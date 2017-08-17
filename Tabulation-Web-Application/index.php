@@ -15,15 +15,21 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <?php
-echo<<<_END
+
+require_once 'login.php';
+echo <<<_END
 <html>
     <head>
         <meta charset="UTF-8">
         <title></title>
     </head>
     <body>
-   test
+_END;
+include_once 'headerMenu.php';
+
+
+echo <<<_END
     </body>
 </html>
-_END
+_END;
 ?>
