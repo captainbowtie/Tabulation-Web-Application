@@ -28,10 +28,9 @@ if (isset($_POST["email"]) && isset($_POST["pass"])){
     $hashedPass = hash('whirlpool',$pass);
     $connection = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
     $query = "SELECT * FROM users WHERE email='$email' && password='$hashedPass'";
-    $name = $connection->query($query);
-    $t = $name->fetch_assoc()['name'];
-    echo 'Author: '   . $t   . '<br>';
-    //echo "<br>$t";
+    $result = $connection->query($query);
+    $id = $result->fetch_assoc()['id'];
+    $_SESSION['id'] = $id;
 }
 
 echo<<<_END

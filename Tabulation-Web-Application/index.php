@@ -17,6 +17,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 require_once 'dblogin.php';
+session_start();
+
 echo <<<_END
 <html>
     <head>
@@ -27,6 +29,9 @@ echo <<<_END
 _END;
 include_once 'headerMenu.php';
 include_once 'login.php';
+include_once 'accountMenu.php';
+echo "<br>";
+
 
 echo <<<_END
     </body>
