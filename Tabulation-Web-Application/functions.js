@@ -1,5 +1,3 @@
-<?php
-
 /* 
  * Copyright (C) 2017 allen
  *
@@ -16,9 +14,28 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-echo <<<_END
-<a href="/pairings.php">Round Pairings</a>
-<a href="/locations.php">Locations</a>
-<a href="/map.php">Map</a>
-<a href="/contact.php">Contact</a><br>
-_END;
+function $(id){
+    return document.getElementById(id);
+}
+function O(obj)
+{
+  return document.getElementById(obj);
+}
+function S(obj)
+{
+  return O(obj).style
+}
+function C(name)
+{
+    var elements = document.getElementsByTagName('*');
+  var objects  = [];
+
+  for (var i = 0 ; i < elements.length ; ++i){
+       if (elements[i].className == name){
+           objects.push(elements[i]);
+       }
+      
+  }
+  return objects;
+}
+

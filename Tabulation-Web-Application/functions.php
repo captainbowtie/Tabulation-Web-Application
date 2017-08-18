@@ -16,9 +16,10 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-echo <<<_END
-<a href="/pairings.php">Round Pairings</a>
-<a href="/locations.php">Locations</a>
-<a href="/map.php">Map</a>
-<a href="/contact.php">Contact</a><br>
-_END;
+function fix_string($string)
+  {
+    if (get_magic_quotes_gpc()) {
+        $string = stripslashes($string);
+    }
+    return htmlentities ($string);
+  }

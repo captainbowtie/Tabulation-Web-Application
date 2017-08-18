@@ -19,6 +19,18 @@
 
 //Require database login credentials
 require_once 'login.php';
+//Require common PHP functions
+require_once 'functions.php';
+
+echo<<<_END
+<!DOCTYPE html>
+<head>
+<title>Database Setup</title>
+<script src='functions.js'></script>
+</head>
+<body>
+_END;
+require_once 'headerMenu.php';
 
 //Connect to database
 //TODO: Do better error handling
@@ -54,6 +66,19 @@ if (teamsTableExists || usersTableExists || roomsTableExists || competitorsTable
             //IF user is a tabulation director, confirm deletion
             if($result == 1){
                 //TODO: add confirmation code (requires AJAX)
+                echo<<<_END
+                <div>Are you sure you want to clear the database?</div>
+                <form method="post" action="index.php">
+                <input type="submit" value="No"></form>
+                <form method="post" action="setup.php">
+                <input type="hidden" name="deleteTables" value="yes">
+                <input type="submit" value="Yes"></form>
+_END;
+                if(isset($_POST['deleteTables']) && fix_string($_POST['deleteTables']) == 'yes'){
+                    echo "Deleting tables and creating new admin user with "
+                    . "email: example@example.com and password: password";
+                    createTables();
+                }
             }
         }
     } else {
@@ -67,6 +92,15 @@ if (teamsTableExists || usersTableExists || roomsTableExists || competitorsTable
 _END;
     }
 } else {
+    createTables();
+}
+
+//Query to drop any pre-existing tables with the same names as will be used
+$initialDrop = "DROP TABLE teams; DROP TABLE competitors; DROP TABLE users;"
+        . "DROP TABLE ballots; DROP TABLE rooms;";
+
+function createTables() {
+    // Drop any tables that already exist
     if (teamsTableExists) {
         $query = "DROP TABLE teams";
         mysql_query($query);
@@ -87,19 +121,11 @@ _END;
         $query = "DROP TABLE ballots";
         mysql_query($query);
     }
-    createTables();
-}
-
-//Query to drop any pre-existing tables with the same names as will be used
-$initialDrop = "DROP TABLE teams; DROP TABLE competitors; DROP TABLE users;"
-        . "DROP TABLE ballots; DROP TABLE rooms;";
-
-function createTables() {
     /* Query to create the tables needed for the application
      * This string creates five tables: a teams, competitors, rooms, users, and ballots
      * table.
      */
-    $createTables = "CREATE TABLE teams(number SMALLINT UNSIGNED, " //Teams Table
+    $query = "CREATE TABLE teams(number SMALLINT UNSIGNED, " //Teams Table
             . "teamName VARCHAR(64), PRIMARY KEY (number)) ENGINE InnoDB;"
             . "CREATE TABLE competitors(id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT KEY," //Competitors Table
             . " teamNumber SMALLINT UNSIGNED, name VARCHAR(64), INDEX(teamNumber)) "
@@ -142,7 +168,15 @@ function createTables() {
             . "INDEX(attyRank6), INDEX(witRank1), INDEX(witRank2), INDEX(witRank3), "
             . "INDEX(witRank4), INDEX(witRank5), INDEX(witRank6)) ENGINE InnoDB;";
 
-    mysql_query($createTables);
+    mysql_query($query);
+    
+    //TODO: And code to specific a default tabulation director
+    //TODO: Generate a new password salt and save it on the server
+    $query = "INSERT INTO users(name, email, password, isTab) "
+            . "VALUES('Tabulation Director', 'example@example.com', "
+            . "'74DFC2B27ACFA364DA55F93A5CAEE29CCAD3557247EDA238831B3E9BD931B01D77FE994E4F12B9D4CFA92A124461D2065197D8CF7F33FC88566DA2DB2A4D6EAE', " //Whirlpool hash for 'password'
+            . "'1')"; 
+    mysql_query($query);
 }
-
+echo "</body></html>"
 ?>
