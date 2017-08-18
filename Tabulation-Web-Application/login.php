@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-$db_hostname = 'tabtesting';
-$db_database = 'tournaments';
-$db_username = 'test';
-$db_password = 'password';
+$dbhost = 'tabtesting';
+$dbname = 'tournaments';
+$dbuser = 'test';
+$dbpass = 'password';
 ?>
