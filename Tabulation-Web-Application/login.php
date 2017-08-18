@@ -1,6 +1,6 @@
 <?php
 
-/* 
+/*
  * Copyright (C) 2017 allen
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,8 +16,40 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-$dbhost = 'tabtesting';
-$dbname = 'tournaments';
-$dbuser = 'test';
-$dbpass = 'password';
+//Require database login credentials
+require_once 'dblogin.php';
+//Require common PHP functions
+require_once 'functions.php';
+
+if (isset($_POST["email"]) && isset($_POST["pass"])){
+    $email = sanitize_string($_POST["email"]);
+    $pass = sanitize_string($_POST["pass"]);
+    
+    $hashedPass = hash('whirlpool',$pass);
+    $connection = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
+    $query = "SELECT * FROM users WHERE email='$email' && password='$hashedPass'";
+    $name = $connection->query($query);
+    $t = $name->fetch_assoc()['name'];
+    echo 'Author: '   . $t   . '<br>';
+    //echo "<br>$t";
+}
+
+echo<<<_END
+    
+<form method="post" action="index.php">
+<table>
+<tr>
+<td>Email</td>
+<td><input type="text" maxlength="64" name="email"></td>
+        </tr>
+            <tr>
+<td>Password</td>
+<td><input type="password" maxlength="64" name="pass"></td>
+        </tr>
+        <tr>
+        <td></td>
+        <td><input type="submit" value="Login"></td>
+        </tr></table>
+        </form>
+_END
 ?>

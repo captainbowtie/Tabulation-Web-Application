@@ -1,4 +1,5 @@
-<!--
+<?php
+/*
 Copyright (C) 2017 allen
 
 This program is free software: you can redistribute it and/or modify
@@ -13,10 +14,9 @@ GNU Affero General Public License for more details.
 
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
--->
-<?php
+ */
 
-require_once 'login.php';
+require_once 'dblogin.php';
 echo <<<_END
 <html>
     <head>
@@ -26,7 +26,7 @@ echo <<<_END
     <body>
 _END;
 include_once 'headerMenu.php';
-
+include_once 'login.php';
 
 echo <<<_END
     </body>

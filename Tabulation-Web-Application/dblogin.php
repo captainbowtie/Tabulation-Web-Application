@@ -16,10 +16,8 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-function sanitize_string($string)
-  {
-    if (get_magic_quotes_gpc()) {
-        $string = stripslashes($string);
-    }
-    return htmlentities ($string);
-  }
+$dbhost = 'tabtesting';
+$dbname = 'tournaments';
+$dbuser = 'test';
+$dbpass = 'password';
+?>

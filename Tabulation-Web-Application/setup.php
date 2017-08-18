@@ -18,7 +18,7 @@
  */
 
 //Require database login credentials
-require_once 'login.php';
+require_once 'dblogin.php';
 //Require common PHP functions
 require_once 'functions.php';
 
@@ -79,7 +79,7 @@ if ($teamsTableExists || $usersTableExists || $roomsTableExists || $competitorsT
                 <input type="hidden" name="deleteTables" value="yes">
                 <input type="submit" value="Yes"></form>
 _END;
-                if (isset($_POST['deleteTables']) && fix_string($_POST['deleteTables']) == 'yes') {
+                if (isset($_POST['deleteTables']) && sanitize_string($_POST['deleteTables']) == 'yes') {
                     echo "Deleting tables and creating new admin user with "
                     . "email: example@example.com and password: password";
                     createTables();
@@ -187,7 +187,7 @@ function createTables() {
     //TODO: Generate a new password salt and save it on the server
     $generateAdmin = "INSERT INTO users(name, email, password, isTab) "
             . "VALUES('Tabulation Director', 'example@example.com', "
-            . "'74DFC2B27ACFA364DA55F93A5CAEE29CCAD3557247EDA238831B3E9BD931B01D77FE994E4F12B9D4CFA92A124461D2065197D8CF7F33FC88566DA2DB2A4D6EAE', " //Whirlpool hash for 'password'
+            . "'74dfc2b27acfa364da55f93a5caee29ccad3557247eda238831b3e9bd931b01d77fe994e4f12b9d4cfa92a124461d2065197d8cf7f33fc88566da2db2a4d6eae', " //Whirlpool hash for 'password'
             . "'1')";
     $result = $connection->query($generateAdmin);
 }
