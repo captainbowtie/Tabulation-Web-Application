@@ -127,33 +127,25 @@ function createTables() {
      * This string creates five tables: a teams, competitors, rooms, users, and ballots
      * table.
      */
-    $query = "CREATE TABLE teams(number SMALLINT UNSIGNED, " //Teams Table
+    $teamsTable = "CREATE TABLE teams(number SMALLINT UNSIGNED, " //Teams Table
             . "teamName VARCHAR(64), PRIMARY KEY (number)) ENGINE InnoDB";
-    echo $query;
-    $result = $connection->query($query);
-    echo $result;
-    $query = "CREATE TABLE competitors(id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT KEY, " //Competitors Table
+    $result = $connection->query($teamsTable);
+    $competitorsTable = "CREATE TABLE competitors(id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT KEY, " //Competitors Table
             . " teamNumber SMALLINT UNSIGNED, name VARCHAR(64), INDEX(teamNumber)) "
             . "ENGINE InnoDB";
-    echo $query;
-    $result = $connection->query($query);
-    echo $result;
-    $query = "CREATE TABLE rooms(id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT KEY, " //Rooms Table
+    $result = $connection->query($competitorsTable);
+    $roomsTable = "CREATE TABLE rooms(id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT KEY, " //Rooms Table
             . "building VARCHAR(64), number SMALLINT UNSIGNED, "
             . "availableRound1 BINARY(1), availableRound2 BINARY(1), "
             . "availableRound3 BINARY(1), availableRound4 BINARY (4)) ENGINE InnoDB";
-    echo $query;
-    $result = $connection->query($query);
-    echo $result;
-    $query = "CREATE TABLE users(id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT KEY, " //Users Table
+    $result = $connection->query($roomsTable);
+    $usersTable = "CREATE TABLE users(id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT KEY, " //Users Table
             . "name VARCHAR(64), email VARCHAR(64), password CHAR(128), "
             . "isJudge BINARY(1), isCoach BINARY(1), isTab BINARY(1), "
             . "canJudgeRound1 BINARY(1), canJudgeRound2 BINARY(1), "
             . "canJudgeRound3 BINARY(1), canJudgeRound4 BINARY(1)) ENGINE InnoDB";
-    echo $query;
-    $result = $connection->query($query);
-    echo $result;
-    $query = "CREATE TABLE ballots(id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT KEY, " //Ballots Table
+    $result = $connection->query($usersTable);
+    $ballotsTable = "CREATE TABLE ballots(id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT KEY, " //Ballots Table
             . "pTeamNumber SMALLINT UNSIGNED, dTeamNumber SMALLINT UNSIGNED, "
             . "roundNumber TINYINT UNSIGNED, judgeId SMALLINT UNSIGNED, roomID SMALLINT UNSIGNED, "
             . "pOpen TINYINT UNSIGNED, pDirect1 TINYINT UNSIGNED, "
@@ -181,17 +173,23 @@ function createTables() {
             . "INDEX(attyRank2), INDEX(attyRank3), INDEX(attyRank4), INDEX(attyRank5), "
             . "INDEX(attyRank6), INDEX(witRank1), INDEX(witRank2), INDEX(witRank3), "
             . "INDEX(witRank4), INDEX(witRank5), INDEX(witRank6)) ENGINE InnoDB";
-    echo $query;
-    $result = $connection->query($query);
-    echo $result;
+    $result = $connection->query($ballotsTable);
+    $teamConflictsTable = "CREATE TABLE teamConflicts(id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT KEY, "
+            . "team1 SMALLINT UNSIGNED, team2 SMALLINT UNSIGNED, "
+            . "INDEX(team1), INDEX(team2)) ENGINE InnoDB";
+    $result = $connnection->query($teamConflictsTable);
+    $judgeConflictsTable = "CREATE TABLE judgeConflicts(id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT KEY, "
+            . "judgeID SMALLINT UNSIGNED, team SMALLINT UNSIGNED, "
+            . "INDEX(judgeID), INDEX(team)) ENGINE InnoDB";
+    $result = $connnection->query($judgeConflictsTable);
 
-    //TODO: And code to specific a default tabulation director
+    //TODO: And code to specific a default tabulation director's email and password
     //TODO: Generate a new password salt and save it on the server
-    $query = "INSERT INTO users(name, email, password, isTab) "
+    $generateAdmin = "INSERT INTO users(name, email, password, isTab) "
             . "VALUES('Tabulation Director', 'example@example.com', "
             . "'74DFC2B27ACFA364DA55F93A5CAEE29CCAD3557247EDA238831B3E9BD931B01D77FE994E4F12B9D4CFA92A124461D2065197D8CF7F33FC88566DA2DB2A4D6EAE', " //Whirlpool hash for 'password'
             . "'1')";
-    $result = $connection->query($query);
+    $result = $connection->query($generateAdmin);
 }
 
 echo "</body></html>"
