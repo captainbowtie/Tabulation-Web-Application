@@ -27,9 +27,7 @@ echo <<<_END
     </head>
     <body>
 _END;
-include_once 'headerMenu.php';
-include_once 'login.php';
-include_once 'accountMenu.php';
+include_once 'header.php';
 echo "<br>";
 
 

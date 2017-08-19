@@ -1,6 +1,6 @@
 <?php
 
-/*
+/* 
  * Copyright (C) 2017 allen
  *
  * This program is free software: you can redistribute it and/or modify
@@ -21,6 +21,11 @@ require_once 'dblogin.php';
 //Require common PHP functions
 require_once 'functions.php';
 
+$connection = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
+if ($connection->connect_error) {
+    die($connection->connect_error);
+}
+
 if (isset($_POST["email"]) && isset($_POST["pass"])){
     $email = sanitize_string($_POST["email"]);
     $pass = sanitize_string($_POST["pass"]);
@@ -33,8 +38,22 @@ if (isset($_POST["email"]) && isset($_POST["pass"])){
     $_SESSION['id'] = $id;
 }
 
-echo<<<_END
-    
+echo <<<_END
+<div>
+<a href="/pairings.php">Round Pairings</a>
+<a href="/locations.php">Locations</a>
+<a href="/map.php">Map</a>
+<a href="/contact.php">Contact</a>
+_END;
+
+if(isset($_SESSION['id'])){
+    $id = $_SESSION['id'];
+    $nameQuery = "SELECT * FROM users WHERE id='$id'";
+            $result = $connection->query($nameQuery);
+            $name = $result->fetch_assoc()['name'];
+    echo "<span>$name</span>|<span><a href='logout.php'>Log Out</a></span>";
+} else{
+    echo<<<_END
 <form method="post" action="index.php">
 <table>
 <tr>
@@ -50,5 +69,7 @@ echo<<<_END
         <td><input type="submit" value="Login"></td>
         </tr></table>
         </form>
-_END
+_END;
+}
+echo "</div>";
 ?>

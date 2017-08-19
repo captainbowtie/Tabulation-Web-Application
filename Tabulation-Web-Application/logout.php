@@ -16,9 +16,11 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-echo <<<_END
-<a href="/pairings.php">Round Pairings</a>
-<a href="/locations.php">Locations</a>
-<a href="/map.php">Map</a>
-<a href="/contact.php">Contact</a><br>
-_END;
+session_start();
+$_SESSION = array();
+setcookie(session_name(), '', time()-2592000, '/');
+session_destroy();
+header("Location: /index.php");
+die();
+
+?>
