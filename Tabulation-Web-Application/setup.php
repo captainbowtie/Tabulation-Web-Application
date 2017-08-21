@@ -31,7 +31,7 @@ echo<<<_END
 </head>
 <body>
 _END;
-require_once 'headerMenu.php';
+require_once 'header.php';
 
 //Connect to database
 //TODO: Do better error handling
@@ -64,15 +64,18 @@ $competitorsTableExists = $result->num_rows > 0;
 
 //If any table needed already exists, require Tabulation director login to clear data
 if ($teamsTableExists || $usersTableExists || $roomsTableExists || $competitorsTableExists || $ballotsTableExists) {
-    if (isset($_SESSION['userID'])) {
+    if (isset($_SESSION['id'])) {
         if ($usersTableExists) {
-            $query = "SELECT isJudge FROM USERS WHERE id=" . $SESSION['userID'] . "\"";
+            $query = 'SELECT isTab FROM users WHERE id="' .$_SESSION['id'].'"';
             $result = $connection->query($query);
             //IF user is a tabulation director, confirm deletion
             if ($result == 1) {
                 //TODO: add confirmation code (requires AJAX)
                 echo<<<_END
-                <div>Are you sure you want to clear the database?</div>
+                <div>Are you sure you want to clear the database?
+                    (This will delete all tournament data. A new admin user with 
+                        default email: example@example.com and password: 
+                            password will be created.)</div>
                 <form method="post" action="index.php">
                 <input type="submit" value="No"></form>
                 <form method="post" action="setup.php">
@@ -177,19 +180,23 @@ function createTables() {
     $teamConflictsTable = "CREATE TABLE teamConflicts(id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT KEY, "
             . "team1 SMALLINT UNSIGNED, team2 SMALLINT UNSIGNED, "
             . "INDEX(team1), INDEX(team2)) ENGINE InnoDB";
-    $result = $connnection->query($teamConflictsTable);
+    $result = $connection->query($teamConflictsTable);
     $judgeConflictsTable = "CREATE TABLE judgeConflicts(id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT KEY, "
             . "judgeID SMALLINT UNSIGNED, team SMALLINT UNSIGNED, "
             . "INDEX(judgeID), INDEX(team)) ENGINE InnoDB";
-    $result = $connnection->query($judgeConflictsTable);
+    $result = $connection->query($judgeConflictsTable);
 
     //TODO: And code to specific a default tabulation director's email and password
     //TODO: Generate a new password salt and save it on the server
-    $generateAdmin = "INSERT INTO users(name, email, password, isTab) "
+    $generateAdmin = "INSERT INTO users(name, email, password, isJudge, isCoach, "
+            . "isTab, canJudgeRound1, canJudgeRound2, canJudgeRound3, canJudgeRound4) "
             . "VALUES('Tabulation Director', 'example@example.com', "
             . "'74dfc2b27acfa364da55f93a5caee29ccad3557247eda238831b3e9bd931b01d77fe994e4f12b9d4cfa92a124461d2065197d8cf7f33fc88566da2db2a4d6eae', " //Whirlpool hash for 'password'
-            . "'1')";
+            . "'0','0','1','0','0','0','0')";
     $result = $connection->query($generateAdmin);
+    $_SESSION = array();
+    session_destroy();
+    echo '<meta http-equiv="refresh" content="0;url=/index.php">';
 }
 
 echo "</body></html>"
