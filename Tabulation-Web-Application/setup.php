@@ -32,7 +32,6 @@ echo<<<_END
 <body>
 _END;
 require_once 'header.php';
-
 //Connect to database
 //TODO: Do better error handling
 $connection = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
@@ -106,22 +105,28 @@ _END;
 function createTables() {
     global $connection;
     // Drop any tables that already exist
+    //TODO: Add drops for other tables added to database since this funcgtion was written
+    global $teamsTableExists;
     if ($teamsTableExists) {
         $query = "DROP TABLE teams";
         $connection->query($query);
     }
+    global $usersTableExists;
     if ($usersTableExists) {
         $query = "DROP TABLE users";
         $connection->query($query);
     }
+    global $roomsTableExists;
     if ($roomsTableExists) {
         $query = "DROP TABLE rooms";
         $connection->query($query);
     }
+    $competitorsTableExists;
     if ($competitorsTableExists) {
         $query = "DROP TABLE competitors";
         $connection->query($query);
     }
+    global $ballotsTableExists;
     if ($ballotsTableExists) {
         $query = "DROP TABLE ballots";
         $connection->query($query);
@@ -131,7 +136,7 @@ function createTables() {
      * table.
      */
     $teamsTable = "CREATE TABLE teams(number SMALLINT UNSIGNED, " //Teams Table
-            . "teamName VARCHAR(64), PRIMARY KEY (number)) ENGINE InnoDB";
+            . "name VARCHAR(64), PRIMARY KEY (number)) ENGINE InnoDB";
     $result = $connection->query($teamsTable);
     $competitorsTable = "CREATE TABLE competitors(id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT KEY, " //Competitors Table
             . " teamNumber SMALLINT UNSIGNED, name VARCHAR(64), INDEX(teamNumber)) "
@@ -157,14 +162,14 @@ function createTables() {
             . "pWitCross2 TINYINT UNSIGNED, pDirect3 TINYINT UNSIGNED, "
             . "pWitDirect3 TINYINT UNSIGNED, pWitCross3 TINYINT UNSIGNED, "
             . "pCross1 TINYINT UNSIGNED, pCross2 TINYINT UNSIGNED, pCross3 TINYINT UNSIGNED, "
-            . "pClosing TINYINT UNSIGNED, "
+            . "pClose TINYINT UNSIGNED, "
             . "dOpen TINYINT UNSIGNED, dDirect1 TINYINT UNSIGNED, "
             . "dWitDirect1 TINYINT UNSIGNED, dWitCross1 TINYINT UNSIGNED, "
             . "dDirect2 TINYINT UNSIGNED, dWitDirect2 TINYINT UNSIGNED, "
             . "dWitCross2 TINYINT UNSIGNED, dDirect3 TINYINT UNSIGNED, "
             . "dWitDirect3 TINYINT UNSIGNED, dWitCross3 TINYINT UNSIGNED, "
             . "dCross1 TINYINT UNSIGNED, dCross2 TINYINT UNSIGNED, dCross3 TINYINT UNSIGNED, "
-            . "dClosing TINYINT UNSIGNED, "
+            . "dClose TINYINT UNSIGNED, "
             . "attyRank1 SMALLINT UNSIGNED, attyRank2 SMALLINT UNSIGNED, "
             . "attyRank3 SMALLINT UNSIGNED, attyRank4 SMALLINT UNSIGNED, "
             . "attyRank5 SMALLINT UNSIGNED, attyRank6 SMALLINT UNSIGNED, "
