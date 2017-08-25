@@ -21,7 +21,7 @@ require_once 'dblogin.php';
 //Require common PHP functions
 require_once 'functions.php';
 
-$connection = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
+$connection = new mysqli(dbhost, dbuser, dbpass, dbname);
 if ($connection->connect_error) {
     die($connection->connect_error);
 }
@@ -29,9 +29,7 @@ if ($connection->connect_error) {
 if (isset($_POST["email"]) && isset($_POST["pass"])){
     $email = sanitize_string($_POST["email"]);
     $pass = sanitize_string($_POST["pass"]);
-    
     $hashedPass = hash('whirlpool',$pass);
-    $connection = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
     $query = "SELECT * FROM users WHERE email='$email' && password='$hashedPass'";
     //TODO: Stuff if the password is incorrect
     $result = $connection->query($query);
@@ -97,4 +95,5 @@ if(isset($_SESSION['id'])){
 _END;
 }
 echo "</div>";
+$connection->close();
 ?>
