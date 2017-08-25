@@ -125,5 +125,65 @@ function getStatisticalWins($teamNumber) {
 }
 
 function getCS($teamNumber){
-    
+    $connection = new mysqli(dbhost, dbuser, dbpass, dbname);
+    $pTeamQuery = "SELECT DISTINCT pTeamNumber FROM ballots WHERE dTeamNumber=".$teamNumber;
+    $pResult = $connection->query($pTeamQuery);
+    $dTeamQuery = "SELECT DISTINCT dTeamNumber FROM ballots WHERE pTeamNumber=".$teamNumber;
+    $dResult = $connection->query($dTeamQuery);
+    $connection->close();
+    $CS = 0.0;
+    for($a = 0;$a<$pResult->num_rows;$a++){
+        $pResult->data_seek($a);
+        $resultRow = $pResult->fetch_array(MYSQLI_NUM);
+        $opposingTeamNumber = $resultRow[0];
+        $CS += getStatisticalWins($opposingTeamNumber);
+    }
+    for($a = 0;$a<$dResult->num_rows;$a++){
+        $dResult->data_seek($a);
+        $resultRow = $dResult->fetch_array(MYSQLI_NUM);
+        $opposingTeamNumber = $resultRow[0];
+        $CS += getStatisticalWins($opposingTeamNumber);
+    }
+    $pResult->close();
+    $dResult->close();
+    return $CS;
+}
+
+function getOCS($teamNumber){
+    $connection = new mysqli(dbhost, dbuser, dbpass, dbname);
+    $pTeamQuery = "SELECT DISTINCT pTeamNumber FROM ballots WHERE dTeamNumber=".$teamNumber;
+    $pResult = $connection->query($pTeamQuery);
+    $dTeamQuery = "SELECT DISTINCT dTeamNumber FROM ballots WHERE pTeamNumber=".$teamNumber;
+    $dResult = $connection->query($dTeamQuery);
+    $connection->close();
+    $OCS = 0.0;
+    for($a = 0;$a<$pResult->num_rows;$a++){
+        $pResult->data_seek($a);
+        $resultRow = $pResult->fetch_array(MYSQLI_NUM);
+        $opposingTeamNumber = $resultRow[0];
+        $OCS += getCS($opposingTeamNumber);
+    }
+    for($a = 0;$a<$dResult->num_rows;$a++){
+        $dResult->data_seek($a);
+        $resultRow = $dResult->fetch_array(MYSQLI_NUM);
+        $opposingTeamNumber = $resultRow[0];
+        $OCS += getCS($opposingTeamNumber);
+    }
+    $pResult->close();
+    $dResult->close();
+    return $OCS;
+}
+
+function getPD($teamNumber){
+    $connection = new mysqli(dbhost, dbuser, dbpass, dbname);
+    $query = "SELECT id FROM ballots WHERE pTeamNumber='" . $teamNumber . "' || dTeamNumber='" . $teamNumber . "'";
+    $result = $connection->query($query);
+    $connection->close();
+    $PD = 0;
+    for($a = 0;$a<$result->num_rows;$a++){
+        $result->data_seek($a);
+        $resultRow = $result->fetch_array(MYSQLI_NUM);
+        $PD += getBallotPD($resultRow[0], $teamNumber);
+    }
+    return $PD;
 }

@@ -23,7 +23,7 @@ require_once "dblogin.php";
 require_once "header.php";
 
 $connection = new mysqli(dbhost, dbuser, dbpass, dbname);
-$numberTeamsQuery = "SELECT number FROM teams";
+$numberTeamsQuery = "SELECT * FROM teams";
 $result = $connection->query($numberTeamsQuery);
 $numberRows = $result->num_rows;
 if ($numberRows == 0) {
@@ -38,7 +38,7 @@ if ($numberRows == 0) {
 echo "</html>";
 
 function createTeamRow($teamNumber, $teamName) {
-    global $connection;
+    $connection = new mysqli(dbhost, dbuser, dbpass, dbname);
     $resultArray = [];
     //Extract all the teams ballots into a array of MySQL results, each result
     //containing all of the ballots from a particular round
@@ -132,7 +132,7 @@ function createTeamRow($teamNumber, $teamName) {
             $round4Ballot2PD = getBallotPD($round4Ballot2['id'], $teamNumber);
         }
     }
-    echo "<table>";
+    echo "\n<table>";
     //Team Number
     echo "<tr><td>" . $teamNumber . "</td>";
     //Round 1 side, opponent, and round 2 side
@@ -164,13 +164,13 @@ function createTeamRow($teamNumber, $teamName) {
     //Team Name
     echo "<tr><td>".$teamName."</td>";
     //Round 1 Ballots
-    echo "<td>".$round1Ballot1."</td><td></td>".$round1Ballot2."</td>";
+    echo "<td>".$round1Ballot1PD."</td><td></td><td>".$round1Ballot2PD."</td>";
     //Round 2 Ballots
-    echo "<td>".$round2Ballot1."</td><td></td>".$round2Ballot2."</td>";
+    echo "<td>".$round2Ballot1PD."</td><td></td><td>".$round2Ballot2PD."</td>";
     //Round 3 Ballots
-    echo "<td>".$round3Ballot1."</td><td></td>".$round3Ballot2."</td>";
+    echo "<td>".$round3Ballot1PD."</td><td></td><td>".$round3Ballot2PD."</td>";
     //Round 4 Ballots
-    echo "<td>".$round4Ballot1."</td><td></td>".$round4Ballot2."</td>";
+    echo "<td>".$round4Ballot1PD."</td><td></td><td>".$round4Ballot2PD."</td>";
     //CS, OCS, PD
     echo "<td>CS: ".getCS($teamNumber)." OCS: ".getOCS($teamNumber)." PD: ".getPD($teamNumber)."</td></tr>";
     echo "</table>";
