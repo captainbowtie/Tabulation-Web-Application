@@ -1,6 +1,6 @@
 <?php
 
-/* 
+/*
  * Copyright (C) 2017 allen
  *
  * This program is free software: you can redistribute it and/or modify
@@ -26,36 +26,51 @@ if ($connection->connect_error) {
     die($connection->connect_error);
 }
 
-if (isset($_POST["email"]) && isset($_POST["pass"])){
+if (isset($_POST["email"]) && isset($_POST["pass"])) {
     $email = sanitize_string($_POST["email"]);
     $pass = sanitize_string($_POST["pass"]);
-    $hashedPass = hash('whirlpool',$pass);
+    $hashedPass = hash('whirlpool', $pass);
     $query = "SELECT * FROM users WHERE email='$email' && password='$hashedPass'";
     //TODO: Stuff if the password is incorrect
     $result = $connection->query($query);
     $result->data_seek(0);
     $row = $result->fetch_array(MYSQLI_ASSOC);
     $id = $row['id'];
-    $isCoach = $row['isCoach'];
-    $isJudge = $row['isJudge'];
-    $isTab = $row['isTab'];
     $_SESSION['id'] = $id;
-    $_SESSION['isCoach'] = $isCoach;
-    $_SESSION['isJudge'] = $isJudge;
-    $_SESSION['isTab'] = $isTab;
     $result->close();
 }
 
+$isTab = FALSE;
+$isJudge = FALSE;
+$isCoach = FALSE;
+
+if (isset($_SESSION['id'])) {
+    $userQuery = "SELECT isTab,isJudge,isCoach FROM users WHERE id=" . $_SESSION['id'];
+    $userResult = $connection->query($userQuery);
+    $userResult->data_seek(0);
+    $roleArray = $userResult->fetch_array(MYSQLI_ASSOC);
+    $userResult->close();
+    if($roleArray['isTab']==1){
+        $isTab=TRUE;
+    }
+    if($roleArray['isJudge']==1){
+        $isJudge=TRUE;
+    }
+    if($roleArray['isCoach']==1){
+        $isCoach=TRUE;
+    }
+}
+
 echo "<div>";
-if($_SESSION['isTab']){
+if ($isTab) {
     echo '<a href="/tabroom.php">Tab Room</a>';
     echo '<a href="/tabsummary.php">Tab Summary</a>';
     echo '<a href="/tabcards.php">Tab Cards</a>';
 }
-if($_SESSION['isJudge']){
+if ($isJudge) {
     echo '<a href="/ballot.php">Ballot</a>';
 }
-if($_SESSION['isCoach']){
+if ($isCoach) {
     echo '<a href="/tabsummary.php">Tab Summary</a>';
     echo '<a href="/tabcards.php">Tab Cards</a>';
 }
@@ -65,17 +80,17 @@ echo <<<_END
 <a href="/map.php">Map</a>
 <a href="/contact.php">Contact</a>
 _END;
-if(isset($_SESSION['id'])){
+if (isset($_SESSION['id'])) {
     echo '<a href="/alerts.php">Alerts</a>';
 }
 
-if(isset($_SESSION['id'])){
+if (isset($_SESSION['id'])) {
     $id = $_SESSION['id'];
     $nameQuery = "SELECT * FROM users WHERE id='$id'";
-            $result = $connection->query($nameQuery);
-            $name = $result->fetch_assoc()['name'];
+    $result = $connection->query($nameQuery);
+    $name = $result->fetch_assoc()['name'];
     echo "<span>$name</span>|<span><a href='logout.php'>Log Out</a></span>";
-} else{
+} else {
     echo<<<_END
 <form method="post" action="index.php">
 <table>
@@ -96,4 +111,3 @@ _END;
 }
 echo "</div>";
 $connection->close();
-?>

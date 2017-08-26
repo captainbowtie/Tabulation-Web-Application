@@ -21,4 +21,3 @@ define("dbhost","tabtesting");
 define("dbname","tournaments");
 define("dbuser","test");
 define("dbpass","password");
-?>

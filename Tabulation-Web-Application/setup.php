@@ -34,7 +34,7 @@ _END;
 require_once 'header.php';
 //Connect to database
 //TODO: Do better error handling
-$connection = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
+$connection = new mysqli(dbhost, dbuser, dbpass, dbname);
 if ($connection->connect_error) {
     die($connection->connect_error);
 }
@@ -65,11 +65,10 @@ $competitorsTableExists = $result->num_rows > 0;
 if ($teamsTableExists || $usersTableExists || $roomsTableExists || $competitorsTableExists || $ballotsTableExists) {
     if (isset($_SESSION['id'])) {
         if ($usersTableExists) {
-            $query = 'SELECT isTab FROM users WHERE id="' .$_SESSION['id'].'"';
+            $query = 'SELECT isTab FROM users WHERE id="' . $_SESSION['id'] . '"';
             $result = $connection->query($query);
             //IF user is a tabulation director, confirm deletion
             if ($result == 1) {
-                //TODO: add confirmation code (requires AJAX)
                 echo<<<_END
                 <div>Are you sure you want to clear the database?
                     (This will delete all tournament data. A new admin user with 
@@ -101,9 +100,16 @@ _END;
 } else {
     createTables();
 }
+echo "</body></html>";
 
 function createTables() {
     global $connection;
+    //Reset current round to 0 (pre-round 1)
+    $fh = fopen("currentRound.txt", 'w') or die("Failed to create file");
+    flock($fh, LOCK_EX);
+    fwrite($fh, 0) or die("Could not write to file");
+    flock($fh, LOCK_UN);
+    fclose($fh);
     // Drop any tables that already exist
     //TODO: Add drops for other tables added to database since this funcgtion was written
     global $teamsTableExists;
@@ -136,60 +142,64 @@ function createTables() {
      * table.
      */
     $teamsTable = "CREATE TABLE teams(number SMALLINT UNSIGNED, " //Teams Table
-            . "name VARCHAR(64), PRIMARY KEY (number)) ENGINE InnoDB";
-    $result = $connection->query($teamsTable);
+            . "name VARCHAR(64) NOT NULL, PRIMARY KEY (number)) ENGINE InnoDB";
+    $connection->query($teamsTable);
     $competitorsTable = "CREATE TABLE competitors(id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT KEY, " //Competitors Table
-            . " teamNumber SMALLINT UNSIGNED, name VARCHAR(64), INDEX(teamNumber)) "
+            . " teamNumber SMALLINT UNSIGNED NOT NULL, name VARCHAR(64) NOT NULL, INDEX(teamNumber)) "
             . "ENGINE InnoDB";
-    $result = $connection->query($competitorsTable);
+    $connection->query($competitorsTable);
     $roomsTable = "CREATE TABLE rooms(id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT KEY, " //Rooms Table
-            . "building VARCHAR(64), number SMALLINT UNSIGNED, "
-            . "availableRound1 BINARY(1), availableRound2 BINARY(1), "
-            . "availableRound3 BINARY(1), availableRound4 BINARY (4)) ENGINE InnoDB";
-    $result = $connection->query($roomsTable);
+            . "building VARCHAR(64) NOT NULL, number VARCHAR(64) NOT NULL, "
+            . "availableRound1 BINARY(1) NOT NULL, availableRound2 BINARY(1) NOT NULL, "
+            . "availableRound3 BINARY(1) NOT NULL, availableRound4 BINARY (4) NOT NULL) ENGINE InnoDB";
+    $connection->query($roomsTable);
     $usersTable = "CREATE TABLE users(id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT KEY, " //Users Table
-            . "name VARCHAR(64), email VARCHAR(64), password CHAR(128), "
-            . "isJudge BINARY(1), isCoach BINARY(1), isTab BINARY(1), "
-            . "canJudgeRound1 BINARY(1), canJudgeRound2 BINARY(1), "
-            . "canJudgeRound3 BINARY(1), canJudgeRound4 BINARY(1)) ENGINE InnoDB";
-    $result = $connection->query($usersTable);
+            . "name VARCHAR(64) NOT NULL, email VARCHAR(64) NOT NULL, password CHAR(128) NOT NULL, "
+            . "isJudge BINARY(1) NOT NULL, isCoach BINARY(1) NOT NULL, isTab BINARY(1) NOT NULL, "
+            . "canJudgeRound1 BINARY(1) NOT NULL, canJudgeRound2 BINARY(1) NOT NULL, "
+            . "canJudgeRound3 BINARY(1) NOT NULL, canJudgeRound4 BINARY(1) NOT NULL) ENGINE InnoDB";
+    $connection->query($usersTable);
     $ballotsTable = "CREATE TABLE ballots(id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT KEY, " //Ballots Table
-            . "pTeamNumber SMALLINT UNSIGNED, dTeamNumber SMALLINT UNSIGNED, "
-            . "roundNumber TINYINT UNSIGNED, judgeId SMALLINT UNSIGNED, roomID SMALLINT UNSIGNED, "
-            . "pOpen TINYINT UNSIGNED, pDirect1 TINYINT UNSIGNED, "
-            . "pWitDirect1 TINYINT UNSIGNED, pWitCross1 TINYINT UNSIGNED, "
-            . "pDirect2 TINYINT UNSIGNED, pWitDirect2 TINYINT UNSIGNED, "
-            . "pWitCross2 TINYINT UNSIGNED, pDirect3 TINYINT UNSIGNED, "
-            . "pWitDirect3 TINYINT UNSIGNED, pWitCross3 TINYINT UNSIGNED, "
-            . "pCross1 TINYINT UNSIGNED, pCross2 TINYINT UNSIGNED, pCross3 TINYINT UNSIGNED, "
-            . "pClose TINYINT UNSIGNED, "
-            . "dOpen TINYINT UNSIGNED, dDirect1 TINYINT UNSIGNED, "
-            . "dWitDirect1 TINYINT UNSIGNED, dWitCross1 TINYINT UNSIGNED, "
-            . "dDirect2 TINYINT UNSIGNED, dWitDirect2 TINYINT UNSIGNED, "
-            . "dWitCross2 TINYINT UNSIGNED, dDirect3 TINYINT UNSIGNED, "
-            . "dWitDirect3 TINYINT UNSIGNED, dWitCross3 TINYINT UNSIGNED, "
-            . "dCross1 TINYINT UNSIGNED, dCross2 TINYINT UNSIGNED, dCross3 TINYINT UNSIGNED, "
-            . "dClose TINYINT UNSIGNED, "
-            . "attyRank1 SMALLINT UNSIGNED, attyRank2 SMALLINT UNSIGNED, "
-            . "attyRank3 SMALLINT UNSIGNED, attyRank4 SMALLINT UNSIGNED, "
-            . "attyRank5 SMALLINT UNSIGNED, attyRank6 SMALLINT UNSIGNED, "
-            . "witRank1 SMALLINT UNSIGNED, witRank2 SMALLINT UNSIGNED, "
-            . "witRank3 SMALLINT UNSIGNED, witRank4 SMALLINT UNSIGNED, "
-            . "witRank5 SMALLINT UNSIGNED, witRank6 SMALLINT UNSIGNED, "
+            . "pTeamNumber SMALLINT UNSIGNED NOT NULL, dTeamNumber SMALLINT UNSIGNED NOT NULL, "
+            . "roundNumber TINYINT UNSIGNED NOT NULL, judgeId SMALLINT UNSIGNED NOT NULL, roomID SMALLINT UNSIGNED NOT NULL, "
+            . "pOpen TINYINT UNSIGNED NOT NULL, pDirect1 TINYINT UNSIGNED NOT NULL, "
+            . "pWitDirect1 TINYINT UNSIGNED NOT NULL, pWitCross1 TINYINT UNSIGNED NOT NULL, "
+            . "pDirect2 TINYINT UNSIGNED NOT NULL, pWitDirect2 TINYINT UNSIGNED NOT NULL, "
+            . "pWitCross2 TINYINT UNSIGNED NOT NULL, pDirect3 TINYINT UNSIGNED NOT NULL, "
+            . "pWitDirect3 TINYINT UNSIGNED NOT NULL, pWitCross3 TINYINT UNSIGNED NOT NULL, "
+            . "pCross1 TINYINT UNSIGNED NOT NULL, pCross2 TINYINT UNSIGNED NOT NULL, pCross3 TINYINT UNSIGNED NOT NULL, "
+            . "pClose TINYINT UNSIGNED NOT NULL, "
+            . "dOpen TINYINT UNSIGNED NOT NULL, dDirect1 TINYINT UNSIGNED NOT NULL, "
+            . "dWitDirect1 TINYINT UNSIGNED NOT NULL, dWitCross1 TINYINT UNSIGNED NOT NULL, "
+            . "dDirect2 TINYINT UNSIGNED NOT NULL, dWitDirect2 TINYINT UNSIGNED NOT NULL, "
+            . "dWitCross2 TINYINT UNSIGNED NOT NULL, dDirect3 TINYINT UNSIGNED NOT NULL, "
+            . "dWitDirect3 TINYINT UNSIGNED NOT NULL, dWitCross3 TINYINT UNSIGNED NOT NULL, "
+            . "dCross1 TINYINT UNSIGNED NOT NULL, dCross2 TINYINT UNSIGNED NOT NULL, dCross3 TINYINT UNSIGNED NOT NULL, "
+            . "dClose TINYINT UNSIGNED NOT NULL, "
+            . "attyRank1 SMALLINT UNSIGNED NOT NULL, attyRank2 SMALLINT UNSIGNED NOT NULL, "
+            . "attyRank3 SMALLINT UNSIGNED NOT NULL, attyRank4 SMALLINT UNSIGNED NOT NULL, "
+            . "attyRank5 SMALLINT UNSIGNED NOT NULL, attyRank6 SMALLINT UNSIGNED NOT NULL, "
+            . "witRank1 SMALLINT UNSIGNED NOT NULL, witRank2 SMALLINT UNSIGNED NOT NULL, "
+            . "witRank3 SMALLINT UNSIGNED NOT NULL, witRank4 SMALLINT UNSIGNED NOT NULL, "
+            . "witRank5 SMALLINT UNSIGNED NOT NULL, witRank6 SMALLINT UNSIGNED NOT NULL, "
             . "INDEX(pTeamNumber), INDEX(dTeamNumber), "
             . "INDEX(roundNumber), INDEX(judgeId), INDEX(attyRank1), "
             . "INDEX(attyRank2), INDEX(attyRank3), INDEX(attyRank4), INDEX(attyRank5), "
             . "INDEX(attyRank6), INDEX(witRank1), INDEX(witRank2), INDEX(witRank3), "
             . "INDEX(witRank4), INDEX(witRank5), INDEX(witRank6)) ENGINE InnoDB";
-    $result = $connection->query($ballotsTable);
+    $connection->query($ballotsTable);
     $teamConflictsTable = "CREATE TABLE teamConflicts(id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT KEY, "
-            . "team1 SMALLINT UNSIGNED, team2 SMALLINT UNSIGNED, "
+            . "team1 SMALLINT UNSIGNED NOT NULL, team2 SMALLINT UNSIGNED NOT NULL, "
             . "INDEX(team1), INDEX(team2)) ENGINE InnoDB";
-    $result = $connection->query($teamConflictsTable);
+    $connection->query($teamConflictsTable);
     $judgeConflictsTable = "CREATE TABLE judgeConflicts(id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT KEY, "
-            . "judgeID SMALLINT UNSIGNED, team SMALLINT UNSIGNED, "
-            . "INDEX(judgeID), INDEX(team)) ENGINE InnoDB";
-    $result = $connection->query($judgeConflictsTable);
+            . "judge SMALLINT UNSIGNED NOT NULL, team SMALLINT UNSIGNED NOT NULL, "
+            . "INDEX(judge), INDEX(team)) ENGINE InnoDB";
+    $connection->query($judgeConflictsTable);
+    $alertsTable = "CREATE TABLE alerts(id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT KEY, "
+            . "user SMALLINT UNSIGNED NOT NULL, team SMALL INT UNSIGNED NOT NULL, "
+            . "INDEX(user)) ENGINE InnoDB";
+    $connection->query($alertsTable);
 
     //TODO: And code to specific a default tabulation director's email and password
     //TODO: Generate a new password salt and save it on the server
@@ -198,11 +208,8 @@ function createTables() {
             . "VALUES('Tabulation Director', 'example@example.com', "
             . "'74dfc2b27acfa364da55f93a5caee29ccad3557247eda238831b3e9bd931b01d77fe994e4f12b9d4cfa92a124461d2065197d8cf7f33fc88566da2db2a4d6eae', " //Whirlpool hash for 'password'
             . "'0','0','1','0','0','0','0')";
-    $result = $connection->query($generateAdmin);
+    $connection->query($generateAdmin);
     $_SESSION = array();
     session_destroy();
     echo '<meta http-equiv="refresh" content="0;url=/index.php">';
 }
-
-echo "</body></html>"
-?>

@@ -19,25 +19,44 @@
 
 //TODO: Check session privileges
 session_start();
+
 require_once "dblogin.php";
 require_once "header.php";
 
-$connection = new mysqli(dbhost, dbuser, dbpass, dbname);
-$numberTeamsQuery = "SELECT * FROM teams";
-$result = $connection->query($numberTeamsQuery);
-$numberRows = $result->num_rows;
-if ($numberRows == 0) {
-    echo "There are no teams";
+//Web page if not logged in
+if (!isset($_SESSION['id'])) {
+    echo "You must be logged in to view this page";
+//Web page if logged in, but not as a coach or tabulation director
+} else if (!$isTab && !$isCoach) {
+    echo "You do not have permission to access this page";
+//Code common to coach and tabulation director pages
 } else {
-    for ($a = 0; $a < $numberRows; $a++) {
-        $result->data_seek($a);
-        $team = $result->fetch_array(MYSQLI_ASSOC);
-        createTeamRow($team['number'], $team['name']);    
+    $connection = new mysqli(dbhost, dbuser, dbpass, dbname);
+    $numberTeamsQuery = "SELECT * FROM teams";
+    $result = $connection->query($numberTeamsQuery);
+    $numberRows = $result->num_rows;
+    //Check if there are any teams
+    if ($numberRows == 0) {
+        echo "There are no teams";
+    } else { //if there are teams, create tab summary table
+        echo "\n<table>";
+        for ($a = 0; $a < $numberRows; $a++) {
+            $result->data_seek($a);
+            $team = $result->fetch_array(MYSQLI_ASSOC);
+            //Web page if logged in as tabulation director (r+w scores)
+            if ($isTab) {
+                createTabTeamRow($team['number'], $team['name']);
+                //Web page if logged in as a coach (r scores)
+            } else if ($isCoach) {
+                createCoachTeamRow($team['number'], $team['name']);
+            }
+        }
+        echo "</table>";
     }
 }
 echo "</html>";
 
-function createTeamRow($teamNumber, $teamName) {
+function createCoachTeamRow($teamNumber, $teamName) {
     $connection = new mysqli(dbhost, dbuser, dbpass, dbname);
     $resultArray = [];
     //Extract all the teams ballots into a array of MySQL results, each result
@@ -64,9 +83,10 @@ function createTeamRow($teamNumber, $teamName) {
     $round3Ballot2PD = 0;
     $round4Ballot1PD = 0;
     $round4Ballot2PD = 0;
-    $record = "0-0-0";
-    $PD = 0;
-    $CS = 0;
+    $record = getWins($teamNumber)."-". getLoses($teamNumber)."-". getTies($teamNumber);
+    $PD = getPD($teamNumber);
+    $CS = getCS($teamNumber);
+    $OCS = getOCS($teamNumber);
 
     //Get out Round 1 and Round 2 data, if it exists
     if ($resultArray[0]->num_rows != 0) { //Check if Round 1 data exists
@@ -132,48 +152,189 @@ function createTeamRow($teamNumber, $teamName) {
             $round4Ballot2PD = getBallotPD($round4Ballot2['id'], $teamNumber);
         }
     }
-    echo "\n<table>";
+
+//Print all the data to a table row
     //Team Number
     echo "<tr><td>" . $teamNumber . "</td>";
     //Round 1 side, opponent, and round 2 side
-    if($round1IsPlaintiff){
+    if ($round1IsPlaintiff) {
         echo "<td>π</td><td>vs.</td>";
-        echo "<td>".$round1Opponent."</td>";
+        echo "<td>" . $round1Opponent . "</td>";
         echo "<td>∆</td><td>vs.</td>";
-    }else{
+    } else {
         echo "<td>∆</td><td>vs.</td>";
-        echo "<td>".$round1Opponent."</td>";
+        echo "<td>" . $round1Opponent . "</td>";
         echo "<td>π</td><td>vs.</td>";
     }
     //Round 2 opponent
-    echo "<td>".$round2Opponent."</td>";
+    echo "<td>" . $round2Opponent . "</td>";
     //ROund 3 side, opponent, and round 4 side
-    if($round3IsPlaintiff){
+    if ($round3IsPlaintiff) {
         echo "<td>π</td><td>vs.</td>";
-        echo "<td>".$round3Opponent."</td>";
+        echo "<td>" . $round3Opponent . "</td>";
         echo "<td>∆</td><td>vs.</td>";
-    }else{
+    } else {
         echo "<td>∆</td><td>vs.</td>";
-        echo "<td>".$round3Opponent."</td>";
+        echo "<td>" . $round3Opponent . "</td>";
         echo "<td>π</td><td>vs.</td>";
     }
     //Round 4 opponent
-    echo "<td>".$round4Opponent."</td>";
+    echo "<td>" . $round4Opponent . "</td>";
     //Record
-    echo "<td>".getWins($teamNumber)."-".getLoses($teamNumber)."-".getTies($teamNumber)."</td></tr>";
+    echo "<td>".$record."</td></tr>";
     //Team Name
-    echo "<tr><td>".$teamName."</td>";
+    echo "<tr><td>" . $teamName . "</td>";
     //Round 1 Ballots
-    echo "<td>".$round1Ballot1PD."</td><td></td><td>".$round1Ballot2PD."</td>";
+    echo "<td>" . $round1Ballot1PD . "</td><td></td><td>" . $round1Ballot2PD . "</td>";
     //Round 2 Ballots
-    echo "<td>".$round2Ballot1PD."</td><td></td><td>".$round2Ballot2PD."</td>";
+    echo "<td>" . $round2Ballot1PD . "</td><td></td><td>" . $round2Ballot2PD . "</td>";
     //Round 3 Ballots
-    echo "<td>".$round3Ballot1PD."</td><td></td><td>".$round3Ballot2PD."</td>";
+    echo "<td>" . $round3Ballot1PD . "</td><td></td><td>" . $round3Ballot2PD . "</td>";
     //Round 4 Ballots
-    echo "<td>".$round4Ballot1PD."</td><td></td><td>".$round4Ballot2PD."</td>";
+    echo "<td>" . $round4Ballot1PD . "</td><td></td><td>" . $round4Ballot2PD . "</td>";
     //CS, OCS, PD
-    echo "<td>CS: ".getCS($teamNumber)." OCS: ".getOCS($teamNumber)." PD: ".getPD($teamNumber)."</td></tr>";
-    echo "</table>";
+    echo "<td>CS: " . $CS . " OCS: " . $OCS . " PD: " . $PD . "</td></tr>";
+    echo "\n";
+}
+
+//TODO: make this able to write data to the database
+function createTabTeamRow($teamNumber, $teamName) {
+    $connection = new mysqli(dbhost, dbuser, dbpass, dbname);
+    $resultArray = [];
+    //Extract all the teams ballots into a array of MySQL results, each result
+    //containing all of the ballots from a particular round
+    for ($a = 0; $a < 4; $a++) {
+        $ballotQuery = "SELECT * FROM ballots WHERE roundNumber='" . ($a + 1) . "' && "
+                . "(pTeamNumber='" . $teamNumber . "' || dTeamNumber='" . $teamNumber . "') "
+                . "ORDER BY id;";
+        $resultArray[$a] = $connection->query($ballotQuery);
+    }
+    $connection->close();
+    //Initial all variables that will be printed
+    $round1IsPlaintiff = TRUE;
+    $round3IsPlaintiff = TRUE;
+    $round1Opponent = "0000";
+    $round2Opponent = "0000";
+    $round3Opponent = "0000";
+    $round4Opponent = "0000";
+    $round1Ballot1PD = 0;
+    $round1Ballot2PD = 0;
+    $round2Ballot1PD = 0;
+    $round2Ballot2PD = 0;
+    $round3Ballot1PD = 0;
+    $round3Ballot2PD = 0;
+    $round4Ballot1PD = 0;
+    $round4Ballot2PD = 0;
+    $record = getWins($teamNumber)."-". getLoses($teamNumber)."-". getTies($teamNumber);
+    $PD = getPD($teamNumber);
+    $CS = getCS($teamNumber);
+    $OCS = getOCS($teamNumber);
+
+    //Get out Round 1 and Round 2 data, if it exists
+    if ($resultArray[0]->num_rows != 0) { //Check if Round 1 data exists
+        $resultArray[0]->data_seek(0);
+        $round1Ballot1 = $resultArray[0]->fetch_array(MYSQLI_ASSOC);
+        $resultArray[0]->data_seek(1);
+        $round1Ballot2 = $resultArray[0]->fetch_array(MYSQLI_ASSOC);
+        //Check team side for round 1
+        if ($round1Ballot1['dTeamNumber'] == $teamNumber) {
+            $round1IsPlaintiff = FALSE;
+            //Get opposing team number
+            $round1Opponent = $round1Ballot1['pTeamNumber'];
+        } else {
+            $round1Opponent = $round1Ballot1['dTeamNumber'];
+        }
+        //Get point differential on each ballot
+        $round1Ballot1PD = getBallotPD($round1Ballot1['id'], $teamNumber);
+        $round1Ballot2PD = getBallotPD($round1Ballot2['id'], $teamNumber);
+        //Round 2 Data
+        if ($resultArray[1]->num_rows != 0) { //check if round 2 ballots exist
+            $resultArray[1]->data_seek(0);
+            $round2Ballot1 = $resultArray[1]->fetch_array(MYSQLI_ASSOC);
+            $resultArray[1]->data_seek(1);
+            $round2Ballot2 = $resultArray[1]->fetch_array(MYSQLI_ASSOC);
+            if ($round1IsPlaintiff) {
+                $round2Opponent = $ound2Ballot1['pTeamNumber'];
+            } else {
+                $round2Opponent = $ound2Ballot1['dTeamNumber'];
+            }
+            $round2Ballot1PD = getBallotPD($round2Ballot1['id'], $teamNumber);
+            $round2Ballot2PD = getBallotPD($round2Ballot2['id'], $teamNumber);
+        }
+    }
+    //Get Round 3 and 4 data, if it exists
+    if ($resultArray[2]->num_rows != 0) {
+        $resultArray[2]->data_seek(0);
+        $round3Ballot1 = $resultArray[2]->fetch_array(MYSQLI_ASSOC);
+        $resultArray[2]->data_seek(1);
+        $round3Ballot2 = $resultArray[2]->fetch_array(MYSQLI_ASSOC);
+        //Check team side for round 3
+        if ($round3Ballot1['dTeamNumber'] == $teamNumber) {
+            $round3IsPlaintiff = FALSE;
+            //Get opposing team number
+            $round3Opponent = $round3Ballot1['pTeamNumber'];
+        } else {
+            $round3Opponent = $round3Ballot1['dTeamNumber'];
+        }
+        //Get point differential on each ballot
+        $round3Ballot1PD = getBallotPD($round3Ballot1['id'], $teamNumber);
+        $round3Ballot2PD = getBallotPD($round3Ballot2['id'], $teamNumber);
+        //Round 4 Data
+        if ($resultArray[3]->num_rows != 0) { //check if round 2 ballots exist
+            $resultArray[3]->data_seek(0);
+            $round4Ballot1 = $resultArray[3]->fetch_array(MYSQLI_ASSOC);
+            $resultArray[3]->data_seek(1);
+            $round4Ballot2 = $resultArray[1]->fetch_array(MYSQLI_ASSOC);
+            if ($round3IsPlaintiff) {
+                $round4Opponent = $ound4Ballot1['pTeamNumber'];
+            } else {
+                $round4Opponent = $ound4Ballot1['dTeamNumber'];
+            }
+            $round4Ballot1PD = getBallotPD($round4Ballot1['id'], $teamNumber);
+            $round4Ballot2PD = getBallotPD($round4Ballot2['id'], $teamNumber);
+        }
+    }
+    //Team Number
+    echo "<tr><td>" . $teamNumber . "</td>";
+    //Round 1 side, opponent, and round 2 side
+    if ($round1IsPlaintiff) {
+        echo "<td>π</td><td>vs.</td>";
+        echo "<td>" . $round1Opponent . "</td>";
+        echo "<td>∆</td><td>vs.</td>";
+    } else {
+        echo "<td>∆</td><td>vs.</td>";
+        echo "<td>" . $round1Opponent . "</td>";
+        echo "<td>π</td><td>vs.</td>";
+    }
+    //Round 2 opponent
+    echo "<td>" . $round2Opponent . "</td>";
+    //ROund 3 side, opponent, and round 4 side
+    if ($round3IsPlaintiff) {
+        echo "<td>π</td><td>vs.</td>";
+        echo "<td>" . $round3Opponent . "</td>";
+        echo "<td>∆</td><td>vs.</td>";
+    } else {
+        echo "<td>∆</td><td>vs.</td>";
+        echo "<td>" . $round3Opponent . "</td>";
+        echo "<td>π</td><td>vs.</td>";
+    }
+    //Round 4 opponent
+    echo "<td>" . $round4Opponent . "</td>";
+    //Record
+    echo "<td>" . $record . "</td></tr>";
+    //Team Name
+    echo "<tr><td>" . $teamName . "</td>";
+    //Round 1 Ballots
+    echo "<td>" . $round1Ballot1PD . "</td><td></td><td>" . $round1Ballot2PD . "</td>";
+    //Round 2 Ballots
+    echo "<td>" . $round2Ballot1PD . "</td><td></td><td>" . $round2Ballot2PD . "</td>";
+    //Round 3 Ballots
+    echo "<td>" . $round3Ballot1PD . "</td><td></td><td>" . $round3Ballot2PD . "</td>";
+    //Round 4 Ballots
+    echo "<td>" . $round4Ballot1PD . "</td><td></td><td>" . $round4Ballot2PD . "</td>";
+    //CS, OCS, PD
+    echo "<td>CS: " . $CS . " OCS: " . $OCS . " PD: " . $PD . "</td></tr>";
+    echo "\n";
 }
 
 ?>
