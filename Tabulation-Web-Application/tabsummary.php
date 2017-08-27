@@ -18,9 +18,25 @@
  */
 
 //TODO: Check session privileges
+/*TODO: when data is manually entered by tabulation director, confirm that it is
+sane before writing it to the database */
+//TODO: revert to ability not to edit directly, as all editing should be done in ballot screen
+
 session_start();
 
 require_once "dblogin.php";
+
+//HTML Header information
+echo<<<_END
+<!DOCTYPE HTML>
+<html>
+        <head>
+            <title>Tab Summary</title>
+<script src='https://code.jquery.com/jquery-3.2.1.min.js'></script>
+                </head>
+        <body>
+_END;
+
 require_once "header.php";
 
 //Web page if not logged in
@@ -45,16 +61,18 @@ if (!isset($_SESSION['id'])) {
             $team = $result->fetch_array(MYSQLI_ASSOC);
             //Web page if logged in as tabulation director (r+w scores)
             if ($isTab) {
+                echo "\n<form>\n";
                 createTabTeamRow($team['number'], $team['name']);
+                echo "</form>";
                 //Web page if logged in as a coach (r scores)
             } else if ($isCoach) {
                 createCoachTeamRow($team['number'], $team['name']);
             }
         }
-        echo "</table>";
+        echo "\n</table>";
     }
 }
-echo "</html>";
+echo "\n</html>";
 
 function createCoachTeamRow($teamNumber, $teamName) {
     $connection = new mysqli(dbhost, dbuser, dbpass, dbname);
@@ -83,7 +101,7 @@ function createCoachTeamRow($teamNumber, $teamName) {
     $round3Ballot2PD = 0;
     $round4Ballot1PD = 0;
     $round4Ballot2PD = 0;
-    $record = getWins($teamNumber)."-". getLoses($teamNumber)."-". getTies($teamNumber);
+    $record = getWins($teamNumber) . "-" . getLoses($teamNumber) . "-" . getTies($teamNumber);
     $PD = getPD($teamNumber);
     $CS = getCS($teamNumber);
     $OCS = getOCS($teamNumber);
@@ -181,7 +199,7 @@ function createCoachTeamRow($teamNumber, $teamName) {
     //Round 4 opponent
     echo "<td>" . $round4Opponent . "</td>";
     //Record
-    echo "<td>".$record."</td></tr>";
+    echo "<td>" . $record . "</td></tr>";
     //Team Name
     echo "<tr><td>" . $teamName . "</td>";
     //Round 1 Ballots
@@ -225,7 +243,7 @@ function createTabTeamRow($teamNumber, $teamName) {
     $round3Ballot2PD = 0;
     $round4Ballot1PD = 0;
     $round4Ballot2PD = 0;
-    $record = getWins($teamNumber)."-". getLoses($teamNumber)."-". getTies($teamNumber);
+    $record = getWins($teamNumber) . "-" . getLoses($teamNumber) . "-" . getTies($teamNumber);
     $PD = getPD($teamNumber);
     $CS = getCS($teamNumber);
     $OCS = getOCS($teamNumber);
@@ -295,46 +313,85 @@ function createTabTeamRow($teamNumber, $teamName) {
         }
     }
     //Team Number
-    echo "<tr><td>" . $teamNumber . "</td>";
+    echo "<tr><td>" .
+    "<input type=text pattern='[0-9]{4}' value=$teamNumber size='4' maxlength='4'>" .
+    "</td>";
     //Round 1 side, opponent, and round 2 side
     if ($round1IsPlaintiff) {
-        echo "<td>π</td><td>vs.</td>";
-        echo "<td>" . $round1Opponent . "</td>";
-        echo "<td>∆</td><td>vs.</td>";
+        echo "<td>".
+                "<select><option selected>π</option><option>∆</option></select>".
+                "</td><td>vs.</td>";
+        echo "<td>" .
+        "<input type=text pattern='[0-9]{4}' value=$round1Opponent size='4' maxlength='4'>" .
+        "</td>";
+        echo "<td>".
+                "<select><option>π</option><option selected>∆</option></select>".
+                "</td><td>vs.</td>";
     } else {
-        echo "<td>∆</td><td>vs.</td>";
-        echo "<td>" . $round1Opponent . "</td>";
-        echo "<td>π</td><td>vs.</td>";
+        echo "<td>".
+                "<select><option>π</option><option selected>∆</option></select>".
+                "</td><td>vs.</td>";
+        echo "<td>" .
+        "<input type=text pattern='[0-9]{4}' value=$round1Opponent size='4' maxlength='4'>" .
+        "</td>";
+        echo "<td>".
+                "<select><option selected>π</option><option>∆</option></select>".
+                "</td><td>vs.</td>";
     }
     //Round 2 opponent
-    echo "<td>" . $round2Opponent . "</td>";
+    echo "<td>" .
+    "<input type=text pattern='[0-9]{4}' value=$round2Opponent size='4' maxlength='4'>" .
+    "</td>";
     //ROund 3 side, opponent, and round 4 side
     if ($round3IsPlaintiff) {
         echo "<td>π</td><td>vs.</td>";
-        echo "<td>" . $round3Opponent . "</td>";
+        echo "<td>" .
+        "<input type=text pattern='[0-9]{4}' value=$round3Opponent size='4' maxlength='4'>" .
+        "</td>";
         echo "<td>∆</td><td>vs.</td>";
     } else {
         echo "<td>∆</td><td>vs.</td>";
-        echo "<td>" . $round3Opponent . "</td>";
+        echo "<td>" .
+        "<input type=text pattern='[0-9]{4}' value=$round3Opponent size='4' maxlength='4'>" .
+        "</td>";
         echo "<td>π</td><td>vs.</td>";
     }
     //Round 4 opponent
-    echo "<td>" . $round4Opponent . "</td>";
+    echo "<td>" .
+    "<input type=text pattern='[0-9]{4}' value=$round4Opponent size='4' maxlength='4'>" .
+    "</td>";
     //Record
     echo "<td>" . $record . "</td></tr>";
     //Team Name
     echo "<tr><td>" . $teamName . "</td>";
     //Round 1 Ballots
-    echo "<td>" . $round1Ballot1PD . "</td><td></td><td>" . $round1Ballot2PD . "</td>";
+    echo "<td>" .
+    "<input type=text pattern='[0-9]{2}' value=$round1Ballot1PD size='2' maxlength='2'>" .
+    "</td><td></td><td>" .
+    "<input type=text pattern='[0-9]{2}' value=$round1Ballot2PD size='2' maxlength='2'>" .
+    "</td>";
     //Round 2 Ballots
-    echo "<td>" . $round2Ballot1PD . "</td><td></td><td>" . $round2Ballot2PD . "</td>";
+    echo "<td>" .
+    "<input type=text pattern='[0-9]{2}' value=$round2Ballot1PD size='2' maxlength='2'>" .
+    "</td><td></td><td>" .
+    "<input type=text pattern='[0-9]{2}' value=$round2Ballot2PD size='2' maxlength='2'>" .
+    "</td>";
     //Round 3 Ballots
-    echo "<td>" . $round3Ballot1PD . "</td><td></td><td>" . $round3Ballot2PD . "</td>";
+    echo "<td>" .
+    "<input type=text pattern='[0-9]{2}' value=$round3Ballot1PD size='2' maxlength='2'>" .
+    "</td><td></td><td>" .
+    "<input type=text pattern='[0-9]{2}' value=$round3Ballot2PD size='2' maxlength='2'>" .
+    "</td>";
     //Round 4 Ballots
-    echo "<td>" . $round4Ballot1PD . "</td><td></td><td>" . $round4Ballot2PD . "</td>";
+    echo "<td>" .
+    "<input type=text pattern='[0-9]{2}' value=$round4Ballot1PD size='2' maxlength='2'>" .
+    "</td><td></td><td>" .
+    "<input type=text pattern='[0-9]{2}' value=$round4Ballot2PD size='2' maxlength='2'>" .
+    "</td>";
     //CS, OCS, PD
     echo "<td>CS: " . $CS . " OCS: " . $OCS . " PD: " . $PD . "</td></tr>";
     echo "\n";
 }
 
+echo "\n</body>\n</html>";
 ?>

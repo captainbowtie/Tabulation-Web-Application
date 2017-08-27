@@ -100,7 +100,7 @@ _END;
 } else {
     createTables();
 }
-echo "</body></html>";
+echo "\n</body>\n</html>";
 
 function createTables() {
     global $connection;
