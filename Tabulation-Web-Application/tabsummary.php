@@ -72,7 +72,8 @@ if (!isset($_SESSION['id'])) {
         echo "\n</table>";
     }
 }
-echo "\n</html>";
+echo "</body>\n";
+echo "</html>\n";
 
 function createCoachTeamRow($teamNumber, $teamName) {
     $connection = new mysqli(dbhost, dbuser, dbpass, dbname);
@@ -393,5 +394,4 @@ function createTabTeamRow($teamNumber, $teamName) {
     echo "\n";
 }
 
-echo "\n</body>\n</html>";
 ?>

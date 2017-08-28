@@ -23,13 +23,13 @@ session_start();
 
 require_once "dblogin.php";
 
+
 //HTML Header information
 echo<<<_END
 <!DOCTYPE HTML>
 <html>
         <head>
-            <title>Tab Summary</title>
-<script src='https://code.jquery.com/jquery-3.2.1.min.js'></script>
+            <title>Admin</title>
                 </head>
         <body>
 _END;
@@ -41,10 +41,52 @@ if (!isset($_SESSION['id'])) {
 //Web page if logged in, but not as a coach or tabulation director
 } else if (!$isTab) {
     echo "You do not have permission to access this page";
-//Code common to coach and tabulation director pages
+//Code if logged in as tabulation director
 } else {
-    
+    createUserTable();
+    echo "<form id='userForm'>\n";
+    echo "<label>Name: <input id='name'></label>\n";
+    echo "<label>Email: <input id='email' pattern='[A-z0-9._%+-]+@[A-z0-9.-]+\.[A-z]{2,}'></label>\n";
+    echo "<label><input type=checkbox id='judge'>Judge</label>\n" .
+    "<label><input type=checkbox id='coach'>Coach</label>\n" .
+    "<label><input type=checkbox id='tab'>Tab</label>\n";
+    echo "<label><input type=checkbox id='round1'>Available Round 1</label>\n" .
+    "<label><input type=checkbox id='round2'>Available Round 2</label>\n" .
+    "<label><input type=checkbox id='round3'>Available Round 3</label>\n" .
+    "<label><input type=checkbox id='round4'>Available Round 4</label>\n";
+    echo "<input type=submit id='addUserButton' name='addUser' value='Add User'>\n";
+    echo "</form>\n";
 }
 
-echo "</body>";
-echo "</html>";
+
+echo "<script src='https://code.jquery.com/jquery-3.2.1.min.js'></script>";
+echo "<script src='/admin.js'></script>";
+echo "</body>\n";
+echo "</html>\n";
+
+function createUserTable(){
+    $connection = new mysqli(dbhost, dbuser, dbpass, dbname);
+    $userQuery = "SELECT id,name,email,isJudge,isCoach,isTab FROM users";
+    $userResult = $connection->query($userQuery);
+    $connection->close();
+
+    echo "\n<table>";
+    echo "\n<tr>"
+    . "<td>id</td><td>name</td><td>email</td><td>Judge</td><td>Coach</td><td>Tab</td>"
+    . "</tr>\n";
+    for ($a = 0; $a < $userResult->num_rows; $a++) {
+        $userResult->data_seek($a);
+        $user = $userResult->fetch_array(MYSQLI_ASSOC);
+        $userId = $user['id'];
+        $userName = $user['name'];
+        $userEmail = $user['email'];
+        $userIsJudge = $user['isJudge'];
+        $userIsCoach = $user['isCoach'];
+        $userIsTab = $user['isTab'];
+        echo "<tr>";
+        echo "<td>$userId</td><td>$userName</td><td>$userEmail</td>"
+        . "<td>$userIsJudge</td><td>$userIsCoach</td><td>$userIsTab</td>";
+        echo "</tr>\n";
+    }
+    echo "</table>\n";
+}

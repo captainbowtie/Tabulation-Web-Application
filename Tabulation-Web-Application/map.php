@@ -1,6 +1,7 @@
-<!DOCTYPE html>
-<!--
-Copyright (C) 2017 allen
+<?php 
+
+/*
+ * Copyright (C) 2017 allen
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as published by
@@ -14,15 +15,7 @@ GNU Affero General Public License for more details.
 
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
--->
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title></title>
-    </head>
-    <body>
-        <?php
-        // put your code here
-        ?>
-    </body>
-</html>
+ */
+
+echo "forty-two";
+?>
