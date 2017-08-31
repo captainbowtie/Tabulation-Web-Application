@@ -40,26 +40,7 @@ if (isset($_POST["email"]) && isset($_POST["pass"])) {
     $result->close();
 }
 
-$isTab = FALSE;
-$isJudge = FALSE;
-$isCoach = FALSE;
-
-if (isset($_SESSION['id'])) {
-    $userQuery = "SELECT isTab,isJudge,isCoach FROM users WHERE id=" . $_SESSION['id'];
-    $userResult = $connection->query($userQuery);
-    $userResult->data_seek(0);
-    $roleArray = $userResult->fetch_array(MYSQLI_ASSOC);
-    $userResult->close();
-    if($roleArray['isTab']==1){
-        $isTab=TRUE;
-    }
-    if($roleArray['isJudge']==1){
-        $isJudge=TRUE;
-    }
-    if($roleArray['isCoach']==1){
-        $isCoach=TRUE;
-    }
-}
+require_once 'setSessionPrivileges.php';
 
 echo "<div>";
 if ($isTab) {

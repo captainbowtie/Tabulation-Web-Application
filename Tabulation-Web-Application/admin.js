@@ -14,10 +14,53 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-$('#userForm').submit(function(e){
+$('#userForm').submit(function (e) {
     e.preventDefault();
-    console.log("hello");
-    //return false;
-    
+    if (validateName() && validateEmail()) {
+        $.ajax({
+
+            // The URL for the request
+            url: "/addUser.php",
+
+            // The data to send (will be converted to a query string)
+            data: $("#userForm").serializeArray(),
+
+            // Whether this is a POST or GET request
+            type: "POST",
+
+            // The type of data we expect back
+            dataType: "text",
+        })
+                // Code to run if the request succeeds (is done);
+                // The response is passed to the function
+                .done(function (response) {
+                    if(response==="0"){
+                        console.log("a"+response+"a");
+                        $.post("/userTable.php",function(userTable){
+                            $("#userTable").replaceWith(userTable);
+                        });
+                    }else{
+                        console.log(response);
+                    }
+                })
+    }else{
+        
+    }
 });
+
+function validateName() {
+    if ($('#name').val() != '') {
+        return true;
+    } else {
+        return false;
+    }
+}
+;
+
+function validateEmail() {
+    var regEx = /[A-z0-9._%+-]+@[A-z0-9.-]+\.[A-z]{2,}/;
+    return regEx.test($('#email').val());
+}
+;
+
 
