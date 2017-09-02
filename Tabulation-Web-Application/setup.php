@@ -27,7 +27,6 @@ echo<<<_END
 <!DOCTYPE html>
 <head>
 <title>Database Setup</title>
-<script src='functions.js'></script>
 </head>
 <body>
 _END;
@@ -42,23 +41,23 @@ if ($connection->connect_error) {
 //Check if tables needed already exist in database
 $query = "SHOW TABLES LIKE 'teams'";
 $result = $connection->query($query);
-global $teamsTableExists;
+$teamsTableExists;
 $teamsTableExists = $result->num_rows > 0;
 $query = "SHOW TABLES LIKE 'users'";
 $result = $connection->query($query);
-global $usersTableExists;
+$usersTableExists;
 $usersTableExists = $result->num_rows > 0;
 $query = "SHOW TABLES LIKE 'rooms'";
 $result = $connection->query($query);
-global $roomsTableExists;
+$roomsTableExists;
 $roomsTableExists = $result->num_rows > 0;
 $query = "SHOW TABLES LIKE 'ballots'";
 $result = $connection->query($query);
-global $ballotsTableExists;
+$ballotsTableExists;
 $ballotsTableExists = $result->num_rows > 0;
 $query = "SHOW TABLES LIKE 'competitors'";
 $result = $connection->query($query);
-global $competitorsTableExists;
+$competitorsTableExists;
 $competitorsTableExists = $result->num_rows > 0;
 
 //If any table needed already exists, require Tabulation director login to clear data
@@ -112,6 +111,7 @@ function createTables() {
     fclose($fh);
     // Drop any tables that already exist
     //TODO: Add drops for other tables added to database since this funcgtion was written
+    //TODO: Split rooms table into a building and a room table
     global $teamsTableExists;
     if ($teamsTableExists) {
         $query = "DROP TABLE teams";
@@ -127,7 +127,7 @@ function createTables() {
         $query = "DROP TABLE rooms";
         $connection->query($query);
     }
-    $competitorsTableExists;
+    global $competitorsTableExists;
     if ($competitorsTableExists) {
         $query = "DROP TABLE competitors";
         $connection->query($query);
@@ -145,7 +145,7 @@ function createTables() {
             . "name VARCHAR(64) NOT NULL, PRIMARY KEY (number)) ENGINE InnoDB";
     $connection->query($teamsTable);
     $competitorsTable = "CREATE TABLE competitors(id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT KEY, " //Competitors Table
-            . " teamNumber SMALLINT UNSIGNED NOT NULL, name VARCHAR(64) NOT NULL, INDEX(teamNumber)) "
+            . "team SMALLINT UNSIGNED NOT NULL, name VARCHAR(64) NOT NULL, INDEX(team)) "
             . "ENGINE InnoDB";
     $connection->query($competitorsTable);
     $roomsTable = "CREATE TABLE rooms(id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT KEY, " //Rooms Table
@@ -160,44 +160,45 @@ function createTables() {
             . "canJudgeRound3 BINARY(1) NOT NULL DEFAULT '0', canJudgeRound4 BINARY(1) NOT NULL DEFAULT '0') ENGINE InnoDB";
     $connection->query($usersTable);
     $ballotsTable = "CREATE TABLE ballots(id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT KEY, " //Ballots Table
-            . "pTeamNumber SMALLINT UNSIGNED NOT NULL, dTeamNumber SMALLINT UNSIGNED NOT NULL, "
-            . "roundNumber TINYINT UNSIGNED NOT NULL, judgeId SMALLINT UNSIGNED NOT NULL, roomID SMALLINT UNSIGNED NOT NULL, "
-            . "pOpen TINYINT UNSIGNED NOT NULL, pDirect1 TINYINT UNSIGNED NOT NULL, "
-            . "pWitDirect1 TINYINT UNSIGNED NOT NULL, pWitCross1 TINYINT UNSIGNED NOT NULL, "
-            . "pDirect2 TINYINT UNSIGNED NOT NULL, pWitDirect2 TINYINT UNSIGNED NOT NULL, "
-            . "pWitCross2 TINYINT UNSIGNED NOT NULL, pDirect3 TINYINT UNSIGNED NOT NULL, "
-            . "pWitDirect3 TINYINT UNSIGNED NOT NULL, pWitCross3 TINYINT UNSIGNED NOT NULL, "
-            . "pCross1 TINYINT UNSIGNED NOT NULL, pCross2 TINYINT UNSIGNED NOT NULL, pCross3 TINYINT UNSIGNED NOT NULL, "
-            . "pClose TINYINT UNSIGNED NOT NULL, "
-            . "dOpen TINYINT UNSIGNED NOT NULL, dDirect1 TINYINT UNSIGNED NOT NULL, "
-            . "dWitDirect1 TINYINT UNSIGNED NOT NULL, dWitCross1 TINYINT UNSIGNED NOT NULL, "
-            . "dDirect2 TINYINT UNSIGNED NOT NULL, dWitDirect2 TINYINT UNSIGNED NOT NULL, "
-            . "dWitCross2 TINYINT UNSIGNED NOT NULL, dDirect3 TINYINT UNSIGNED NOT NULL, "
-            . "dWitDirect3 TINYINT UNSIGNED NOT NULL, dWitCross3 TINYINT UNSIGNED NOT NULL, "
-            . "dCross1 TINYINT UNSIGNED NOT NULL, dCross2 TINYINT UNSIGNED NOT NULL, dCross3 TINYINT UNSIGNED NOT NULL, "
-            . "dClose TINYINT UNSIGNED NOT NULL, "
-            . "attyRank1 SMALLINT UNSIGNED NOT NULL, attyRank2 SMALLINT UNSIGNED NOT NULL, "
-            . "attyRank3 SMALLINT UNSIGNED NOT NULL, attyRank4 SMALLINT UNSIGNED NOT NULL, "
-            . "attyRank5 SMALLINT UNSIGNED NOT NULL, attyRank6 SMALLINT UNSIGNED NOT NULL, "
-            . "witRank1 SMALLINT UNSIGNED NOT NULL, witRank2 SMALLINT UNSIGNED NOT NULL, "
-            . "witRank3 SMALLINT UNSIGNED NOT NULL, witRank4 SMALLINT UNSIGNED NOT NULL, "
-            . "witRank5 SMALLINT UNSIGNED NOT NULL, witRank6 SMALLINT UNSIGNED NOT NULL, "
+            . "pTeamNumber SMALLINT UNSIGNED NOT NULL DEFAULT '0', dTeamNumber SMALLINT UNSIGNED NOT NULL DEFAULT '0', "
+            . "round TINYINT UNSIGNED NOT NULL DEFAULT '1', judgeId SMALLINT UNSIGNED NOT NULL DEFAULT '0', roomId SMALLINT UNSIGNED NOT NULL DEFAULT '0', "
+            . "pOpen TINYINT UNSIGNED NOT NULL DEFAULT '0', pDirect1 TINYINT UNSIGNED NOT NULL DEFAULT '0', "
+            . "pWitDirect1 TINYINT UNSIGNED NOT NULL DEFAULT '0', pWitCross1 TINYINT UNSIGNED NOT NULL DEFAULT '0', "
+            . "pDirect2 TINYINT UNSIGNED NOT NULL DEFAULT '0', pWitDirect2 TINYINT UNSIGNED NOT NULL DEFAULT '0', "
+            . "pWitCross2 TINYINT UNSIGNED NOT NULL DEFAULT '0', pDirect3 TINYINT UNSIGNED NOT NULL DEFAULT '0', "
+            . "pWitDirect3 TINYINT UNSIGNED NOT NULL DEFAULT '0', pWitCross3 TINYINT UNSIGNED NOT NULL DEFAULT '0', "
+            . "pCross1 TINYINT UNSIGNED NOT NULL DEFAULT '0', pCross2 TINYINT UNSIGNED NOT NULL DEFAULT '0', pCross3 TINYINT UNSIGNED NOT NULL DEFAULT '0', "
+            . "pClose TINYINT UNSIGNED NOT NULL DEFAULT '0', "
+            . "dOpen TINYINT UNSIGNED NOT NULL DEFAULT '0', dDirect1 TINYINT UNSIGNED NOT NULL DEFAULT '0', "
+            . "dWitDirect1 TINYINT UNSIGNED NOT NULL DEFAULT '0', dWitCross1 TINYINT UNSIGNED NOT NULL DEFAULT '0', "
+            . "dDirect2 TINYINT UNSIGNED NOT NULL DEFAULT '0', dWitDirect2 TINYINT UNSIGNED NOT NULL DEFAULT '0', "
+            . "dWitCross2 TINYINT UNSIGNED NOT NULL DEFAULT '0', dDirect3 TINYINT UNSIGNED NOT NULL DEFAULT '0', "
+            . "dWitDirect3 TINYINT UNSIGNED NOT NULL DEFAULT '0', dWitCross3 TINYINT UNSIGNED NOT NULL DEFAULT '0', "
+            . "dCross1 TINYINT UNSIGNED NOT NULL DEFAULT '0', dCross2 TINYINT UNSIGNED NOT NULL DEFAULT '0', dCross3 TINYINT UNSIGNED NOT NULL DEFAULT '0', "
+            . "dClose TINYINT UNSIGNED NOT NULL DEFAULT '0', "
+            . "attyRank1 SMALLINT UNSIGNED NOT NULL DEFAULT '0', attyRank2 SMALLINT UNSIGNED NOT NULL DEFAULT '0', "
+            . "attyRank3 SMALLINT UNSIGNED NOT NULL DEFAULT '0', attyRank4 SMALLINT UNSIGNED NOT NULL DEFAULT '0', "
+            . "attyRank5 SMALLINT UNSIGNED NOT NULL DEFAULT '0', attyRank6 SMALLINT UNSIGNED NOT NULL DEFAULT '0', "
+            . "witRank1 SMALLINT UNSIGNED NOT NULL DEFAULT '0', witRank2 SMALLINT UNSIGNED NOT NULL DEFAULT '0', "
+            . "witRank3 SMALLINT UNSIGNED NOT NULL DEFAULT '0', witRank4 SMALLINT UNSIGNED NOT NULL DEFAULT '0', "
+            . "witRank5 SMALLINT UNSIGNED NOT NULL DEFAULT '0', witRank6 SMALLINT UNSIGNED NOT NULL DEFAULT '0', "
+            . "finalized BINARY(1) NOT NULL DEFAULT '0', "
             . "INDEX(pTeamNumber), INDEX(dTeamNumber), "
-            . "INDEX(roundNumber), INDEX(judgeId), INDEX(attyRank1), "
+            . "INDEX(round), INDEX(judgeId), INDEX(attyRank1), "
             . "INDEX(attyRank2), INDEX(attyRank3), INDEX(attyRank4), INDEX(attyRank5), "
             . "INDEX(attyRank6), INDEX(witRank1), INDEX(witRank2), INDEX(witRank3), "
             . "INDEX(witRank4), INDEX(witRank5), INDEX(witRank6)) ENGINE InnoDB";
     $connection->query($ballotsTable);
     $teamConflictsTable = "CREATE TABLE teamConflicts(id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT KEY, "
-            . "team1 SMALLINT UNSIGNED NOT NULL, team2 SMALLINT UNSIGNED NOT NULL, "
+            . "team1 SMALLINT UNSIGNED NOT NULL DEFAULT '0', team2 SMALLINT UNSIGNED NOT NULL DEFAULT '0', "
             . "INDEX(team1), INDEX(team2)) ENGINE InnoDB";
     $connection->query($teamConflictsTable);
     $judgeConflictsTable = "CREATE TABLE judgeConflicts(id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT KEY, "
-            . "judge SMALLINT UNSIGNED NOT NULL, team SMALLINT UNSIGNED NOT NULL, "
+            . "judge SMALLINT UNSIGNED NOT NULL DEFAULT '0', team SMALLINT UNSIGNED NOT NULL DEFAULT '0', "
             . "INDEX(judge), INDEX(team)) ENGINE InnoDB";
     $connection->query($judgeConflictsTable);
     $alertsTable = "CREATE TABLE alerts(id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT KEY, "
-            . "user SMALLINT UNSIGNED NOT NULL, team SMALL INT UNSIGNED NOT NULL, "
+            . "user SMALLINT UNSIGNED NOT NULL DEFAULT '0', team SMALL INT UNSIGNED NOT NULL DEFAULT '0', "
             . "INDEX(user)) ENGINE InnoDB";
     $connection->query($alertsTable);
 

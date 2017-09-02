@@ -14,9 +14,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-function $(id){
-    return document.getElementById(id);
-}
+
 function O(obj)
 {
   return document.getElementById(obj);

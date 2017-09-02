@@ -70,6 +70,7 @@ if (!isset($_SESSION['id'])) {
         $round4 = "0";
     }
     //TODO: validate values of name, email, and password
+    //TODO: error handling
     $query = "INSERT INTO users(name,email,password,isJudge,isCoach,isTab,"
             . "canJudgeRound1, canJudgeRound2, canJudgeRound3, canJudgeRound4) "
             . "VALUES ('$name','$email','$pass','$judge','$coach',"
