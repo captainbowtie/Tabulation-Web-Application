@@ -72,6 +72,7 @@ if (!isset($_SESSION['id'])) {
 
 
 echo "<script src='https://code.jquery.com/jquery-3.2.1.min.js'></script>";
+echo "<script src='/ballot.js'></script>";
 echo "</body>\n";
 echo "</html>\n";
 
@@ -121,7 +122,7 @@ function createJudgeBallot($ballot) {
     $connection->close();
 
     //Assign initial values to variables
-    $roundNumber = $ballot['roundNumber'];
+    $round = $ballot['round'];
     $judgeName = $judge['name'];
     $roomNumber = $room['building'] . " " . $room['number'];
     $pOpen = $ballot['pOpen'];
@@ -204,11 +205,11 @@ function createJudgeBallot($ballot) {
     $witRank6 = str_replace($witRank6Search, $witRank6Replace, $comboBoxOptionHTML);
     
     //Create ballot header HTML
-    echo "$pTeamNumber vs. $dTeamNumber<br>\n";
-    echo "$roomNumber, Round $roundNumber: $judgeName<br>\n";
+    echo "<span id='pTeam'>$pTeamNumber</span> vs. <span id='dTeam'>$dTeamNumber</span><br>\n";
+    echo "$roomNumber, Round <span id='round'>$round</span>: <span id='judge' judgeId='$judgeId'>$judgeName</span><br>\n";
 
     //Create scores section of ballot
-    echo "<form>\n";
+    echo "<form name='form' id='form'>\n";
     echo "<table>\n";
     echo "<tr><td>PLAINTIFF</td><td>DEFENSE</td></tr>\n";
     //TODO: make all inputs numbers, limit to 2 digits, set default values
@@ -287,28 +288,28 @@ function createJudgeBallot($ballot) {
     echo "<table>";
     echo "<tr><td>ATTORNEYS</td><td>WITNESSES</td></tr>\n";
     echo "<tr>\n";
-    echo "<td><label>1: <select>\n$attyRank1</select></label>\n</td>\n";
-    echo "<td><label>1: <select>\n$witRank1</select></label>\n</td>\n";
+    echo "<td><label>1: <select id='attyRank1'>\n$attyRank1</select></label>\n</td>\n";
+    echo "<td><label>1: <select id='witRank1'>\n$witRank1</select></label>\n</td>\n";
     echo "</tr>\n";
     echo "<tr>\n";
-    echo "<td><label>2: <select>\n$attyRank2</select></label>\n</td>\n";
-    echo "<td><label>2: <select>\n$witRank2</select></label>\n</td>\n";
+    echo "<td><label>2: <select id='attyRank2'>\n$attyRank2</select></label>\n</td>\n";
+    echo "<td><label>2: <select id='witRank2'>\n$witRank2</select></label>\n</td>\n";
     echo "</tr>\n";
     echo "<tr>\n";
-    echo "<td><label>3: <select>\n$attyRank3</select></label>\n</td>\n";
-    echo "<td><label>3: <select>\n$witRank3</select></label>\n</td>\n";
+    echo "<td><label>3: <select id='attyRank3'>\n$attyRank3</select></label>\n</td>\n";
+    echo "<td><label>3: <select id='witRank3'>\n$witRank3</select></label>\n</td>\n";
     echo "</tr>\n";
     echo "<tr>\n";
-    echo "<td><label>4: <select>\n$attyRank4</select></label>\n</td>\n";
-    echo "<td><label>4: <select>\n$witRank4</select></label>\n</td>\n";
+    echo "<td><label>4: <select id='attyRank4'>\n$attyRank4</select></label>\n</td>\n";
+    echo "<td><label>4: <select  id='witRank4'>\n$witRank4</select></label>\n</td>\n";
     echo "</tr>\n";
     echo "<tr>\n";
-    echo "<td><label>5: <select>\n$attyRank5</select></label>\n</td>\n";
-    echo "<td><label>5: <select>\n$witRank5</select></label>\n</td>\n";
+    echo "<td><label>5: <select id='attyRank5'>\n$attyRank5</select></label>\n</td>\n";
+    echo "<td><label>5: <select  id='witRank5'>\n$witRank5</select></label>\n</td>\n";
     echo "</tr>\n";
     echo "<tr>\n";
-    echo "<td><label>6: <select>\n$attyRank6</select></label>\n</td>\n";
-    echo "<td><label>6: <select>\n$witRank6</select></label>\n</td>\n";
+    echo "<td><label>6: <select id='attyRank6'>\n$attyRank6</select></label>\n</td>\n";
+    echo "<td><label>6: <select  id='witRank6'>\n$witRank6</select></label>\n</td>\n";
     echo "</tr>\n";
     echo "</table>";
     echo "</form>\n";

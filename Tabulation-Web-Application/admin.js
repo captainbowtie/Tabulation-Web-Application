@@ -34,17 +34,17 @@ $('#userForm').submit(function (e) {
                 // Code to run if the request succeeds (is done);
                 // The response is passed to the function
                 .done(function (response) {
-                    if(response==="0"){
-                        console.log("a"+response+"a");
-                        $.post("/userTable.php",function(userTable){
+                    if (response === "0") {
+                        $.post("/userTable.php", function (userTable) {
                             $("#userTable").replaceWith(userTable);
                         });
-                    }else{
+                    } else {
+                        //TODO: code if there is an error
                         console.log(response);
                     }
                 })
-    }else{
-        
+    } else {
+
     }
 });
 
