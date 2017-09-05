@@ -44,13 +44,10 @@ if (!isset($_SESSION['id'])) {
     echo "You do not have permission to access this page";
 //Code if logged in as tabulation director
 } else if ($isTab) {
-    
+    createTabBallot();
 } else if ($isCoach && $isJudge) {
     
 } else if ($isJudge) {
-    //TODO: Submit name with the index of rankings, to verify no funny business on client side
-    //Alternatively, send the dropdown index, and then on the server reconstruct the dropdown to see who that index must point to
-    //TODO: Check if ballot is finalized
     $fh = fopen("currentRound.txt", 'r');
     $currentRound = fgets($fh);
     fclose($fh);
@@ -69,10 +66,6 @@ if (!isset($_SESSION['id'])) {
 } else if ($isCoach) {
     
 }
-
-
-echo "<script src='https://code.jquery.com/jquery-3.2.1.min.js'></script>";
-echo "<script src='/ballot.js'></script>";
 echo "</body>\n";
 echo "</html>\n";
 
@@ -209,7 +202,7 @@ function createJudgeBallot($ballot) {
     echo "$roomNumber, Round <span id='round'>$round</span>: <span id='judge' judgeId='$judgeId'>$judgeName</span><br>\n";
 
     //Create scores section of ballot
-    echo "<form name='form' id='form'>\n";
+    echo "<form name='ballot' id='ballot'>\n";
     echo "<table>\n";
     echo "<tr><td>PLAINTIFF</td><td>DEFENSE</td></tr>\n";
     //TODO: make all inputs numbers, limit to 2 digits, set default values
@@ -240,7 +233,7 @@ function createJudgeBallot($ballot) {
     echo "</tr>\n";
     echo "<tr>";
     echo "<td><label>Direct exam of π #3: <input type=number min='0' step='1' max='10' size='2' id='pDirect3' name='pDirect3' value='$pDirect3'></label></td>";
-    echo "<td><label>Cross exam of π #3: <input type=number min='0' step='1' max='10' size='2' id='dCross=3' name='dCross3' value='$dCross3'></label></td>";
+    echo "<td><label>Cross exam of π #3: <input type=number min='0' step='1' max='10' size='2' id='dCross3' name='dCross3' value='$dCross3'></label></td>";
     echo "</tr>\n";
     echo "<tr>";
     echo "<td><label>Witness #3 direct: <input type=number min='0' step='1' max='10' size='2' id='pWitDirect3' name='pWitDirect3' value='$pWitDirect3'></label></td><td></td>";
@@ -312,5 +305,153 @@ function createJudgeBallot($ballot) {
     echo "<td><label>6: <select  id='witRank6'>\n$witRank6</select></label>\n</td>\n";
     echo "</tr>\n";
     echo "</table>";
+    echo "<input type=submit id='finalize' name='finalize' value='Finalize Ballot'>\n";
     echo "</form>\n";
+    
+    echo "<script src='https://code.jquery.com/jquery-3.2.1.min.js'></script>";
+echo "<script src='/judgeBallot.js'></script>";
+}
+
+function createTabBallot(){
+    //Echo the round number selector
+    $roundOptions = "<option value='round1'>Round 1</option>\n".
+            "<option value='round2'>Round 2</option>\n".
+            "<option value='round3'>Round 3</option>\n".
+            "<option value='round4'>Round 4</option>\n";
+    $fh = fopen("currentRound.txt", 'r');
+    $currentRound = fgets($fh);
+    fclose($fh);
+    $roundOptions = str_replace("round$currentRound'", "round$currentRound' selected", $roundOptions);
+    echo "<select id='round'>\n$roundOptions\n</select>\n";
+    
+    //Echo the pairing selector
+    $pairingOptions = "";
+    $pairingsQuery = "SELECT id,pTeamNumber,dTeamNumber,judgeId FROM ballots WHERE round=$currentRound";
+    $connection = new mysqli(dbhost, dbuser, dbpass, dbname);
+    $pairingsResult = $connection->query($pairingsQuery);
+    for($a = 0;$a<$pairingsResult->num_rows;$a++){
+        $pairingsResult->data_seek($a);
+        $row = $pairingsResult->fetch_array(MYSQLI_ASSOC);
+        $id = $row['id'];
+        $pTeamNumber = $row['pTeamNumber'];
+        $dTeamNumber = $row['dTeamNumber'];
+        $judgeId = $row['judgeId'];
+        $judgeQuery = "SELECT name FROM users WHERE id=$judgeId";
+        $judgeResult = $connection->query($judgeQuery);
+        $judgeResult->data_seek(0);
+        $judgeRow = $judgeResult->fetch_array(MYSQLI_ASSOC);
+        $judgeName = $judgeRow['name'];
+        $pairingOptions .= "<option value=$id>$pTeamNumber vs. $dTeamNumber -- $judgeName</option>\n";
+    }
+    echo "<select id='pairing'>\n$pairingOptions\n</select>\n";
+    
+    //Create scores section of ballot
+    echo "<form name='ballot' id='ballot'>\n";
+    echo "<table>\n";
+    echo "<tr><td>PLAINTIFF</td><td>DEFENSE</td></tr>\n";
+    //TODO: make all inputs numbers, limit to 2 digits, set default values
+    echo "<tr>";
+    echo "<td><label>Opening statement: <input type=number min='0' step='1' max='10' size='2' id='pOpen' name='pOpen' value='$pOpen'></label></td>";
+    echo "<td><label>Opening statement: <input type=number min='0' step='1' max='10' size='2' id='dOpen' name='dOpen' value='$dOpen'></label></td>";
+    echo "</tr>\n";
+    echo "<tr><td>PL. CASE-IN-CHIEF</td><td></td></tr>\n";
+    echo "<tr>";
+    echo "<td><label>Direct exam of π #1: <input type=number min='0' step='1' max='10' size='2' id='pDirect1' name='pDirect1' value='$pDirect1'></label></td>";
+    echo "<td><label>Cross exam of π #1: <input type=number min='0' step='1' max='10' size='2' id='dCross1' name='dCross1' value='$dCross1'></label></td>";
+    echo "</tr>\n";
+    echo "<tr>";
+    echo "<td><label>Witness #1 direct: <input type=number min='0' step='1' max='10' size='2' id='pWitDirect1' name='pWitDirect1' value='$pWitDirect1'></label></td><td></td>";
+    echo "</tr>\n";
+    echo "<tr>";
+    echo "<td><label>Witness #1 cross: <input type=number min='0' step='1' max='10' size='2' id='pWitCross1' name='pWitCross1' value='$pWitCross1'></label></td><td></td>";
+    echo "</tr>\n";
+    echo "<tr>";
+    echo "<td><label>Direct exam of π #2: <input type=number min='0' step='1' max='10' size='2' id='pDirect2' name='pDirect2' value='$pDirect2'></label></td>";
+    echo "<td><label>Cross exam of π #2: <input type=number min='0' step='1' max='10' size='2' id='dCross2' name='dCross2' value='$dCross2'></label></td>";
+    echo "</tr>\n";
+    echo "<tr>";
+    echo "<td><label>Witness #2 direct: <input type=number min='0' step='1' max='10' size='2' id='pWitDirect2' name='pWitDirect2' value='$pWitDirect2'></label></td><td></td>";
+    echo "</tr>\n";
+    echo "<tr>";
+    echo "<td><label>Witness #2 cross: <input type=number min='0' step='1' max='10' size='2' id='pWitCross2' name='pWitCross2' value='$pWitCross2'></label></td><td></td>";
+    echo "</tr>\n";
+    echo "<tr>";
+    echo "<td><label>Direct exam of π #3: <input type=number min='0' step='1' max='10' size='2' id='pDirect3' name='pDirect3' value='$pDirect3'></label></td>";
+    echo "<td><label>Cross exam of π #3: <input type=number min='0' step='1' max='10' size='2' id='dCross3' name='dCross3' value='$dCross3'></label></td>";
+    echo "</tr>\n";
+    echo "<tr>";
+    echo "<td><label>Witness #3 direct: <input type=number min='0' step='1' max='10' size='2' id='pWitDirect3' name='pWitDirect3' value='$pWitDirect3'></label></td><td></td>";
+    echo "</tr>\n";
+    echo "<tr>";
+    echo "<td><label>Witness #3 cross: <input type=number min='0' step='1' max='10' size='2' id='pWitCross3' name='pWitCross3' value='$pWitCross3'></label></td><td></td>";
+    echo "</tr>\n";
+    echo "<tr><td></td><td>DEF. CASE-IN-CHIEF</td></tr>\n";
+    echo "<tr>";
+    echo "<td><label>Cross exam of ∆ #1: <input type=number min='0' step='1' max='10' size='2' id='pCross1' name='pCross1' value='$pCross1'></label></td>";
+    echo "<td><label>Direct exam of ∆ #1: <input type=number min='0' step='1' max='10' size='2' id='dDirect1' name='dDirect1' value='$dDirect1'></label></td>";
+    echo "</tr>\n";
+    echo "<tr>";
+    echo "<td></td><td><label>Witness #1 direct: <input type=number min='0' step='1' max='10' size='2' id='dWitDirect1' name='dWitDirect1' value='$dWitDirect1'></label></td>";
+    echo "</tr\n>";
+    echo "<tr>";
+    echo "<td></td><td><label>Witness #1 cross: <input type=number min='0' step='1' max='10' size='2' id='dWitCross1' name='dWitCross1' value='$dWitCross1'></label></td>";
+    echo "</tr>\n";
+    echo "<tr>";
+    echo "<td><label>Cross exam of ∆ #2: <input type=number min='0' step='1' max='10' size='2' id='pCross2' name='pCross2' value='$pCross2'></label></td>";
+    echo "<td><label>Direct exam of ∆ #2: <input type=number min='0' step='1' max='10' size='2' id='dDirect2' name='dDirect2' value='$dDirect2'></label></td>";
+    echo "</tr>\n";
+    echo "<tr>";
+    echo "<td></td><td><label>Witness #2 direct: <input type=number min='0' step='1' max='10' size='2' id='dWitDirect2' name='dWitDirect2' value='$dWitDirect2'></label></td>";
+    echo "</tr\n>";
+    echo "<tr>";
+    echo "<td></td><td><label>Witness #2 cross: <input type=number min='0' step='1' max='10' size='2' id='dWitCross2' name='dWitCross2' value='$dWitCross2'></label></td>";
+    echo "</tr>\n";
+    echo "<tr>";
+    echo "<td><label>Cross exam of ∆ #3: <input type=number min='0' step='1' max='10' size='2' id='pCross3' name='pCross3' value='$pCross3'></label></td>";
+    echo "<td><label>Direct exam of ∆ #3: <input type=number min='0' step='1' max='10' size='2' id='dDirect3' name='dDirect3' value='$dDirect3'></label></td>";
+    echo "</tr>\n";
+    echo "<tr>";
+    echo "<td></td><td><label>Witness #3 direct: <input type=number min='0' step='1' max='10' size='2' id='dWitDirect3' name='dWitDirect3' value='$dWitDirect3'></label></td>";
+    echo "</tr\n>";
+    echo "<tr>";
+    echo "<td></td><td><label>Witness #3 cross: <input type=number min='0' step='1' max='10' size='2' id='dWitCross3' name='dWitCross3' value='$dWitCross3'></label></td>";
+    echo "</tr>\n";
+    echo "<tr>";
+    echo "<td><label>Closing argument: <input type=number min='0' step='1' max='10' size='2' id='pClose' name='pClose' value='$pClose'></label></td>";
+    echo "<td><label>Closing argument: <input type=number min='0' step='1' max='10' size='2' id='dClose' name='dClose' value='$dClose'></label></td>";
+    echo "</tr>\n";
+    echo "</table>\n";
+    echo "OUTSTANDING ATTORNEYS AND WITNESSES\n";
+    echo "<table>";
+    echo "<tr><td>ATTORNEYS</td><td>WITNESSES</td></tr>\n";
+    echo "<tr>\n";
+    echo "<td><label>1: <select id='attyRank1'>\n$attyRank1</select></label>\n</td>\n";
+    echo "<td><label>1: <select id='witRank1'>\n$witRank1</select></label>\n</td>\n";
+    echo "</tr>\n";
+    echo "<tr>\n";
+    echo "<td><label>2: <select id='attyRank2'>\n$attyRank2</select></label>\n</td>\n";
+    echo "<td><label>2: <select id='witRank2'>\n$witRank2</select></label>\n</td>\n";
+    echo "</tr>\n";
+    echo "<tr>\n";
+    echo "<td><label>3: <select id='attyRank3'>\n$attyRank3</select></label>\n</td>\n";
+    echo "<td><label>3: <select id='witRank3'>\n$witRank3</select></label>\n</td>\n";
+    echo "</tr>\n";
+    echo "<tr>\n";
+    echo "<td><label>4: <select id='attyRank4'>\n$attyRank4</select></label>\n</td>\n";
+    echo "<td><label>4: <select  id='witRank4'>\n$witRank4</select></label>\n</td>\n";
+    echo "</tr>\n";
+    echo "<tr>\n";
+    echo "<td><label>5: <select id='attyRank5'>\n$attyRank5</select></label>\n</td>\n";
+    echo "<td><label>5: <select  id='witRank5'>\n$witRank5</select></label>\n</td>\n";
+    echo "</tr>\n";
+    echo "<tr>\n";
+    echo "<td><label>6: <select id='attyRank6'>\n$attyRank6</select></label>\n</td>\n";
+    echo "<td><label>6: <select  id='witRank6'>\n$witRank6</select></label>\n</td>\n";
+    echo "</tr>\n";
+    echo "</table>";
+    echo "<input type=submit id='finalize' name='finalize' value='Finalize Ballot'>\n";
+    echo "</form>\n";
+    
+    echo "<script src='https://code.jquery.com/jquery-3.2.1.min.js'></script>";
+echo "<script src='/tabBallot.js'></script>";
 }

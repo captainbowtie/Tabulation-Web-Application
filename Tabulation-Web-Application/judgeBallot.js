@@ -20,7 +20,7 @@ $("input").on("change", function () {
     var round = $("#round").text();
     var role = this.name;
     var score = this.value;
-    var postString = '{"judgeId":' + judgeId + ',"round":' + round + ',"role":"' + role + '","score":' + score + '}';
+    var postString = '{"judgeId":' + judgeId + ',"round":' + round + ',"field":"' + role + '","value":' + score + '}';
     var postData = JSON.parse(postString);
 
     $.ajax({
@@ -42,7 +42,6 @@ $("input").on("change", function () {
             .done(function (response) {
 
             })
-    console.log(this.name + " " + this.value);
 });
 
 $("select").on("change", function () {
@@ -72,5 +71,51 @@ $("select").on("change", function () {
             .done(function (response) {
 
             })
-    console.log(this.name + " " + this.value);
+});
+
+$('#ballot').submit(function (e) {
+    e.preventDefault();
+    var judgeId = $("#judge").attr('judgeId');
+    var round = $("#round").text();
+    var ballot = $("#ballot").serializeArray();
+    ballot[28] = {name: "attyRank1",value: $("#attyRank1 option:selected").attr("value")};
+    ballot[29] = {name: "attyRank2",value: $("#attyRank2 option:selected").attr("value")};
+    ballot[30] = {name: "attyRank3",value: $("#attyRank3 option:selected").attr("value")};
+    ballot[31] = {name: "attyRank4",value: $("#attyRank4 option:selected").attr("value")};
+    ballot[32] = {name: "attyRank5",value: $("#attyRank5 option:selected").attr("value")};
+    ballot[33] = {name: "attyRank6",value: $("#attyRank6 option:selected").attr("value")};
+    ballot[34] = {name: "witRank1",value: $("#witRank1 option:selected").attr("value")};
+    ballot[35] = {name: "witRank2",value: $("#witRank2 option:selected").attr("value")};
+    ballot[36] = {name: "witRank3",value: $("#witRank3 option:selected").attr("value")};
+    ballot[37] = {name: "witRank4",value: $("#witRank4 option:selected").attr("value")};
+    ballot[38] = {name: "witRank5",value: $("#witRank5 option:selected").attr("value")};
+    ballot[39] = {name: "witRank6",value: $("#witRank6 option:selected").attr("value")};
+    ballot[40] = {name: "judgeId", value: judgeId};
+    ballot[41] = {name: "round", value: round};
+    ballot[42] = {name: "finalized",value : "yes"};
+
+    console.log(ballot);
+    //var postString = '{"judgeId":' + judgeId + ',"round":' + round + ',"field":"' + rankSlot + '","value":' + competitor + '}';
+    //var postData = JSON.parse(postString);
+
+    $.ajax({
+
+        // The URL for the request
+        url: "/postBallot.php",
+
+        // The data to send (will be converted to a query string)
+        data: ballot,
+
+        // Whether this is a POST or GET request
+        type: "POST",
+
+        // The type of data we expect back
+        dataType: "text",
+    })
+            // Code to run if the request succeeds (is done);
+            // The response is passed to the function
+            .done(function (response) {
+
+            })
+
 });
