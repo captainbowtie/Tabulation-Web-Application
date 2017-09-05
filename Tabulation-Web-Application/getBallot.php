@@ -35,38 +35,24 @@ if (!isset($_SESSION['id'])) {
     $ballotQuery = "SELECT * FROM ballots WHERE id=$id";
     $connection = new mysqli(dbhost, dbuser, dbpass, dbname);
     $ballotResult = $connection->query($ballotQuery);
-    $connection->close();
     $ballotResult->data_seek(0);
     $ballot = $ballotResult->fetch_array(MYSQLI_ASSOC);
-    //Set values from the ballot
-    $pOpen = $ballot['pOpen'];
-    $pDirect1 = $ballot['pDirect1'];
-    $pWitDirect1 = $ballot['pWitDirect1'];
-    $pWitCross1 = $ballot['pWitCross1'];
-    $pDirect2 = $ballot['pDirect2'];
-    $pWitDirect2 = $ballot['pWitDirect2'];
-    $pWitCross2 = $ballot['pWitCross2'];
-    $pDirect3 = $ballot['pDirect3'];
-    $pWitDirect3 = $ballot['pWitDirect3'];
-    $pWitCross3 = $ballot['pWitCross3'];
-    $pCross1 = $ballot['pCross1'];
-    $pCross2 = $ballot['pCross2'];
-    $pCross3 = $ballot['pCross3'];
-    $pClose = $ballot['pClose'];
-    $dOpen = $ballot['dOpen'];
-    $dDirect1 = $ballot['dDirect1'];
-    $dWitDirect1 = $ballot['dWitDirect1'];
-    $dWitCross1 = $ballot['dWitCross1'];
-    $dDirect2 = $ballot['dDirect2'];
-    $dWitDirect2 = $ballot['dWitDirect2'];
-    $dWitCross2 = $ballot['dWitCross2'];
-    $dDirect3 = $ballot['dDirect3'];
-    $dWitDirect3 = $ballot['dWitDirect3'];
-    $dWitCross3 = $ballot['dWitCross3'];
-    $dCross1 = $ballot['dCross1'];
-    $dCross2 = $ballot['dCross2'];
-    $dCross3 = $ballot['dCross3'];
-    $dClose = $ballot['dClose'];
+    $pTeamNumber = $ballot['pTeamNumber'];
+    $dTeamNumber = $ballot['dTeamNumber'];
+    //Retrieve pTeam and dTeam members
+    $memberQuery = "SELECT id,name FROM competitors WHERE team=$pTeamNumber || team=$dTeamNumber ORDER BY team";
+    $memberResult = $connection->query($memberQuery);
+    $connection->close();
+    
+    //Create competitors array
+    $competitors = array();
+    for($a = 0;$a<$memberResult->num_rows;$a++){
+        $memberResult->data_seek($a);
+        $member = $memberResult->fetch_array(MYSQLI_ASSOC);
+        $memberId = $member['id'];
+        $memberName = $member['name'];
+        $competitors[$memberId] = $memberName;
+    }
     //Create json object of the ballot data
     $arr = array('pOpen' => $ballot['pOpen'],
         'pDirect1' => $ballot['pDirect1'],
@@ -95,11 +81,25 @@ if (!isset($_SESSION['id'])) {
         'dCross1' => $ballot['dCross1'],
         'dCross2' => $ballot['dCross2'],
         'dCross3' => $ballot['dCross3'],
-        'dClose' => $ballot['dClose']
-        );
+        'dClose' => $ballot['dClose'],
+        'attyRank1' => $ballot['attyRank1'],
+        'attyRank2' => $ballot['attyRank2'],
+        'attyRank3' => $ballot['attyRank3'],
+        'attyRank4' => $ballot['attyRank4'],
+        'attyRank5' => $ballot['attyRank5'],
+        'attyRank6' => $ballot['attyRank6'],
+        'witRank1' => $ballot['witRank1'],
+        'witRank2' => $ballot['witRank2'],
+        'witRank3' => $ballot['witRank3'],
+        'witRank4' => $ballot['witRank4'],
+        'witRank5' => $ballot['witRank5'],
+        'witRank6' => $ballot['witRank6'],
+        'competitors' => $competitors
+    );
+    //Return json data
+    header('Content-Type: application/json');
+    echo json_encode($arr);
 
-echo json_encode($arr);
-    
 //More limited code if a judge (so they can only see their ballot)    
 } else if ($isJudge) {
     
