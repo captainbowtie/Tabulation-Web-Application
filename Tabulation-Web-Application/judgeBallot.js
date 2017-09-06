@@ -16,11 +16,10 @@
  */
 
 $("input").on("change", function () {
-    var judgeId = $("#judge").attr('judgeId');
-    var round = $("#round").text();
+    var ballotId = $("#judge").attr('ballotId');
     var role = this.name;
     var score = this.value;
-    var postString = '{"judgeId":' + judgeId + ',"round":' + round + ',"field":"' + role + '","value":' + score + '}';
+    var postString = '{"id":' + ballotId + ',"field":"' + role + '","value":' + score + '}';
     var postData = JSON.parse(postString);
 
     $.ajax({
@@ -44,12 +43,11 @@ $("input").on("change", function () {
             })
 });
 
-$("select").on("change", function () {
-    var judgeId = $("#judge").attr('judgeId');
-    var round = $("#round").text();
+$(".rankSelect").on("change", function () {
+    var ballotId = $("#judge").attr('ballotId');
     var rankSlot = this.id;
     var competitor = this.value;
-    var postString = '{"judgeId":' + judgeId + ',"round":' + round + ',"field":"' + rankSlot + '","value":' + competitor + '}';
+    var postString = '{"id":' + ballotId + ',"field":"' + rankSlot + '","value":' + competitor + '}';
     var postData = JSON.parse(postString);
 
     $.ajax({
@@ -75,8 +73,7 @@ $("select").on("change", function () {
 
 $('#ballot').submit(function (e) {
     e.preventDefault();
-    var judgeId = $("#judge").attr('judgeId');
-    var round = $("#round").text();
+    var ballotId = $("#judge").attr('ballotId');
     var ballot = $("#ballot").serializeArray();
     ballot[28] = {name: "attyRank1",value: $("#attyRank1 option:selected").attr("value")};
     ballot[29] = {name: "attyRank2",value: $("#attyRank2 option:selected").attr("value")};
@@ -90,13 +87,9 @@ $('#ballot').submit(function (e) {
     ballot[37] = {name: "witRank4",value: $("#witRank4 option:selected").attr("value")};
     ballot[38] = {name: "witRank5",value: $("#witRank5 option:selected").attr("value")};
     ballot[39] = {name: "witRank6",value: $("#witRank6 option:selected").attr("value")};
-    ballot[40] = {name: "judgeId", value: judgeId};
-    ballot[41] = {name: "round", value: round};
-    ballot[42] = {name: "finalized",value : "yes"};
+    ballot[40] = {name: "id", value: ballotId};
+    ballot[41] = {name: "finalized",value : "yes"};
 
-    console.log(ballot);
-    //var postString = '{"judgeId":' + judgeId + ',"round":' + round + ',"field":"' + rankSlot + '","value":' + competitor + '}';
-    //var postData = JSON.parse(postString);
 
     $.ajax({
 

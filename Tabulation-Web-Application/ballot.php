@@ -75,6 +75,7 @@ function createJudgeBallot($ballot) {
     $dTeamNumber = $ballot['dTeamNumber'];
     $roomId = $ballot['roomId'];
     $judgeId = $ballot['judgeId'];
+    $ballotId = $ballot['id'];
 
     //Fetch data from db
     $connection = new mysqli(dbhost, dbuser, dbpass, dbname);
@@ -199,7 +200,7 @@ function createJudgeBallot($ballot) {
     
     //Create ballot header HTML
     echo "<span id='pTeam'>$pTeamNumber</span> vs. <span id='dTeam'>$dTeamNumber</span><br>\n";
-    echo "$roomNumber, Round <span id='round'>$round</span>: <span id='judge' judgeId='$judgeId'>$judgeName</span><br>\n";
+    echo "$roomNumber, Round <span id='round'>$round</span>: <span id='judge' judgeId='$judgeId' ballotId='$ballotId'>$judgeName</span><br>\n";
 
     //Create scores section of ballot
     echo "<form name='ballot' id='ballot'>\n";
@@ -281,28 +282,28 @@ function createJudgeBallot($ballot) {
     echo "<table>";
     echo "<tr><td>ATTORNEYS</td><td>WITNESSES</td></tr>\n";
     echo "<tr>\n";
-    echo "<td><label>1: <select id='attyRank1'>\n$attyRank1</select></label>\n</td>\n";
-    echo "<td><label>1: <select id='witRank1'>\n$witRank1</select></label>\n</td>\n";
+    echo "<td><label>1: <select id='attyRank1' class='rankSelect'>\n$attyRank1</select></label>\n</td>\n";
+    echo "<td><label>1: <select id='witRank1' class='rankSelect'>\n$witRank1</select></label>\n</td>\n";
     echo "</tr>\n";
     echo "<tr>\n";
-    echo "<td><label>2: <select id='attyRank2'>\n$attyRank2</select></label>\n</td>\n";
-    echo "<td><label>2: <select id='witRank2'>\n$witRank2</select></label>\n</td>\n";
+    echo "<td><label>2: <select id='attyRank2' class='rankSelect'>\n$attyRank2</select></label>\n</td>\n";
+    echo "<td><label>2: <select id='witRank2' class='rankSelect'>\n$witRank2</select></label>\n</td>\n";
     echo "</tr>\n";
     echo "<tr>\n";
-    echo "<td><label>3: <select id='attyRank3'>\n$attyRank3</select></label>\n</td>\n";
-    echo "<td><label>3: <select id='witRank3'>\n$witRank3</select></label>\n</td>\n";
+    echo "<td><label>3: <select id='attyRank3' class='rankSelect'>\n$attyRank3</select></label>\n</td>\n";
+    echo "<td><label>3: <select id='witRank3' class='rankSelect'>\n$witRank3</select></label>\n</td>\n";
     echo "</tr>\n";
     echo "<tr>\n";
-    echo "<td><label>4: <select id='attyRank4'>\n$attyRank4</select></label>\n</td>\n";
-    echo "<td><label>4: <select  id='witRank4'>\n$witRank4</select></label>\n</td>\n";
+    echo "<td><label>4: <select id='attyRank4' class='rankSelect'>\n$attyRank4</select></label>\n</td>\n";
+    echo "<td><label>4: <select  id='witRank4' class='rankSelect'>\n$witRank4</select></label>\n</td>\n";
     echo "</tr>\n";
     echo "<tr>\n";
-    echo "<td><label>5: <select id='attyRank5'>\n$attyRank5</select></label>\n</td>\n";
-    echo "<td><label>5: <select  id='witRank5'>\n$witRank5</select></label>\n</td>\n";
+    echo "<td><label>5: <select id='attyRank5' class='rankSelect'>\n$attyRank5</select></label>\n</td>\n";
+    echo "<td><label>5: <select  id='witRank5' class='rankSelect'>\n$witRank5</select></label>\n</td>\n";
     echo "</tr>\n";
     echo "<tr>\n";
-    echo "<td><label>6: <select id='attyRank6'>\n$attyRank6</select></label>\n</td>\n";
-    echo "<td><label>6: <select  id='witRank6'>\n$witRank6</select></label>\n</td>\n";
+    echo "<td><label>6: <select id='attyRank6' class='rankSelect'>\n$attyRank6</select></label>\n</td>\n";
+    echo "<td><label>6: <select  id='witRank6' class='rankSelect'>\n$witRank6</select></label>\n</td>\n";
     echo "</tr>\n";
     echo "</table>";
     echo "<input type=submit id='finalize' name='finalize' value='Finalize Ballot'>\n";
@@ -425,28 +426,28 @@ function createTabBallot(){
     echo "<table>";
     echo "<tr><td>ATTORNEYS</td><td>WITNESSES</td></tr>\n";
     echo "<tr>\n";
-    echo "<td><label>1: <select id='attyRank1'>\n$attyRank1</select></label>\n</td>\n";
-    echo "<td><label>1: <select id='witRank1'>\n$witRank1</select></label>\n</td>\n";
+    echo "<td><label>1: <select id='attyRank1' class='rankSelect'>\n$attyRank1</select></label>\n</td>\n";
+    echo "<td><label>1: <select id='witRank1' class='rankSelect'>\n$witRank1</select></label>\n</td>\n";
     echo "</tr>\n";
     echo "<tr>\n";
-    echo "<td><label>2: <select id='attyRank2'>\n$attyRank2</select></label>\n</td>\n";
-    echo "<td><label>2: <select id='witRank2'>\n$witRank2</select></label>\n</td>\n";
+    echo "<td><label>2: <select id='attyRank2' class='rankSelect'>\n$attyRank2</select></label>\n</td>\n";
+    echo "<td><label>2: <select id='witRank2' class='rankSelect'>\n$witRank2</select></label>\n</td>\n";
     echo "</tr>\n";
     echo "<tr>\n";
-    echo "<td><label>3: <select id='attyRank3'>\n$attyRank3</select></label>\n</td>\n";
-    echo "<td><label>3: <select id='witRank3'>\n$witRank3</select></label>\n</td>\n";
+    echo "<td><label>3: <select id='attyRank3' class='rankSelect'>\n$attyRank3</select></label>\n</td>\n";
+    echo "<td><label>3: <select id='witRank3' class='rankSelect'>\n$witRank3</select></label>\n</td>\n";
     echo "</tr>\n";
     echo "<tr>\n";
-    echo "<td><label>4: <select id='attyRank4'>\n$attyRank4</select></label>\n</td>\n";
-    echo "<td><label>4: <select  id='witRank4'>\n$witRank4</select></label>\n</td>\n";
+    echo "<td><label>4: <select id='attyRank4' class='rankSelect'>\n$attyRank4</select></label>\n</td>\n";
+    echo "<td><label>4: <select  id='witRank4' class='rankSelect'>\n$witRank4</select></label>\n</td>\n";
     echo "</tr>\n";
     echo "<tr>\n";
-    echo "<td><label>5: <select id='attyRank5'>\n$attyRank5</select></label>\n</td>\n";
-    echo "<td><label>5: <select  id='witRank5'>\n$witRank5</select></label>\n</td>\n";
+    echo "<td><label>5: <select id='attyRank5' class='rankSelect'>\n$attyRank5</select></label>\n</td>\n";
+    echo "<td><label>5: <select  id='witRank5' class='rankSelect'>\n$witRank5</select></label>\n</td>\n";
     echo "</tr>\n";
     echo "<tr>\n";
-    echo "<td><label>6: <select id='attyRank6'>\n$attyRank6</select></label>\n</td>\n";
-    echo "<td><label>6: <select  id='witRank6'>\n$witRank6</select></label>\n</td>\n";
+    echo "<td><label>6: <select id='attyRank6' class='rankSelect'>\n$attyRank6</select></label>\n</td>\n";
+    echo "<td><label>6: <select  id='witRank6' class='rankSelect'>\n$witRank6</select></label>\n</td>\n";
     echo "</tr>\n";
     echo "</table>";
     echo "<input type=submit id='finalize' name='finalize' value='Finalize Ballot'>\n";

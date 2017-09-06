@@ -51,7 +51,7 @@ if (!isset($_SESSION['id'])) {
         $member = $memberResult->fetch_array(MYSQLI_ASSOC);
         $memberId = $member['id'];
         $memberName = $member['name'];
-        $competitors[$memberId] = $memberName;
+        $competitors["$memberId"] = $memberName;
     }
     //Create json object of the ballot data
     $arr = array('pOpen' => $ballot['pOpen'],

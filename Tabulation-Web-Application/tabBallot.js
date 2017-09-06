@@ -16,8 +16,8 @@
  */
 
 $(document).ready(function () {
-    var id = $("#pairing option:selected").attr('value');
-    var getString = '{"id":' + id + '}';
+    var ballotId = $("#pairing option:selected").attr('value');
+    var getString = '{"id":' + ballotId + '}';
     $.ajax({
 
         // The URL for the request
@@ -35,6 +35,29 @@ $(document).ready(function () {
             // Code to run if the request succeeds (is done);
             // The response is passed to the function
             .done(function (response) {
+                //Create competitor option list
+                var competitorOptions = "<option value='0'>N/A</option>\n";
+                for (var key in response.competitors) {
+                    if (response.competitors.hasOwnProperty(key)) {
+                        competitorOptions += "<option value='" + key + "'>" + response.competitors[key] + "</option>\n";
+                    }
+                }
+                //Set selected value on each competitor option list
+                var attyRank1 = competitorOptions.replace("'" + response.attyRank1 + "'", "'" + response.attyRank1 + "' selected");
+                var attyRank2 = competitorOptions.replace("'" + response.attyRank2 + "'", "'" + response.attyRank2 + "' selected");
+                var attyRank3 = competitorOptions.replace("'" + response.attyRank3 + "'", "'" + response.attyRank3 + "' selected");
+                var attyRank4 = competitorOptions.replace("'" + response.attyRank4 + "'", "'" + response.attyRank4 + "' selected");
+                var attyRank5 = competitorOptions.replace("'" + response.attyRank5 + "'", "'" + response.attyRank5 + "' selected");
+                var attyRank6 = competitorOptions.replace("'" + response.attyRank6 + "'", "'" + response.attyRank6 + "' selected");
+                var witRank1 = competitorOptions.replace("'" + response.witRank1 + "'", "'" + response.witRank1 + "' selected");
+                var witRank2 = competitorOptions.replace("'" + response.witRank2 + "'", "'" + response.witRank2 + "' selected");
+                var witRank3 = competitorOptions.replace("'" + response.witRank3 + "'", "'" + response.witRank3 + "' selected");
+                var witRank4 = competitorOptions.replace("'" + response.witRank4 + "'", "'" + response.witRank4 + "' selected");
+                var witRank5 = competitorOptions.replace("'" + response.witRank5 + "'", "'" + response.witRank5 + "' selected");
+                var witRank6 = competitorOptions.replace("'" + response.witRank6 + "'", "'" + response.witRank6 + "' selected");
+
+
+                //Replace values
                 $("#pOpen").val(response.pOpen);
                 $("#pDirect1").val(response.pDirect1);
                 $("#pWitDirect1").val(response.pWitDirect1);
@@ -63,6 +86,73 @@ $(document).ready(function () {
                 $("#dCross2").val(response.dCross2);
                 $("#dCross3").val(response.dCross3);
                 $("#dClose").val(response.dClose);
+                $("#attyRank1").empty().append(attyRank1);
+                $("#attyRank2").empty().append(attyRank2);
+                $("#attyRank3").empty().append(attyRank3);
+                $("#attyRank4").empty().append(attyRank4);
+                $("#attyRank5").empty().append(attyRank5);
+                $("#attyRank6").empty().append(attyRank6);
+                $("#witRank1").empty().append(witRank1);
+                $("#witRank2").empty().append(witRank2);
+                $("#witRank3").empty().append(witRank3);
+                $("#witRank4").empty().append(witRank4);
+                $("#witRank5").empty().append(witRank5);
+                $("#witRank6").empty().append(witRank6);
             })
+});
 
+$(".rankSelect").on("change", function () {
+    var ballotId = $("#pairing option:selected").attr('value');
+    var rankSlot = this.id;
+    var competitor = this.value;
+    var postString = '{"id":' + ballotId + ',"field":"' + rankSlot + '","value":' + competitor + '}';
+    var postData = JSON.parse(postString);
+
+    $.ajax({
+
+        // The URL for the request
+        url: "/postBallot.php",
+
+        // The data to send (will be converted to a query string)
+        data: postData,
+
+        // Whether this is a POST or GET request
+        type: "POST",
+
+        // The type of data we expect back
+        dataType: "text",
+    })
+            // Code to run if the request succeeds (is done);
+            // The response is passed to the function
+            .done(function (response) {
+
+            })
+});
+
+$("input").on("change", function () {
+    var ballotId = $("#pairing option:selected").attr('value');
+    var role = this.name;
+    var score = this.value;
+    var postString = '{"id":' + ballotId + ',"field":"' + role + '","value":' + score + '}';
+    var postData = JSON.parse(postString);
+
+    $.ajax({
+
+        // The URL for the request
+        url: "/postBallot.php",
+
+        // The data to send (will be converted to a query string)
+        data: postData,
+
+        // Whether this is a POST or GET request
+        type: "POST",
+
+        // The type of data we expect back
+        dataType: "text",
+    })
+            // Code to run if the request succeeds (is done);
+            // The response is passed to the function
+            .done(function (response) {
+
+            })
 });
