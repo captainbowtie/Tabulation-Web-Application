@@ -90,5 +90,5 @@ if (isset($_SESSION['id'])) {
         </form>
 _END;
 }
-echo "</div>";
+echo "</div>\n";
 $connection->close();

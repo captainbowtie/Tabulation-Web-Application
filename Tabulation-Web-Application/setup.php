@@ -160,7 +160,7 @@ function createTables() {
             . "canJudgeRound3 BINARY(1) NOT NULL DEFAULT '0', canJudgeRound4 BINARY(1) NOT NULL DEFAULT '0') ENGINE InnoDB";
     $connection->query($usersTable);
     $ballotsTable = "CREATE TABLE ballots(id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT KEY, " //Ballots Table
-            . "pTeamNumber SMALLINT UNSIGNED NOT NULL DEFAULT '0', dTeamNumber SMALLINT UNSIGNED NOT NULL DEFAULT '0', "
+            . "pTeam SMALLINT UNSIGNED NOT NULL DEFAULT '0', dTeam SMALLINT UNSIGNED NOT NULL DEFAULT '0', "
             . "round TINYINT UNSIGNED NOT NULL DEFAULT '1', judgeId SMALLINT UNSIGNED NOT NULL DEFAULT '0', roomId SMALLINT UNSIGNED NOT NULL DEFAULT '0', "
             . "pOpen TINYINT UNSIGNED NOT NULL DEFAULT '0', pDirect1 TINYINT UNSIGNED NOT NULL DEFAULT '0', "
             . "pWitDirect1 TINYINT UNSIGNED NOT NULL DEFAULT '0', pWitCross1 TINYINT UNSIGNED NOT NULL DEFAULT '0', "
@@ -183,7 +183,7 @@ function createTables() {
             . "witRank3 SMALLINT UNSIGNED NOT NULL DEFAULT '0', witRank4 SMALLINT UNSIGNED NOT NULL DEFAULT '0', "
             . "witRank5 SMALLINT UNSIGNED NOT NULL DEFAULT '0', witRank6 SMALLINT UNSIGNED NOT NULL DEFAULT '0', "
             . "finalized BINARY(1) NOT NULL DEFAULT '0', "
-            . "INDEX(pTeamNumber), INDEX(dTeamNumber), "
+            . "INDEX(pTeam), INDEX(dTeam), "
             . "INDEX(round), INDEX(judgeId), INDEX(attyRank1), "
             . "INDEX(attyRank2), INDEX(attyRank3), INDEX(attyRank4), INDEX(attyRank5), "
             . "INDEX(attyRank6), INDEX(witRank1), INDEX(witRank2), INDEX(witRank3), "

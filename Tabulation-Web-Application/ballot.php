@@ -71,8 +71,8 @@ echo "</html>\n";
 
 function createJudgeBallot($ballot) {
     //Pull data from ballot necessary to fetch remaining data from db
-    $pTeamNumber = $ballot['pTeamNumber'];
-    $dTeamNumber = $ballot['dTeamNumber'];
+    $pTeam = $ballot['pTeam'];
+    $dTeam = $ballot['dTeam'];
     $roomId = $ballot['roomId'];
     $judgeId = $ballot['judgeId'];
     $ballotId = $ballot['id'];
@@ -82,7 +82,7 @@ function createJudgeBallot($ballot) {
 
     //Get the names of team members and create HTML string for combo boxes
     $comboBoxOptionHTML = "<option value='0'>N/A</option>\n";
-    $pTeamQuery = "SELECT id,name FROM competitors WHERE team=$pTeamNumber";
+    $pTeamQuery = "SELECT id,name FROM competitors WHERE team=$pTeam";
     $pResult = $connection->query($pTeamQuery);
     for ($a = 0; $a < $pResult->num_rows; $a++) {
         $pResult->data_seek($a);
@@ -92,7 +92,7 @@ function createJudgeBallot($ballot) {
         $comboBoxOptionHTML .= "<option value='$value'>$name</option>\n";
     }
     //Get the names of the defense team members
-    $dTeamQuery = "SELECT id,name FROM competitors WHERE team=$dTeamNumber";
+    $dTeamQuery = "SELECT id,name FROM competitors WHERE team=$dTeam";
     $dResult = $connection->query($dTeamQuery);
     for ($a = 0; $a < $dResult->num_rows; $a++) {
         $dResult->data_seek($a);
@@ -199,7 +199,7 @@ function createJudgeBallot($ballot) {
     $witRank6 = str_replace($witRank6Search, $witRank6Replace, $comboBoxOptionHTML);
     
     //Create ballot header HTML
-    echo "<span id='pTeam'>$pTeamNumber</span> vs. <span id='dTeam'>$dTeamNumber</span><br>\n";
+    echo "<span id='pTeam'>$pTeam</span> vs. <span id='dTeam'>$dTeam</span><br>\n";
     echo "$roomNumber, Round <span id='round'>$round</span>: <span id='judge' judgeId='$judgeId' ballotId='$ballotId'>$judgeName</span><br>\n";
 
     //Create scores section of ballot
@@ -313,6 +313,7 @@ function createJudgeBallot($ballot) {
 echo "<script src='/judgeBallot.js'></script>";
 }
 
+//TODO: check if judge has finalized ballot before allowing tab to edit
 function createTabBallot(){
     //Echo the round number selector
     $roundOptions = "<option value='round1'>Round 1</option>\n".
@@ -327,22 +328,23 @@ function createTabBallot(){
     
     //Echo the pairing selector
     $pairingOptions = "";
-    $pairingsQuery = "SELECT id,pTeamNumber,dTeamNumber,judgeId FROM ballots WHERE round=$currentRound";
+    $pairingsQuery = "SELECT id,pTeam,dTeam,round,judgeId FROM ballots";
     $connection = new mysqli(dbhost, dbuser, dbpass, dbname);
     $pairingsResult = $connection->query($pairingsQuery);
     for($a = 0;$a<$pairingsResult->num_rows;$a++){
         $pairingsResult->data_seek($a);
         $row = $pairingsResult->fetch_array(MYSQLI_ASSOC);
         $id = $row['id'];
-        $pTeamNumber = $row['pTeamNumber'];
-        $dTeamNumber = $row['dTeamNumber'];
+        $pTeam = $row['pTeam'];
+        $dTeam = $row['dTeam'];
+        $round = $row['round'];
         $judgeId = $row['judgeId'];
         $judgeQuery = "SELECT name FROM users WHERE id=$judgeId";
         $judgeResult = $connection->query($judgeQuery);
         $judgeResult->data_seek(0);
         $judgeRow = $judgeResult->fetch_array(MYSQLI_ASSOC);
         $judgeName = $judgeRow['name'];
-        $pairingOptions .= "<option value=$id>$pTeamNumber vs. $dTeamNumber -- $judgeName</option>\n";
+        $pairingOptions .= "<option value='$id' round='$round'>$pTeam vs. $dTeam -- $judgeName</option>\n";
     }
     echo "<select id='pairing'>\n$pairingOptions\n</select>\n";
     

@@ -43,7 +43,7 @@ function getBallotPD($ballotId, $teamNumber) {
             $ballot['dWitCross3'] + $ballot['dCross1'] + $ballot['dCross2'] +
             $ballot['dCross3'] + $ballot['dClose'];
     $plaintiffPD = $pPoints - $dPoints;
-    if ($teamNumber == $ballot['pTeamNumber']) {
+    if ($teamNumber == $ballot['pTeam']) {
         return $plaintiffPD;
     } else {
         return -1 * $plaintiffPD;
@@ -52,7 +52,7 @@ function getBallotPD($ballotId, $teamNumber) {
 
 function getWins($teamNumber) {
     $connection = new mysqli(dbhost, dbuser, dbpass, dbname);
-    $query = "SELECT id FROM ballots WHERE pTeamNumber='" . $teamNumber . "' || dTeamNumber='" . $teamNumber . "'";
+    $query = "SELECT id FROM ballots WHERE pTeam='" . $teamNumber . "' || dTeam='" . $teamNumber . "'";
     $result = $connection->query($query);
     $wins = 0;
     $connection->close();
@@ -70,7 +70,7 @@ function getWins($teamNumber) {
 
 function getLoses($teamNumber) {
     $connection = new mysqli(dbhost, dbuser, dbpass, dbname);
-    $query = "SELECT id FROM ballots WHERE pTeamNumber='" . $teamNumber . "' || dTeamNumber='" . $teamNumber . "'";
+    $query = "SELECT id FROM ballots WHERE pTeam='" . $teamNumber . "' || dTeam='" . $teamNumber . "'";
     $result = $connection->query($query);
     $loses = 0;
     $connection->close();
@@ -88,7 +88,7 @@ function getLoses($teamNumber) {
 
 function getTies($teamNumber) {
     $connection = new mysqli(dbhost, dbuser, dbpass, dbname);
-    $query = "SELECT id FROM ballots WHERE pTeamNumber='" . $teamNumber . "' || dTeamNumber='" . $teamNumber . "'";
+    $query = "SELECT id FROM ballots WHERE pTeam='" . $teamNumber . "' || dTeam='" . $teamNumber . "'";
     $result = $connection->query($query);
     $ties = 0;
     $connection->close();
@@ -106,7 +106,7 @@ function getTies($teamNumber) {
 
 function getStatisticalWins($teamNumber) {
     $connection = new mysqli(dbhost, dbuser, dbpass, dbname);
-    $query = "SELECT id FROM ballots WHERE pTeamNumber='" . $teamNumber . "' || dTeamNumber='" . $teamNumber . "'";
+    $query = "SELECT id FROM ballots WHERE pTeam='" . $teamNumber . "' || dTeam='" . $teamNumber . "'";
     $result = $connection->query($query);
     $wins = 0;
     $connection->close();
@@ -126,9 +126,9 @@ function getStatisticalWins($teamNumber) {
 
 function getCS($teamNumber){
     $connection = new mysqli(dbhost, dbuser, dbpass, dbname);
-    $pTeamQuery = "SELECT DISTINCT pTeamNumber FROM ballots WHERE dTeamNumber=".$teamNumber;
+    $pTeamQuery = "SELECT DISTINCT pTeam FROM ballots WHERE dTeam=".$teamNumber;
     $pResult = $connection->query($pTeamQuery);
-    $dTeamQuery = "SELECT DISTINCT dTeamNumber FROM ballots WHERE pTeamNumber=".$teamNumber;
+    $dTeamQuery = "SELECT DISTINCT dTeam FROM ballots WHERE pTeam=".$teamNumber;
     $dResult = $connection->query($dTeamQuery);
     $connection->close();
     $CS = 0.0;
@@ -151,9 +151,9 @@ function getCS($teamNumber){
 
 function getOCS($teamNumber){
     $connection = new mysqli(dbhost, dbuser, dbpass, dbname);
-    $pTeamQuery = "SELECT DISTINCT pTeamNumber FROM ballots WHERE dTeamNumber=".$teamNumber;
+    $pTeamQuery = "SELECT DISTINCT pTeam FROM ballots WHERE dTeam=".$teamNumber;
     $pResult = $connection->query($pTeamQuery);
-    $dTeamQuery = "SELECT DISTINCT dTeamNumber FROM ballots WHERE pTeamNumber=".$teamNumber;
+    $dTeamQuery = "SELECT DISTINCT dTeam FROM ballots WHERE pTeam=".$teamNumber;
     $dResult = $connection->query($dTeamQuery);
     $connection->close();
     $OCS = 0.0;
@@ -176,7 +176,7 @@ function getOCS($teamNumber){
 
 function getPD($teamNumber){
     $connection = new mysqli(dbhost, dbuser, dbpass, dbname);
-    $query = "SELECT id FROM ballots WHERE pTeamNumber='" . $teamNumber . "' || dTeamNumber='" . $teamNumber . "'";
+    $query = "SELECT id FROM ballots WHERE pTeam='" . $teamNumber . "' || dTeam='" . $teamNumber . "'";
     $result = $connection->query($query);
     $connection->close();
     $PD = 0;

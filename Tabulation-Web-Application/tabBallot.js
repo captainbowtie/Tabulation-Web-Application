@@ -15,8 +15,160 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+var round1pairings = "";
+var round2pairings = "";
+var round3pairings = "";
+var round4pairings = "";
+
 $(document).ready(function () {
+    //Edit pairing list to only have current round pairings
+    var select = $("#pairing option");
+    for (a = 0; a < select.length; a++) {
+        var id = $(select[a]).attr('value');
+        var text = $(select[a]).text();
+        if ($(select[a]).attr("round") == 1) {
+            if(round1pairings==""){
+                round1pairings += "<option id='" + id + "' selected>" + text + "</option>\n";
+            }else{
+                round1pairings += "<option id='" + id + "'>" + text + "</option>\n";
+            }
+        } else if ($(select[a]).attr("round") == 2) {
+            if(round2pairings==""){
+                round2pairings += "<option id='" + id + "' selected>" + text + "</option>\n";
+            }else{
+                round2pairings += "<option id='" + id + "'>" + text + "</option>\n";
+            }
+        } else if ($(select[a]).attr("round") == 3) {
+            if(round3pairings==""){
+                round3pairings += "<option id='" + id + "' selected>" + text + "</option>\n";
+            }else{
+                round3pairings += "<option id='" + id + "'>" + text + "</option>\n";
+            }
+        } else if ($(select[a]).attr("round") == 4) {
+            if(round4pairings==""){
+                round4pairings += "<option id='" + id + "' selected>" + text + "</option>\n";
+            }else{
+                round4pairings += "<option id='" + id + "'>" + text + "</option>\n";
+            }
+        }
+    }
+    var currentRound = $("#round option:selected").attr("value");
+    if (currentRound == "round1") {
+        $("#pairing").empty().append(round1pairings);
+    } else if (currentRound == "round2") {
+        $("#pairing").empty().append(round2pairings);
+    } else if (currentRound == "round3") {
+        $("#pairing").empty().append(round3pairings);
+    } else if (currentRound == "round4") {
+        $("#pairing").empty().append(round4pairings);
+    }
+    populateBallot();
+});
+
+$(".rankSelect").on("change", function () {
     var ballotId = $("#pairing option:selected").attr('value');
+    var rankSlot = this.id;
+    var competitor = this.value;
+    var postString = '{"id":' + ballotId + ',"field":"' + rankSlot + '","value":' + competitor + '}';
+    var postData = JSON.parse(postString);
+
+    $.ajax({
+
+        // The URL for the request
+        url: "/postBallot.php",
+
+        // The data to send (will be converted to a query string)
+        data: postData,
+
+        // Whether this is a POST or GET request
+        type: "POST",
+
+        // The type of data we expect back
+        dataType: "text",
+    })
+            // Code to run if the request succeeds (is done);
+            // The response is passed to the function
+            .done(function (response) {
+
+            })
+});
+
+$("input").on("change", function () {
+    var ballotId = $("#pairing option:selected").attr('value');
+    var role = this.name;
+    var score = this.value;
+    var postString = '{"id":' + ballotId + ',"field":"' + role + '","value":' + score + '}';
+    var postData = JSON.parse(postString);
+
+    $.ajax({
+
+        // The URL for the request
+        url: "/postBallot.php",
+
+        // The data to send (will be converted to a query string)
+        data: postData,
+
+        // Whether this is a POST or GET request
+        type: "POST",
+
+        // The type of data we expect back
+        dataType: "text",
+    })
+            // Code to run if the request succeeds (is done);
+            // The response is passed to the function
+            .done(function (response) {
+
+            })
+});
+
+$(".rankSelect").on("change", function () {
+    var ballotId = $("#pairing option:selected").attr('value');
+    var rankSlot = this.id;
+    var competitor = this.value;
+    var postString = '{"id":' + ballotId + ',"field":"' + rankSlot + '","value":' + competitor + '}';
+    var postData = JSON.parse(postString);
+
+    $.ajax({
+
+        // The URL for the request
+        url: "/postBallot.php",
+
+        // The data to send (will be converted to a query string)
+        data: postData,
+
+        // Whether this is a POST or GET request
+        type: "POST",
+
+        // The type of data we expect back
+        dataType: "text",
+    })
+            // Code to run if the request succeeds (is done);
+            // The response is passed to the function
+            .done(function (response) {
+
+            })
+});
+
+$("#pairing").on("change", function () {
+    populateBallot();
+});
+
+$("#round").on("change", function () {
+    var currentRound = $("#round option:selected").attr("value");
+    if (currentRound == "round1") {
+        $("#pairing").empty().append(round1pairings);
+    } else if (currentRound == "round2") {
+        $("#pairing").empty().append(round2pairings);
+    } else if (currentRound == "round3") {
+        $("#pairing").empty().append(round3pairings);
+    } else if (currentRound == "round4") {
+        $("#pairing").empty().append(round4pairings);
+    }
+    populateBallot();
+});
+
+function populateBallot() {
+    var ballotId = $("#pairing option:selected").attr('id');
     var getString = '{"id":' + ballotId + '}';
     $.ajax({
 
@@ -99,60 +251,4 @@ $(document).ready(function () {
                 $("#witRank5").empty().append(witRank5);
                 $("#witRank6").empty().append(witRank6);
             })
-});
-
-$(".rankSelect").on("change", function () {
-    var ballotId = $("#pairing option:selected").attr('value');
-    var rankSlot = this.id;
-    var competitor = this.value;
-    var postString = '{"id":' + ballotId + ',"field":"' + rankSlot + '","value":' + competitor + '}';
-    var postData = JSON.parse(postString);
-
-    $.ajax({
-
-        // The URL for the request
-        url: "/postBallot.php",
-
-        // The data to send (will be converted to a query string)
-        data: postData,
-
-        // Whether this is a POST or GET request
-        type: "POST",
-
-        // The type of data we expect back
-        dataType: "text",
-    })
-            // Code to run if the request succeeds (is done);
-            // The response is passed to the function
-            .done(function (response) {
-
-            })
-});
-
-$("input").on("change", function () {
-    var ballotId = $("#pairing option:selected").attr('value');
-    var role = this.name;
-    var score = this.value;
-    var postString = '{"id":' + ballotId + ',"field":"' + role + '","value":' + score + '}';
-    var postData = JSON.parse(postString);
-
-    $.ajax({
-
-        // The URL for the request
-        url: "/postBallot.php",
-
-        // The data to send (will be converted to a query string)
-        data: postData,
-
-        // Whether this is a POST or GET request
-        type: "POST",
-
-        // The type of data we expect back
-        dataType: "text",
-    })
-            // Code to run if the request succeeds (is done);
-            // The response is passed to the function
-            .done(function (response) {
-
-            })
-});
+}

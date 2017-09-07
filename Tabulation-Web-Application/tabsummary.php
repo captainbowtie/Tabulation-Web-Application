@@ -81,8 +81,8 @@ function createCoachTeamRow($teamNumber, $teamName) {
     //Extract all the teams ballots into a array of MySQL results, each result
     //containing all of the ballots from a particular round
     for ($a = 0; $a < 4; $a++) {
-        $ballotQuery = "SELECT * FROM ballots WHERE roundNumber='" . ($a + 1) . "' && "
-                . "(pTeamNumber='" . $teamNumber . "' || dTeamNumber='" . $teamNumber . "') "
+        $ballotQuery = "SELECT * FROM ballots WHERE round='" . ($a + 1) . "' && "
+                . "(pTeam='" . $teamNumber . "' || dTeam='" . $teamNumber . "') "
                 . "ORDER BY id;";
         $resultArray[$a] = $connection->query($ballotQuery);
     }
@@ -114,12 +114,12 @@ function createCoachTeamRow($teamNumber, $teamName) {
         $resultArray[0]->data_seek(1);
         $round1Ballot2 = $resultArray[0]->fetch_array(MYSQLI_ASSOC);
         //Check team side for round 1
-        if ($round1Ballot1['dTeamNumber'] == $teamNumber) {
+        if ($round1Ballot1['dTeam'] == $teamNumber) {
             $round1IsPlaintiff = FALSE;
             //Get opposing team number
-            $round1Opponent = $round1Ballot1['pTeamNumber'];
+            $round1Opponent = $round1Ballot1['pTeam'];
         } else {
-            $round1Opponent = $round1Ballot1['dTeamNumber'];
+            $round1Opponent = $round1Ballot1['dTeam'];
         }
         //Get point differential on each ballot
         $round1Ballot1PD = getBallotPD($round1Ballot1['id'], $teamNumber);
@@ -131,9 +131,9 @@ function createCoachTeamRow($teamNumber, $teamName) {
             $resultArray[1]->data_seek(1);
             $round2Ballot2 = $resultArray[1]->fetch_array(MYSQLI_ASSOC);
             if ($round1IsPlaintiff) {
-                $round2Opponent = $ound2Ballot1['pTeamNumber'];
+                $round2Opponent = $ound2Ballot1['pTeam'];
             } else {
-                $round2Opponent = $ound2Ballot1['dTeamNumber'];
+                $round2Opponent = $ound2Ballot1['dTeam'];
             }
             $round2Ballot1PD = getBallotPD($round2Ballot1['id'], $teamNumber);
             $round2Ballot2PD = getBallotPD($round2Ballot2['id'], $teamNumber);
@@ -146,12 +146,12 @@ function createCoachTeamRow($teamNumber, $teamName) {
         $resultArray[2]->data_seek(1);
         $round3Ballot2 = $resultArray[2]->fetch_array(MYSQLI_ASSOC);
         //Check team side for round 3
-        if ($round3Ballot1['dTeamNumber'] == $teamNumber) {
+        if ($round3Ballot1['dTeam'] == $teamNumber) {
             $round3IsPlaintiff = FALSE;
             //Get opposing team number
-            $round3Opponent = $round3Ballot1['pTeamNumber'];
+            $round3Opponent = $round3Ballot1['pTeam'];
         } else {
-            $round3Opponent = $round3Ballot1['dTeamNumber'];
+            $round3Opponent = $round3Ballot1['dTeam'];
         }
         //Get point differential on each ballot
         $round3Ballot1PD = getBallotPD($round3Ballot1['id'], $teamNumber);
@@ -163,9 +163,9 @@ function createCoachTeamRow($teamNumber, $teamName) {
             $resultArray[3]->data_seek(1);
             $round4Ballot2 = $resultArray[1]->fetch_array(MYSQLI_ASSOC);
             if ($round3IsPlaintiff) {
-                $round4Opponent = $ound4Ballot1['pTeamNumber'];
+                $round4Opponent = $ound4Ballot1['pTeam'];
             } else {
-                $round4Opponent = $ound4Ballot1['dTeamNumber'];
+                $round4Opponent = $ound4Ballot1['dTeam'];
             }
             $round4Ballot1PD = getBallotPD($round4Ballot1['id'], $teamNumber);
             $round4Ballot2PD = getBallotPD($round4Ballot2['id'], $teamNumber);
@@ -223,8 +223,8 @@ function createTabTeamRow($teamNumber, $teamName) {
     //Extract all the teams ballots into a array of MySQL results, each result
     //containing all of the ballots from a particular round
     for ($a = 0; $a < 4; $a++) {
-        $ballotQuery = "SELECT * FROM ballots WHERE roundNumber='" . ($a + 1) . "' && "
-                . "(pTeamNumber='" . $teamNumber . "' || dTeamNumber='" . $teamNumber . "') "
+        $ballotQuery = "SELECT * FROM ballots WHERE round='" . ($a + 1) . "' && "
+                . "(pTeam='" . $teamNumber . "' || dTeam='" . $teamNumber . "') "
                 . "ORDER BY id;";
         $resultArray[$a] = $connection->query($ballotQuery);
     }
@@ -256,12 +256,12 @@ function createTabTeamRow($teamNumber, $teamName) {
         $resultArray[0]->data_seek(1);
         $round1Ballot2 = $resultArray[0]->fetch_array(MYSQLI_ASSOC);
         //Check team side for round 1
-        if ($round1Ballot1['dTeamNumber'] == $teamNumber) {
+        if ($round1Ballot1['dTeam'] == $teamNumber) {
             $round1IsPlaintiff = FALSE;
             //Get opposing team number
-            $round1Opponent = $round1Ballot1['pTeamNumber'];
+            $round1Opponent = $round1Ballot1['pTeam'];
         } else {
-            $round1Opponent = $round1Ballot1['dTeamNumber'];
+            $round1Opponent = $round1Ballot1['dTeam'];
         }
         //Get point differential on each ballot
         $round1Ballot1PD = getBallotPD($round1Ballot1['id'], $teamNumber);
@@ -273,9 +273,9 @@ function createTabTeamRow($teamNumber, $teamName) {
             $resultArray[1]->data_seek(1);
             $round2Ballot2 = $resultArray[1]->fetch_array(MYSQLI_ASSOC);
             if ($round1IsPlaintiff) {
-                $round2Opponent = $ound2Ballot1['pTeamNumber'];
+                $round2Opponent = $ound2Ballot1['pTeam'];
             } else {
-                $round2Opponent = $ound2Ballot1['dTeamNumber'];
+                $round2Opponent = $ound2Ballot1['dTeam'];
             }
             $round2Ballot1PD = getBallotPD($round2Ballot1['id'], $teamNumber);
             $round2Ballot2PD = getBallotPD($round2Ballot2['id'], $teamNumber);
@@ -288,12 +288,12 @@ function createTabTeamRow($teamNumber, $teamName) {
         $resultArray[2]->data_seek(1);
         $round3Ballot2 = $resultArray[2]->fetch_array(MYSQLI_ASSOC);
         //Check team side for round 3
-        if ($round3Ballot1['dTeamNumber'] == $teamNumber) {
+        if ($round3Ballot1['dTeam'] == $teamNumber) {
             $round3IsPlaintiff = FALSE;
             //Get opposing team number
-            $round3Opponent = $round3Ballot1['pTeamNumber'];
+            $round3Opponent = $round3Ballot1['pTeam'];
         } else {
-            $round3Opponent = $round3Ballot1['dTeamNumber'];
+            $round3Opponent = $round3Ballot1['dTeam'];
         }
         //Get point differential on each ballot
         $round3Ballot1PD = getBallotPD($round3Ballot1['id'], $teamNumber);
@@ -305,9 +305,9 @@ function createTabTeamRow($teamNumber, $teamName) {
             $resultArray[3]->data_seek(1);
             $round4Ballot2 = $resultArray[1]->fetch_array(MYSQLI_ASSOC);
             if ($round3IsPlaintiff) {
-                $round4Opponent = $ound4Ballot1['pTeamNumber'];
+                $round4Opponent = $ound4Ballot1['pTeam'];
             } else {
-                $round4Opponent = $ound4Ballot1['dTeamNumber'];
+                $round4Opponent = $ound4Ballot1['dTeam'];
             }
             $round4Ballot1PD = getBallotPD($round4Ballot1['id'], $teamNumber);
             $round4Ballot2PD = getBallotPD($round4Ballot2['id'], $teamNumber);

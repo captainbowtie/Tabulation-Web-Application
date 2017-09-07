@@ -37,10 +37,10 @@ if (!isset($_SESSION['id'])) {
     $ballotResult = $connection->query($ballotQuery);
     $ballotResult->data_seek(0);
     $ballot = $ballotResult->fetch_array(MYSQLI_ASSOC);
-    $pTeamNumber = $ballot['pTeamNumber'];
-    $dTeamNumber = $ballot['dTeamNumber'];
+    $pTeam = $ballot['pTeam'];
+    $dTeam = $ballot['dTeam'];
     //Retrieve pTeam and dTeam members
-    $memberQuery = "SELECT id,name FROM competitors WHERE team=$pTeamNumber || team=$dTeamNumber ORDER BY team";
+    $memberQuery = "SELECT id,name FROM competitors WHERE team=$pTeam || team=$dTeam ORDER BY team";
     $memberResult = $connection->query($memberQuery);
     $connection->close();
     
