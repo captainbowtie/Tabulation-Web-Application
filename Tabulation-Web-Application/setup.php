@@ -142,7 +142,8 @@ function createTables() {
      * table.
      */
     $teamsTable = "CREATE TABLE teams(number SMALLINT UNSIGNED, " //Teams Table
-            . "name VARCHAR(64) NOT NULL, PRIMARY KEY (number)) ENGINE InnoDB";
+            . "name VARCHAR(64) NOT NULL, coachId SMALLINT UNSIGNED NOT NULL DEFAULT '0', "
+            . "PRIMARY KEY (number), INDEX(coachId)) ENGINE InnoDB";
     $connection->query($teamsTable);
     $competitorsTable = "CREATE TABLE competitors(id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT KEY, " //Competitors Table
             . "team SMALLINT UNSIGNED NOT NULL, name VARCHAR(64) NOT NULL, INDEX(team)) "
