@@ -146,7 +146,10 @@ function createTables() {
             . "PRIMARY KEY (number), INDEX(coachId)) ENGINE InnoDB";
     $connection->query($teamsTable);
     $competitorsTable = "CREATE TABLE competitors(id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT KEY, " //Competitors Table
-            . "team SMALLINT UNSIGNED NOT NULL, name VARCHAR(64) NOT NULL, INDEX(team)) "
+            . "team SMALLINT UNSIGNED NOT NULL, name VARCHAR(64) NOT NULL, "
+            . "pAtty BINARY(1) NOT NULL DEFAULT '1', pWit BINARY(1) NOT NULL DEFAULT '1', "
+            . "dAtty BINARY(1) NOT NULL DEFAULT '1', dWit BINARY(1) NOT NULL DEFAULT '1', "
+            . "INDEX(team)) "
             . "ENGINE InnoDB";
     $connection->query($competitorsTable);
     $roomsTable = "CREATE TABLE rooms(id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT KEY, " //Rooms Table

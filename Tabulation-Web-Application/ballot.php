@@ -458,3 +458,4 @@ function createTabBallot(){
     echo "<script src='https://code.jquery.com/jquery-3.2.1.min.js'></script>";
 echo "<script src='/tabBallot.js'></script>";
 }
+//TODO: add names attributes to the outstanding selectors

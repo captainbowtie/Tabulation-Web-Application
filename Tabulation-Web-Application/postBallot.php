@@ -26,7 +26,7 @@ require_once "functions.php";
 
 if (!isset($_SESSION['id'])) {
     echo "You must be logged in to view this page";
-//Web page if logged in, but not as a coach or tabulation director
+//Web page if logged in, but not as a judge or tabulation director
 } else if (!$isTab && !$isJudge) {
     echo "You do not have permission to access this page";
 //Code if logged in as tabulation director

@@ -22,10 +22,12 @@ require_once 'dblogin.php';
 $isTab = FALSE;
 $isJudge = FALSE;
 $isCoach = FALSE;
+$id = $_SESSION['id'];
 
 if (isset($_SESSION['id'])) {
+    $id = $_SESSION['id'];
     $connection = new mysqli(dbhost, dbuser, dbpass, dbname);
-    $userQuery = "SELECT isTab,isJudge,isCoach FROM users WHERE id=" . $_SESSION['id'];
+    $userQuery = "SELECT isTab,isJudge,isCoach FROM users WHERE id=$id";
     $userResult = $connection->query($userQuery);
     $userResult->data_seek(0);
     $roleArray = $userResult->fetch_array(MYSQLI_ASSOC);
