@@ -17,7 +17,6 @@
 
 $(".existingUserName").on("change", function () {
     var postString = '{"id":' + $(this).attr('competitor') + ',"field":"' + "name" + '","value":"' + this.value + '"}';
-    console.log(postString);
     var postData = JSON.parse(postString);
     $.ajax({
 
@@ -63,4 +62,16 @@ $("#addCompetitor").on("submit", function (e) {
             .done(function (response) {
 
             })
+});
+
+$("#newTeamButton").on("click", function (e) {
+    e.preventDefault();
+    //Probably scrap all this and use a hide/show function instead
+    $("#competitorTable").remove();
+    
+});
+
+$("body").on("click","#addTeamButton", function(e){
+    e.preventDefault()
+    console.log("asdf");
 });

@@ -59,8 +59,17 @@ if ($isTab || $isCoach) {
         $options .= ">$teamNumber: $teamName</option>\n";
     }
     //Print the select and a header about the currently selected team
-    echo "<select id='teamSelect'>\n$options</select><br>\n";
-    echo "<span id='teamNumber'>$firstTeamNumber</span>\n";
+    echo "<select id='teamSelect'>\n$options</select>\n";
+    if ($isTab) {
+        echo "<input type='submit' id='newTeamButton' value='New Team'>\n";
+        echo "<form id='newTeamForm'>\n"
+        . "<label>Team Number: <input></label>\n"
+        . "<label>Team Name: <input></label>\n"
+                . "<select></select>\n"
+                . "<input type='submit' value='Add Team'>"
+        . "</form>";
+    }
+    echo "<br><span id='teamNumber'>$firstTeamNumber</span>\n";
     echo "<span id='teamName'>$firstTeamName</span>";
     //Get data on selected team's competitors
     $competitorQuery = "SELECT * FROM competitors WHERE team=$firstTeamNumber";
@@ -75,45 +84,50 @@ if ($isTab || $isCoach) {
         $pWit = $competitor['pWit'];
         $dAtty = $competitor['dAtty'];
         $dWit = $competitor['dWit'];
-        echo "<script>console.log('$name $pAtty $pWit $dAtty $dWit')</script>";
         //Create competitor row, checking for each role if that box should be checked
         $competitorRows .= "<tr><td><input role='name' competitor='$id' value='$name' class='existingUserName'></td>"
                 . "<td><label><input type=checkbox role='pAtty' competitor='$id' class='existingUserRole'";
-        if($pAtty==1){
+        if ($pAtty == 1) {
             $competitorRows .= " checked";
         }
         $competitorRows .= ">Plaintiff Attorney</label></td>"
                 . "<td><label><input type=checkbox role='pWit' competitor='$id' class='existingUserRole'";
-        if($pWit==1){
+        if ($pWit == 1) {
             $competitorRows .= " checked";
         }
         $competitorRows .= ">Plaintiff Witness</label></td>"
                 . "<td><label><input type=checkbox role='dAtty' competitor='$id' class='existingUserRole'";
-        if($dAtty==1){
+        if ($dAtty == 1) {
             $competitorRows .= " checked";
         }
         $competitorRows .= ">Defense Attorney</label></td>"
                 . "<td><label><input type=checkbox role='dWit' competitor='$id' class='existingUserRole'";
-        if($dWit==1){
+        if ($dWit == 1) {
             $competitorRows .= " checked";
         }
         $competitorRows .= ">Defense Witness</label></td></tr>\n";
     }
     //Create list of existing competitors
-    echo "<form id='competitorForm'>\n";
+echo "<form id='competitorForm'>\n";
     echo "<table id='competitorTable'>\n";
     echo $competitorRows;
+    echo "<tr>\n";
     echo "</table>";
     echo "</form>\n";
-    //Form to add more competitors to team
     echo "<form id='addCompetitor'>\n";
-    echo "<input id='name' name='name'>"
-    . "<label><input type=checkbox name ='pAtty' id='pAtty'>Plaintiff Attorney</label>"
-    . "<label><input type=checkbox name='pWit' id='pWit'>Plaintiff Witness</label>"
-    . "<label><input type=checkbox name='dAtty' id='dAtty'>Defense Attorney</label>"
-    . "<label><input type=checkbox name='dWit' id='dWit'>Defense Witness</label>"
-    . "<input type=submit id='addCompetitorButton' name='addCompetitorButton' value='Add Competitor'>";
+    echo "<table>\n<tr>\n";
+    echo "<td>\n";
+    echo "<input id='name' name='name'>\n"
+    . "<td><label><input type=checkbox name ='pAtty' id='pAtty'>Plaintiff Attorney</label></td>\n"
+    . "<td><label><input type=checkbox name='pWit' id='pWit'>Plaintiff Witness</label></td>\n"
+    . "<td><label><input type=checkbox name='dAtty' id='dAtty'>Defense Attorney</label></td>\n"
+    . "<td><label><input type=checkbox name='dWit' id='dWit'>Defense Witness</label></td>\n"
+    . "<td><input type=submit id='addCompetitorButton' name='addCompetitorButton' value='Add Competitor'></td>\n"; 
+    echo "</tr>";
+    echo "</table>";
     echo "</form>\n";
+
+    //Form to add more competitors to team
 } else if (isset($_POST['id'])) {
     echo "You do not have permission to access this page";
 } else {
