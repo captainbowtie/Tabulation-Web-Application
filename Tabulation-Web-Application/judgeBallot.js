@@ -19,7 +19,7 @@ $("input").on("change", function () {
     var ballotId = $("#judge").attr('ballotId');
     var role = this.name;
     var score = this.value;
-    var postString = '{"id":' + ballotId + ',"field":"' + role + '","value":' + score + '}';
+    var postString = '{"id":' + ballotId + ',"field":' + role + '","value":' + score + '}';
     var postData = JSON.parse(postString);
 
     $.ajax({

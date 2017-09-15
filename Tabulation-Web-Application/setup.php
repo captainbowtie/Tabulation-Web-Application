@@ -137,6 +137,8 @@ function createTables() {
         $query = "DROP TABLE ballots";
         $connection->query($query);
     }
+    $query = "DROP TABLE teamConflicts";
+    $connection->query($query);
     /* Query to create the tables needed for the application
      * This string creates five tables: a teams, competitors, rooms, users, and ballots
      * table.
@@ -195,6 +197,7 @@ function createTables() {
     $connection->query($ballotsTable);
     $teamConflictsTable = "CREATE TABLE teamConflicts(id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT KEY, "
             . "team1 SMALLINT UNSIGNED NOT NULL DEFAULT '0', team2 SMALLINT UNSIGNED NOT NULL DEFAULT '0', "
+            . "sameSchool BINARY(1) NOT NULL DEFAULT '0', "
             . "INDEX(team1), INDEX(team2)) ENGINE InnoDB";
     $connection->query($teamConflictsTable);
     $judgeConflictsTable = "CREATE TABLE judgeConflicts(id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT KEY, "

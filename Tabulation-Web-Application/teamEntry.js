@@ -15,6 +15,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+$(document).ready(function () {
+
+});
+
 $(".existingUserName").on("change", function () {
     var postString = '{"id":' + $(this).attr('competitor') + ',"field":"' + "name" + '","value":"' + this.value + '"}';
     var postData = JSON.parse(postString);
@@ -64,14 +68,40 @@ $("#addCompetitor").on("submit", function (e) {
             })
 });
 
-$("#newTeamButton").on("click", function (e) {
+$("#addTeam").on("submit", function (e) {
     e.preventDefault();
-    //Probably scrap all this and use a hide/show function instead
-    $("#competitorTable").remove();
-    
+
 });
 
-$("body").on("click","#addTeamButton", function(e){
+$("#addConflict").on("submit", function (e) {
+    e.preventDefault();
+    var conflictNumber = $("#conflictSelect option:selected").attr('id').substring(8, 12);
+    var teamNumber = $("#teamSelect option:selected").attr("id");
+    var postString = '{"team1":' + conflictNumber + ',"team2":' + teamNumber + '}';
+    var postData = JSON.parse(postString);
+    $.ajax({
+
+        // The URL for the request
+        url: "/postConflict.php",
+
+        // The data to send (will be converted to a query string)
+        data: postData,
+
+        // Whether this is a POST or GET request
+        type: "POST",
+
+        // The type of data we expect back
+        dataType: "text",
+    })
+            // Code to run if the request succeeds (is done);
+            // The response is passed to the function
+            .done(function (response) {
+                
+            })
+
+});
+
+$("body").on("click", "#addTeamButton", function (e) {
     e.preventDefault()
     console.log("asdf");
 });

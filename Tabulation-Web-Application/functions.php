@@ -175,8 +175,8 @@ function getOCS($teamNumber){
 }
 
 function getPD($teamNumber){
-    $connection = new mysqli(dbhost, dbuser, dbpass, dbname);
     $query = "SELECT id FROM ballots WHERE pTeam='" . $teamNumber . "' || dTeam='" . $teamNumber . "'";
+    $connection = new mysqli(dbhost, dbuser, dbpass, dbname);
     $result = $connection->query($query);
     $connection->close();
     $PD = 0;
@@ -186,4 +186,47 @@ function getPD($teamNumber){
         $PD += getBallotPD($resultRow[0], $teamNumber);
     }
     return $PD;
+}
+
+function getSchoolConflicts($teamNumber){
+    $conflictQuery = "SELECT team1,team2 FROM teamConflicts "
+            . "WHERE sameSchool=1 && (team1=$teamNumber || team2=$teamNumber)";
+    $connection = new mysqli(dbhost, dbuser, dbpass, dbname);
+    $result = $connection->query($conflictQuery);
+    $connection->close();
+    $conflictList = array();
+    for ($a = 0; $a < $result->num_rows; $a++) {
+        
+        $result->data_seek($a);
+        $conflict = $result->fetch_array(MYSQLI_ASSOC);
+        $team1 = $conflict['team1'];
+        $team2 = $conflict['team2'];
+        if($team1!=$teamNumber){
+            array_push($conflictList, $team1);
+        }else{
+            array_push($conflictList, $team2);
+        }
+    }
+    return array_unique($conflictList);
+}
+
+function getAllConflicts($teamNumber){
+    $conflictQuery = "SELECT team1,team2 FROM teamConflicts "
+            . "WHERE team1=$teamNumber || team2=$teamNumber";
+    $connection = new mysqli(dbhost, dbuser, dbpass, dbname);
+    $result = $connection->query($conflictQuery);
+    $connection->close();
+    $conflictList = array();
+    for ($a = 0; $a < $result->num_rows; $a++) {
+        $result->data_seek($a);
+        $conflict = $result->fetch_array(MYSQLI_ASSOC);
+        $team1 = $conflict['team1'];
+        $team2 = $conflict['team2'];
+        if($team1!=$teamNumber){
+            array_push($conflictList, $team1);
+        }else{
+            array_push($conflictList, $team2);
+        }
+    }
+    return array_unique($conflictList);
 }

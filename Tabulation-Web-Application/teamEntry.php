@@ -20,7 +20,8 @@
 session_start();
 
 require_once "dblogin.php";
-require_once 'setSessionPrivileges.php';
+require_once "setSessionPrivileges.php";
+require_once "functions.php";
 
 //HTML Header information
 echo<<<_END
@@ -44,33 +45,81 @@ if ($isTab || $isCoach) {
     $connection = new mysqli(dbhost, dbuser, dbpass, dbname);
     $teamResult = $connection->query($teamQuery);
     //Combine teams in to HTML string of select options
-    $options = "";
+    $teamOptions = "";
     for ($a = 0; $a < $teamResult->num_rows; $a++) {
         $teamResult->data_seek($a);
         $team = $teamResult->fetch_array(MYSQLI_ASSOC);
         $teamNumber = $team['number'];
         $teamName = $team['name'];
-        $options .= "<option id='$teamNumber'";
+        $teamOptions .= "<option id='$teamNumber'";
         if ($a == 0) {
             $options .= " selected";
             $firstTeamNumber = $teamNumber;
             $firstTeamName = $teamName;
         }
-        $options .= ">$teamNumber: $teamName</option>\n";
+        $teamOptions .= ">$teamNumber: $teamName</option>\n";
     }
     //Print the select and a header about the currently selected team
-    echo "<select id='teamSelect'>\n$options</select>\n";
+    echo "<select id='teamSelect'>\n$teamOptions</select>\n";
+    //If tabulation director, create form to add teams
     if ($isTab) {
-        echo "<input type='submit' id='newTeamButton' value='New Team'>\n";
+        $coachQuery = "SELECT id,name FROM users WHERE isCoach=1";
+        $coachResult = $connection->query($coachQuery);
+        $coachOptions = "<option id='coach0'>Coach:</option>\n";
+        for ($a = 0; $a < $coachResult->num_rows; $a++) {
+            $coachResult->data_seek($a);
+            $coach = $coachResult->fetch_array(MYSQLI_ASSOC);
+            $coachId = $coach['id'];
+            $name = $coach['name'];
+            $coachOptions .= "<option id='coach$id'>$name</option>\n";
+        }
         echo "<form id='newTeamForm'>\n"
         . "<label>Team Number: <input></label>\n"
         . "<label>Team Name: <input></label>\n"
-                . "<select></select>\n"
-                . "<input type='submit' value='Add Team'>"
+        . "<select>\n$coachOptions</select>\n"
+        . "<input type='submit' value='Add Team'>"
         . "</form>";
     }
+    echo "<div>\n";
     echo "<br><span id='teamNumber'>$firstTeamNumber</span>\n";
     echo "<span id='teamName'>$firstTeamName</span>";
+    echo "</div>\n";
+    
+    //Create list of same school team conflicts
+    $conflictQuery = "SELECT team1,team2 FROM teamConflicts "
+            . "WHERE team1=$firstTeamNumber || team2=$firstTeamNumber || "
+            . "sameSchool=1";
+    $conflictResult = $connection->query($conflictQuery);
+    $conflictList = getSchoolConflicts($firstTeamNumber);
+    $conflictListHTML = "";
+    for ($a = 0;$a<count($conflictList);$a++) {
+        if($a==0){
+            $conflictListHTML .= "<div>School Conflicts:";
+        }
+        $conflictNameQuery = "SELECT name FROM teams WHERE number=$conflictList[$a]";
+        $conflictNameResult = $connection->query($conflictNameQuery);
+        $conflictNameResult->data_seek(0);
+        $conflictNameRow = $conflictNameResult->fetch_array(MYSQLI_ASSOC);
+        $conflictName = $conflictNameRow['name'];
+        $conflictListHTML .= " $conflictList[$a] $conflictName";
+        if($a==(count($conflictList)-1)){
+            $conflictListHTML .= "</div>\n";
+        }else{
+            $conflictListHTML .= ";";
+        }
+    }
+    echo $conflictListHTML;
+    
+    //Create form to add more conflicts
+    if ($isTab) {
+        $conflictOptions = str_replace("id='", "id='conflict", $teamOptions);
+        echo "<form id='addConflict'>\n"
+        . "<select id='conflictSelect'>\n"
+        . "$conflictOptions\n"
+        . "</select>\n"
+        . "<input type=submit value='Add Conflict'>\n"
+        . "</form>\n";
+    }
     //Get data on selected team's competitors
     $competitorQuery = "SELECT * FROM competitors WHERE team=$firstTeamNumber";
     $competitorResult = $connection->query($competitorQuery);
@@ -108,7 +157,7 @@ if ($isTab || $isCoach) {
         $competitorRows .= ">Defense Witness</label></td></tr>\n";
     }
     //Create list of existing competitors
-echo "<form id='competitorForm'>\n";
+    echo "<form id='competitorForm'>\n";
     echo "<table id='competitorTable'>\n";
     echo $competitorRows;
     echo "<tr>\n";
@@ -122,7 +171,7 @@ echo "<form id='competitorForm'>\n";
     . "<td><label><input type=checkbox name='pWit' id='pWit'>Plaintiff Witness</label></td>\n"
     . "<td><label><input type=checkbox name='dAtty' id='dAtty'>Defense Attorney</label></td>\n"
     . "<td><label><input type=checkbox name='dWit' id='dWit'>Defense Witness</label></td>\n"
-    . "<td><input type=submit id='addCompetitorButton' name='addCompetitorButton' value='Add Competitor'></td>\n"; 
+    . "<td><input type=submit id='addCompetitorButton' name='addCompetitorButton' value='Add Competitor'></td>\n";
     echo "</tr>";
     echo "</table>";
     echo "</form>\n";
