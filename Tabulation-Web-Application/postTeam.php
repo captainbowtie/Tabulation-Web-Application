@@ -22,16 +22,17 @@ session_start();
 require_once "dblogin.php";
 require_once "setSessionPrivileges.php";
 require_once "functions.php";
-//TODO: data validation
+
 if($isTab){
-    $team1 = sanitize_string($_POST['team1']);
-    $team2 = sanitize_string($_POST['team2']);
-    $conflictQuery = "INSERT INTO teamConflicts (team1,team2,sameSchool) "
-            . "VALUES($team1,$team2,1)";
+    $teamNumber = sanitize_string($_POST['teamNumber']);
+    $teamName = sanitize_string($_POST['teamName']);
+    $coach = sanitize_string($_POST['coach']);
+    $teamQuery = "INSERT INTO teams (number,name,coachId) "
+            . "VALUES($teamNumber,'$teamName',$coach)";
     $connection = new mysqli(dbhost, dbuser, dbpass, dbname);
-    $connection->query($conflictQuery);
-        $connection->close();
-    echo "TODO send revised conflict list";
+    $result = $connection->query($teamQuery);
+    $connection->close();
+    echo "$teamQuery";
 }else if(!isset($_SESSION[id])){
     echo "You must be logged in to view this page";
 }else{

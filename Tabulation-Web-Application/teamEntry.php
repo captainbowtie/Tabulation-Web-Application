@@ -70,13 +70,13 @@ if ($isTab || $isCoach) {
             $coachResult->data_seek($a);
             $coach = $coachResult->fetch_array(MYSQLI_ASSOC);
             $coachId = $coach['id'];
-            $name = $coach['name'];
-            $coachOptions .= "<option id='coach$id'>$name</option>\n";
+            $coachName = $coach['name'];
+            $coachOptions .= "<option id='coach$coachId'>$coachName</option>\n";
         }
         echo "<form id='newTeamForm'>\n"
-        . "<label>Team Number: <input></label>\n"
-        . "<label>Team Name: <input></label>\n"
-        . "<select>\n$coachOptions</select>\n"
+        . "<label>Team Number: <input name='teamNumber' id='newTeamNumber'></label>\n"
+        . "<label>Team Name: <input name='teamName' id='newTeamName'></label>\n"
+        . "<select id='newTeamCoach' name='coachPen'>\n$coachOptions</select>\n"
         . "<input type='submit' value='Add Team'>"
         . "</form>";
     }

@@ -68,8 +68,33 @@ $("#addCompetitor").on("submit", function (e) {
             })
 });
 
-$("#addTeam").on("submit", function (e) {
+$("#newTeamForm").on("submit", function (e) {
     e.preventDefault();
+    var coachId = $("#newTeamCoach option:selected").attr("id");
+    var postString = '{"teamNumber":' + $("#newTeamNumber").val() +
+            ',"teamName":"' + $("#newTeamName").val() +
+            '","coach":' + $("#newTeamCoach option:selected").attr("id").substring(5) + '}';
+    var postData = JSON.parse(postString);
+    $.ajax({
+
+        // The URL for the request
+        url: "/postTeam.php",
+
+        // The data to send (will be converted to a query string)
+        data: postData,
+
+        // Whether this is a POST or GET request
+        type: "POST",
+
+        // The type of data we expect back
+        dataType: "text",
+    })
+            // Code to run if the request succeeds (is done);
+            // The response is passed to the function
+            .done(function (response) {
+                //TODO: update team list with new team
+            })
+
 
 });
 
@@ -96,12 +121,7 @@ $("#addConflict").on("submit", function (e) {
             // Code to run if the request succeeds (is done);
             // The response is passed to the function
             .done(function (response) {
-                
+
             })
 
-});
-
-$("body").on("click", "#addTeamButton", function (e) {
-    e.preventDefault()
-    console.log("asdf");
 });
