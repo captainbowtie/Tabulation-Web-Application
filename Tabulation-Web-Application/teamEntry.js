@@ -125,3 +125,33 @@ $("#addConflict").on("submit", function (e) {
             })
 
 });
+
+$("#teamSelect").on("change", function () {
+    populateTeam();
+});
+
+function populateTeam() {
+    var selectedTeam = $("#teamSelect option:selected").attr('id');
+    var getString = '{"teamNumber":' + selectedTeam + '}';
+    console.log(getString);
+    $.ajax({
+
+        // The URL for the request
+        url: "/getTeam.php",
+
+        // The data to send (will be converted to a query string)
+        data: JSON.parse(getString),
+
+        // Whether this is a POST or GET request
+        type: "GET",
+
+        // The type of data we expect back
+        dataType: "json",
+    })
+            // Code to run if the request succeeds (is done);
+            // The response is passed to the function
+            .done(function (response) {
+                
+                
+            })
+}
