@@ -19,16 +19,15 @@ $(document).ready(function () {
 
 });
 
-$(".existingUserName").on("change", function () {
+$(document).on("change", ".existingUserName", function () {
     var postString = '{"id":' + $(this).attr('competitor') + ',"field":"' + "name" + '","value":"' + this.value + '"}';
-    var postData = JSON.parse(postString);
     $.ajax({
 
         // The URL for the request
         url: "/postCompetitor.php",
 
         // The data to send (will be converted to a query string)
-        data: postData,
+        data: JSON.parse(postString),
 
         // Whether this is a POST or GET request
         type: "POST",
@@ -43,7 +42,36 @@ $(".existingUserName").on("change", function () {
             })
 });
 
-$("#addCompetitor").on("submit", function (e) {
+$(document).on("change", ".existingUserRole", function () {
+    var flag;
+    if(this.checked){
+        flag = 1;
+    }else{
+        flag = 0;
+    }
+    var postString = '{"id":' + $(this).attr('competitor') + ',"field":"' + $(this).attr("role") + '","value":"' + flag + '"}';
+    $.ajax({
+
+        // The URL for the request
+        url: "/postCompetitor.php",
+
+        // The data to send (will be converted to a query string)
+        data: JSON.parse(postString),
+
+        // Whether this is a POST or GET request
+        type: "POST",
+
+        // The type of data we expect back
+        dataType: "text",
+    })
+            // Code to run if the request succeeds (is done);
+            // The response is passed to the function
+            .done(function (response) {
+
+            })
+});
+
+$(document).on("submit", "#addCompetitor", function (e) {
     e.preventDefault();
     var competitor = $("#addCompetitor").serialize();
     competitor += "&team=" + $("#teamSelect option:selected").attr("id");
@@ -68,7 +96,7 @@ $("#addCompetitor").on("submit", function (e) {
             })
 });
 
-$("#newTeamForm").on("submit", function (e) {
+$(document).on("submit", "#newTeamForm", function (e) {
     e.preventDefault();
     var coachId = $("#newTeamCoach option:selected").attr("id");
     var postString = '{"teamNumber":' + $("#newTeamNumber").val() +
@@ -98,7 +126,7 @@ $("#newTeamForm").on("submit", function (e) {
 
 });
 
-$("#addConflict").on("submit", function (e) {
+$(document).on("submit", "#addConflict", function (e) {
     e.preventDefault();
     var conflictNumber = $("#conflictSelect option:selected").attr('id').substring(8, 12);
     var teamNumber = $("#teamSelect option:selected").attr("id");
@@ -126,14 +154,13 @@ $("#addConflict").on("submit", function (e) {
 
 });
 
-$("#teamSelect").on("change", function () {
+$(document).on("change", "#teamSelect", function () {
     populateTeam();
 });
 
 function populateTeam() {
     var selectedTeam = $("#teamSelect option:selected").attr('id');
     var getString = '{"teamNumber":' + selectedTeam + '}';
-    console.log(getString);
     $.ajax({
 
         // The URL for the request
@@ -150,8 +177,64 @@ function populateTeam() {
     })
             // Code to run if the request succeeds (is done);
             // The response is passed to the function
-            .done(function (response) {
-                
-                
+            .done(function (team) {
+                console.log(team);
+                //Change team number and team name
+                $("#teamNumber").html(team.teamNumber);
+                $("#teamName").html(team.teamName);
+
+                //Change team conflicts
+                var conflictHTML = "";
+                for (a = 0; a < team.schoolConflicts.length; a++) {
+                    if (a == 0) {
+                        conflictHTML += "School Conflicts: ";
+                    }
+                    conflictHTML += team.schoolConflicts[a]["teamNumber"] + " ";
+                    conflictHTML += team.schoolConflicts[a]["teamName"];
+                    if (!a == team.schoolConflicts.length - 1) {
+                        conflictHTML += ";";
+                    }
+                }
+                $("#conflictList").html(conflictHTML);
+
+                //Change list of competitors
+                $("#competitorForm").empty();
+
+                var content = "<table>"
+                for (a = 0; a < team.competitors.length; a++) {
+                    var id = team.competitors[a]["id"];
+                    content += "<tr><td><input role='name' " +
+                            "competitor='" + id + "' " +
+                            "value='" + team.competitors[a]["name"] + "' " +
+                            "class='existingUserName'></td>";
+                    content += "<td><label><input type=checkbox role='pAtty' " +
+                            "competitor='" + id + "' class='existingUserRole'";
+                    if (team.competitors[a]["pAtty"] == 1) {
+                        content += " checked"
+                    }
+                    content += ">Plaintiff Attorney</label></td>";
+                    content += "<td><label><input type=checkbox role='pWit' " +
+                            "competitor='" + id + "' class='existingUserRole'";
+                    if (team.competitors[a]["pWit"] == 1) {
+                        content += " checked"
+                    }
+                    content += ">Plaintiff Witness</label></td>";
+                    content += "<td><label><input type=checkbox role='dAtty' " +
+                            "competitor='" + id + "' class='existingUserRole'";
+                    if (team.competitors[a]["dAtty"] == 1) {
+                        content += " checked"
+                    }
+                    content += ">Defense Attorney</label></td>";
+                    content += "<td><label><input type=checkbox role='dWit' " +
+                            "competitor='" + id + "' class='existingUserRole'";
+                    if (team.competitors[a]["dWit"] == 1) {
+                        content += " checked"
+                    }
+                    content += ">Defense Witness</label></td></tr>";
+                }
+                content += "</table>"
+
+                $('#competitorForm').append(content);
+
             })
 }

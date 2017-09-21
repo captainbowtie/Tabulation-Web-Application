@@ -91,10 +91,10 @@ if ($isTab || $isCoach) {
             . "sameSchool=1";
     $conflictResult = $connection->query($conflictQuery);
     $conflictList = getSchoolConflicts($firstTeamNumber);
-    $conflictListHTML = "";
+    echo "<div id='conflictList'>";
     for ($a = 0;$a<count($conflictList);$a++) {
         if($a==0){
-            $conflictListHTML .= "<div>School Conflicts:";
+            $conflictListHTML .= "School Conflicts:";
         }
         $conflictNameQuery = "SELECT name FROM teams WHERE number=$conflictList[$a]";
         $conflictNameResult = $connection->query($conflictNameQuery);
@@ -102,13 +102,12 @@ if ($isTab || $isCoach) {
         $conflictNameRow = $conflictNameResult->fetch_array(MYSQLI_ASSOC);
         $conflictName = $conflictNameRow['name'];
         $conflictListHTML .= " $conflictList[$a] $conflictName";
-        if($a==(count($conflictList)-1)){
-            $conflictListHTML .= "</div>\n";
-        }else{
+        if(!$a==(count($conflictList)-1)){
             $conflictListHTML .= ";";
         }
     }
     echo $conflictListHTML;
+    echo "</div>\n";
     
     //Create form to add more conflicts
     if ($isTab) {

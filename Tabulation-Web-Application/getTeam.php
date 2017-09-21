@@ -43,6 +43,16 @@ if (!isset($_SESSION['id'])) {
         $name = $nameResult->fetch_array(MYSQLI_NUM);
         $teamName = $name[0];
         $schoolConflicts = getSchoolConflicts($teamNumber);
+        $conflicts = array();
+        for($a = 0;$a<sizeof($schoolConflicts);$a++){
+            $conflictNumber = $schoolConflicts[$a];
+            $teamNameQuery = "SELECT name FROM teams WHERE number = $conflictNumber";
+            $conflictNameResult = $connection->query($teamNameQuery);
+            $conflictNameResult->data_seek(0);
+            $conflictName = $conflictNameResult->fetch_array(MYSQLI_ASSOC);
+            $conflicts[$a]["teamNumber"] = $conflictNumber;
+            $conflicts[$a]["teamName"] = $conflictName["name"];
+        }
         $competitorQuery = "SELECT * FROM competitors WHERE team=$teamNumber";
         $competitorResult = $connection->query($competitorQuery);
         $competitors = array();
@@ -59,7 +69,7 @@ if (!isset($_SESSION['id'])) {
         
         $arr = array('teamNumber' => $teamNumber,
             'teamName' => $teamName,
-            'schoolConflicts' => $schoolConflicts,
+            'schoolConflicts' => $conflicts,
             'competitors' => $competitors
         );
         //Return json data
