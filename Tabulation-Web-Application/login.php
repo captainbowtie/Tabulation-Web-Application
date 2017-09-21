@@ -17,29 +17,33 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once 'dblogin.php';
-
 session_start();
 
-$isTab = FALSE;
-$isJudge = FALSE;
-$isCoach = FALSE;
+require_once "dblogin.php";
+require_once 'setSessionPrivileges.php';
 
 if (isset($_SESSION['id'])) {
     $id = $_SESSION['id'];
-    $connection = new mysqli(dbhost, dbuser, dbpass, dbname);
-    $userQuery = "SELECT isTab,isJudge,isCoach FROM users WHERE id=$id";
-    $userResult = $connection->query($userQuery);
-    $userResult->data_seek(0);
-    $roleArray = $userResult->fetch_array(MYSQLI_ASSOC);
-    $userResult->close();
-    if($roleArray['isTab']==1){
-        $isTab=TRUE;
-    }
-    if($roleArray['isJudge']==1){
-        $isJudge=TRUE;
-    }
-    if($roleArray['isCoach']==1){
-        $isCoach=TRUE;
-    }
+    $nameQuery = "SELECT * FROM users WHERE id='$id'";
+    $result = $connection->query($nameQuery);
+    $name = $result->fetch_assoc()['name'];
+    echo "<span>$name</span>|<span><a href='logout.php'>Log Out</a></span>";
+} else {
+    echo<<<_END
+\n<form id='login'>
+<table>
+<tr>
+<td>Email</td>
+<td><input type="text" maxlength="64" name="email"></td>
+        </tr>
+            <tr>
+<td>Password</td>
+<td><input type="password" maxlength="64" name="pass"></td>
+        </tr>
+        <tr>
+        <td></td>
+        <td><input type="submit" value="Login"></td>
+        </tr></table>
+        </form>
+_END;
 }

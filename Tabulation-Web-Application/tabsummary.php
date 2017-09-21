@@ -25,6 +25,7 @@ sane before writing it to the database */
 session_start();
 
 require_once "dblogin.php";
+require_once "setSessionPrivileges.php";
 
 //HTML Header information
 echo<<<_END

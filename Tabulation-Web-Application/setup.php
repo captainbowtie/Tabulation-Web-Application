@@ -17,10 +17,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-//Require database login credentials
-require_once 'dblogin.php';
-//Require common PHP functions
-require_once 'functions.php';
+
+require_once "dblogin.php";
+require_once "setSessionPrivileges.php";
+require_once "functions.php";
 
 session_start();
 echo<<<_END
@@ -38,36 +38,30 @@ if ($connection->connect_error) {
     die($connection->connect_error);
 }
 
+if($isTab){
+    echo "<script>console.log('test')</script>";
+}
+
 //Check if tables needed already exist in database
-$query = "SHOW TABLES LIKE 'teams'";
-$result = $connection->query($query);
-$teamsTableExists;
-$teamsTableExists = $result->num_rows > 0;
 $query = "SHOW TABLES LIKE 'users'";
 $result = $connection->query($query);
-$usersTableExists;
 $usersTableExists = $result->num_rows > 0;
-$query = "SHOW TABLES LIKE 'rooms'";
-$result = $connection->query($query);
-$roomsTableExists;
-$roomsTableExists = $result->num_rows > 0;
-$query = "SHOW TABLES LIKE 'ballots'";
-$result = $connection->query($query);
-$ballotsTableExists;
-$ballotsTableExists = $result->num_rows > 0;
-$query = "SHOW TABLES LIKE 'competitors'";
-$result = $connection->query($query);
-$competitorsTableExists;
-$competitorsTableExists = $result->num_rows > 0;
 
-//If any table needed already exists, require Tabulation director login to clear data
-if ($teamsTableExists || $usersTableExists || $roomsTableExists || $competitorsTableExists || $ballotsTableExists) {
+
+//If user table needed already exists, require Tabulation director login to clear data
+if ($usersTableExists) {
     if (isset($_SESSION['id'])) {
+        echo "1";
         if ($usersTableExists) {
+            echo "2";
             $query = 'SELECT isTab FROM users WHERE id="' . $_SESSION['id'] . '"';
             $result = $connection->query($query);
             //IF user is a tabulation director, confirm deletion
-            if ($result == 1) {
+            $isTab = TRUE;
+            if ($isTab) {
+                echo "3";
+                //TODO: use jquery/ajax to delete tables instead of POST
+                //TODO: allow custom email and password for initial account
                 echo<<<_END
                 <div>Are you sure you want to clear the database?
                     (This will delete all tournament data. A new admin user with 
@@ -111,33 +105,21 @@ function createTables() {
     fclose($fh);
     // Drop any tables that already exist
     //TODO: Add drops for other tables added to database since this funcgtion was written
-    //TODO: Split rooms table into a building and a room table
-    global $teamsTableExists;
-    if ($teamsTableExists) {
-        $query = "DROP TABLE teams";
-        $connection->query($query);
-    }
-    global $usersTableExists;
-    if ($usersTableExists) {
-        $query = "DROP TABLE users";
-        $connection->query($query);
-    }
-    global $roomsTableExists;
-    if ($roomsTableExists) {
-        $query = "DROP TABLE rooms";
-        $connection->query($query);
-    }
-    global $competitorsTableExists;
-    if ($competitorsTableExists) {
-        $query = "DROP TABLE competitors";
-        $connection->query($query);
-    }
-    global $ballotsTableExists;
-    if ($ballotsTableExists) {
-        $query = "DROP TABLE ballots";
-        $connection->query($query);
-    }
+    $query = "DROP TABLE teams";
+    $connection->query($query);
+    $query = "DROP TABLE competitors";
+    $connection->query($query);
+    $query = "DROP TABLE rooms";
+    $connection->query($query);
+    $query = "DROP TABLE users";
+    $connection->query($query);
+    $query = "DROP TABLE ballots";
+    $connection->query($query);
     $query = "DROP TABLE teamConflicts";
+    $connection->query($query);
+    $query = "DROP TABLE judgeConflicts";
+    $connection->query($query);
+    $query = "DROPT TABLE alerts";
     $connection->query($query);
     /* Query to create the tables needed for the application
      * This string creates five tables: a teams, competitors, rooms, users, and ballots

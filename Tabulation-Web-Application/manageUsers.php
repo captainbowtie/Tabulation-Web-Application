@@ -61,7 +61,7 @@ if (!isset($_SESSION['id'])) {
 
 
 echo "<script src='https://code.jquery.com/jquery-3.2.1.min.js'></script>";
-echo "<script src='/admin.js'></script>";
+echo "<script src='/manageUsers.js'></script>";
 echo "</body>\n";
 echo "</html>\n";
 

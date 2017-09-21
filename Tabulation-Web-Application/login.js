@@ -1,5 +1,3 @@
-<?php
-
 /* 
  * Copyright (C) 2017 allen
  *
@@ -17,3 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+$("#login").on("submit",function(e){
+    e.preventDefault();
+    
+})

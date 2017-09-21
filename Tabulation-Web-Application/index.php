@@ -17,9 +17,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 require_once 'dblogin.php';
-session_start();
+require_once 'setSessionPrivileges.php';
 
 echo <<<_END
+<!DOCTYPE HTML>
 <html>
     <head>
         <meta charset="UTF-8">

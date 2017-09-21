@@ -16,10 +16,11 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 //Require database login credentials
-require_once 'dblogin.php';
-//Require common PHP functions
-require_once 'functions.php';
+require_once "dblogin.php";
+require_once "setSessionPrivileges.php";
+require_once "functions.php";
 
 $connection = new mysqli(dbhost, dbuser, dbpass, dbname);
 if ($connection->connect_error) {
@@ -47,6 +48,7 @@ if ($isTab) {
     echo '<a href="/tabroom.php">Tab Room</a>';
     echo '<a href="/tabsummary.php">Tab Summary</a>';
     echo '<a href="/tabcards.php">Tab Cards</a>';
+    echo '<a href="/manageUsers.php">Manage Users</a>';
 }
 if ($isJudge) {
     echo '<a href="/ballot.php">Ballot</a>';
@@ -64,31 +66,6 @@ _END;
 if (isset($_SESSION['id'])) {
     echo '<a href="/alerts.php">Alerts</a>';
 }
-
-if (isset($_SESSION['id'])) {
-    $id = $_SESSION['id'];
-    $nameQuery = "SELECT * FROM users WHERE id='$id'";
-    $result = $connection->query($nameQuery);
-    $name = $result->fetch_assoc()['name'];
-    echo "<span>$name</span>|<span><a href='logout.php'>Log Out</a></span>";
-} else {
-    echo<<<_END
-<form method="post" action="index.php">
-<table>
-<tr>
-<td>Email</td>
-<td><input type="text" maxlength="64" name="email"></td>
-        </tr>
-            <tr>
-<td>Password</td>
-<td><input type="password" maxlength="64" name="pass"></td>
-        </tr>
-        <tr>
-        <td></td>
-        <td><input type="submit" value="Login"></td>
-        </tr></table>
-        </form>
-_END;
-}
+require_once "login.php";
 echo "</div>\n";
 $connection->close();
