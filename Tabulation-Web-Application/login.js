@@ -17,5 +17,30 @@
 
 $("#login").on("submit",function(e){
     e.preventDefault();
-    
+    $.ajax({
+
+        // The URL for the request
+        url: "/postLogin.php",
+
+        // The data to send (will be converted to a query string)
+        data: $("#login").serializeArray(),
+
+        // Whether this is a POST or GET request
+        type: "POST",
+
+        // The type of data we expect back
+        dataType: "text",
+    })
+            // Code to run if the request succeeds (is done);
+            // The response is passed to the function
+            .done(function (response) {
+                if(response==0){
+                    window.location = "/index.php";
+                }else{
+                    var alertHTML = "<span>Incorrect email or password</span>";
+                    $("#login").append(alertHTML);
+                }
+            })
+   
+
 })

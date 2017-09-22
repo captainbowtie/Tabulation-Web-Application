@@ -45,5 +45,7 @@ if (isset($_SESSION['id'])) {
         <td><input type="submit" value="Login"></td>
         </tr></table>
         </form>
+   <script src='https://code.jquery.com/jquery-3.2.1.min.js'></script> 
+   <script src='/login.js'></script>
 _END;
 }
