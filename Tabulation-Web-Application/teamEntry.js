@@ -44,9 +44,9 @@ $(document).on("change", ".existingUserName", function () {
 
 $(document).on("change", ".existingUserRole", function () {
     var flag;
-    if(this.checked){
+    if (this.checked) {
         flag = 1;
-    }else{
+    } else {
         flag = 0;
     }
     var postString = '{"id":' + $(this).attr('competitor') + ',"field":"' + $(this).attr("role") + '","value":"' + flag + '"}';
@@ -92,7 +92,8 @@ $(document).on("submit", "#addCompetitor", function (e) {
             // Code to run if the request succeeds (is done);
             // The response is passed to the function
             .done(function (response) {
-
+                populateTeam();
+                $('#addCompetitor').trigger("reset");
             })
 });
 
@@ -120,7 +121,14 @@ $(document).on("submit", "#newTeamForm", function (e) {
             // Code to run if the request succeeds (is done);
             // The response is passed to the function
             .done(function (response) {
-                //TODO: update team list with new team
+                $('#teamSelect').append($('<option>', {
+                    id: $("#newTeamNumber").val(),
+                    text: $("#newTeamNumber").val() + ": " + $("#newTeamName").val()
+                }));
+                $("#teamSelect option:selected").attr("selected","false");
+                $("#"+$("#newTeamNumber").val()).attr("selected","true");
+                $('#newTeamForm').trigger("reset");
+                populateTeam();
             })
 
 
@@ -149,7 +157,7 @@ $(document).on("submit", "#addConflict", function (e) {
             // Code to run if the request succeeds (is done);
             // The response is passed to the function
             .done(function (response) {
-
+                populateTeam();
             })
 
 });
@@ -178,7 +186,6 @@ function populateTeam() {
             // Code to run if the request succeeds (is done);
             // The response is passed to the function
             .done(function (team) {
-                console.log(team);
                 //Change team number and team name
                 $("#teamNumber").html(team.teamNumber);
                 $("#teamName").html(team.teamName);

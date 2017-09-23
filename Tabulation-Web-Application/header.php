@@ -45,9 +45,8 @@ require_once 'setSessionPrivileges.php';
 
 echo "<div>";
 if ($isTab) {
-    echo '<a href="/tabroom.php">Tab Room</a>';
     echo '<a href="/tabsummary.php">Tab Summary</a>';
-    echo '<a href="/tabcards.php">Tab Cards</a>';
+    echo '<a href="/teamEntry.php">Teams</a>';
     echo '<a href="/manageUsers.php">Manage Users</a>';
 }
 if ($isJudge) {
@@ -56,6 +55,7 @@ if ($isJudge) {
 if ($isCoach) {
     echo '<a href="/tabsummary.php">Tab Summary</a>';
     echo '<a href="/tabcards.php">Tab Cards</a>';
+    echo '<a href="/teamEntry.php">Team Members</a>';
 }
 echo <<<_END
 <a href="/pairings.php">Round Pairings</a>

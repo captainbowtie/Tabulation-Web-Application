@@ -91,6 +91,10 @@ _END;
 _END;
     }
 } else {
+    //TODO: allow custom login creation
+    echo "Tournament data not found.  The server will create the database "
+    . "and then reload this page.  You may login with email: example@example.com "
+            . "and password: password";
     createTables();
 }
 echo "\n</body>\n</html>";

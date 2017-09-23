@@ -1,22 +1,33 @@
 <?php
+
 /*
-Copyright (C) 2017 allen
+  Copyright (C) 2017 allen
 
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Affero General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License for more details.
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU Affero General Public License for more details.
 
-You should have received a copy of the GNU Affero General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  You should have received a copy of the GNU Affero General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 require_once 'dblogin.php';
+
+$connection = new mysqli(dbhost, dbuser, dbpass, dbname);
+$query = "SHOW TABLES LIKE 'users'";
+$result = $connection->query($query);
+$usersTableExists = $result->num_rows > 0;
+
+if(!$usersTableExists){
+    require_once 'setup.php';
+}else{
+//TODO: write actual index pagerequire_once 'dblogin.php';
 require_once 'setSessionPrivileges.php';
 
 echo <<<_END
@@ -36,4 +47,4 @@ echo <<<_END
     </body>
 </html>
 _END;
-?>
+}

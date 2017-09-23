@@ -35,9 +35,10 @@ $('#userForm').submit(function (e) {
                 // The response is passed to the function
                 .done(function (response) {
                     if (response === "0") {
-                        $.post("/userTable.php", function (userTable) {
+                        $.get("/userTable.php", function (userTable) {
                             $("#userTable").replaceWith(userTable);
                         });
+                        $('#userForm').trigger("reset");
                     } else {
                         //TODO: code if there is an error
                         console.log(response);
