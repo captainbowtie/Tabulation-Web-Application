@@ -38,10 +38,6 @@ if ($connection->connect_error) {
     die($connection->connect_error);
 }
 
-if($isTab){
-    echo "<script>console.log('test')</script>";
-}
-
 //Check if tables needed already exist in database
 $query = "SHOW TABLES LIKE 'users'";
 $result = $connection->query($query);

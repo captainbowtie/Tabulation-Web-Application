@@ -124,21 +124,21 @@ function getStatisticalWins($teamNumber) {
     return $wins;
 }
 
-function getCS($teamNumber){
+function getCS($teamNumber) {
     $connection = new mysqli(dbhost, dbuser, dbpass, dbname);
-    $pTeamQuery = "SELECT DISTINCT pTeam FROM ballots WHERE dTeam=".$teamNumber;
+    $pTeamQuery = "SELECT DISTINCT pTeam FROM ballots WHERE dTeam=" . $teamNumber;
     $pResult = $connection->query($pTeamQuery);
-    $dTeamQuery = "SELECT DISTINCT dTeam FROM ballots WHERE pTeam=".$teamNumber;
+    $dTeamQuery = "SELECT DISTINCT dTeam FROM ballots WHERE pTeam=" . $teamNumber;
     $dResult = $connection->query($dTeamQuery);
     $connection->close();
     $CS = 0.0;
-    for($a = 0;$a<$pResult->num_rows;$a++){
+    for ($a = 0; $a < $pResult->num_rows; $a++) {
         $pResult->data_seek($a);
         $resultRow = $pResult->fetch_array(MYSQLI_NUM);
         $opposingTeamNumber = $resultRow[0];
         $CS += getStatisticalWins($opposingTeamNumber);
     }
-    for($a = 0;$a<$dResult->num_rows;$a++){
+    for ($a = 0; $a < $dResult->num_rows; $a++) {
         $dResult->data_seek($a);
         $resultRow = $dResult->fetch_array(MYSQLI_NUM);
         $opposingTeamNumber = $resultRow[0];
@@ -149,21 +149,21 @@ function getCS($teamNumber){
     return $CS;
 }
 
-function getOCS($teamNumber){
+function getOCS($teamNumber) {
     $connection = new mysqli(dbhost, dbuser, dbpass, dbname);
-    $pTeamQuery = "SELECT DISTINCT pTeam FROM ballots WHERE dTeam=".$teamNumber;
+    $pTeamQuery = "SELECT DISTINCT pTeam FROM ballots WHERE dTeam=" . $teamNumber;
     $pResult = $connection->query($pTeamQuery);
-    $dTeamQuery = "SELECT DISTINCT dTeam FROM ballots WHERE pTeam=".$teamNumber;
+    $dTeamQuery = "SELECT DISTINCT dTeam FROM ballots WHERE pTeam=" . $teamNumber;
     $dResult = $connection->query($dTeamQuery);
     $connection->close();
     $OCS = 0.0;
-    for($a = 0;$a<$pResult->num_rows;$a++){
+    for ($a = 0; $a < $pResult->num_rows; $a++) {
         $pResult->data_seek($a);
         $resultRow = $pResult->fetch_array(MYSQLI_NUM);
         $opposingTeamNumber = $resultRow[0];
         $OCS += getCS($opposingTeamNumber);
     }
-    for($a = 0;$a<$dResult->num_rows;$a++){
+    for ($a = 0; $a < $dResult->num_rows; $a++) {
         $dResult->data_seek($a);
         $resultRow = $dResult->fetch_array(MYSQLI_NUM);
         $opposingTeamNumber = $resultRow[0];
@@ -174,13 +174,13 @@ function getOCS($teamNumber){
     return $OCS;
 }
 
-function getPD($teamNumber){
+function getPD($teamNumber) {
     $query = "SELECT id FROM ballots WHERE pTeam='" . $teamNumber . "' || dTeam='" . $teamNumber . "'";
     $connection = new mysqli(dbhost, dbuser, dbpass, dbname);
     $result = $connection->query($query);
     $connection->close();
     $PD = 0;
-    for($a = 0;$a<$result->num_rows;$a++){
+    for ($a = 0; $a < $result->num_rows; $a++) {
         $result->data_seek($a);
         $resultRow = $result->fetch_array(MYSQLI_NUM);
         $PD += getBallotPD($resultRow[0], $teamNumber);
@@ -188,7 +188,7 @@ function getPD($teamNumber){
     return $PD;
 }
 
-function getSchoolConflicts($teamNumber){
+function getSchoolConflicts($teamNumber) {
     $conflictQuery = "SELECT team1,team2 FROM teamConflicts "
             . "WHERE sameSchool=1 && (team1=$teamNumber || team2=$teamNumber)";
     $connection = new mysqli(dbhost, dbuser, dbpass, dbname);
@@ -196,21 +196,21 @@ function getSchoolConflicts($teamNumber){
     $connection->close();
     $conflictList = array();
     for ($a = 0; $a < $result->num_rows; $a++) {
-        
+
         $result->data_seek($a);
         $conflict = $result->fetch_array(MYSQLI_ASSOC);
         $team1 = $conflict['team1'];
         $team2 = $conflict['team2'];
-        if($team1!=$teamNumber){
+        if ($team1 != $teamNumber) {
             array_push($conflictList, $team1);
-        }else{
+        } else {
             array_push($conflictList, $team2);
         }
     }
     return array_unique($conflictList);
 }
 
-function getAllConflicts($teamNumber){
+function getAllConflicts($teamNumber) {
     $conflictQuery = "SELECT team1,team2 FROM teamConflicts "
             . "WHERE team1=$teamNumber || team2=$teamNumber";
     $connection = new mysqli(dbhost, dbuser, dbpass, dbname);
@@ -222,11 +222,27 @@ function getAllConflicts($teamNumber){
         $conflict = $result->fetch_array(MYSQLI_ASSOC);
         $team1 = $conflict['team1'];
         $team2 = $conflict['team2'];
-        if($team1!=$teamNumber){
+        if ($team1 != $teamNumber) {
             array_push($conflictList, $team1);
-        }else{
+        } else {
             array_push($conflictList, $team2);
         }
     }
     return array_unique($conflictList);
+}
+
+function getAllTeamNumbers() {
+    $connection = new mysqli(dbhost, dbuser, dbpass, dbname);
+    if ($connection->connect_error) {
+        die($connection->connect_error);
+    }
+    $teamQuery = "SELECT number FROM teams";
+    $teamResult = $connection->query($teamQuery);
+    $return = array();
+    for($a=0;$a<$teamResult->num_rows;$a++){
+        $teamResult->data_seek($a);
+        $teamNumber = $teamResult->fetch_array(MYSQLI_ASSOC);
+        $return[$a] = $teamNumber['number'];
+    }
+    return $return;
 }
