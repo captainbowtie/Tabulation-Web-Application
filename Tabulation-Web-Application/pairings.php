@@ -183,6 +183,7 @@ function resolveImpermissibleMatches($pairings) {
                         $pairings[$potentialSwaps[0]->conflictTeamRank] = $swapTeam;
                         $pairings[$potentialSwaps[0]->swapTeamRank] = $conflictTeam;
                         $swapQuery = "INSERT INTO swapList (team1,team2) VALUES($swapTeam,$conflictTeam)";
+                        $connection->query($swapQuery);
                         $a = -1;
                     } else { //Find the teams with the least record difference
                         $minRecordDifference = 9999;
@@ -205,6 +206,7 @@ function resolveImpermissibleMatches($pairings) {
                             $pairings[$potentialSwaps[0]->conflictTeamRank] = $swapTeam;
                             $pairings[$potentialSwaps[0]->swapTeamRank] = $conflictTeam;
                             $swapQuery = "INSERT INTO swapList (team1,team2) VALUES($swapTeam,$conflictTeam)";
+                            $connection->query($swapQuery);
                             $a = -1;
                         } else { //Find the swap with the least CS difference
                             $minCSDifference = 9999;
@@ -227,6 +229,7 @@ function resolveImpermissibleMatches($pairings) {
                                 $pairings[$potentialSwaps[0]->conflictTeamRank] = $swapTeam;
                                 $pairings[$potentialSwaps[0]->swapTeamRank] = $conflictTeam;
                                 $swapQuery = "INSERT INTO swapList (team1,team2) VALUES($swapTeam,$conflictTeam)";
+                                $connection->query($swapQuery);
                                 $a = -1;
                             } else {//Find the teams with the least PD difference
                                 $minPDDifference = 9999;
@@ -249,6 +252,7 @@ function resolveImpermissibleMatches($pairings) {
                                     $pairings[$potentialSwaps[0]->conflictTeamRank] = $swapTeam;
                                     $pairings[$potentialSwaps[0]->swapTeamRank] = $conflictTeam;
                                     $swapQuery = "INSERT INTO swapList (team1,team2) VALUES($swapTeam,$conflictTeam)";
+                                    $connection->query($swapQuery);
                                     $a = -1;
                                 } else {//Find swap with highest rank sum
                                     $maxRankSum = -9999;
@@ -268,6 +272,7 @@ function resolveImpermissibleMatches($pairings) {
                                     $pairings[$potentialSwaps[0]->conflictTeamRank] = $swapTeam;
                                     $pairings[$potentialSwaps[0]->swapTeamRank] = $conflictTeam;
                                     $swapQuery = "INSERT INTO swapList (team1,team2) VALUES($swapTeam,$conflictTeam)";
+                                    $connection->query($swapQuery);
                                     $a = -1;
                                 }
                             }
@@ -301,11 +306,11 @@ function resolveImpermissibleSideConstrainedMatches($pTeams, $dTeams) {
         //Check if there is a conflict
         if ($conflictResult->num_rows > 0) {
             //If there is a conflict, create an array of all possible swaps
-            $potentialSwaps = array();
+            $potentialSwaps = [];
             //Loop through all teams to create list of all possible swaps
             for ($b = 0; $b < sizeOf($pTeams); $b++) {
                 //Check to ensure that the swap in question is not the conflict in question
-                if(!($b==$a)){
+                if (!($b == $a)) {
                     //Check to ensure that plaintiff Swap in question has not already happened
                     $pSwapTeam = $pTeams[$b];
                     $pSwapQuery = "SELECT id FROM swapList "
@@ -315,7 +320,7 @@ function resolveImpermissibleSideConstrainedMatches($pTeams, $dTeams) {
                     if ($pSwapResult->num_rows == 0) {
                         $potentialSwaps[] = new swap($pTeam, $pSwapTeam, $a, $b);
                     }
-                    
+
                     //Check to ensure that defense Swap in question has not already happened
                     $dSwapTeam = $dTeams[$b];
                     $dSwapQuery = "SELECT id FROM swapList "
@@ -327,108 +332,202 @@ function resolveImpermissibleSideConstrainedMatches($pTeams, $dTeams) {
                     }
                 }
             }
-            
+
             //Check if there is only one permissible swap
+            if (sizeOf($potentialSwaps) == 1) {
+                //TODO: Do the swap
+
+                $a = -1;
+            } else { //Find the teams with the least rank difference
+                $minRankDifference = 9999; //Sets the smallest distance to an absurdly high value
+                for ($b = 0; $b < sizeOf($potentialSwaps); $b++) { //Loop through all swaps
+                    $rankDifference = $potentialSwaps[$b]->getRankDifference();
+                    if ($rankDifference < $minRankDifference) {  //Check if swap in question has a smaller rank difference
+                        $minRankDifference = $rankDifference; //If so, sets the minDistance to that distance and restarts the loop
+                        $b = 0;
+                    } else if ($rankDifference > $minRankDifference) { //If a swap has a higher rank distance, then remove that swap from the list of possibilities
+                        unset($potentialSwaps[$b]);
+                        $potentialSwaps = array_values($potentialSwaps);
+                    }
+                }
+
+                //After finding smallest rank distance, see if there is only one swap remaining
                 if (sizeOf($potentialSwaps) == 1) {
-                    //TODO: Do the swap
-                    
-                    $a = -1;
-                } else { //Find the teams with the least rank difference
-                    $minRankDifference = 9999; //Sets the smallest distance to an absurdly high value
+                    //Do the swap
+                    if ($potentialSwaps[0]->conflictTeam == $dTeam) {
+                        $conflictTeam = $potentialSwaps[0]->conflictTeam;
+                        $swapTeam = $potentialSwaps[0]->swapTeam;
+                        $dTeams[$potentialSwaps[0]->conflictTeamRank] = $swapTeam;
+                        $dTeams[$potentialSwaps[0]->swapTeamRank] = $conflictTeam;
+                        $swapQuery = "INSERT INTO swapList (team1,team2) VALUES($swapTeam,$conflictTeam)";
+                        $connection->query($swapQuery);
+                        $a = -1;
+                    } else {
+                        $conflictTeam = $potentialSwaps[0]->conflictTeam;
+                        $swapTeam = $potentialSwaps[0]->swapTeam;
+                        $pTeams[$potentialSwaps[0]->conflictTeamRank] = $swapTeam;
+                        $pTeams[$potentialSwaps[0]->swapTeamRank] = $conflictTeam;
+                        $swapQuery = "INSERT INTO swapList (team1,team2) VALUES($swapTeam,$conflictTeam)";
+                        $connection->query($swapQuery);
+                        $a = -1;
+                    }
+                } else { //Find the teams with the least record difference
+                    $minRecordDifference = 9999;
                     for ($b = 0; $b < sizeOf($potentialSwaps); $b++) { //Loop through all swaps
-                        $rankDifference = $potentialSwaps[$b]->getRankDifference();
-                        if ($rankDifference < $minRankDifference) {  //Check if swap in question has a smaller rank difference
-                            $minRankDifference = $rankDifference; //If so, sets the minDistance to that distance and restarts the loop
+                        $recordDifference = $potentialSwaps[$b]->getRecordDifference();
+                        if ($recordDifference < $minRecordDifference) {  //Check if swap in question has a smaller record difference
+                            $minRecordDifference = $recordDifference; //If so, sets the minDistance to that distance and restarts the loop
                             $b = 0;
-                        } else if ($rankDifference > $minRankDifference) { //If a swap has a higher rank distance, then remove that swap from the list of possibilities
+                        } else if ($recordDifference > $minRecordDifference) { //If a swap has a higher record distance, then remove that swap from the list of possibilities
                             unset($potentialSwaps[$b]);
                             $potentialSwaps = array_values($potentialSwaps);
                         }
                     }
 
-                    //After finding smallest rank distance, see if there is only one swap remaining
+                    //After finding smallest record difference, see if there is only one swap remaining
                     if (sizeOf($potentialSwaps) == 1) {
-                        //TODO: Do the swap
-                        
-                    } else { //Find the teams with the least record difference
-                        $minRecordDifference = 9999;
+                        //Do the swap
+                        if ($potentialSwaps[0]->conflictTeam == $dTeam) {
+                            $conflictTeam = $potentialSwaps[0]->conflictTeam;
+                            $swapTeam = $potentialSwaps[0]->swapTeam;
+                            $dTeams[$potentialSwaps[0]->conflictTeamRank] = $swapTeam;
+                            $dTeams[$potentialSwaps[0]->swapTeamRank] = $conflictTeam;
+                            $swapQuery = "INSERT INTO swapList (team1,team2) VALUES($swapTeam,$conflictTeam)";
+                            $connection->query($swapQuery);
+                            $a = -1;
+                        } else {
+                            $conflictTeam = $potentialSwaps[0]->conflictTeam;
+                            $swapTeam = $potentialSwaps[0]->swapTeam;
+                            $pTeams[$potentialSwaps[0]->conflictTeamRank] = $swapTeam;
+                            $pTeams[$potentialSwaps[0]->swapTeamRank] = $conflictTeam;
+                            $swapQuery = "INSERT INTO swapList (team1,team2) VALUES($swapTeam,$conflictTeam)";
+                            $connection->query($swapQuery);
+                            $a = -1;
+                        }
+                    } else { //Find the swap with the least CS difference
+                        $minCSDifference = 9999;
                         for ($b = 0; $b < sizeOf($potentialSwaps); $b++) { //Loop through all swaps
-                            $recordDifference = $potentialSwaps[$b]->getRecordDifference();
-                            if ($recordDifference < $minRecordDifference) {  //Check if swap in question has a smaller record difference
-                                $minRecordDifference = $recordDifference; //If so, sets the minDistance to that distance and restarts the loop
+                            $CSDifference = $potentialSwaps[$b]->getCSDifference();
+                            if ($CSDifference < $minCSDifference) {  //Check if swap in question has a smaller CS difference
+                                $minCSDifference = $CSDifference; //If so, sets the minDistance to that distance and restarts the loop
                                 $b = 0;
-                            } else if ($recordDifference > $minRecordDifference) { //If a swap has a higher record distance, then remove that swap from the list of possibilities
+                            } else if ($CSDifference > $minCSDifference) { //If a swap has a higher CS distance, then remove that swap from the list of possibilities
                                 unset($potentialSwaps[$b]);
                                 $potentialSwaps = array_values($potentialSwaps);
                             }
                         }
 
-                        //After finding smallest record difference, see if there is only one swap remaining
+                        //After finding smallest CS difference, see if there is only one swap remaining
                         if (sizeOf($potentialSwaps) == 1) {
-                            //TODO: Do the swap
-                            
-                        } else { //Find the swap with the least CS difference
-                            $minCSDifference = 9999;
+                            //Do the swap
+                            if ($potentialSwaps[0]->conflictTeam == $dTeam) {
+                                $conflictTeam = $potentialSwaps[0]->conflictTeam;
+                                $swapTeam = $potentialSwaps[0]->swapTeam;
+                                $dTeams[$potentialSwaps[0]->conflictTeamRank] = $swapTeam;
+                                $dTeams[$potentialSwaps[0]->swapTeamRank] = $conflictTeam;
+                                $swapQuery = "INSERT INTO swapList (team1,team2) VALUES($swapTeam,$conflictTeam)";
+                                $connection->query($swapQuery);
+                                $a = -1;
+                            } else {
+                                $conflictTeam = $potentialSwaps[0]->conflictTeam;
+                                $swapTeam = $potentialSwaps[0]->swapTeam;
+                                $pTeams[$potentialSwaps[0]->conflictTeamRank] = $swapTeam;
+                                $pTeams[$potentialSwaps[0]->swapTeamRank] = $conflictTeam;
+                                $swapQuery = "INSERT INTO swapList (team1,team2) VALUES($swapTeam,$conflictTeam)";
+                                $connection->query($swapQuery);
+                                $a = -1;
+                            }
+                        } else {//Find the teams with the least PD difference
+                            $minPDDifference = 9999;
                             for ($b = 0; $b < sizeOf($potentialSwaps); $b++) { //Loop through all swaps
-                                $CSDifference = $potentialSwaps[$b]->getCSDifference();
-                                if ($CSDifference < $minCSDifference) {  //Check if swap in question has a smaller CS difference
-                                    $minCSDifference = $CSDifference; //If so, sets the minDistance to that distance and restarts the loop
+                                $PDDifference = $potentialSwaps[$b]->getPDDifference();
+                                if ($PDDifference < $minPDDifference) {  //Check if swap in question has a smaller PD difference
+                                    $minPDDifference = $PDDifference; //If so, sets the minDistance to that distance and restarts the loop
                                     $b = 0;
-                                } else if ($CSDifference > $minCSDifference) { //If a swap has a higher CS distance, then remove that swap from the list of possibilities
+                                } else if ($PDDifference > $minPDDifference) { //If a swap has a higher PD distance, then remove that swap from the list of possibilities
                                     unset($potentialSwaps[$b]);
                                     $potentialSwaps = array_values($potentialSwaps);
                                 }
                             }
 
-                            //After finding smallest CS difference, see if there is only one swap remaining
+                            //After finding smallest PD difference, see if there is only one swap remaining
                             if (sizeOf($potentialSwaps) == 1) {
-                                //TODO: Do the swap
-                                
-                            } else {//Find the teams with the least PD difference
-                                $minPDDifference = 9999;
+                                //Do the swap
+                                if ($potentialSwaps[0]->conflictTeam == $dTeam) {
+                                    $conflictTeam = $potentialSwaps[0]->conflictTeam;
+                                    $swapTeam = $potentialSwaps[0]->swapTeam;
+                                    $dTeams[$potentialSwaps[0]->conflictTeamRank] = $swapTeam;
+                                    $dTeams[$potentialSwaps[0]->swapTeamRank] = $conflictTeam;
+                                    $swapQuery = "INSERT INTO swapList (team1,team2) VALUES($swapTeam,$conflictTeam)";
+                                    $connection->query($swapQuery);
+                                    $a = -1;
+                                } else {
+                                    $conflictTeam = $potentialSwaps[0]->conflictTeam;
+                                    $swapTeam = $potentialSwaps[0]->swapTeam;
+                                    $pTeams[$potentialSwaps[0]->conflictTeamRank] = $swapTeam;
+                                    $pTeams[$potentialSwaps[0]->swapTeamRank] = $conflictTeam;
+                                    $swapQuery = "INSERT INTO swapList (team1,team2) VALUES($swapTeam,$conflictTeam)";
+                                    $connection->query($swapQuery);
+                                    $a = -1;
+                                }
+                            } else {//Find swap with highest rank sum
+                                $maxRankSum = -9999;
                                 for ($b = 0; $b < sizeOf($potentialSwaps); $b++) { //Loop through all swaps
-                                    $PDDifference = $potentialSwaps[$b]->getPDDifference();
-                                    if ($PDDifference < $minPDDifference) {  //Check if swap in question has a smaller PD difference
-                                        $minPDDifference = $PDDifference; //If so, sets the minDistance to that distance and restarts the loop
+                                    $rankSum = $potentialSwaps[$b]->getRankSum();
+                                    if ($rankSum > $maxRankSum) {
+                                        $maxRankSum = $rankSum;
                                         $b = 0;
-                                    } else if ($PDDifference > $minPDDifference) { //If a swap has a higher PD distance, then remove that swap from the list of possibilities
+                                    } else if ($rankSum < $maxRankSum) {
                                         unset($potentialSwaps[$b]);
                                         $potentialSwaps = array_values($potentialSwaps);
                                     }
                                 }
 
-                                //After finding smallest PD difference, see if there is only one swap remaining
+                                //After finding greatest rank sum, see if there is only one swap remaining
                                 if (sizeOf($potentialSwaps) == 1) {
-                                    //TODO: Do the swap
-                                    
-                                } else {//Find swap with highest rank sum
-                                    $maxRankSum = -9999;
-                                    for ($b = 0; $b < sizeOf($potentialSwaps); $b++) { //Loop through all swaps
-                                        $rankSum = $potentialSwaps[$b]->getRankSum();
-                                        if ($rankSum > $maxRankSum) {
-                                            $maxRankSum = $rankSum;
-                                            $b = 0;
-                                        } else if ($rankSum < $maxRankSum) {
-                                            unset($potentialSwaps[$b]);
-                                            $potentialSwaps = array_values($potentialSwaps);
-                                        }
+                                    //Do the swap
+                                    if ($potentialSwaps[0]->conflictTeam == $dTeam) {
+                                        $conflictTeam = $potentialSwaps[0]->conflictTeam;
+                                        $swapTeam = $potentialSwaps[0]->swapTeam;
+                                        $dTeams[$potentialSwaps[0]->conflictTeamRank] = $swapTeam;
+                                        $dTeams[$potentialSwaps[0]->swapTeamRank] = $conflictTeam;
+                                        $swapQuery = "INSERT INTO swapList (team1,team2) VALUES($swapTeam,$conflictTeam)";
+                                        $connection->query($swapQuery);
+                                        $a = -1;
+                                    } else {
+                                        $conflictTeam = $potentialSwaps[0]->conflictTeam;
+                                        $swapTeam = $potentialSwaps[0]->swapTeam;
+                                        $pTeams[$potentialSwaps[0]->conflictTeamRank] = $swapTeam;
+                                        $pTeams[$potentialSwaps[0]->swapTeamRank] = $conflictTeam;
+                                        $swapQuery = "INSERT INTO swapList (team1,team2) VALUES($swapTeam,$conflictTeam)";
+                                        $connection->query($swapQuery);
+                                        $a = -1;
                                     }
-                                    
-                                    //After finding greatest rank sum, see if there is only one swap remaining
-                                    if(sizeOf($potentialSwaps) == 1){
-                                        //TODO: Do the swap
-                                        
-                                    }else{
-                                        //Do the swap on the defense side
-                                        //TODO: Do the swap
+                                } else {
+                                    //Do the swap on the defense side if there are still two potential swaps
+                                    if ($potentialSwaps[0]->conflictTeam == $dTeam) {
+                                        $conflictTeam = $potentialSwaps[0]->conflictTeam;
+                                        $swapTeam = $potentialSwaps[0]->swapTeam;
+                                        $dTeams[$potentialSwaps[0]->conflictTeamRank] = $swapTeam;
+                                        $dTeams[$potentialSwaps[0]->swapTeamRank] = $conflictTeam;
+                                        $swapQuery = "INSERT INTO swapList (team1,team2) VALUES($swapTeam,$conflictTeam)";
+                                        $connection->query($swapQuery);
+                                        $a = -1;
+                                    } else {
+                                        $conflictTeam = $potentialSwaps[1]->conflictTeam;
+                                        $swapTeam = $potentialSwaps[1]->swapTeam;
+                                        $dTeams[$potentialSwaps[1]->conflictTeamRank] = $swapTeam;
+                                        $dTeams[$potentialSwaps[1]->swapTeamRank] = $conflictTeam;
+                                        $swapQuery = "INSERT INTO swapList (team1,team2) VALUES($swapTeam,$conflictTeam)";
+                                        $connection->query($swapQuery);
+                                        $a = -1;
                                     }
-                                    
                                 }
                             }
                         }
                     }
                 }
-            
+            }
         }
     }
 }
