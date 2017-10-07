@@ -48,9 +48,9 @@ if (!isset($_SESSION['id'])) {
 } else if ($isCoach && $isJudge) {
     
 } else if ($isJudge) {
-    $fh = fopen("currentRound.txt", 'r');
-    $currentRound = fgets($fh);
-    fclose($fh);
+    $file = "tab.json";
+    $json = json_decode(file_get_contents($file), true);
+    $currentRound = $json["currentRound"];
     $judgeId = $_SESSION['id'];
     $connection = new mysqli(dbhost, dbuser, dbpass, dbname);
     $query = "SELECT * FROM ballots WHERE judgeId=$judgeId && round=$currentRound";
@@ -320,9 +320,9 @@ function createTabBallot(){
             "<option value='round2'>Round 2</option>\n".
             "<option value='round3'>Round 3</option>\n".
             "<option value='round4'>Round 4</option>\n";
-    $fh = fopen("currentRound.txt", 'r');
-    $currentRound = fgets($fh);
-    fclose($fh);
+    $file = "tab.json";
+    $json = json_decode(file_get_contents($file), true);
+    $currentRound = $json["currentRound"];
     $roundOptions = str_replace("round$currentRound'", "round$currentRound' selected", $roundOptions);
     echo "<select id='round'>\n$roundOptions\n</select>\n";
     

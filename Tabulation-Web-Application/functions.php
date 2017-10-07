@@ -236,7 +236,7 @@ function getAllTeamNumbers() {
     if ($connection->connect_error) {
         die($connection->connect_error);
     }
-    $teamQuery = "SELECT number FROM teams";
+    $teamQuery = "SELECT number FROM teams ORDER BY number";
     $teamResult = $connection->query($teamQuery);
     $return = array();
     for($a=0;$a<$teamResult->num_rows;$a++){

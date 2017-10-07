@@ -97,10 +97,11 @@ echo "\n</body>\n</html>";
 
 function createTables() {
     global $connection;
-    //Reset current round to 0 (pre-round 1)
-    $fh = fopen("currentRound.txt", 'w') or die("Failed to create file");
+    //Reset tab values (current round, tie breaker coin flip, and round 3 side coin flip)
+    
+    $fh = fopen("tab.json", 'w') or die("Failed to create file");
     flock($fh, LOCK_EX);
-    fwrite($fh, 0) or die("Could not write to file");
+    fwrite($fh, '{"currentRound":0,"lowTeamIsHighRank":'. rand(0,1) . ',"round3OddPairingsSwap":'. rand(0,1) . '}') or die("Could not write to file");
     flock($fh, LOCK_UN);
     fclose($fh);
     // Drop any tables that already exist
