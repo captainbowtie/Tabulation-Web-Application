@@ -38,10 +38,18 @@ require_once "header.php";
 if (!$isTab) {
     //TODO: web page if not the tabulation director
 } else {
+    //Check the current round
     $file = "tab.json";
     $json = json_decode(file_get_contents($file), true);
     $currentRound = $json["currentRound"];
-    switch ($currentRound) {
+    
+    //Check if there are non-finalized ballots (i.e. are just checking the
+    //current round pairings, or do we want to actually pair the next round)
+    $connection = new mysqli(dbhost, dbuser, dbpass, dbname);
+    $finalizedQuery = "SELECT id FROM ballots WHERE round=$currentRound && finalized=0";
+    $finalizedResult = $connection->query($finalizedQuery);
+    if($finalizedResult->num_rows==0){
+        switch ($currentRound) {
         case 0:
             //Create selector for round 1 pairing method
             echo "How would you like to pair round 1?\n";
@@ -76,6 +84,12 @@ if (!$isTab) {
             break;
     }
     echo "<input type='submit' id='sumbitPairingsButton' value='Pair Round ".($currentRound+1)."'>";
+    }else{
+        //TODO: echo pairings in a non-editable table and include instruction on finalizing
+        
+    }
+    
+    
 }
 
 

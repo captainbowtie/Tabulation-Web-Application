@@ -140,13 +140,15 @@ function createTables() {
     $roomsTable = "CREATE TABLE rooms(id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT KEY, " //Rooms Table
             . "building VARCHAR(64) NOT NULL, number VARCHAR(64) NOT NULL, "
             . "availableRound1 BINARY(1) NOT NULL, availableRound2 BINARY(1) NOT NULL, "
-            . "availableRound3 BINARY(1) NOT NULL, availableRound4 BINARY (4) NOT NULL) ENGINE InnoDB";
+            . "availableRound3 BINARY(1) NOT NULL, availableRound4 BINARY (4) NOT NULL, "
+            . "roomQuality TINYINT UNSIGNED NOT NULL DEFAULT '0') ENGINE InnoDB";
     $connection->query($roomsTable);
     $usersTable = "CREATE TABLE users(id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT KEY, " //Users Table
             . "name VARCHAR(64) NOT NULL DEFAULT 'Missing Name', email VARCHAR(64) NOT NULL DEFAULT 'example@example.com', password CHAR(128) NOT NULL DEFAULT '74dfc2b27acfa364da55f93a5caee29ccad3557247eda238831b3e9bd931b01d77fe994e4f12b9d4cfa92a124461d2065197d8cf7f33fc88566da2db2a4d6eae', "
             . "isJudge BINARY(1) NOT NULL DEFAULT '0', isCoach BINARY(1) NOT NULL DEFAULT '0', isTab BINARY(1) NOT NULL DEFAULT '0', "
             . "canJudgeRound1 BINARY(1) NOT NULL DEFAULT '0', canJudgeRound2 BINARY(1) NOT NULL DEFAULT '0', "
-            . "canJudgeRound3 BINARY(1) NOT NULL DEFAULT '0', canJudgeRound4 BINARY(1) NOT NULL DEFAULT '0') ENGINE InnoDB";
+            . "canJudgeRound3 BINARY(1) NOT NULL DEFAULT '0', canJudgeRound4 BINARY(1) NOT NULL DEFAULT '0', "
+            . "judgeQuality TINYINT UNSIGNED NOT NULL DEFAULT '0') ENGINE InnoDB";
     $connection->query($usersTable);
     $ballotsTable = "CREATE TABLE ballots(id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT KEY, " //Ballots Table
             . "pTeam SMALLINT UNSIGNED NOT NULL DEFAULT '0', dTeam SMALLINT UNSIGNED NOT NULL DEFAULT '0', "

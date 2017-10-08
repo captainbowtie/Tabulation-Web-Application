@@ -115,6 +115,8 @@ $("#sumbitPairingsButton").on("click", function (e) {
                 if(r["exitCode"]==1){
                     //TODO: highlight error using CSS
                     alert(r["errorMessage"])
+                }else{
+                    location.reload(true);
                 }
             })
 });

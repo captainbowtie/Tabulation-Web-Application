@@ -119,6 +119,8 @@ if ($isTab || $isCoach) {
         . "<input type=submit value='Add Conflict'>\n"
         . "</form>\n";
     }
+    
+    //TODO: add list of judge conflicts and form to create judge conflicts
     //Get data on selected team's competitors
     $competitorQuery = "SELECT * FROM competitors WHERE team=$firstTeamNumber";
     $competitorResult = $connection->query($competitorQuery);

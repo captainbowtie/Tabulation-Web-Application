@@ -43,20 +43,9 @@ if (!isset($_SESSION['id'])) {
     echo "You do not have permission to access this page";
 //Code if logged in as tabulation director
 } else {
-    require_once 'userTable.php';
-    echo "<form id='userForm'>\n";
-    echo "<label>Name: <input id='name' name='name'></label>\n";
-    echo "<label>Email: <input id='email' name='email' pattern='[A-z0-9._%+-]+@[A-z0-9.-]+\.[A-z]{2,}'></label>\n";
-    echo "<label>Password: <input type='password' id='pass' name='pass'></label>\n";
-    echo "<label><input type=checkbox id='judge' name='judge'>Judge</label>\n" .
-    "<label><input type=checkbox id='coach' name='coach'>Coach</label>\n" .
-    "<label><input type=checkbox id='tab' name='tab'>Tab</label>\n";
-    echo "<label><input type=checkbox id='round1' name='round1'>Available Round 1</label>\n" .
-    "<label><input type=checkbox id='round2' name='round2'>Available Round 2</label>\n" .
-    "<label><input type=checkbox id='round3' name='round3'>Available Round 3</label>\n" .
-    "<label><input type=checkbox id='round4' name='round4'>Available Round 4</label>\n";
-    echo "<input type=submit id='addUserButton' name='addUser' value='Add User'>\n";
+    echo "<form id='userForm' name='userForm'>\n";
     echo "</form>\n";
+    
 }
 
 

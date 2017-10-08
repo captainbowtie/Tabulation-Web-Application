@@ -14,40 +14,32 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-$('#userForm').submit(function (e) {
-    e.preventDefault();
-    if (validateName() && validateEmail()) {
-        $.ajax({
 
-            // The URL for the request
-            url: "/addUser.php",
-
-            // The data to send (will be converted to a query string)
-            data: $("#userForm").serializeArray(),
-
-            // Whether this is a POST or GET request
-            type: "POST",
-
-            // The type of data we expect back
-            dataType: "text",
-        })
-                // Code to run if the request succeeds (is done);
-                // The response is passed to the function
-                .done(function (response) {
-                    if (response === "0") {
-                        $.get("/userTable.php", function (userTable) {
-                            $("#userTable").replaceWith(userTable);
-                        });
-                        $('#userForm').trigger("reset");
-                    } else {
-                        //TODO: code if there is an error
-                        console.log(response);
-                    }
-                })
-    } else {
-
-    }
+$(document).ready(function () {
+    populateUsers();
 });
+
+
+
+function populateUsers() {
+    $("#userForm").empty();
+    $.ajax({
+
+        // The URL for the request
+        url: "/userTable.php",
+
+        // Whether this is a POST or GET request
+        type: "GET",
+
+        // The type of data we expect back
+        dataType: "html",
+    })
+            // Code to run if the request succeeds (is done);
+            // The response is passed to the function
+            .done(function (table) {
+                $('#userForm').append(table);
+            })
+}
 
 function validateName() {
     if ($('#name').val() != '') {
@@ -56,12 +48,8 @@ function validateName() {
         return false;
     }
 }
-;
 
 function validateEmail() {
     var regEx = /[A-z0-9._%+-]+@[A-z0-9.-]+\.[A-z]{2,}/;
     return regEx.test($('#email').val());
 }
-;
-
-

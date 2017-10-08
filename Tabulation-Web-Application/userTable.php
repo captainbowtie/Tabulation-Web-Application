@@ -28,29 +28,103 @@ if (!isset($_SESSION['id'])) {
     echo "You do not have permission to access this page";
 //Code if logged in as tabulation director
 } else {
+    echo "<table id='userTable' name='userTable'>\n";
+    echo "<tr><td>Name</td><td>Email</td><td>Password</td><td>Tab</td><td>Coach</td><td>Judge</td>"
+    . "<td>Round 1</td><td>Round 2</td><td>Round 3</td><td>Round 4</td><td>Quality</td><tr>\n";
     $connection = new mysqli(dbhost, dbuser, dbpass, dbname);
-    $userQuery = "SELECT id,name,email,isJudge,isCoach,isTab FROM users";
+    if ($connection->connect_error) {
+        die($connection->connect_error);
+    }
+    $userQuery = "SELECT * FROM users";
     $userResult = $connection->query($userQuery);
     $connection->close();
-
-    echo "\n<table id='userTable'>";
-    echo "\n<tr>"
-    . "<td>id</td><td>name</td><td>email</td><td>Judge</td><td>Coach</td><td>Tab</td>"
-    . "</tr>\n";
-    for ($a = 0; $a < $userResult->num_rows; $a++) {
+    for($a = 0;$a<$userResult->num_rows;$a++){
         $userResult->data_seek($a);
         $user = $userResult->fetch_array(MYSQLI_ASSOC);
-        $userId = $user['id'];
-        $userName = $user['name'];
-        $userEmail = $user['email'];
-        $userIsJudge = $user['isJudge'];
-        $userIsCoach = $user['isCoach'];
-        $userIsTab = $user['isTab'];
+        $id = $user['id'];
+        $name = $user['name'];
+        $email = $user['email'];
+        $tab = $user['isTab'];
+        $coach = $user['isCoach'];
+        $judge = $user['isJudge'];
+        $round1 = $user['canJudgeRound1'];
+        $round2 = $user['canJudgeRound2'];
+        $round3 = $user['canJudgeRound3'];
+        $round4 = $user['canJudgeRound4'];
+        $quality = $user['judgeQuality'];
         echo "<tr>";
-        echo "<td>$userId</td><td>$userName</td><td>$userEmail</td>"
-        . "<td>$userIsJudge</td><td>$userIsCoach</td><td>$userIsTab</td>";
-        echo "</tr>\n";
+        echo "<td><input class='existingUser' user='$id' field='name' value='$name'></td>\n";
+        echo "<td><input class='existingUser' user='$id' field='email' value='$email'></td>\n";
+        echo "<td><button>Reset Password</button></td>\n";
+        echo "<td><input type=checkbox class='existingUser' user='$id' field='isTab'";
+        if($tab==1){
+            echo " checked";
+        }
+        echo "></td>\n";
+        echo "<td><input type=checkbox class='existingUser' user='$id' field='isCoach'";
+        if($coach==1){
+            echo " checked";
+        }
+        echo "></td>\n";
+        echo "<td><input type=checkbox class='existingUser' user='$id' field='isJudge'";
+        if($judge==1){
+            echo " checked";
+        }
+        echo "></td>\n";
+        echo "<td><input type=checkbox class='existingUser' user='$id' field='round1'";
+        if($round1==1){
+            echo " checked";
+        }
+        echo "></td>\n";
+        echo "<td><input type=checkbox class='existingUser' user='$id' field='round2'";
+        if($round2==1){
+            echo " checked";
+        }
+        echo "></td>\n";
+        echo "<td><input type=checkbox class='existingUser' user='$id' field='round3'";
+        if($round3==1){
+            echo " checked";
+        }
+        echo "></td>\n";
+        echo "<td><input type=checkbox class='existingUser' user='$id' field='round4'";
+        if($round4==1){
+            echo " checked";
+        }
+        echo "></td>\n";
+        echo "<td><select class='existingUser' user='$id' field='quality'>";
+        switch ($quality){
+            case 1:
+                echo "<option selected>1</option>\n<option>2</option>\n<option>3</option>\n";
+                break;
+            case 2:
+                echo "<option>1</option>\n<option selected>2</option>\n<option>3</option>\n";
+                break;
+            case 3:
+                echo "<option>1</option>\n<option>2</option>\n<option selected>3</option>\n";
+                break;
+            default:
+                echo "<option>1</option>\n<option>2</option>\n<option>3</option>\n";
+                break;
+        }
+        
+        echo "</select></td></tr>\n";
     }
+    echo "<tr>\n";
+    echo "<td><input id='newUserName'></td>\n";
+    echo "<td><input id='newUserEmail'></td>\n";
+    echo "<td><input id='newUserPassword'></td>\n";
+    echo "<td><input type=checkbox id='isTab'></td>\n";
+    echo "<td><input type=checkbox id='isCoach'></td>\n";
+    echo "<td><input type=checkbox id='isJudge'></td>\n";
+    echo "<td><input type=checkbox id='round1'></td>\n";
+    echo "<td><input type=checkbox id='round2'></td>\n";
+    echo "<td><input type=checkbox id='round3'></td>\n";
+    echo "<td><input type=checkbox id='round4'></td>\n";
+    echo "<td><select id='quality'>\n";
+    echo "<option>1</option>\n<option>2</option>\n<option>3</option>\n";
+    echo "</select></td>\n";
+    echo "<td><button>Add User</button></td>\n";
+    echo "</tr>\n";
     echo "</table>\n";
     $userResult->close();
 }
