@@ -197,10 +197,10 @@ function createTables() {
     //TODO: And code to specific a default tabulation director's email and password
     //TODO: Generate a new password salt and save it on the server
     $generateAdmin = "INSERT INTO users(name, email, password, isJudge, isCoach, "
-            . "isTab, canJudgeRound1, canJudgeRound2, canJudgeRound3, canJudgeRound4) "
+            . "isTab, canJudgeRound1, canJudgeRound2, canJudgeRound3, canJudgeRound4, judgeQuality) "
             . "VALUES('Tabulation Director', 'example@example.com', "
             . "'74dfc2b27acfa364da55f93a5caee29ccad3557247eda238831b3e9bd931b01d77fe994e4f12b9d4cfa92a124461d2065197d8cf7f33fc88566da2db2a4d6eae', " //Whirlpool hash for 'password'
-            . "'0','0','1','0','0','0','0')";
+            . "'0','0','1','0','0','0','0','1')";
     $connection->query($generateAdmin);
     $_SESSION = array();
     session_destroy();

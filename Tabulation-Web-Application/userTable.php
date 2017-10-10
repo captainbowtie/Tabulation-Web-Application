@@ -71,27 +71,43 @@ if (!isset($_SESSION['id'])) {
             echo " checked";
         }
         echo "></td>\n";
-        echo "<td><input type=checkbox class='existingUser' user='$id' field='round1'";
+        echo "<td><input type=checkbox id='round1$id' class='existingUser' user='$id' field='round1'";
+        if($judge==0){
+            echo " disabled";
+        }
         if($round1==1){
             echo " checked";
         }
         echo "></td>\n";
-        echo "<td><input type=checkbox class='existingUser' user='$id' field='round2'";
+        echo "<td><input type=checkbox id='round2$id' class='existingUser' user='$id' field='round2'";
+        if($judge==0){
+            echo " disabled";
+        }
         if($round2==1){
             echo " checked";
         }
         echo "></td>\n";
-        echo "<td><input type=checkbox class='existingUser' user='$id' field='round3'";
+        echo "<td><input type=checkbox id='round3$id' class='existingUser' user='$id' field='round3'";
+        if($judge==0){
+            echo " disabled";
+        }
         if($round3==1){
             echo " checked";
         }
         echo "></td>\n";
-        echo "<td><input type=checkbox class='existingUser' user='$id' field='round4'";
+        echo "<td><input type=checkbox id='round4$id' class='existingUser' user='$id' field='round4'";
+        if($judge==0){
+            echo " disabled";
+        }
         if($round4==1){
             echo " checked";
         }
         echo "></td>\n";
-        echo "<td><select class='existingUser' user='$id' field='quality'>";
+        echo "<td><select id='judgeQuality$id' class='existingUser' user='$id' field='judgeQuality'";
+        if($judge==0){
+            echo " disabled";
+        }
+        echo ">\n";
         switch ($quality){
             case 1:
                 echo "<option selected>1</option>\n<option>2</option>\n<option>3</option>\n";
@@ -116,14 +132,14 @@ if (!isset($_SESSION['id'])) {
     echo "<td><input type=checkbox id='isTab'></td>\n";
     echo "<td><input type=checkbox id='isCoach'></td>\n";
     echo "<td><input type=checkbox id='isJudge'></td>\n";
-    echo "<td><input type=checkbox id='round1'></td>\n";
-    echo "<td><input type=checkbox id='round2'></td>\n";
-    echo "<td><input type=checkbox id='round3'></td>\n";
-    echo "<td><input type=checkbox id='round4'></td>\n";
-    echo "<td><select id='quality'>\n";
+    echo "<td><input type=checkbox id='round1' disabled></td>\n";
+    echo "<td><input type=checkbox id='round2' disabled></td>\n";
+    echo "<td><input type=checkbox id='round3' disabled ></td>\n";
+    echo "<td><input type=checkbox id='round4' disabled></td>\n";
+    echo "<td><select id='judgeQuality' disabled>\n";
     echo "<option>1</option>\n<option>2</option>\n<option>3</option>\n";
     echo "</select></td>\n";
-    echo "<td><button>Add User</button></td>\n";
+    echo "<td><button id='addUser'>Add User</button></td>\n";
     echo "</tr>\n";
     echo "</table>\n";
     $userResult->close();
