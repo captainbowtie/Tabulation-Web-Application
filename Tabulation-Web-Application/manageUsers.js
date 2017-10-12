@@ -75,6 +75,8 @@ $(document).on("change", ".existingUser", function () {
             })
 })
 
+//Change the disabled property of round checkboxes and quality select in the new
+//user form based on whether or not the new user is a judge
 $(document).on("change", "#isJudge", function () {
     if ($(this).prop("checked")) {
             $("#round1").prop( "disabled", false );
