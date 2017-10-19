@@ -45,45 +45,12 @@ if (!isset($_SESSION['id'])) {
     if ($connection->connect_error) {
         die($connection->connect_error);
     }
-    $roomQuery = "SELECT * FROM rooms";
-    $roomResult = $connection->query($roomQuery);
+    
+    
+    echo "<form id='existingRooms' name='existingRooms'>\n";
+    echo "</form>";
     echo "<form id='roomForm' name='roomForm'>\n";
-    echo "<table id='roomTable'>\n";
-    echo "<tr><td>Building</td><td>Room Number</td><td>Round 1</td><td>Round 2</td><td>Round 3</td><td>Round 4</td></tr>\n";
-    for ($a = 0; $a < $roomResult->num_rows; $a++) {
-        $roomResult->data_seek($a);
-        $room = $roomResult->fetch_array(MYSQLI_ASSOC);
-        $id = $room["id"];
-        $building = $room["building"];
-        $number = $room["number"];
-        $round1 = $room["availableRound1"];
-        $round2 = $room["availableRound2"];
-        $round3 = $room["availableRound3"];
-        $round4 = $room["availableRound4"];
-        echo "<tr>";
-        echo "<td><input room='$id' class='existingBuilding' value='$building'></td>";
-        echo "<td><input room='$id' class='existingRoom' value = '$number'></td>";
-        echo "<td><input type=checkbox room='$id' round=1";
-        if ($round1 == 1) {
-            echo " checked";
-        }
-        echo "></td>";
-        echo "<td><input type=checkbox room='$id' round=2";
-        if ($round2 == 1) {
-            echo " checked";
-        }
-        echo "></td>";
-        echo "<td><input type=checkbox room='$id' round=3";
-        if ($round3 == 1) {
-            echo " checked";
-        }
-        echo "></td>";
-        echo "<td><input type=checkbox room='$id' round=4";
-        if ($round4 == 1) {
-            echo " checked";
-        }
-        echo "></td></tr>\n";
-    }
+    echo "<table>";
     echo "<tr>"
     . "<td><input id='newBuilding'></td>"
     . "<td><input id='newNumber'></td>"
@@ -91,6 +58,9 @@ if (!isset($_SESSION['id'])) {
             . "<td><input type=checkbox id='round2'></td>"
             . "<td><input type=checkbox id='round3'></td>"
             . "<td><input type=checkbox id='round4'></td>"
+            . "<td><select id='quality'>"
+            . "<option selected>1</option>\n<option>2</option>\n<option>3</option>"
+            . "</select></td>"
             . "<td><input type='submit' value='Add Room'></td></tr>\n";
     echo "</table>\n";
     echo "</form>\n";

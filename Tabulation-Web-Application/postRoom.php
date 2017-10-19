@@ -24,13 +24,19 @@ require_once "setSessionPrivileges.php";
 require_once "functions.php";
 
 if($isTab){
-    $teamNumber = sanitize_string($_POST['teamNumber']);
-    $teamName = sanitize_string($_POST['teamName']);
-    $coach = sanitize_string($_POST['coach']);
-    $teamQuery = "INSERT INTO teams (number,name,coachId) "
-            . "VALUES($teamNumber,'$teamName',$coach)";
+    $building = sanitize_string($_POST['building']);
+    $number = sanitize_string($_POST['number']);
+    $round1 = sanitize_string($_POST['round1']);
+    $round2 = sanitize_string($_POST['round2']);
+    $round3 = sanitize_string($_POST['round3']);
+    $round4 = sanitize_string($_POST['round4']);
+    $roomQuality = sanitize_string($_POST['roomQuality']);
+    $roomQuery = "INSERT INTO rooms (building,number,availableRound1,"
+            . "availableRound2,availableRound3,availableRound4,roomQuality) "
+            . "VALUES('$building','$number',$round1,$round2,$round3,$round4,"
+            . "$roomQuality)";
     $connection = new mysqli(dbhost, dbuser, dbpass, dbname);
-    $result = $connection->query($teamQuery);
+    $result = $connection->query($roomQuery);
     $connection->close();
 }else if(!isset($_SESSION[id])){
     echo "You must be logged in to view this page";

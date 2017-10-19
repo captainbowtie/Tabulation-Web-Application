@@ -156,7 +156,7 @@ function populateUsers() {
     $.ajax({
 
         // The URL for the request
-        url: "/userTable.php",
+        url: "/getUsers.php",
 
         // Whether this is a POST or GET request
         type: "GET",
