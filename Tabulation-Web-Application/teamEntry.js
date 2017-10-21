@@ -122,6 +122,7 @@ $(document).on("submit", "#newTeamForm", function (e) {
                     id: $("#newTeamNumber").val(),
                     text: $("#newTeamNumber").val() + ": " + $("#newTeamName").val()
                 }));
+                //TODO: also update the content of the add conflict select
                 $("#teamSelect option:selected").attr("selected","false");
                 $("#"+$("#newTeamNumber").val()).attr("selected","true");
                 $('#newTeamForm').trigger("reset");

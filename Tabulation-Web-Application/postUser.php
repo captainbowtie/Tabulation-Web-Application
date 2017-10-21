@@ -37,7 +37,13 @@ if (!isset($_SESSION['id'])) {
         //Set variables for query
         $id = sanitize_string($_POST['id']);
         $field = sanitize_string($_POST['field']);
-        $value = sanitize_string($_POST['value']);
+        if ($field != "password") {
+            $value = sanitize_string($_POST['value']);
+        } else {
+            $value = hash('whirlpool', sanitize_string($_POST['value']));
+            
+        }
+
 
         //Query to update table
         $query = "UPDATE users SET $field='$value' WHERE id=$id";
@@ -51,6 +57,7 @@ if (!isset($_SESSION['id'])) {
         //TODO: validate data entry
         //Set variables for query
         $name = sanitize_string($_POST['name']);
+        //TODO: make email all lowercase (samzies on check for login)
         $email = sanitize_string($_POST['email']);
         $clearPass = sanitize_string($_POST['password']);
         $hashedPass = hash('whirlpool', $clearPass);
@@ -68,7 +75,7 @@ if (!isset($_SESSION['id'])) {
                 . "isTab, canJudgeRound1, canJudgeRound2, canJudgeRound3, canJudgeRound4, judgeQuality) "
                 . "VALUES('$name', '$email', '$hashedPass', '$judge', '$coach', "
                 . "'$tab', '$round1', '$round2', '$round3', '$round4', '$judgeQuality')";
-        
+
         //Send query to database
         $connection->query($userQuery);
         $connection->close();

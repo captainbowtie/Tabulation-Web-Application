@@ -35,21 +35,21 @@ $(document).on("change", ".existingUser", function () {
     } else if (field == "judgeQuality") {
         var value = $(this).val();
     }
-    
+
     //Enable/disable round availabilitiy and quality depending on judge status
-    if(field == "isJudge"){
+    if (field == "isJudge") {
         if ($(this).prop("checked")) {
-            $("#round1"+id).prop( "disabled", false );
-            $("#round2"+id).prop( "disabled", false );
-            $("#round3"+id).prop( "disabled", false );
-            $("#round4"+id).prop( "disabled", false );
-            $("#judgeQuality"+id).prop( "disabled", false );
+            $("#round1" + id).prop("disabled", false);
+            $("#round2" + id).prop("disabled", false);
+            $("#round3" + id).prop("disabled", false);
+            $("#round4" + id).prop("disabled", false);
+            $("#judgeQuality" + id).prop("disabled", false);
         } else {
-            $("#round1"+id).prop( "disabled", true );
-            $("#round2"+id).prop( "disabled", true );
-            $("#round3"+id).prop( "disabled", true );
-            $("#round4"+id).prop( "disabled", true );
-            $("#judgeQuality"+id).prop( "disabled", true );
+            $("#round1" + id).prop("disabled", true);
+            $("#round2" + id).prop("disabled", true);
+            $("#round3" + id).prop("disabled", true);
+            $("#round4" + id).prop("disabled", true);
+            $("#judgeQuality" + id).prop("disabled", true);
         }
     }
 
@@ -79,18 +79,18 @@ $(document).on("change", ".existingUser", function () {
 //user form based on whether or not the new user is a judge
 $(document).on("change", "#isJudge", function () {
     if ($(this).prop("checked")) {
-            $("#round1").prop( "disabled", false );
-            $("#round2").prop( "disabled", false );
-            $("#round3").prop( "disabled", false );
-            $("#round4").prop( "disabled", false );
-            $("#judgeQuality").prop( "disabled", false );
-        } else {
-            $("#round1").prop( "disabled", true );
-            $("#round2").prop( "disabled", true );
-            $("#round3").prop( "disabled", true );
-            $("#round4").prop( "disabled", true );
-            $("#judgeQuality").prop( "disabled", true );
-        }
+        $("#round1").prop("disabled", false);
+        $("#round2").prop("disabled", false);
+        $("#round3").prop("disabled", false);
+        $("#round4").prop("disabled", false);
+        $("#judgeQuality").prop("disabled", false);
+    } else {
+        $("#round1").prop("disabled", true);
+        $("#round2").prop("disabled", true);
+        $("#round3").prop("disabled", true);
+        $("#round4").prop("disabled", true);
+        $("#judgeQuality").prop("disabled", true);
+    }
 })
 
 $(document).on("click", "#addUser", function (e) {
@@ -149,6 +149,36 @@ $(document).on("click", "#addUser", function (e) {
                 populateUsers();
             })
 
+})
+
+$(document).on("click", ".passwordButton", function (e) {
+    e.preventDefault();
+    var password = prompt("Please enter the new password");
+    if (password == null || password == "") {
+
+    } else {
+        var id = $(this).attr("user");
+        var postString = '{"id":' + id + ',"field":"password","value":"' + password + '"}';
+        $.ajax({
+
+            // The URL for the request
+            url: "/postUser.php",
+
+            // The data to send (will be converted to a query string)
+            data: JSON.parse(postString),
+
+            // Whether this is a POST or GET request
+            type: "POST",
+
+            // The type of data we expect back
+            dataType: "text",
+        })
+                // Code to run if the request succeeds (is done);
+                // The response is passed to the function
+                .done(function (response) {
+                    //TODO: error handling
+                })
+    }
 })
 
 function populateUsers() {

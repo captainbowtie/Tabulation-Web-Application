@@ -17,6 +17,8 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+session_start();
+
 require_once 'dblogin.php';
 
 $connection = new mysqli(dbhost, dbuser, dbpass, dbname);
@@ -24,13 +26,17 @@ $query = "SHOW TABLES LIKE 'users'";
 $result = $connection->query($query);
 $usersTableExists = $result->num_rows > 0;
 
-if(!$usersTableExists){
+if (!$usersTableExists) {
     require_once 'setup.php';
-}else{
-//TODO: write actual index pagerequire_once 'dblogin.php';
-require_once 'setSessionPrivileges.php';
+} else {
+//TODO: write actual index page
+    require_once 'setSessionPrivileges.php';
 
-echo <<<_END
+    if ($isCoach) {
+        header("Location: https://tab.allenbarr.com/teamEntry.php"); /* Redirect browser */
+        exit();
+    } else {
+        echo <<<_END
 <!DOCTYPE HTML>
 <html>
     <head>
@@ -39,12 +45,13 @@ echo <<<_END
     </head>
     <body>
 _END;
-include_once 'header.php';
-echo "<br>";
+        include_once 'header.php';
+        echo "<br>";
 
 
-echo <<<_END
+        echo <<<_END
     </body>
 </html>
 _END;
+    }
 }

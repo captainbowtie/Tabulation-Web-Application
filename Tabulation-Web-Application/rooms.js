@@ -72,7 +72,25 @@ $(document).on("submit", "#roomForm", function (e) {
 });
 
 $(document).on("change", ".existing", function () {
-    
+    var room = $(this).attr("room");
+    var field = $(this).attr("field");
+    var value;
+    switch (field){
+        case "building":
+            break;
+            case "number":
+            break;
+            case "round1":
+            break;
+            case "round2":
+            break;
+            case "round3":
+            break;
+            case "round4":
+            break;
+            case "roomQuality":
+            break;
+    }
 });
 
 function populateRooms(){

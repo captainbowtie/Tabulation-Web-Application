@@ -55,7 +55,7 @@ if (!isset($_SESSION['id'])) {
         echo "<tr>";
         echo "<td><input class='existingUser' user='$id' field='name' value='$name'></td>\n";
         echo "<td><input class='existingUser' user='$id' field='email' value='$email'></td>\n";
-        echo "<td><button>Reset Password</button></td>\n";
+        echo "<td><button user='$id' class='passwordButton'>Reset Password</button></td>\n";
         echo "<td><input type=checkbox class='existingUser' user='$id' field='isTab'";
         if($tab==1){
             echo " checked";

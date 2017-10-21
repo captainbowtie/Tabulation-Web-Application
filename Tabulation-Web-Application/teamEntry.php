@@ -164,6 +164,8 @@ if ($isTab || $isCoach) {
     echo "<tr>\n";
     echo "</table>";
     echo "</form>\n";
+    
+    //Form to add more competitors to team
     echo "<form id='addCompetitor'>\n";
     echo "<table>\n<tr>\n";
     echo "<td>\n";
@@ -175,9 +177,7 @@ if ($isTab || $isCoach) {
     . "<td><input type=submit id='addCompetitorButton' name='addCompetitorButton' value='Add Competitor'></td>\n";
     echo "</tr>";
     echo "</table>";
-    echo "</form>\n";
-
-    //Form to add more competitors to team
+    echo "</form>\n";    
 } else if (isset($_POST['id'])) {
     echo "You do not have permission to access this page";
 } else {
