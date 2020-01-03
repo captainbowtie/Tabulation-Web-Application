@@ -19,3 +19,4 @@ define("dbhost","localhost");
 define("dbname","tournament");
 define("dbuser","test");
 define("dbpass","password");
+define('SITE_ROOT', __DIR__);

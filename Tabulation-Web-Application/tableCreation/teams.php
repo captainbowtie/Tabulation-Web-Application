@@ -17,7 +17,7 @@
  */
 
 // Get db login information
-require("../config.php");
+require_once __DIR__."/../config.php";
 
 // Create db connection
 $db = new mysqli(dbhost, dbuser, dbpass, dbname);
@@ -30,7 +30,7 @@ if ($db->connect_error) {
 //Query to create table
 $query = "CREATE TABLE teams (
 id INT(4) UNSIGNED PRIMARY KEY,
-name VARCHAR(50) NOT NULL,
+name VARCHAR(50) NOT NULL
 )";
 
 if ($db->query($query) === TRUE) {

@@ -17,7 +17,7 @@
  */
 
 // Get db login information
-require("../config.php");
+require_once __DIR__."/../config.php";
 
 // Create db connection
 $db = new mysqli(dbhost, dbuser, dbpass, dbname);
