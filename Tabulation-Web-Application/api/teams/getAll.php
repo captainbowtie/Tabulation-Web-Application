@@ -1,6 +1,7 @@
 <?php
+
 /* 
- * Copyright (C) 2019 allen
+ * Copyright (C) 2020 allen
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -16,30 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Get config information
-require_once __DIR__."/../config.php";
-require_once SITE_ROOT."/database.php";
+require_once __DIR__ . '/../../config.php';
+require_once SITE_ROOT . '/objects/team.php';
 
-// Create db connection
-$db = new mysqli(dbhost, dbuser, dbpass, dbname);
-
-// Check connection
-if ($db->connect_error) {
-    die("Connection failed: " . $db->connect_error);
-}
-
-//Query to create table
-$query = "CREATE TABLE IF NOT EXISTS impermissibles (
-id INT(2) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-team0 INT(4) UNSIGNED NOT NULL,
-team1 INT(4) UNSIGNED NOT NULL
-)";
-
-if ($db->query($query) === TRUE) {
-    echo "Table impermissibles created successfully";
-} else {
-    echo "Error creating table: " . $db->error;
-}
-
-$db->close();
-?>
+echo json_encode(getAllTeams());

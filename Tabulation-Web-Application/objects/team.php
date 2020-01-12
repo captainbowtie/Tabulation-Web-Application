@@ -1,5 +1,6 @@
 <?php
-/* 
+
+/*
  * Copyright (C) 2019 allen
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,20 +17,46 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-class Team{
- 
-    // database connection and table name
-    private $db;
-    private $table_name = "ballots";
- 
-    // object properties
+require_once __DIR__ . "/../config.php";
+require_once SITE_ROOT . "/database.php";
+
+class Team {
+
     public $id;
-    public $pairing;
-    public $plaintiffPD;
- 
-    // constructor with $db as database connection
-    public function __construct($conn){
-        $this->db = $conn;
+    public $name;
+
+    public function __construct($id, $name) {
+        $this->id = $id;
+        $this->name = $name;
     }
+
 }
-?>
+
+function createTeam($id, $name) {
+    $db = new Database();
+    $conn = $db->getConnection();
+    $stmt = $conn->prepare("INSERT INTO teams VALUES (?, ?)");
+    $stmt->bind_param('is', $id, $name);
+    $stmt->execute();
+    $stmt->close();
+    $conn->close();
+    return true;
+}
+
+function getAllTeams() {
+    $db = new Database();
+    $conn = $db->getConnection();
+    $query = "SELECT * FROM teams";
+    if ($result = $conn->query($query)) {
+        $i = 0;
+        global $teams;
+        while ($row = $result->fetch_row()) {
+            $teams[$i]["id"] = $row[0];
+            $teams[$i]["name"] = $row[1];
+            $i++;
+        }
+        /* free result set */
+        $result->close();
+    }
+    return $teams;
+}

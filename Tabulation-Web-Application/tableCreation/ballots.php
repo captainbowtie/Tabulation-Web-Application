@@ -16,10 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Get db login information
+// Get config information
 require_once __DIR__."/../config.php";
+require_once SITE_ROOT."/database.php";
 
 // Create db connection
+
 $db = new mysqli(dbhost, dbuser, dbpass, dbname);
 
 // Check connection
@@ -28,7 +30,7 @@ if ($db->connect_error) {
 }
 
 //Query to create table
-$query = "CREATE TABLE ballots (
+$query = "CREATE TABLE IF NOT EXISTS ballots (
 id INT(4) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 pairing INT(3) UNSIGNED NOT NULL,
 plaintiffPD INT(3) SIGNED NOT NULL

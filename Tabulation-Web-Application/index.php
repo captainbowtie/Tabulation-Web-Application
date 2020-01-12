@@ -17,7 +17,6 @@
  */
  
 require_once __DIR__."/config.php";
-require_once SITE_ROOT."/tableCreation/teams.php";
  
  echo <<<_END
 <!DOCTYPE HTML>

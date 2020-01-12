@@ -18,18 +18,9 @@
 
 class Ballot{
  
-    // database connection and table name
-    private $db;
-    private $table_name = "ballots";
- 
     // object properties
     public $id;
     public $pairing;
     public $plaintiffPD;
- 
-    // constructor with $db as database connection
-    public function __construct($conn){
-        $this->db = $conn;
-    }
+    
 }
-?>

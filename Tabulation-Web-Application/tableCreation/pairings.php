@@ -16,8 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Get db login information
+// Get config information
 require_once __DIR__."/../config.php";
+require_once SITE_ROOT."/database.php";
 
 // Create db connection
 $db = new mysqli(dbhost, dbuser, dbpass, dbname);
@@ -28,7 +29,7 @@ if ($db->connect_error) {
 }
 
 //Query to create table
-$query = "CREATE TABLE pairings (
+$query = "CREATE TABLE IF NOT EXISTS pairings (
 id INT(3) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 round INT(1) UNSIGNED NOT NULL,
 plaintiff INT(4) UNSIGNED NOT NULL,

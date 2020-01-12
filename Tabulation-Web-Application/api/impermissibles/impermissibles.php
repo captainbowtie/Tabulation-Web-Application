@@ -1,4 +1,5 @@
 <?php
+
 /* 
  * Copyright (C) 2020 allen
  *
@@ -15,4 +16,12 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
+require_once __DIR__."/../../config.php";
+include_once SITE_ROOT.'/database.php';
+include_once SITE_ROOT.'/objects/impermissible.php';
+
+$database = new Database();
+$db = $database->getConnection();
+
+$impermissible = new Impermissible($db);

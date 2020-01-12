@@ -1,6 +1,7 @@
 <?php
-/* 
- * Copyright (C) 2019 allen
+
+/*
+ * Copyright (C) 2020 allen
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -16,30 +17,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Get config information
-require_once __DIR__."/../config.php";
-require_once SITE_ROOT."/database.php";
+/**
+ * Description of database
+ *
+ * @author allen
+ */
+class Database {
 
-// Create db connection
-$db = new mysqli(dbhost, dbuser, dbpass, dbname);
+    private $host = "db4free.net";
+    private $database = "tournament";
+    private $username = "mocktrial";
+    private $password = "password";
+    public $conn;
 
-// Check connection
-if ($db->connect_error) {
-    die("Connection failed: " . $db->connect_error);
+    // get the database connection
+    public function getConnection() {
+
+        $conn = new mysqli($this->host, $this->username, $this->password, $this->database);
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $db->connect_error);
+        }
+
+        return $conn;
+    }
+
 }
-
-//Query to create table
-$query = "CREATE TABLE IF NOT EXISTS impermissibles (
-id INT(2) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-team0 INT(4) UNSIGNED NOT NULL,
-team1 INT(4) UNSIGNED NOT NULL
-)";
-
-if ($db->query($query) === TRUE) {
-    echo "Table impermissibles created successfully";
-} else {
-    echo "Error creating table: " . $db->error;
-}
-
-$db->close();
-?>

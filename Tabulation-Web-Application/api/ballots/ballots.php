@@ -16,3 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
  
+require_once __DIR__."/../../config.php";
+include_once SITE_ROOT.'/database.php';
+include_once SITE_ROOT.'/objects/ballot.php';
+
+$database = new Database();
+$db = $database->getConnection();
+
+$ballot = new Ballot($db);
