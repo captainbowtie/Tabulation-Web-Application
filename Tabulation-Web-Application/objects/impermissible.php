@@ -22,11 +22,31 @@
  *
  * @author allen
  */
+
+require_once __DIR__ . "/../config.php";
+require_once SITE_ROOT . "/database.php";
+
 class Impermissible{
  
     // object properties
     public $id;
     public $team0;
     public $team1;
+    
+    public function __construct($team0, $team1) {
+        $this->team0 = $team0;
+        $this->team1 = $team1;
+    }
  
+}
+
+function createImpermissible($team0, $team1) {
+    $db = new Database();
+    $conn = $db->getConnection();
+    $stmt = $conn->prepare("INSERT INTO impermissibles (team0, team1) VALUES (?, ?)");
+    $stmt->bind_param('ii', $team0, $team1);
+    $stmt->execute();
+    $stmt->close();
+    $conn->close();
+    return true;
 }

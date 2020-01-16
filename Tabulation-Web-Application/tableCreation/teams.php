@@ -30,7 +30,8 @@ if ($db->connect_error) {
 
 //Query to create table
 $query = "CREATE TABLE IF NOT EXISTS teams (
-id INT(4) UNSIGNED PRIMARY KEY,
+id INT(3) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+number INT(4) UNSIGNED,
 name VARCHAR(50) NOT NULL
 )";
 

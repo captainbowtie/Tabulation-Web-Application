@@ -22,21 +22,21 @@ require_once SITE_ROOT . "/database.php";
 
 class Team {
 
-    public $id;
+    public $number;
     public $name;
 
-    public function __construct($id, $name) {
-        $this->id = $id;
+    public function __construct($number, $name) {
+        $this->number = $number;
         $this->name = $name;
     }
 
 }
 
-function createTeam($id, $name) {
+function createTeam($number, $name) {
     $db = new Database();
     $conn = $db->getConnection();
     $stmt = $conn->prepare("INSERT INTO teams VALUES (?, ?)");
-    $stmt->bind_param('is', $id, $name);
+    $stmt->bind_param('is', $number, $name);
     $stmt->execute();
     $stmt->close();
     $conn->close();
@@ -51,7 +51,7 @@ function getAllTeams() {
         $i = 0;
         global $teams;
         while ($row = $result->fetch_row()) {
-            $teams[$i]["id"] = $row[0];
+            $teams[$i]["number"] = $row[0];
             $teams[$i]["name"] = $row[1];
             $i++;
         }
