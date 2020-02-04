@@ -51,8 +51,8 @@ function getAllTeams() {
         $i = 0;
         global $teams;
         while ($row = $result->fetch_row()) {
-            $teams[$i]["number"] = $row[0];
-            $teams[$i]["name"] = $row[1];
+            $teams[$i]["number"] = $row[1];
+            $teams[$i]["name"] = $row[2];
             $i++;
         }
         /* free result set */

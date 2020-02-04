@@ -50,3 +50,21 @@ function createImpermissible($team0, $team1) {
     $conn->close();
     return true;
 }
+
+function getAllImpermissibles() {
+    $db = new Database();
+    $conn = $db->getConnection();
+    $query = "SELECT * FROM impermissibles";
+    if ($result = $conn->query($query)) {
+        $i = 0;
+        global $impermissibles;
+        while ($row = $result->fetch_row()) {
+            $impermissibles[$i]["team0"] = $row[1];
+            $impermissibles[$i]["team1"] = $row[2];
+            $i++;
+        }
+        /* free result set */
+        $result->close();
+    }
+    return $impermissibles;
+}
