@@ -17,52 +17,39 @@
 
 
 $("#test").on("click", function () {
-    pair1();
+    getData().then(data=>console.log(data));
 });
 
-function pair1() {
-    const getData = new Promise(function (resolve, reject) {
+function getData() {
+    return new Promise(function (resolve, reject) {
         var teams = getTeams();
         var impermissibles = getImpermissibles();
-        resolve(teams);
-
+        Promise.all([teams,impermissibles]).then(data=>resolve(data));
     });
-
-    getData.then(function(value){
-        console.log("value");
-    });
-
-
-    //var pairings = shuffle(teams);
-    //console.log(pairings);
-
 }
 
-function pair() {}
-function error() {}
-
 function getTeams() {
-    var teams;
-    $.ajax({
-        url: "../api/teams/getAll.php",
-        success: function (data) {
-            teams = data;
-        },
-        dataType: "json"
+    return new Promise(function (resolve, reject) {
+        $.ajax({
+            url: "../api/teams/getAll.php",
+            dataType: "json"
+        }).then(teams => {
+            resolve(teams);
+        });
     });
-    return teams;
+
 }
 
 function getImpermissibles() {
-    var impermissibles;
-    $.ajax({
-        url: "../api/impermissibles/getAll.php",
-        success: function (data) {
-            impermissibles = data;
-        },
-        dataType: "json"
+    return new Promise(function (resolve, reject) {
+        $.ajax({
+            url: "../api/impermissibles/getAll.php",
+            dataType: "json"
+        }).then(impermissibles => {
+            resolve(impermissibles);
+        });
     });
-    return impermissibles;
+
 }
 
 
