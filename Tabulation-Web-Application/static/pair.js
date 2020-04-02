@@ -17,14 +17,65 @@
 
 
 $("#test").on("click", function () {
-    getData().then(data=>console.log(data));
+    pair1();
 });
+
+function pair1() {
+    getData().then(data => {
+        //Assign team data to variables
+        var teams = data[0];
+        var impermissibles = data[1];
+        var noConflicts = false;
+
+        while (noConflicts===false) {
+            //Shuffle the list of teams, assign to plaintiff and defense
+            var shuffledTeams = shuffle(teams);
+            var plaintiffTeams = [];
+            var defenseTeams = [];
+            for (var a = 0; a < shuffledTeams.length / 2; a++) {
+                plaintiffTeams[a] = shuffledTeams[a * 2];
+                defenseTeams[a] = shuffledTeams[a * 2 + 1];
+            }
+            //check for pairing conflicts
+            var noConflicts = true;
+            for (var a = 0; a < plaintiffTeams.length; a++) {
+                for (var b = 0; b < impermissibles.length; b++) {
+                    if ((plaintiffTeams[a] === impermissibles[b].team0 ||
+                            plaintiffTeams[a] === impermissibles[b].team1) &&
+                            (defenseTeams[a] === impermissibles[b].team0 ||
+                                    defenseTeams[a] === impermissibles[b].team1)) {
+                                noConflicts = false;
+                    }
+                }
+            }
+        }
+        
+        //write pairings to server
+        for(var a = 0;a<plaintiffTeams.length;a++){
+            console.log(plaintiffTeams[a].number+" "+defenseTeams[a].number);
+        }
+    });
+
+
+}
+
+function pair2() {
+
+}
+
+function pair3() {
+
+}
+
+function pair4() {
+
+}
 
 function getData() {
     return new Promise(function (resolve, reject) {
         var teams = getTeams();
         var impermissibles = getImpermissibles();
-        Promise.all([teams,impermissibles]).then(data=>resolve(data));
+        Promise.all([teams, impermissibles]).then(data => resolve(data));
     });
 }
 
@@ -54,7 +105,7 @@ function getImpermissibles() {
 
 
 
-//cc-by-sa CoolAJ86 https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
+//cc-by-sa by CoolAJ86 https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
 function shuffle(array) {
     var currentIndex = array.length, temporaryValue, randomIndex;
 

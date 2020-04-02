@@ -30,6 +30,32 @@ class Team {
         $this->name = $name;
     }
 
+    public function getOpponents() {
+        $number = $this->number;
+        //connect to database, draft query
+        $db = new Database();
+        $conn = $db->getConnection();
+        $query = "SELECT * FROM pairings WHERE plaintiff = " . $number . " || defense = " . $number . " ORDER BY round";
+
+        //get results
+        if ($result = $conn->query($query)) {
+            $i = 0;
+            global $opponents;
+            while ($row = $result->fetch_row()) {
+                //check if team in quesstion is plaintiff or defense, and pull the other one
+                if ($row[1] == $team) {
+                    $opponents[$i] = $row[2];
+                } else {
+                    $opponents[$i] = $row[1];
+                }
+                $i++;
+            }
+            /* free result set */
+            $result->close();
+        }
+        return $opponents;
+    }
+
 }
 
 function createTeam($number, $name) {

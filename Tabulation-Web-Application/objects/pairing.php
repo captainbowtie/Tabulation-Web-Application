@@ -16,12 +16,33 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-class Ballot{
- 
-    // object properties
+
+require_once __DIR__ . "/../config.php";
+require_once SITE_ROOT . "/database.php";
+
+class Pairing {
+
     public $id;
     public $round;
     public $plaintiff;
     public $defense;
- 
+
+    public function __construct($round, $plaintiff, $defense) {
+        $this->round = $round;
+        $this->plaintiff = $plaintiff;
+        $this->defense = $defense;
+    }
+
+}
+
+function createPairing($round, $plaintiff, $defense) {
+    $db = new Database();
+    $conn = $db->getConnection();
+    $stmt =$conn->prepare("INSERT INTO pairings (round, plaintiff, defense) VALUES (?, ?, ?)");
+    echo($stmt->error_list);
+    $stmt->bind_param('iii', $round, $plaintiff, $defense);
+    $stmt->execute();
+    $stmt->close();
+    $conn->close();
+    return true;
 }
