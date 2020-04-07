@@ -1,6 +1,6 @@
 <?php
 
-/*
+/* 
  * Copyright (C) 2020 allen
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,29 +18,29 @@
  */
 
 require_once __DIR__ . '/../../config.php';
-require_once SITE_ROOT . '/objects/team.php';
+require_once SITE_ROOT . '/objects/ballot.php';
 
 $data = json_decode(file_get_contents("php://input"));
 
 if (
-        isset($data->number) &&
-        isset($data->name)
+        isset($data->pairing) &&
+        isset($data->plaintiffPD)
 ) {
-    $number = htmlspecialchars(strip_tags($data->number));
-    $name = htmlspecialchars(strip_tags($data->name));
-    if(createTeam($number, $name)){
+    $pairing = htmlspecialchars(strip_tags($data->pairing));
+    $plaintiffPD = htmlspecialchars(strip_tags($data->plaintiffPD));
+    if(createBallot($pairing, $plaintiffPD)){
         // set response code - 201 created
         http_response_code(201);
 
         // tell the user
-        echo json_encode(array("message" => "Team was created."));
+        echo json_encode(array("message" => "Ballot was created."));
     }else {
 
         // set response code - 503 service unavailable
         http_response_code(503);
 
         // tell the user
-        echo json_encode(array("message" => "Unable to create team."));
+        echo json_encode(array("message" => "Unable to create ballot."));
     }
     
     
@@ -51,5 +51,5 @@ else {
     http_response_code(400);
 
     // tell the user
-    echo json_encode(array("message" => "Unable to create team. Data is incomplete."));
+    echo json_encode(array("message" => "Unable to create ballot. Data is incomplete."));
 }

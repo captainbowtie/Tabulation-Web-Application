@@ -46,3 +46,27 @@ function createPairing($round, $plaintiff, $defense) {
     $conn->close();
     return true;
 }
+
+function getAllPairings() {
+    global $pairings;
+
+    //connect to database
+    $db = new Database();
+    $conn = $db->getConnection();
+
+    //get basic team data (number and name)
+    $pairingssQuery = "SELECT * FROM pairings";
+    if ($result = $conn->query($pairingssQuery)) {
+        $i = 0;
+        while ($row = $result->fetch_assoc()) {
+            $pairings[$i]["round"] = $row["round"];
+            $pairings[$i]["plaintiff"] = $row["plaintiff"];
+            $pairings[$i]["defense"] = $row["defense"];
+            $i++;
+        }
+        /* free result set */
+        $result->close();
+    }
+
+    return $pairings;
+}

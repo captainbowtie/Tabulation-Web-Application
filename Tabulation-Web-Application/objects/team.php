@@ -70,19 +70,24 @@ function createTeam($number, $name) {
 }
 
 function getAllTeams() {
+    global $teams;
+
+    //connect to database
     $db = new Database();
     $conn = $db->getConnection();
-    $query = "SELECT * FROM teams";
-    if ($result = $conn->query($query)) {
+
+    //get basic team data (number and name)
+    $teamsQuery = "SELECT * FROM teams";
+    if ($result = $conn->query($teamsQuery)) {
         $i = 0;
-        global $teams;
-        while ($row = $result->fetch_row()) {
-            $teams[$i]["number"] = $row[1];
-            $teams[$i]["name"] = $row[2];
+        while ($row = $result->fetch_assoc()) {
+            $teams[$i]["number"] = $row["number"];
+            $teams[$i]["name"] = $row["name"];
             $i++;
         }
         /* free result set */
         $result->close();
     }
+
     return $teams;
 }

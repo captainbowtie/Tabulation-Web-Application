@@ -23,8 +23,8 @@ require_once SITE_ROOT . '/objects/impermissible.php';
 $data = json_decode(file_get_contents("php://input"));
 
 if (
-        !empty($data->team0) &&
-        !empty($data->team1)
+        isset($data->team0) &&
+        isset($data->team1)
 ) {
     $team0 = htmlspecialchars(strip_tags($data->team0));
     $team1 = htmlspecialchars(strip_tags($data->team1));

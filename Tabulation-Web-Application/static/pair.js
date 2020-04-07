@@ -17,17 +17,16 @@
 
 
 $("#test").on("click", function () {
-    pair1();
+    getImpermissibles().then(impermissibles => console.log(impermissibles));
 });
 
 function pair1() {
-    getData().then(data => {
+    getTeams().then(teamData => {
         //Assign team data to variables
-        var teams = data[0];
-        var impermissibles = data[1];
+        var teams = teamData;
         var noConflicts = false;
 
-        while (noConflicts===false) {
+        while (noConflicts === false) {
             //Shuffle the list of teams, assign to plaintiff and defense
             var shuffledTeams = shuffle(teams);
             var plaintiffTeams = [];
@@ -37,22 +36,12 @@ function pair1() {
                 defenseTeams[a] = shuffledTeams[a * 2 + 1];
             }
             //check for pairing conflicts
-            var noConflicts = true;
-            for (var a = 0; a < plaintiffTeams.length; a++) {
-                for (var b = 0; b < impermissibles.length; b++) {
-                    if ((plaintiffTeams[a] === impermissibles[b].team0 ||
-                            plaintiffTeams[a] === impermissibles[b].team1) &&
-                            (defenseTeams[a] === impermissibles[b].team0 ||
-                                    defenseTeams[a] === impermissibles[b].team1)) {
-                                noConflicts = false;
-                    }
-                }
-            }
+            var noConflicts = !pairingsHaveConflicts(plaintiffTeams, defenseTeams);
         }
-        
-        //write pairings to server
-        for(var a = 0;a<plaintiffTeams.length;a++){
-            console.log(plaintiffTeams[a].number+" "+defenseTeams[a].number);
+
+        //display pairings for approval
+        for (var a = 0; a < plaintiffTeams.length; a++) {
+            console.log(plaintiffTeams[a].number + " " + defenseTeams[a].number);
         }
     });
 
@@ -69,6 +58,23 @@ function pair3() {
 
 function pair4() {
 
+}
+
+function pairingsHaveConflicts(plaintiffTeams, defenseTeams) {
+    var noConflicts = true;
+    getImpermissibles().then(impermissibles => {
+        for (var a = 0; a < plaintiffTeams.length; a++) {
+            for (var b = 0; b < impermissibles.length; b++) {
+                if ((plaintiffTeams[a].number === impermissibles[b].team0 ||
+                        plaintiffTeams[a].number === impermissibles[b].team1) &&
+                        (defenseTeams[a].number === impermissibles[b].team0 ||
+                                defenseTeams[a].number === impermissibles[b].team1)) {
+                    noConflicts = false;
+                }
+            }
+        }
+        return noConflicts;
+    });
 }
 
 function getData() {
@@ -93,12 +99,37 @@ function getTeams() {
 
 function getImpermissibles() {
     return new Promise(function (resolve, reject) {
-        $.ajax({
-            url: "../api/impermissibles/getAll.php",
-            dataType: "json"
-        }).then(impermissibles => {
+        //get list of team impermissibles
+        var impermissibles = new Promise(function (resolveImpermissibles, rejectImpermissibles) {
+            $.ajax({
+                url: "../api/impermissibles/getAll.php",
+                dataType: "json"
+            }).then(impermissibles => {
+                resolveImpermissibles(impermissibles);
+            });
+        });
+        //get pairing data (to add to impermissibles)
+        var pairings = new Promise(function (resolvePairings, rejectPairings) {
+            $.ajax({
+                url: "../api/pairings/getAll.php",
+                dataType: "json"
+            }).then(pairings => {
+                resolvePairings(pairings);
+            });
+        });
+        //combine pairings with team impermissibles to get all impermissibles
+        Promise.all([impermissibles, pairings]).then(data => {
+            var impermissibles = data[0];
+            var pairings = data[1];
+            var numberOfImpermissibles = impermissibles.length;
+            for (var a = 0; a < pairings.length; a++) {
+                impermissibles.push({"team0": 0, "team1": 0});
+                impermissibles[numberOfImpermissibles + a].team0 = pairings[a].plaintiff;
+                impermissibles[numberOfImpermissibles + a].team1 = pairings[a].defense;
+            }
             resolve(impermissibles);
         });
+
     });
 
 }

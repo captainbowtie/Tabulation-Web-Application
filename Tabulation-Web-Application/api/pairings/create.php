@@ -23,9 +23,9 @@ require_once SITE_ROOT . '/objects/pairing.php';
 $data = json_decode(file_get_contents("php://input"));
 
 if (
-        !empty($data->round) &&
-        !empty($data->plaintiff) &&
-        !empty($data->defense)
+        isset($data->round) &&
+        isset($data->plaintiff) &&
+        isset($data->defense)
 ) {
     $round = htmlspecialchars(strip_tags($data->round));
     $plaintiff = htmlspecialchars(strip_tags($data->plaintiff));

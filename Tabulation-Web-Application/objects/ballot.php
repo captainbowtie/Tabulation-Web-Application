@@ -16,6 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+require_once __DIR__ . "/../config.php";
+require_once SITE_ROOT . "/database.php";
+
 class Ballot{
  
     // object properties
@@ -23,4 +26,16 @@ class Ballot{
     public $pairing;
     public $plaintiffPD;
     
+}
+
+function createBallot($pairing, $plaintiffPD) {
+    $db = new Database();
+    $conn = $db->getConnection();
+    $stmt =$conn->prepare("INSERT INTO ballots (pairing, plaintiffPD) VALUES (?, ?)");
+    echo($stmt->error_list);
+    $stmt->bind_param('ii', $pairing, $plaintiffPD);
+    $stmt->execute();
+    $stmt->close();
+    $conn->close();
+    return true;
 }
