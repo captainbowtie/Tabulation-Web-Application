@@ -59,8 +59,8 @@ function getAllImpermissibles() {
         $i = 0;
         global $impermissibles;
         while ($row = $result->fetch_assoc()) {
-            $impermissibles[$i]["team0"] = $row["team0"];
-            $impermissibles[$i]["team1"] = $row["team1"];
+            $impermissibles[$i]["team0"] = intval($row["team0"]);
+            $impermissibles[$i]["team1"] = intval($row["team1"]);
             $i++;
         }
         /* free result set */

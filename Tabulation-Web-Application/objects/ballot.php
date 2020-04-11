@@ -39,3 +39,26 @@ function createBallot($pairing, $plaintiffPD) {
     $conn->close();
     return true;
 }
+
+function getAllBallots() {
+    global $ballots;
+
+    //connect to database
+    $db = new Database();
+    $conn = $db->getConnection();
+
+    //get basic ballot data
+    $ballotsQuery = "SELECT * FROM ballots";
+    if ($result = $conn->query($ballotsQuery)) {
+        $i = 0;
+        while ($row = $result->fetch_assoc()) {
+            $ballots[$i]["pairing"] = intval($row["pairing"]);
+            $ballots[$i]["plaintiffPD"] = intval($row["plaintiffPD"]);
+            $i++;
+        }
+        /* free result set */
+        $result->close();
+    }
+
+    return $ballots;
+}

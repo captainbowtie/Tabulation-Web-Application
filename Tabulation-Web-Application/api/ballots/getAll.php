@@ -18,20 +18,6 @@
  */
 
 require_once __DIR__ . '/../../config.php';
-require_once SITE_ROOT . '/objects/pairing.php';
+require_once SITE_ROOT . '/objects/ballot.php';
 
-if (
-        isset($_GET["round"])
-) {
-    $round = htmlspecialchars(strip_tags($_GET["round"]));
-    echo json_encode(getRoundPairings($round));   
-}
-else {
-
-    // set response code - 400 bad request
-    http_response_code(400);
-
-    // tell the user
-    echo json_encode(array("message" => "Unable to read pairings. Request error."));
-}
-
+echo json_encode(getAllBallots());

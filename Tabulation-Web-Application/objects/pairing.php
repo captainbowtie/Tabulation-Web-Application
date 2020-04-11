@@ -1,5 +1,6 @@
 <?php
-/* 
+
+/*
  * Copyright (C) 2019 allen
  *
  * This program is free software: you can redistribute it and/or modify
@@ -38,7 +39,7 @@ class Pairing {
 function createPairing($round, $plaintiff, $defense) {
     $db = new Database();
     $conn = $db->getConnection();
-    $stmt =$conn->prepare("INSERT INTO pairings (round, plaintiff, defense) VALUES (?, ?, ?)");
+    $stmt = $conn->prepare("INSERT INTO pairings (round, plaintiff, defense) VALUES (?, ?, ?)");
     echo($stmt->error_list);
     $stmt->bind_param('iii', $round, $plaintiff, $defense);
     $stmt->execute();
@@ -56,6 +57,30 @@ function getAllPairings() {
 
     //get basic team data (number and name)
     $pairingssQuery = "SELECT * FROM pairings";
+    if ($result = $conn->query($pairingssQuery)) {
+        $i = 0;
+        while ($row = $result->fetch_assoc()) {
+            $pairings[$i]["id"] = intval($row["id"]);
+            $pairings[$i]["round"] = intval($row["round"]);
+            $pairings[$i]["plaintiff"] = intval($row["plaintiff"]);
+            $pairings[$i]["defense"] = intval($row["defense"]);
+            $i++;
+        }
+        /* free result set */
+        $result->close();
+    }
+    return $pairings;
+}
+
+function getRoundPairings($round) {
+    global $pairings;
+
+    //connect to database
+    $db = new Database();
+    $conn = $db->getConnection();
+
+    //get basic team data (number and name)
+    $pairingssQuery = "SELECT * FROM pairings WHERE round = " . $round;
     if ($result = $conn->query($pairingssQuery)) {
         $i = 0;
         while ($row = $result->fetch_assoc()) {
