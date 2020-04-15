@@ -21,12 +21,8 @@ require_once __DIR__."/../config.php";
 require_once SITE_ROOT."/database.php";
 
 // Create db connection
-$db = new mysqli(dbhost, dbuser, dbpass, dbname);
-
-// Check connection
-if ($db->connect_error) {
-    die("Connection failed: " . $db->connect_error);
-}
+$db = new Database();
+$conn = $db->getConnection();
 
 //Query to create table
 $query = "CREATE TABLE IF NOT EXISTS impermissibles (
@@ -35,11 +31,11 @@ team0 INT(4) UNSIGNED NOT NULL,
 team1 INT(4) UNSIGNED NOT NULL
 )";
 
-if ($db->query($query) === TRUE) {
-    echo "Table impermissibles created successfully";
+if ($conn->query($query) === TRUE) {
+    
 } else {
-    echo "Error creating table: " . $db->error;
+    echo "Error creating table: " . $conn->error;
 }
 
-$db->close();
+$conn->close();
 ?>

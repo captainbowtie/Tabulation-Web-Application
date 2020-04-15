@@ -17,16 +17,26 @@
  */
  
 require_once __DIR__."/config.php";
- 
+require_once SITE_ROOT."/database.php";
+require_once SITE_ROOT."/tableCreation/ballots.php";
+require_once SITE_ROOT."/tableCreation/impermissibles.php";
+require_once SITE_ROOT."/tableCreation/pairings.php";
+require_once SITE_ROOT."/tableCreation/teams.php";
+
+
  echo <<<_END
 <!DOCTYPE HTML>
 <html>
     <head>
         <meta charset="UTF-8">
+         <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
         <title></title>
         <script type="text/javascript" src="index.js" defer></script>
     </head>
     <body>
+    <a href="teams.php">Teams</a>
     </body>
 </html>
 _END;
+
+ 
