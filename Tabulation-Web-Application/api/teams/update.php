@@ -1,6 +1,6 @@
 <?php
 
-/*
+/* 
  * Copyright (C) 2020 allen
  *
  * This program is free software: you can redistribute it and/or modify
@@ -23,12 +23,14 @@ require_once SITE_ROOT . '/objects/team.php';
 $data = json_decode(file_get_contents("php://input"));
 
 if (
-        isset($data->number) &&
+        isset($data->existingNumber) &&
+        isset($data->newNumber) &&
         isset($data->name)
 ) {
-    $number = htmlspecialchars(strip_tags($data->number));
+    $existingNumber = htmlspecialchars(strip_tags($data->existingNumber));
+    $newNumber = htmlspecialchars(strip_tags($data->newNumber));
     $name = htmlspecialchars(strip_tags($data->name));
-    if(createTeam($number, $name)){
+    if(updateTeam($existingNumber, $newNumber, $name)){
         // set response code - 201 created
         http_response_code(201);
 
@@ -40,7 +42,7 @@ if (
         http_response_code(503);
 
         // tell the user
-        echo json_encode(array("message" => "Unable to create team."));
+        echo json_encode(array("message" => "Unable to update team."));
     }
     
     
@@ -51,5 +53,5 @@ else {
     http_response_code(400);
 
     // tell the user
-    echo json_encode(array("message" => "Unable to create team. Data is incomplete."));
+    echo json_encode(array("message" => "Unable to update team. Data is incomplete."));
 }

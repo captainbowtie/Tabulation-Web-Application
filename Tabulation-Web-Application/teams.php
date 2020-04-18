@@ -26,33 +26,33 @@ require_once SITE_ROOT . "/objects/team.php";
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
-        
+
         <!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
-<!-- Optional theme -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+        <!-- Optional theme -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 
-<!-- Latest compiled and minified JavaScript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-        
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
         <title></title>
     </head>
     <body>
         <div id="teamTable"></div>
         <table>
             <tr>
-                <td>Number</td>
-                <td>Name</td>
-                <td></td>
+                <th>Number</th>
+                <th>Name</th>
+                <th></th>
             </tr>
             <?php
             $teams = getAllTeams();
             foreach ($teams as $team) {
                 echo "<tr>\n";
-                echo "<td>".$team["number"]."</td>\n";
-                echo "<td>".$team["name"]."</td>\n";
-                echo "<td>"."<a href=''>edit</a>"."</td>\n";
+                echo "<td>" . $team["number"] . "</td>\n";
+                echo "<td id='".$team["number"]."name'>" . $team["name"] . "</td>\n";
+                echo "<td>" . "<a href='' class='edit' id='edit".$team["number"]."'>edit</a>" . "</td>\n";
                 echo "</tr>\n";
             }
             ?>
@@ -66,10 +66,61 @@ require_once SITE_ROOT . "/objects/team.php";
                     <input type="text" id="name" name="name">
                 </td>
                 <td>    
-                    <input type="submit" id="submit" value="Submit">
+                    <input type="submit" id="addTeam" value="Add Team">
                 </td>
             </tr>
         </table>
+        
+        <!-- Warning Modal -->
+        <div id="warningModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Warning</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <label for="fname">First name:</label>
+  <input type="text" id="fname" name="fname"><br><br>
+  <label for="lname">Last name:</label>
+  <input type="text" id="lname" name="lname"><br><br>
+                        </form>
+                        <p id="warningModalText">Some text in the modal.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Team Update Modal -->
+        <div id="teamUpdateModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Update Team</h4>
+                    </div>
+                    <div class="modal-body"><form>
+                            <label for="updateNumber">Number:</label>
+                            <input type="number" id="updateNumber" name="updateNumber" size="5" max="1999">
+                            <label for="updateName">Name:</label>
+                            <input type="text" id="updateName" name="updateName">
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="updateTeam" class="btn btn-default" data-dismiss="modal">Update</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
         <script src="teams.js"></script>
     </body>
 </html>

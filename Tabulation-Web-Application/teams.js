@@ -15,7 +15,103 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-$("#submit").on("click", function (e) {
+var existingNumber;
+
+$("#addTeam").on("click", function (e) {
     e.preventDefault();
-    console.log("test");
+    newTeamHandler();
 });
+
+$(".edit").on("click", function (e) {
+    e.preventDefault();
+    existingNumber = $(this).attr("id").substring(4);
+    let name = $("#" + existingNumber + "name").html();
+    teamUpdateModal(name);
+});
+
+$("#updateTeam").on("click", function (e) {
+    e.preventDefault();
+    updateTeamHandler();
+});
+
+function newTeamHandler() {
+    let number = $("#number").val();
+    let name = $("#name").val();
+    if (!validateNumber(number)) {
+        warningModal("Invalid team number: " + number);
+    } else if (!validateName(name)) {
+        warningModal("Please enter a team name");
+    } else {
+        createTeam(number, name);
+    }
+}
+
+function updateTeamHandler() {
+    let newNumber = $("#updateNumber").val();
+    let name = $("#updateName").val();
+    if (!validateNumber(newNumber)) {
+        warningModal("Invalid team number: " + newNumber);
+    } else if (!validateName(name)) {
+        warningModal("Please enter a team name");
+    } else {
+        updateTeam(newNumber, name);
+    }
+}
+
+function createTeam(number, name) {
+    let teamData = '{"number":' + number + ',"name":"' + name + '"}';
+    console.log(teamData);
+    $.ajax({
+        url: "../api/teams/create.php",
+        method: "POST",
+        data: teamData,
+        dataType: "json"
+    }).then(response => {
+        if (response.message === 0) {
+            window.location.reload();
+        } else {
+            warningModal(response.message);
+        }
+    });
+}
+
+function updateTeam(newNumber, name) {
+    let teamData = '{"existingNumber":' + existingNumber +
+            ',"newNumber":' + newNumber +
+            ',"name":"' + name + '"}';
+    $.ajax({
+        url: "../api/teams/update.php",
+        method: "POST",
+        data: teamData,
+        dataType: "json"
+    }).then(response => {
+        if (response.message === 0) {
+            window.location.reload();
+        } else {
+            warningModal(response.message);
+        }
+    });
+}
+
+function warningModal(warning) {
+    $("#warningModalText").text(warning);
+    $("#warningModal").modal();
+}
+
+function teamUpdateModal(name) {
+    $("#updateNumber").val(existingNumber);
+    $("#updateName").val(name);
+    $("#teamUpdateModal").modal();
+}
+
+function validateNumber(number) {
+    return /^-{0,1}\d+$/.test(number);
+}
+
+function validateName(name) {
+    if (name.length > 0) {
+        return true;
+    } else {
+        return false;
+    }
+}

@@ -32,14 +32,29 @@ class Team {
 }
 
 function createTeam($number, $name) {
+    $teamCreated = false;
     $db = new Database();
     $conn = $db->getConnection();
-    $stmt = $conn->prepare("INSERT INTO teams VALUES (?, ?)");
-    $stmt->bind_param('is', $number, $name);
-    $stmt->execute();
-    $stmt->close();
+    $query = "INSERT INTO teams (number, name) VALUES ($number,'$name')";
+    $conn->query($query);
+    if($conn->affected_rows == 1){
+        $teamCreated = true;
+    }
     $conn->close();
-    return true;
+    return $teamCreated;
+}
+
+function updateTeam($existingNumber, $newNumber, $name) {
+    $teamUpdated = false;
+    $db = new Database();
+    $conn = $db->getConnection();
+    $query = "UPDATE teams SET number = $newNumber, name = '$name' WHERE number = $existingNumber";
+    $conn->query($query);
+    if($conn->affected_rows == 1){
+        $teamUpdated = true;
+    }
+    $conn->close();
+    return $teamUpdated;
 }
 
 function getAllTeams() {
@@ -50,7 +65,7 @@ function getAllTeams() {
     $conn = $db->getConnection();
 
     //get basic team data (number and name)
-    $teamsQuery = "SELECT * FROM teams";
+    $teamsQuery = "SELECT * FROM teams ORDER BY number";
     if ($result = $conn->query($teamsQuery)) {
         $i = 0;
         while ($row = $result->fetch_assoc()) {
@@ -61,6 +76,6 @@ function getAllTeams() {
         /* free result set */
         $result->close();
     }
-
+    $conn->close();
     return $teams;
 }
