@@ -79,3 +79,19 @@ function getAllTeams() {
     $conn->close();
     return $teams;
 }
+
+function getTeamName($number){
+    //connect to database
+    $db = new Database();
+    $conn = $db->getConnection();
+    
+    //query database for name
+    $nameQuery = "SELECT name FROM teams WHERE number = $number";
+    if ($result = $conn->query($nameQuery)) {
+        $row = $result->fetch_assoc();
+        return $row["name"];
+    }else{
+        return false;
+    }
+    
+}

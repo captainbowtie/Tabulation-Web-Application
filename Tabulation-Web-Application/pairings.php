@@ -1,22 +1,5 @@
-<!DOCTYPE html>
-<!--
-Copyright (C) 2020 allen
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License for more details.
-
-You should have received a copy of the GNU Affero General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
--->
-
 <?php
+//import requirements
 require_once __DIR__ . "/config.php";
 require_once SITE_ROOT . "/database.php";
 require_once SITE_ROOT . "/objects/team.php";
@@ -42,12 +25,12 @@ for ($c = 1; $c <= 4; $c++) { //non-zero indexed to match round number
     }
 }
 
+//fill page html variables
 $tabHTML = [];
 $tabHTML[1] = "";
 $tabHTML[2] = "";
 $tabHTML[3] = "";
 $tabHTML[4] = "";
-
 for ($b = 1; $b <= 4; $b++) {
     for ($a = 0; $a < sizeOf($pSelects[$b]); $a++) {
         $tabHTML[$b] .= "<tr>\n";
@@ -57,6 +40,25 @@ for ($b = 1; $b <= 4; $b++) {
     }
 }
 ?>
+
+<!DOCTYPE html>
+<!--
+Copyright (C) 2020 allen
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
 
 <html>
     <head>

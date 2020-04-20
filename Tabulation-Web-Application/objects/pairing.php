@@ -80,7 +80,7 @@ function getRoundPairings($round) {
     $conn = $db->getConnection();
 
     //get basic team data (number and name)
-    $pairingssQuery = "SELECT * FROM pairings WHERE round = " . $round;
+    $pairingssQuery = "SELECT * FROM pairings WHERE round = $round";
     if ($result = $conn->query($pairingssQuery)) {
         $i = 0;
         while ($row = $result->fetch_assoc()) {
@@ -91,7 +91,31 @@ function getRoundPairings($round) {
         }
         /* free result set */
         $result->close();
+        $conn->close();
+        return $pairings;
+    } else {
+        return false;
     }
+}
 
-    return $pairings;
+function getTeamPairings($number) {
+    //connect to database
+    $db = new Database();
+    $conn = $db->getConnection();
+
+    $pairingssQuery = "SELECT * FROM pairings WHERE plaintiff = $number || defense = $number";
+    if ($result = $conn->query($pairingssQuery)) {
+        $pairings = [];
+        while ($row = $result->fetch_assoc()) {
+            $pairings[$row["round"]]["id"] = $row["id"];
+            $pairings[$row["round"]]["plaintiff"] = $row["plaintiff"];
+            $pairings[$row["round"]]["defense"] = $row["defense"];
+        }
+        /* free result set */
+        $result->close();
+        $conn->close();
+        return $pairings;
+    } else {
+        return false;
+    }
 }

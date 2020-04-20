@@ -1,5 +1,6 @@
 <?php
-/* 
+
+/*
  * Copyright (C) 2019 allen
  *
  * This program is free software: you can redistribute it and/or modify
@@ -19,19 +20,19 @@
 require_once __DIR__ . "/../config.php";
 require_once SITE_ROOT . "/database.php";
 
-class Ballot{
- 
+class Ballot {
+
     // object properties
     public $id;
     public $pairing;
     public $plaintiffPD;
-    
+
 }
 
 function createBallot($pairing, $plaintiffPD) {
     $db = new Database();
     $conn = $db->getConnection();
-    $stmt =$conn->prepare("INSERT INTO ballots (pairing, plaintiffPD) VALUES (?, ?)");
+    $stmt = $conn->prepare("INSERT INTO ballots (pairing, plaintiffPD) VALUES (?, ?)");
     echo($stmt->error_list);
     $stmt->bind_param('ii', $pairing, $plaintiffPD);
     $stmt->execute();
@@ -58,7 +59,36 @@ function getAllBallots() {
         }
         /* free result set */
         $result->close();
+        $conn->close();
+        return $ballots;
+    } else{
+        return false;
     }
 
-    return $ballots;
+    
+}
+
+function getPairingBallots($pairing) {
+    global $ballots;
+
+    //connect to database
+    $db = new Database();
+    $conn = $db->getConnection();
+
+    //get basic ballot data
+    $ballotsQuery = "SELECT * FROM ballots WHERE pairing = $pairing";
+    if ($result = $conn->query($ballotsQuery)) {
+        $i = 0;
+        while ($row = $result->fetch_assoc()) {
+            $ballots[$i]["pairing"] = intval($row["pairing"]);
+            $ballots[$i]["plaintiffPD"] = intval($row["plaintiffPD"]);
+            $i++;
+        }
+        /* free result set */
+        $result->close();
+        $conn->close();
+        return $ballots;
+    } else {
+        return false;
+    }
 }

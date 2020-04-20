@@ -1,3 +1,21 @@
+<?php
+//import requirements
+require_once __DIR__ . "/config.php";
+require_once SITE_ROOT . "/database.php";
+require_once SITE_ROOT . "/objects/team.php";
+
+//prepare strings for team table
+$tableHTML = "";
+$teams = getAllTeams();
+foreach ($teams as $team) {
+    $tableHTML .= "<tr>\n";
+    $tableHTML .= "<td><a href='/team.php?number=".$team["number"]."'>" . $team["number"] . "</a></td>\n";
+    $tableHTML .= "<td id='" . $team["number"] . "name'>" . $team["name"] . "</td>\n";
+    $tableHTML .= "<td>" . "<a href='' class='edit' id='edit" . $team["number"] . "'>edit</a>" . "</td>\n";
+    $tableHTML .= "</tr>\n";
+}
+?>
+
 <!DOCTYPE html>
 <!--
 Copyright (C) 2020 allen
@@ -15,11 +33,6 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<?php
-require_once __DIR__ . "/config.php";
-require_once SITE_ROOT . "/database.php";
-require_once SITE_ROOT . "/objects/team.php";
-?>
 
 <html>
     <head>
@@ -47,14 +60,7 @@ require_once SITE_ROOT . "/objects/team.php";
                 <th></th>
             </tr>
             <?php
-            $teams = getAllTeams();
-            foreach ($teams as $team) {
-                echo "<tr>\n";
-                echo "<td>" . $team["number"] . "</td>\n";
-                echo "<td id='".$team["number"]."name'>" . $team["name"] . "</td>\n";
-                echo "<td>" . "<a href='' class='edit' id='edit".$team["number"]."'>edit</a>" . "</td>\n";
-                echo "</tr>\n";
-            }
+            echo $tableHTML;
             ?>
             <tr>
                 <td>
@@ -70,7 +76,7 @@ require_once SITE_ROOT . "/objects/team.php";
                 </td>
             </tr>
         </table>
-        
+
         <!-- Warning Modal -->
         <div id="warningModal" class="modal fade" role="dialog">
             <div class="modal-dialog">
@@ -84,9 +90,9 @@ require_once SITE_ROOT . "/objects/team.php";
                     <div class="modal-body">
                         <form>
                             <label for="fname">First name:</label>
-  <input type="text" id="fname" name="fname"><br><br>
-  <label for="lname">Last name:</label>
-  <input type="text" id="lname" name="lname"><br><br>
+                            <input type="text" id="fname" name="fname"><br><br>
+                            <label for="lname">Last name:</label>
+                            <input type="text" id="lname" name="lname"><br><br>
                         </form>
                         <p id="warningModalText">Some text in the modal.</p>
                     </div>
@@ -96,7 +102,7 @@ require_once SITE_ROOT . "/objects/team.php";
                 </div>
             </div>
         </div>
-        
+
         <!-- Team Update Modal -->
         <div id="teamUpdateModal" class="modal fade" role="dialog">
             <div class="modal-dialog">
@@ -120,7 +126,7 @@ require_once SITE_ROOT . "/objects/team.php";
                 </div>
             </div>
         </div>
-        
+
         <script src="teams.js"></script>
     </body>
 </html>
