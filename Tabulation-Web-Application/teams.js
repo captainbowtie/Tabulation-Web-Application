@@ -60,7 +60,6 @@ function updateTeamHandler() {
 
 function createTeam(number, name) {
     let teamData = '{"number":' + number + ',"name":"' + name + '"}';
-    console.log(teamData);
     $.ajax({
         url: "../api/teams/create.php",
         method: "POST",

@@ -1,3 +1,7 @@
+<?php
+$number = htmlspecialchars(strip_tags($_GET["number"]));
+?>
+
 <!DOCTYPE html>
 <!--
 Copyright (C) 2020 allen
@@ -35,7 +39,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <body>
         <table>
             <tr>
-                <th id="number">N/A</th>
+                <th id="number"><?php echo $number; ?></th>
                 <th colspan="4" id="name">N/A</th>
             </tr>
             <tr>
@@ -88,15 +92,71 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 <p>None</p>
             </div>
             <div>
-                <input type="number" size="5" max="9999">
-                <input type="button" value="Add">
+                <input id="newImpermissible" type="number" size="5" max="9999">
+                <input id="addButton" type="button" value="Add">
             </div>
         </div>
+        
+        <!-- Edit Modal -->
+        <div id="editModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Edit Impermissible</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p id="editModalText">Error</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Delete Conflict Modal -->
+        <div id="deleteConflictModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Update Team</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p id="deleteModalText">Are you sure you want to delete team N/A from this team's conflict list?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="deleteConflictButton" class="btn btn-default" data-dismiss="modal">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Warning Modal -->
+        <div id="warningModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Warning</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p id="warningModalText">Some text in the modal.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
         <script src="team.js"></script>
-        <script>
-            $(document).ready(function () {
-                fillData(<?php echo $_GET["number"]; ?>);
-            });
-        </script>
     </body>
 </html>

@@ -22,22 +22,21 @@
  *
  * @author allen
  */
-
 require_once __DIR__ . "/../config.php";
 require_once SITE_ROOT . "/database.php";
 
-class Impermissible{
- 
+class Impermissible {
+
     // object properties
     public $id;
     public $team0;
     public $team1;
-    
+
     public function __construct($team0, $team1) {
         $this->team0 = $team0;
         $this->team1 = $team1;
     }
- 
+
 }
 
 function createImpermissible($team0, $team1) {
@@ -51,10 +50,23 @@ function createImpermissible($team0, $team1) {
     return true;
 }
 
-function getAllImpermissibles() {
+function deleteImpermissible($team0, $team1) {
+    $impermissibleDeleted = false;
+    $query = "DELETE FROM `impermissibles` WHERE (team0 = $team0 && team1 = $team1) || (team0 = $team1 && team1 = $team0)";
     $db = new Database();
     $conn = $db->getConnection();
+    $conn->query($query);
+    if($conn->affected_rows == 1){
+        $impermissibleDeleted = true;
+    }
+    $conn->close();
+    return $impermissibleDeleted;
+}
+
+function getAllImpermissibles() {
     $query = "SELECT * FROM impermissibles";
+    $db = new Database();
+    $conn = $db->getConnection();
     if ($result = $conn->query($query)) {
         $i = 0;
         global $impermissibles;

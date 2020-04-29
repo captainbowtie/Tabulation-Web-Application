@@ -28,7 +28,7 @@ if (
 ) {
     $team0 = htmlspecialchars(strip_tags($data->team0));
     $team1 = htmlspecialchars(strip_tags($data->team1));
-    if(createImpermissible($team0, $team1)){
+    if(deleteImpermissible($team0, $team1)){
         // set response code - 201 created
         http_response_code(201);
 
@@ -40,7 +40,7 @@ if (
         http_response_code(503);
 
         // tell the user
-        echo json_encode(array("message" => "Unable to create impermissible."));
+        echo json_encode(array("message" => "Unable to delete impermissible."));
     }
     
     
@@ -51,5 +51,5 @@ else {
     http_response_code(400);
 
     // tell the user
-    echo json_encode(array("message" => "Unable to create impermissible. Data is incomplete."));
+    echo json_encode(array("message" => "Unable to delete impermissible. Data is incomplete."));
 }

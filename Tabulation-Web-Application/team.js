@@ -19,6 +19,12 @@ var teams;
 var pairings;
 var ballots;
 var impermissibles;
+var deleteTeamNumber;
+var editTeamNumber;
+
+$(document).ready(function () {
+    fillData(parseInt($("#number").html()));
+});
 
 function fillData(number) {
     updateData().then(data => {
@@ -27,7 +33,6 @@ function fillData(number) {
 
         function fillTabCard() {
             //update number and name
-            $("#number").html(number);
             for (var a = 0; a < teams.length; a++) {
                 if (teams[a].number === number) {
                     $("#name").html(teams[a].name);
@@ -81,23 +86,23 @@ function fillData(number) {
                 }
             }
         }
-        function fillImpermissibles(){
+        function fillImpermissibles() {
             var teamImpermissibles = [];
-            for(var a = 0;a<impermissibles.length;a++){
-                if(impermissibles[a].team0 === number){
+            for (var a = 0; a < impermissibles.length; a++) {
+                if (impermissibles[a].team0 === number) {
                     teamImpermissibles.push(impermissibles[a].team1);
-                }else if(impermissibles[a].team1 === number){
+                } else if (impermissibles[a].team1 === number) {
                     teamImpermissibles.push(impermissibles[a].team0);
                 }
             }
-            if(teamImpermissibles.length>0){
+            if (teamImpermissibles.length > 0) {
                 var impermissibleHTML = "<table>\n";
-                for(var a = 0;a<teamImpermissibles.length;a++){
+                for (var a = 0; a < teamImpermissibles.length; a++) {
                     impermissibleHTML += "<tr>\n<td>";
-                    for(var b = 0;b<teams.length;b++){
-                        if(teams[b].number === teamImpermissibles[a]){
-                            impermissibleHTML += teams[b].number+ "</td>\n<td>" + teams[b].name + "</td>\n";
-                            impermissibleHTML += "<td><a href=''>Edit</a></td>\n<td><a href=''>Delete</a></td>\n";
+                    for (var b = 0; b < teams.length; b++) {
+                        if (teams[b].number === teamImpermissibles[a]) {
+                            impermissibleHTML += teams[b].number + "</td>\n<td>" + teams[b].name + "</td>\n";
+                            impermissibleHTML += "<td><a href='' class='delete' id='delete" + teams[b].number + "'>Delete</a></td>\n";
                             b = teams.length;
                         }
                     }
@@ -107,10 +112,38 @@ function fillData(number) {
                 $("#impermissibles").html(impermissibleHTML);
             }
         }
-
     });
-
 }
+
+$("body").on("click", ".delete", function (e) {
+    e.preventDefault();
+    deleteTeamNumber = e.target.id.substring(6);
+    deleteConflictModal();
+});
+
+$("body").on("click", "#deleteConflictButton", function (e) {
+    e.preventDefault();
+    let data = `{"team0":${deleteTeamNumber},"team1":${$("#number").html()}}`;
+    $.ajax({
+        url: "../api/impermissibles/delete.php",
+        method: "POST",
+        data: data,
+        dataType: "json"
+    }).then(response => {
+        if (response.message === 0) {
+            window.location.reload();
+        } else {
+            warningModal(response.message);
+        }
+    });
+});
+
+$("#addButton").on("click", function (e) {
+    e.preventDefault();
+    if (validateNumber($("#newImpermissible").val())) {
+        createImpermissible($("#newImpermissible").val());
+    }
+});
 
 function getTeams() {
     return new Promise(function (resolve, reject) {
@@ -167,4 +200,35 @@ function updateData() {
             resolve();
         });
     });
+}
+
+function createImpermissible(number) {
+    let data = `{"team0":${number},"team1":${$("#number").html()}}`;
+    $.ajax({
+        url: "../api/impermissibles/create.php",
+        method: "POST",
+        data: data,
+        dataType: "json"
+    }).then(response => {
+        if (response.message === 0) {
+            $("#newImpermissible").val("");
+            window.location.reload();
+        } else {
+            warningModal(response.message);
+        }
+    });
+}
+
+function deleteConflictModal() {
+    $("#deleteModalText").html(`Are you sure you want to delete team ${deleteTeamNumber} from this team's conflict list?`);
+    $("#deleteConflictModal").modal();
+}
+
+function warningModal(warning) {
+    $("#warningModalText").text(warning);
+    $("#warningModal").modal();
+}
+
+function validateNumber(number) {
+    return /^-{0,1}\d+$/.test(number);
 }
