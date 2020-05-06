@@ -37,12 +37,34 @@ class Pairing {
 }
 
 function createPairing($round, $plaintiff, $defense) {
+    //create database connection
     $db = new Database();
     $conn = $db->getConnection();
+    
+    
     $stmt = $conn->prepare("INSERT INTO pairings (round, plaintiff, defense) VALUES (?, ?, ?)");
     echo($stmt->error_list);
     $stmt->bind_param('iii', $round, $plaintiff, $defense);
     $stmt->execute();
+    $stmt->close();
+    $conn->close();
+    return true;
+}
+
+function createPairings($round, $pairings) {
+    $db = new Database();
+    $conn = $db->getConnection();
+    
+    //delete any existing pairings for the round in question
+    $deleteQuery = "DELETE FROM `pairings` WHERE round = $round";
+    $conn->query($deleteQuery);
+
+    //insert the new pairings
+    $stmt = $conn->prepare("INSERT INTO pairings (round, plaintiff, defense) VALUES (?, ?, ?)");
+    for ($a = 0; $a < sizeOf($pairings); $a++) {
+        $stmt->bind_param('iii', $round, $pairings[$a]["plaintiff"], $pairings[$a]["defense"]);
+        $stmt->execute();
+    }
     $stmt->close();
     $conn->close();
     return true;
@@ -56,8 +78,8 @@ function getAllPairings() {
     $conn = $db->getConnection();
 
     //get basic team data (number and name)
-    $pairingssQuery = "SELECT * FROM pairings";
-    if ($result = $conn->query($pairingssQuery)) {
+    $pairingsQuery = "SELECT * FROM pairings";
+    if ($result = $conn->query($pairingsQuery)) {
         $i = 0;
         while ($row = $result->fetch_assoc()) {
             $pairings[$i]["id"] = intval($row["id"]);

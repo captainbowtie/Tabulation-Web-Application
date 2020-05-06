@@ -1,6 +1,6 @@
 <?php
 
-/* 
+/*
  * Copyright (C) 2020 allen
  *
  * This program is free software: you can redistribute it and/or modify
@@ -20,35 +20,30 @@
 require_once __DIR__ . '/../../config.php';
 require_once SITE_ROOT . '/objects/pairing.php';
 
-$data = json_decode(file_get_contents("php://input"));
+$round = json_decode(file_get_contents("php://input"))->round;
+$pairingArray = json_decode(file_get_contents("php://input"))->pairings;
 
 if (
-        isset($data->round) &&
-        isset($data->plaintiff) &&
-        isset($data->defense)
+        true //TODO: create some actual tests
 ) {
-    $round = htmlspecialchars(strip_tags($data->round));
-    $plaintiff = htmlspecialchars(strip_tags($data->plaintiff));
-    $defense = htmlspecialchars(strip_tags($data->defense));
-    if(createPairing($round, $plaintiff, $defense)){
-        // set response code - 201 created
+    $pairings;
+    for ($a = 0; $a < sizeOf($pairingArray); $a++) {
+        $pairings[$a]["plaintiff"] = $pairingArray[$a]->plaintiff;
+        $pairings[$a]["defense"] = $pairingArray[$a]->defense;
+    }
+
+    //create pairings
+    if (createPairings($round, $pairings)) {
         http_response_code(201);
-
-        // tell the user
-        echo json_encode(array("message" => "Pairing was created."));
-    }else {
-
+        echo json_encode(array("message" => 0));
+    } else {
         // set response code - 503 service unavailable
         http_response_code(503);
 
         // tell the user
-        echo json_encode(array("message" => "Unable to create pairing."));
+        echo json_encode(array("message" => "Unable to create pairings."));
     }
-    
-    
-}
-else {
-
+} else {
     // set response code - 400 bad request
     http_response_code(400);
 

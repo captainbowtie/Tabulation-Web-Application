@@ -20,12 +20,12 @@ var teams;
 var pairings;
 var ballots;
 var impermissibles;
+let round1PairingsExist = false;
+let round2PairingsExist = false;
+let round3PairingsExist = false;
+let round4PairingsExist = false;
 
 $(document).ready(function () {
-    var round1PairingsExist = false;
-    var round2PairingsExist = false;
-    var round3PairingsExist = false;
-    var round4PairingsExist = false;
     //Pull all data from server
     updateData().then(data => {
         //to the extent pairings exist, fill them in
@@ -71,11 +71,127 @@ $(document).ready(function () {
             $(`#round4d${a}`).val(round4Pairings[a].defense);
             round4PairingsExist = true;
         }
+
+        //switch tab to current round
+        if (round4PairingsExist) {
+            $('.nav-tabs a[href="#round4"]').tab('show');
+        } else if (round3PairingsExist) {
+            $('.nav-tabs a[href="#round3"]').tab('show');
+        } else if (round2PairingsExist) {
+            $('.nav-tabs a[href="#round2"]').tab('show');
+        } else if (round1PairingsExist) {
+            $('.nav-tabs a[href="#round1"]').tab('show');
+        }
     });
-    //pull all data from server
-    //fill any existing pairings in DOM
-    //switch tab to the current round (how do we deinfe current? look and see if a round existss without ballots)
 });
+
+$("#pair1").on("click", function (e) {
+    e.preventDefault();
+    const pairings = pair1();
+    for (let a = 0; a < pairings.length; a++) {
+        $(`#round1p${a}`).val(pairings[a].plaintiff);
+        $(`#round1d${a}`).val(pairings[a].defense);
+    }
+});
+
+$("#pair2").on("click", function (e) {
+    e.preventDefault();
+    const pairings = pair2();
+    for (let a = 0; a < pairings.length; a++) {
+        $(`#round2p${a}`).val(pairings[a].plaintiff);
+        $(`#round2d${a}`).val(pairings[a].defense);
+    }
+});
+
+$("#pair3").on("click", function (e) {
+    e.preventDefault();
+    const pairings = pair3();
+    for (let a = 0; a < pairings.length; a++) {
+        $(`#round3p${a}`).val(pairings[a].plaintiff);
+        $(`#round3d${a}`).val(pairings[a].defense);
+    }
+});
+
+$("#pair4").on("click", function (e) {
+    e.preventDefault();
+    const pairings = pair4();
+    for (let a = 0; a < pairings.length; a++) {
+        $(`#round4p${a}`).val(pairings[a].plaintiff);
+        $(`#round4d${a}`).val(pairings[a].defense);
+    }
+});
+
+$("#submit1").on("click", function (e) {
+    e.preventDefault();
+    if (round1PairingsExist) {
+        warningModal("Round 1 pairings already exist. Saving these pairings will overwrite the existing pairings.");
+    } else {
+        submitPairings(1);
+    }
+});
+
+$("#submit2").on("click", function (e) {
+    e.preventDefault();
+    if (round2PairingsExist) {
+        warningModal("Round 2 pairings already exist. Saving these pairings will overwrite the existing pairings.");
+    } else {
+        submitPairings(2);
+    }
+});
+
+$("#submit3").on("click", function (e) {
+    e.preventDefault();
+    if (round3PairingsExist) {
+        warningModal("Round 3 pairings already exist. Saving these pairings will overwrite the existing pairings.");
+    } else {
+        submitPairings(3);
+    }
+});
+
+$("#submit4").on("click", function (e) {
+    e.preventDefault();
+    if (round4PairingsExist) {
+        warningModal("Round 4 pairings already exist. Saving these pairings will overwrite the existing pairings.");
+    } else {
+        submitPairings(4);
+    }
+});
+
+$("#modalSave").on("click", function (e) {
+    e.preventDefault();
+    const roundToSubmit = $(".active").attr("id").substring(5);
+    submitPairings(roundToSubmit);
+});
+
+function submitPairings(round) {
+    //create pairings json object
+    let data = `{"round":${round},"pairings":[`;
+    for (let a = 0; a < teams.length / 2; a++) {
+        let plaintiff = $(`#round${round}p${a}`).val();
+        let defense = $(`#round${round}d${a}`).val();
+        let pairing = `{"plaintiff":${plaintiff},"defense":${defense}}`;
+        data += pairing;
+        if(a!==(teams.length/2-1)){
+            data += ",";
+        }
+    }
+    data += "]}";
+    
+ 
+    //send pairings to the server
+    $.ajax({
+        url: "../api/pairings/create.php",
+        method: "POST",
+        data: data,
+        dataType: "json"
+    }).then(response => {
+        if (response.message === 0) {
+            window.location.reload();
+        } else {
+            warningModal(response.message);
+        }
+    });
+}
 
 function pair1() {
     var noConflicts = false;
@@ -92,10 +208,13 @@ function pair1() {
         noConflicts = !pairingsHaveConflicts(plaintiffTeams, defenseTeams);
     }
 
-    //display pairings for approval
+    //return pairings
+    let pairings = [];
     for (var a = 0; a < plaintiffTeams.length; a++) {
-        console.log(plaintiffTeams[a].number + " " + defenseTeams[a].number);
+        let pairing = `{"plaintiff":${plaintiffTeams[a].number},"defense":${defenseTeams[a].number}}`;
+        pairings.push(JSON.parse(pairing));
     }
+    return pairings;
 }
 
 function pair2() {
@@ -244,9 +363,13 @@ function pair2() {
         }
 
     }
+    //return pairings
+    let pairings = [];
     for (var a = 0; a < plaintiffTeams.length; a++) {
-        console.log(plaintiffTeams[a].number + " v. " + defenseTeams[a].number);
+        let pairing = `{"plaintiff":${plaintiffTeams[a].number},"defense":${defenseTeams[a].number}}`;
+        pairings.push(JSON.parse(pairing));
     }
+    return pairings;
 }
 
 function pair3() {
@@ -371,25 +494,31 @@ function pair3() {
             }
         }
     }
-    //display pairings, swapping the side assignment of half of them
-    var snakeFlag = Math.random();
+
+
+    //return pairings, flipping the side assignment of half of them at random
+    const snakeFlag = Math.random();
+    let pairings = [];
     if (snakeFlag < .5) {
         for (var a = 0; a < teams.length; a += 2) {
             if (a % 4 === 0) {
-                console.log(teams[a].number + " v. " + teams[a + 1].number);
+                let pairing = `{"plaintiff":${teams[a].number},"defense":${teams[a + 1].number}`;
             } else {
-                console.log(teams[a + 1].number + " v. " + teams[a].number);
+                let pairing = `{"plaintiff":${teams[a + 1].number},"defense":${teams[a].number}`;
             }
+            pairings.push(JSON.parse(pairing));
         }
     } else {
         for (var a = 0; a < teams.length; a += 2) {
             if (a % 4 === 0) {
-                console.log(teams[a + 1].number + " v. " + teams[a].number);
+                let pairing = `{"plaintiff":${teams[a + 1].number},"defense":${teams[a].number}`;
             } else {
-                console.log(teams[a].number + " v. " + teams[a + 1].number);
+                let pairing = `{"plaintiff":${teams[a].number},"defense":${teams[a + 1].number}`;
             }
+            pairings.push(JSON.parse(pairing));
         }
     }
+    return pairings;
 }
 
 function pair4() {
@@ -538,9 +667,15 @@ function pair4() {
         }
 
     }
+
+
+    //return pairings
+    let pairings = [];
     for (var a = 0; a < plaintiffTeams.length; a++) {
-        console.log(plaintiffTeams[a].number + " v. " + defenseTeams[a].number);
+        let pairing = `{"plaintiff":${plaintiffTeams[a].number},"defense":${defenseTeams[a].number}}`;
+        pairings.push(JSON.parse(pairing));
     }
+    return pairings;
 }
 
 function updateData() {
@@ -596,19 +731,6 @@ function getPairings() {
         });
     });
 }
-
-/*function getPairings(round) {
- return new Promise(function (resolve, reject) {
- $.ajax({
- method: "GET",
- url: "../api/pairings/getRound.php",
- data: "round=" + round,
- dataType: "json"
- }).then(pairings => {
- resolve(pairings);
- });
- });
- }*/
 
 function getImpermissibles() {
     return new Promise(function (resolve, reject) {
@@ -728,6 +850,11 @@ function rankSwaps(swaps) {
         }
     };
     return swaps.sort(sortFunction);
+}
+
+function warningModal(warning) {
+    $("#warningModalText").text(warning);
+    $("#warningModal").modal();
 }
 
 //cc-by-sa by CoolAJ86 https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array

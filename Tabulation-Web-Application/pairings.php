@@ -60,8 +60,8 @@ for ($b = 1; $b <= 4; $b++) {
     }
     $tabHTML[$b] .= "</table>
                 <br>
-                <input type='button' id='pair$b' value='Generate Pairings'>
-                <input type='submit' id='submit$b' value='Save Pairings'>";
+                <input type='button' id='pair$b' value='Generate Pairings' class='pairButton'>
+                <input type='submit' id='submit$b' value='Save Pairings' class='saveButton'>";
 }
 ?>
 
@@ -133,6 +133,25 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             <li><a data-toggle="tab" href="#round3">Round 3</a></li>
             <li><a data-toggle="tab" href="#round4">Round 4</a></li>
         </ul>
+        <!-- Warning Modal -->
+        <div id="warningModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Warning</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p id="warningModalText">Error. Modal unexpectedly displayed.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" id="modalSave">Save Pairings</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <script src="pairings.js"></script>
     </body>
 </html>
