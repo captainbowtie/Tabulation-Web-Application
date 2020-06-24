@@ -1,0 +1,122 @@
+/*
+Copyright (C) 2020 allen
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+/* 
+    Created on : Jun 23, 2020, 8:38:05 PM
+    Author     : allen
+*/
+
+/*
+Speech scoring grid
+*/
+.speech {
+    display:grid;
+}
+.pSpeechLabel {
+    grid-column: 1 / 1;
+    grid-row: 1 / 1;
+}
+.pSpeech {
+    grid-column: 2 / 2;
+    grid-row: 1 / 1;
+}
+.dSpeechLabel {
+    grid-column: 3 / 3;
+    grid-row: 1 / 1;
+}
+.dSpeech {
+    grid-column: 4 / 4;
+    grid-row: 1 / 1;
+}
+
+/*
+Plaintiff witness scoring grid
+*/
+.plaintiffWitness {
+    display: grid;
+}
+.pDxLabel {
+    grid-column: 1 / 1;
+    grid-row: 1 / 1;
+}
+.pDx {
+    grid-column: 2 / 2;
+    grid-row: 1 / 1;
+}
+.dCxLabel {
+    grid-column: 3 / 3;
+    grid-row: 1 / 1;
+}
+.dCx {
+    grid-column: 4 / 4;
+    grid-row: 1 / 1;
+}
+.pWDxLabel {
+    grid-column: 1 / 1;
+    grid-row: 2 / 2;
+}
+.pWDx {
+    grid-column: 2 / 2;
+    grid-row: 2 / 2;
+}
+.pWCxLabel {
+    grid-column: 1 / 1;
+    grid-row: 3 / 3;
+}
+.pWCx {
+    grid-column: 2 / 2;
+    grid-row: 3 / 3;
+}
+
+/*
+Defense witness scoring grid
+*/
+
+.defenseWitness {
+    display: grid;
+}
+.pCxLabel {
+    grid-column: 1 / 1;
+    grid-row: 1 / 1;
+}
+.pCx {
+    grid-column: 2 / 2;
+    grid-row: 1 / 1;
+}
+.dDxLabel {
+    grid-column: 3 / 3;
+    grid-row: 1 / 1;
+}
+.dDx {
+    grid-column: 4 / 4;
+    grid-row: 1 / 1;
+}
+.dWDxLabel {
+    grid-column: 3 / 3;
+    grid-row: 2 / 2;
+}
+.dWDx {
+    grid-column: 4 / 4;
+    grid-row: 2 / 2;
+}
+.dWCxLabel {
+    grid-column: 3 / 3;
+    grid-row: 3 / 3;
+}
+.dWCx {
+    grid-column: 4 / 4;
+    grid-row: 3 / 3;
+}

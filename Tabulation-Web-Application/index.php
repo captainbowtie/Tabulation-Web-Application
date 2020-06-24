@@ -22,6 +22,7 @@ require_once SITE_ROOT."/tableCreation/ballots.php";
 require_once SITE_ROOT."/tableCreation/impermissibles.php";
 require_once SITE_ROOT."/tableCreation/pairings.php";
 require_once SITE_ROOT."/tableCreation/teams.php";
+require_once SITE_ROOT."/tableCreation/settings.php";
 
 
  echo <<<_END
@@ -46,6 +47,8 @@ require_once SITE_ROOT."/tableCreation/teams.php";
     </head>
     <body>
     <a href="teams.php">Teams</a>
+    <a href="pairings.php">Pairings</a>
+    <a href="setup.php">Setup</a>
     </body>
 </html>
 _END;
