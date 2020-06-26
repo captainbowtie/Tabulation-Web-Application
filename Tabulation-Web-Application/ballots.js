@@ -18,13 +18,63 @@
 var teams;
 var pairings;
 var ballots;
+var selectOptions = [];
 
 $(document).ready(function () {
     //Pull all data from server
     updateData().then(data => {
-        
+        let currentRound = 1;
+        for(var a=0;a<pairings.length;a++){
+            if(pairings[a].round>currentRound){
+                currentRound = pairings[a].round;
+            }
+        }
+        $("#round").val(`Round ${currentRound}`);
+        fillPairingSelect();
     });
 });
+
+function fillPairingSelect(){
+    //determine which round's pairings should be listed
+    let pairingOptionsHTML = [];
+    let selectedRound = Number($("#round").val().substring(6,7));
+    
+    //create option HTML
+    for(var a = 0;a<pairings.length;a++){
+        if(pairings[a].round===selectedRound){
+            pairingOptionsHTML.push(`<option>${pairings[a].plaintiff} v. ${pairings[a].defense}</option>\n`);
+        }
+    }
+    
+    //fill the select with the options
+    $("#pairing").empty();
+    pairingOptionsHTML.forEach(function(option){$("#pairing").append(option);});
+    fillBallotSelect();
+};
+
+function fillBallotSelect(){
+    //determine which pairing should have its ballots listed
+    let ballotOptionsHTML = [];
+    let plaintiff = Number($("#pairing").val().substring(0,4));
+    let defense = Number($("#pairing").val().substring(8,13));
+    let pairingId = 0;
+    for(var a = 0;a<pairings.length;a++){
+        if(pairings[a].plaintiff===plaintiff && pairings[a].defense===defense){
+            pairingId = pairings[a].id;
+        }
+    }
+    
+    //create option HTML
+    for(var a=0;a<ballots.length;a++){
+        if(ballots[a].pairing===pairingId){
+            ballotOptionsHTML.push(`<option>Ballot ${a}</option>\n`);
+        }
+    }
+    
+    //put the options into the select
+    $("#ballot").empty();
+    ballotOptionsHTML.forEach(function(option){$("#ballot").append(option);});
+}
 
 function updateData() {
     return new Promise(function (resolve, reject) {
