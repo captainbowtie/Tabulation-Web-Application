@@ -40,8 +40,8 @@ function createPairing($round, $plaintiff, $defense) {
     //create database connection
     $db = new Database();
     $conn = $db->getConnection();
-    
-    
+
+
     $stmt = $conn->prepare("INSERT INTO pairings (round, plaintiff, defense) VALUES (?, ?, ?)");
     echo($stmt->error_list);
     $stmt->bind_param('iii', $round, $plaintiff, $defense);
@@ -54,7 +54,7 @@ function createPairing($round, $plaintiff, $defense) {
 function createPairings($round, $pairings) {
     $db = new Database();
     $conn = $db->getConnection();
-    
+
     //delete any existing pairings for the round in question
     $deleteQuery = "DELETE FROM `pairings` WHERE round = $round";
     $conn->query($deleteQuery);
@@ -66,12 +66,25 @@ function createPairings($round, $pairings) {
         $stmt->execute();
     }
     $stmt->close();
+
+    //get id of new pairings
+    $idQuery = "SELECT id FROM pairings WHERE round = $round";
+    $ids = [];
+    if ($result = $conn->query($idQuery)) {
+        $i = 0;
+        while ($row = $result->fetch_assoc()) {
+            $ids[$i]=intval($row["id"]);
+        }
+        $result->close();
+    }
+
+    //close connection, return ids of new pairings
     $conn->close();
-    return true;
+    return $ids;
 }
 
 function getAllPairings() {
-    global $pairings;
+    $pairings = [];
 
     //connect to database
     $db = new Database();

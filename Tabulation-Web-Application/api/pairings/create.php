@@ -19,6 +19,7 @@
 
 require_once __DIR__ . '/../../config.php';
 require_once SITE_ROOT . '/objects/pairing.php';
+require_once SITE_ROOT . '/objects/ballot.php';
 
 $round = json_decode(file_get_contents("php://input"))->round;
 $pairingArray = json_decode(file_get_contents("php://input"))->pairings;
@@ -33,15 +34,19 @@ if (
     }
 
     //create pairings
-    if (createPairings($round, $pairings)) {
-        http_response_code(201);
-        echo json_encode(array("message" => 0));
-    } else {
-        // set response code - 503 service unavailable
-        http_response_code(503);
+    $pairingIds = createPairings($round, $pairings);
+    if (is_array($pairingIds)) {
+        //create ballots for round
+        if (createBallots($pairingIds)) {
+            http_response_code(201);
+            echo json_encode(array("message" => 0));
+        } else {
+            // set response code - 503 service unavailable
+            http_response_code(503);
 
-        // tell the user
-        echo json_encode(array("message" => "Unable to create pairings."));
+            // tell the user
+            echo json_encode(array("message" => "Unable to create pairings."));
+        }
     }
 } else {
     // set response code - 400 bad request

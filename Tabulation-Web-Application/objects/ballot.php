@@ -29,20 +29,42 @@ class Ballot {
 
 }
 
-function createBallot($pairing, $plaintiffPD) {
+function createBallot($pairing) {
     $db = new Database();
     $conn = $db->getConnection();
-    $stmt = $conn->prepare("INSERT INTO ballots (pairing, plaintiffPD) VALUES (?, ?)");
-    echo($stmt->error_list);
-    $stmt->bind_param('ii', $pairing, $plaintiffPD);
+    $stmt = $conn->prepare("INSERT INTO ballots (pairing) VALUES (?)");
+    $stmt->bind_param('i', $pairing);
     $stmt->execute();
     $stmt->close();
     $conn->close();
     return true;
 }
 
+function createBallots($pairings) {
+    $db = new Database();
+    $conn = $db->getConnection();
+
+    //determine number of ballots per round and create that many ballots for each pairing
+    $judgeCountQuery = "SELECT judgesPerRound FROM settings";
+    $judgeCountResult = $conn->query($judgeCountQuery);
+    $judgeCountRow = $judgeCountResult->fetch_assoc();
+    $judgeCount = $judgeCountRow["judgesPerRound"];
+
+    //create ballots
+    $stmt = $conn->prepare("INSERT INTO ballots (pairing) VALUES (?)");
+    for ($a = 0; $a < sizeOf($pairings); $a++) {
+        $stmt->bind_param('i', $pairings[$a]);
+        //execute statement as many times as there are judges per round
+        for ($b = 0; b < $judgeCount; $b++) {
+            $stmt->execute();
+        }
+    }
+    $stmt->close();
+    return true;
+}
+
 function getAllBallots() {
-    global $ballots;
+    $ballots = [];
 
     //connect to database
     $db = new Database();
@@ -54,6 +76,80 @@ function getAllBallots() {
         $i = 0;
         while ($row = $result->fetch_assoc()) {
             $ballots[$i]["pairing"] = intval($row["pairing"]);
+            $ballots[$i]["pOpen"] = intval($row["pOpen"]);
+            $ballots[$i]["dOpen"] = intval($row["dOpen"]);
+            $ballots[$i]["pDx1"] = intval($row["pDx1"]);
+            $ballots[$i]["pWDx1"] = intval($row["pWDx1"]);
+            $ballots[$i]["pWCx1"] = intval($row["pWCx1"]);
+            $ballots[$i]["dCx1"] = intval($row["dCx1"]);
+            $ballots[$i]["pDx2"] = intval($row["pDx2"]);
+            $ballots[$i]["pWDx2"] = intval($row["pWDx2"]);
+            $ballots[$i]["pWCx2"] = intval($row["pWCx2"]);
+            $ballots[$i]["dCx2"] = intval($row["dCx2"]);
+            $ballots[$i]["pDx3"] = intval($row["pDx3"]);
+            $ballots[$i]["pWDx3"] = intval($row["pWDx3"]);
+            $ballots[$i]["pWCx3"] = intval($row["pWCx3"]);
+            $ballots[$i]["dCx3"] = intval($row["dCx3"]);
+            $ballots[$i]["dDx1"] = intval($row["dDx1"]);
+            $ballots[$i]["dWDx1"] = intval($row["dWDx1"]);
+            $ballots[$i]["dWCx1"] = intval($row["dWCx1"]);
+            $ballots[$i]["pCx1"] = intval($row["pCx1"]);
+            $ballots[$i]["dDx2"] = intval($row["dDx2"]);
+            $ballots[$i]["dWDx2"] = intval($row["dWDx2"]);
+            $ballots[$i]["dWCx2"] = intval($row["dWCx2"]);
+            $ballots[$i]["pCx2"] = intval($row["pCx2"]);
+            $ballots[$i]["dDx3"] = intval($row["dDx3"]);
+            $ballots[$i]["dWDx3"] = intval($row["dWDx3"]);
+            $ballots[$i]["dWCx3"] = intval($row["dWCx3"]);
+            $ballots[$i]["pCx3"] = intval($row["pCx3"]);
+            $ballots[$i]["pClose"] = intval($row["pClose"]);
+            $ballots[$i]["dClose"] = intval($row["dClose"]);
+            $ballots[$i]["aty1"] = intval($row["aty1"]);
+            $ballots[$i]["aty2"] = intval($row["aty2"]);
+            $ballots[$i]["aty3"] = intval($row["aty3"]);
+            $ballots[$i]["aty4"] = intval($row["aty4"]);
+            $ballots[$i]["wit1"] = intval($row["wit1"]);
+            $ballots[$i]["wit2"] = intval($row["wit2"]);
+            $ballots[$i]["wit3"] = intval($row["wit3"]);
+            $ballots[$i]["wit4"] = intval($row["wit4"]);
+            $i++;
+        }
+        /* free result set */
+        $result->close();
+        $conn->close();
+        return $ballots;
+    } else {
+        return false;
+    }
+}
+
+function getAllPDs(){
+    $ballots = [];
+
+    //connect to database
+    $db = new Database();
+    $conn = $db->getConnection();
+
+    //get basic ballot data
+    $ballotsQuery = "SELECT pairing, "
+            . "(CAST(pOpen AS SIGNED)+"
+            . "CAST(pDx1 AS SIGNED)+CAST(pDx2 AS SIGNED)+CAST(pDx3 AS SIGNED)+"
+            . "CAST(pWDx1 AS SIGNED)+CAST(pWDx2 AS SIGNED)+CAST(pWDx3 AS SIGNED)+"
+            . "CAST(pWCx1 AS SIGNED)+CAST(pWDx2 AS SIGNED)+CAST(pWDx3 AS SIGNED)+"
+            . "CAST(pCx1 AS SIGNED)+CAST(pCx2 AS SIGNED)+CAST(pCx3 AS SIGNED)+"
+            . "CAST(pClose AS SIGNED))-"
+            . "(CAST(dOpen AS SIGNED)+"
+            . "CAST(dDx1 AS SIGNED)+CAST(dDx2 AS SIGNED)+CAST(dDx3 AS SIGNED)+"
+            . "CAST(dWDx1 AS SIGNED)+CAST(dWDx2 AS SIGNED)+CAST(dWDx3 AS SIGNED)+"
+            . "CAST(dWCx1 AS SIGNED)+CAST(dWCx2 AS SIGNED)+CAST(dWCx3 AS SIGNED)+"
+            . "CAST(dCx1 AS SIGNED)+CAST(dCx2 AS SIGNED)+CAST(dCx3 AS SIGNED)+"
+            . "CAST(dClose AS SIGNED)) "
+            . "AS 'plaintiffPD'"
+            . " FROM ballots";
+    if ($result = $conn->query($ballotsQuery)) {
+        $i = 0;
+        while ($row = $result->fetch_assoc()) {
+            $ballots[$i]["pairing"] = intval($row["pairing"]);
             $ballots[$i]["plaintiffPD"] = intval($row["plaintiffPD"]);
             $i++;
         }
@@ -61,11 +157,9 @@ function getAllBallots() {
         $result->close();
         $conn->close();
         return $ballots;
-    } else{
+    } else {
         return false;
     }
-
-    
 }
 
 function getPairingBallots($pairing) {
@@ -81,7 +175,42 @@ function getPairingBallots($pairing) {
         $i = 0;
         while ($row = $result->fetch_assoc()) {
             $ballots[$i]["pairing"] = intval($row["pairing"]);
-            $ballots[$i]["plaintiffPD"] = intval($row["plaintiffPD"]);
+            $ballots[$i]["pOpen"] = intval($row["pOpen"]);
+            $ballots[$i]["dOpen"] = intval($row["dOpen"]);
+            $ballots[$i]["pDx1"] = intval($row["pDx1"]);
+            $ballots[$i]["pWDx1"] = intval($row["pWDx1"]);
+            $ballots[$i]["pWCx1"] = intval($row["pWCx1"]);
+            $ballots[$i]["dCx1"] = intval($row["dCx1"]);
+            $ballots[$i]["pDx2"] = intval($row["pDx2"]);
+            $ballots[$i]["pWDx2"] = intval($row["pWDx2"]);
+            $ballots[$i]["pWCx2"] = intval($row["pWCx2"]);
+            $ballots[$i]["dCx2"] = intval($row["dCx2"]);
+            $ballots[$i]["pDx3"] = intval($row["pDx3"]);
+            $ballots[$i]["pWDx3"] = intval($row["pWDx3"]);
+            $ballots[$i]["pWCx3"] = intval($row["pWCx3"]);
+            $ballots[$i]["dCx3"] = intval($row["dCx3"]);
+            $ballots[$i]["dDx1"] = intval($row["dDx1"]);
+            $ballots[$i]["dWDx1"] = intval($row["dWDx1"]);
+            $ballots[$i]["dWCx1"] = intval($row["dWCx1"]);
+            $ballots[$i]["pCx1"] = intval($row["pCx1"]);
+            $ballots[$i]["dDx2"] = intval($row["dDx2"]);
+            $ballots[$i]["dWDx2"] = intval($row["dWDx2"]);
+            $ballots[$i]["dWCx2"] = intval($row["dWCx2"]);
+            $ballots[$i]["pCx2"] = intval($row["pCx2"]);
+            $ballots[$i]["dDx3"] = intval($row["dDx3"]);
+            $ballots[$i]["dWDx3"] = intval($row["dWDx3"]);
+            $ballots[$i]["dWCx3"] = intval($row["dWCx3"]);
+            $ballots[$i]["pCx3"] = intval($row["pCx3"]);
+            $ballots[$i]["pClose"] = intval($row["pClose"]);
+            $ballots[$i]["dClose"] = intval($row["dClose"]);
+            $ballots[$i]["aty1"] = intval($row["aty1"]);
+            $ballots[$i]["aty2"] = intval($row["aty2"]);
+            $ballots[$i]["aty3"] = intval($row["aty3"]);
+            $ballots[$i]["aty4"] = intval($row["aty4"]);
+            $ballots[$i]["wit1"] = intval($row["wit1"]);
+            $ballots[$i]["wit2"] = intval($row["wit2"]);
+            $ballots[$i]["wit3"] = intval($row["wit3"]);
+            $ballots[$i]["wit4"] = intval($row["wit4"]);
             $i++;
         }
         /* free result set */

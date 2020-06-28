@@ -770,7 +770,7 @@ function getImpermissibles() {
 function getBallots() {
     return new Promise(function (resolve, reject) {
         $.ajax({
-            url: "../api/ballots/getAll.php",
+            url: "../api/ballots/getAllPDs.php",
             dataType: "json"
         }).then(ballots => {
             resolve(ballots);
