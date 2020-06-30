@@ -75,6 +75,7 @@ function getAllBallots() {
     if ($result = $conn->query($ballotsQuery)) {
         $i = 0;
         while ($row = $result->fetch_assoc()) {
+            $ballots[$i]["id"] = intval($row["id"]);
             $ballots[$i]["pairing"] = intval($row["pairing"]);
             $ballots[$i]["pOpen"] = intval($row["pOpen"]);
             $ballots[$i]["dOpen"] = intval($row["dOpen"]);
@@ -123,7 +124,7 @@ function getAllBallots() {
     }
 }
 
-function getAllPDs(){
+function getAllPDs() {
     $ballots = [];
 
     //connect to database
@@ -131,7 +132,7 @@ function getAllPDs(){
     $conn = $db->getConnection();
 
     //get basic ballot data
-    $ballotsQuery = "SELECT pairing, "
+    $ballotsQuery = "SELECT id, pairing, "
             . "(CAST(pOpen AS SIGNED)+"
             . "CAST(pDx1 AS SIGNED)+CAST(pDx2 AS SIGNED)+CAST(pDx3 AS SIGNED)+"
             . "CAST(pWDx1 AS SIGNED)+CAST(pWDx2 AS SIGNED)+CAST(pWDx3 AS SIGNED)+"
@@ -149,6 +150,7 @@ function getAllPDs(){
     if ($result = $conn->query($ballotsQuery)) {
         $i = 0;
         while ($row = $result->fetch_assoc()) {
+            $ballots[$i]["id"] = intval($row["id"]);
             $ballots[$i]["pairing"] = intval($row["pairing"]);
             $ballots[$i]["plaintiffPD"] = intval($row["plaintiffPD"]);
             $i++;
@@ -174,6 +176,7 @@ function getPairingBallots($pairing) {
     if ($result = $conn->query($ballotsQuery)) {
         $i = 0;
         while ($row = $result->fetch_assoc()) {
+            $ballots[$i]["id"] = intval($row["id"]);
             $ballots[$i]["pairing"] = intval($row["pairing"]);
             $ballots[$i]["pOpen"] = intval($row["pOpen"]);
             $ballots[$i]["dOpen"] = intval($row["dOpen"]);
@@ -220,4 +223,44 @@ function getPairingBallots($pairing) {
     } else {
         return false;
     }
+}
+
+function updateBallot($ballot) {
+    $stmt = "UPDATE ballots SET "
+            . "pOpen = " . $ballot["pOpen"] . ", "
+            . "dOpen = " . $ballot["dOpen"] . ", "
+            . "pDx1 = " . $ballot["pDx1"] . ", "
+            . "pDx2 = " . $ballot["pDx2"] . ", "
+            . "pDx3 = " . $ballot["pDx3"] . ", "
+            . "pWDx1 = " . $ballot["pWDx1"] . ", "
+            . "pWDx2 = " . $ballot["pWDx2"] . ", "
+            . "pWDx3 = " . $ballot["pWDx3"] . ", "
+            . "pWCx1 = " . $ballot["pWCx1"] . ", "
+            . "pWCx2 = " . $ballot["pWCx2"] . ", "
+            . "pWCx3 = " . $ballot["pWCx3"] . ", "
+            . "pCx1 = " . $ballot["pCx1"] . ", "
+            . "pCx2 = " . $ballot["pCx2"] . ", "
+            . "pCx3 = " . $ballot["pCx3"] . ", "
+            . "dDx1 = " . $ballot["dDx1"] . ", "
+            . "dDx2 = " . $ballot["dDx2"] . ", "
+            . "dDx3 = " . $ballot["dDx3"] . ", "
+            . "dWDx1 = " . $ballot["dWDx1"] . ", "
+            . "dWDx2 = " . $ballot["dWDx2"] . ", "
+            . "dWDx3 = " . $ballot["dWDx3"] . ", "
+            . "dWCx1 = " . $ballot["dWCx1"] . ", "
+            . "dWCx2 = " . $ballot["dWCx2"] . ", "
+            . "dWCx3 = " . $ballot["dWCx3"] . ", "
+            . "dCx1 = " . $ballot["dCx1"] . ", "
+            . "dCx2 = " . $ballot["dCx2"] . ", "
+            . "dCx3 = " . $ballot["dCx3"] . ", "
+            . "pClose = " . $ballot["pClose"] . ", "
+            . "dClose = " . $ballot["dClose"] . " "
+            . "WHERE id = " . $ballot["id"];
+
+    $db = new Database();
+    $conn = $db->getConnection();
+    $conn->query($stmt);
+    $conn->close();
+    echo $stmt;
+    return true;
 }
