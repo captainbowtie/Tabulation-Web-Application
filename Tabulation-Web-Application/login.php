@@ -1,5 +1,4 @@
 <?php
-
 /*
  * Copyright (C) 2020 allen
  *
@@ -19,39 +18,13 @@
 
 require_once __DIR__ . "/config.php";
 require_once SITE_ROOT . "/database.php";
-require_once SITE_ROOT . "/tableCreation/ballots.php";
-require_once SITE_ROOT . "/tableCreation/impermissibles.php";
-require_once SITE_ROOT . "/tableCreation/pairings.php";
-require_once SITE_ROOT . "/tableCreation/teams.php";
-require_once SITE_ROOT . "/tableCreation/users.php";
-require_once SITE_ROOT . "/tableCreation/settings.php";
-require_once SITE_ROOT . "/loginHeader.php";
-
-//check if number of judges per round has been set
-$db = new Database();
-$conn = $db->getConnection();
-$settingsQuery = "SELECT judgesPerRound FROM settings";
-$settingsResult = $conn->query($settingsQuery);
-if(mysqli_num_rows($settingsResult)>0){
-    $bodyHTML = '<a href="teams.php">Teams</a>
-    <a href="pairings.php">Pairings</a>
-    <a href="setup.php">Setup</a>';
-}else{
-    $bodyHTML = '<label for="judgesPerRound">Judges per round:</label>
-        <input type="number" id="judgesPerRound" name="judgesPerRound">
-        <button id="submitJudgesPerRound">Submit</button>';
-}
-
-$settingsResult->close();
-$conn->close();
-
-
+session_start();
 ?>
 <!DOCTYPE HTML>
 <html>
     <head>
         <meta charset="UTF-8">
-         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
 
         <!-- Latest compiled and minified CSS -->
@@ -63,14 +36,25 @@ $conn->close();
         <!-- Latest compiled and minified JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
+        <link rel="stylesheet" href="login.css">
+
         <title></title>
-        <script type="text/javascript" src="index.js" defer></script>
+        <script type="text/javascript" src="login.js" defer></script>
     </head>
     <body>
-<?php
-echo $header;
-require_once SITE_ROOT . "/pairingsTable.php";
-?>
+        <div id="form">
+            <div>
+                <label id="emailLabel" for="email">Email:</label>
+                <input id="email" name="email" type="email">
+            </div>
+            <div>
+                <label id="passwordLabel" for="password">Password:</label>
+                <input id="password" name="password" type="password">
+            </div>
+            <div>
+                <button id="button">Submit</button>
+            </div>
+        </div>
     </body>
 </html>
 

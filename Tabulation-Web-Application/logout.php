@@ -1,25 +1,32 @@
-<?php ?>
-<!DOCTYPE html>
-<!--
-Copyright (C) 2020 allen
+<?php
 
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+/*
+ * Copyright (C) 2020 allen
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License for more details.
-
-You should have received a copy of the GNU Affero General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
--->
+session_start();
+$_SESSION = array();
+header('Location: ' . "index.php", true, 303);
+   die();
+?>
+<!DOCTYPE HTML>
 <html>
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
 
         <!-- Latest compiled and minified CSS -->
@@ -34,8 +41,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <title></title>
     </head>
     <body>
-        <label for="numberOfJudges">Judges per round:</label>
-        <input type="number" id="numberOfJudges" name="numberOfJudges">
-        <button id="submit">Submit</button>
     </body>
 </html>
+
