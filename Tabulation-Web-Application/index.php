@@ -1,5 +1,4 @@
 <?php
-
 /*
  * Copyright (C) 2020 allen
  *
@@ -17,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+session_start();
+
 require_once __DIR__ . "/config.php";
 require_once SITE_ROOT . "/database.php";
 require_once SITE_ROOT . "/tableCreation/ballots.php";
@@ -30,28 +31,24 @@ require_once SITE_ROOT . "/loginHeader.php";
 //check if number of judges per round has been set
 $db = new Database();
 $conn = $db->getConnection();
-$settingsQuery = "SELECT judgesPerRound FROM settings";
-$settingsResult = $conn->query($settingsQuery);
-if(mysqli_num_rows($settingsResult)>0){
-    $bodyHTML = '<a href="teams.php">Teams</a>
-    <a href="pairings.php">Pairings</a>
-    <a href="setup.php">Setup</a>';
-}else{
-    $bodyHTML = '<label for="judgesPerRound">Judges per round:</label>
-        <input type="number" id="judgesPerRound" name="judgesPerRound">
-        <button id="submitJudgesPerRound">Submit</button>';
+
+$bodyHTML = "";
+if ($_SESSION["isCoach"]) {
+    $bodyHTML .= '<a href="ballots.php">Roster Entry</a>
+    <a href="ballots.php">Ballots</a>';
 }
-
-$settingsResult->close();
-$conn->close();
-
-
+if ($_SESSION["isAdmin"]) {
+    $bodyHTML .= '<a href="teams.php">Teams</a>
+        <a href="ballots.php">Ballots</a>
+    <a href="pairings.php">Pairings</a>
+    <a href="judges.php">Judges</a>';
+}
 ?>
 <!DOCTYPE HTML>
 <html>
     <head>
         <meta charset="UTF-8">
-         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
 
         <!-- Latest compiled and minified CSS -->
@@ -67,10 +64,11 @@ $conn->close();
         <script type="text/javascript" src="index.js" defer></script>
     </head>
     <body>
-<?php
-echo $header;
-require_once SITE_ROOT . "/pairingsTable.php";
-?>
+        <?php
+        echo $header;
+        echo $bodyHTML;
+        require_once SITE_ROOT . "/pairingsTable.php";
+        ?>
     </body>
 </html>
 

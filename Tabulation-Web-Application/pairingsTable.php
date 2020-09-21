@@ -24,7 +24,8 @@ require_once SITE_ROOT . "/objects/team.php";
 //get team data;
 $teams = getAllTeams();
 
-//generate select content
+if(!empty($teams)){
+    //generate select content
 $pSelects = [];
 $dSelects = [];
 for ($c = 1; $c <= 4; $c++) { //non-zero indexed to match round number
@@ -77,6 +78,9 @@ for ($b = 1; $b <= 4; $b++) {
     }
     $tabHTML[$b] .= "</table>";
 }
+}
+
+
 ?>
 
 

@@ -21,32 +21,37 @@
  *
  * @author allen
  */
-require_once __DIR__ . '/../../config.php';
-require_once SITE_ROOT . "/database.php";
+session_start();
+if ($_SESSION["isAdmin"]) {
+    require_once __DIR__ . '/../../config.php';
+    require_once SITE_ROOT . "/database.php";
 
-$judgesPerRound = json_decode(file_get_contents("php://input"))->judgesPerRound;
+    $judgesPerRound = json_decode(file_get_contents("php://input"))->judgesPerRound;
 //echo json_decode(file_get_contents("php://input"));
-if (
-        true //TODO: create some actual tests, sike whether the value is already set
-) {
-    $query = "INSERT INTO settings (judgesPerRound) VALUES ($judgesPerRound)";
-    $db = new Database();
-    $conn = $db->getConnection();
-    
-    if(!$conn->query($query)){
-        // set response code - 503 service unavailable
+    if (
+            true //TODO: create some actual tests, sike whether the value is already set
+    ) {
+        $query = "INSERT INTO settings (judgesPerRound) VALUES ($judgesPerRound)";
+        $db = new Database();
+        $conn = $db->getConnection();
+
+        if (!$conn->query($query)) {
+            // set response code - 503 service unavailable
             http_response_code(503);
 
             // tell the user
             echo json_encode(array("message" => "Unable to create set judges per round."));
-    }else{
-        http_response_code(201);
+        } else {
+            http_response_code(201);
             echo json_encode(array("message" => 0));
+        }
+    } else {
+        // set response code - 400 bad request
+        http_response_code(400);
+
+        // tell the user
+        echo json_encode(array("message" => "Unable to set judges per round. Data is incomplete."));
     }
 } else {
-    // set response code - 400 bad request
-    http_response_code(400);
-
-    // tell the user
-    echo json_encode(array("message" => "Unable to set judges per round. Data is incomplete."));
+    http_response_code(401);
 }

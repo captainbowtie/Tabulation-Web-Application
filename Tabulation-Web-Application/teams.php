@@ -1,18 +1,23 @@
 <?php
-//import requirements
-require_once __DIR__ . "/config.php";
-require_once SITE_ROOT . "/database.php";
-require_once SITE_ROOT . "/objects/team.php";
+session_start();
+if ($_SESSION["isAdmin"]) {
+    //import requirements
+    require_once __DIR__ . "/config.php";
+    require_once SITE_ROOT . "/database.php";
+    require_once SITE_ROOT . "/objects/team.php";
 
 //prepare strings for team table
-$tableHTML = "";
-$teams = getAllTeams();
-foreach ($teams as $team) {
-    $tableHTML .= "<tr>\n";
-    $tableHTML .= "<td><a href='/team.php?number=".$team["number"]."'>" . $team["number"] . "</a></td>\n";
-    $tableHTML .= "<td id='" . $team["number"] . "name'>" . $team["name"] . "</td>\n";
-    $tableHTML .= "<td>" . "<a href='' class='edit' id='edit" . $team["number"] . "'>edit</a>" . "</td>\n";
-    $tableHTML .= "</tr>\n";
+    $tableHTML = "";
+    $teams = getAllTeams();
+    if (!empty($teams)) {
+        foreach ($teams as $team) {
+            $tableHTML .= "<tr>\n";
+            $tableHTML .= "<td><a href='/team.php?number=" . $team["number"] . "'>" . $team["number"] . "</a></td>\n";
+            $tableHTML .= "<td id='" . $team["number"] . "name'>" . $team["name"] . "</td>\n";
+            $tableHTML .= "<td>" . "<a href='' class='edit' id='edit" . $team["number"] . "'>edit</a>" . "</td>\n";
+            $tableHTML .= "</tr>\n";
+        }
+    }
 }
 ?>
 

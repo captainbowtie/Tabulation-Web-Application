@@ -1,6 +1,6 @@
 <?php
 
-/* 
+/*
  * Copyright (C) 2020 allen
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,40 +16,41 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+session_start();
+if ($_SESSION["isAdmin"]) {
+    require_once __DIR__ . '/../../config.php';
+    require_once SITE_ROOT . '/objects/ballot.php';
 
-require_once __DIR__ . '/../../config.php';
-require_once SITE_ROOT . '/objects/ballot.php';
+    $data = json_decode(file_get_contents("php://input"));
 
-$data = json_decode(file_get_contents("php://input"));
+    if (
+            isset($data->pairing) &&
+            isset($data->plaintiffPD)
+    ) {
+        $pairing = htmlspecialchars(strip_tags($data->pairing));
+        $plaintiffPD = htmlspecialchars(strip_tags($data->plaintiffPD));
+        if (createBallot($pairing, $plaintiffPD)) {
+            // set response code - 201 created
+            http_response_code(201);
 
-if (
-        isset($data->pairing) &&
-        isset($data->plaintiffPD)
-) {
-    $pairing = htmlspecialchars(strip_tags($data->pairing));
-    $plaintiffPD = htmlspecialchars(strip_tags($data->plaintiffPD));
-    if(createBallot($pairing, $plaintiffPD)){
-        // set response code - 201 created
-        http_response_code(201);
+            // tell the user
+            echo json_encode(array("message" => "Ballot was created."));
+        } else {
+
+            // set response code - 503 service unavailable
+            http_response_code(503);
+
+            // tell the user
+            echo json_encode(array("message" => "Unable to create ballot."));
+        }
+    } else {
+
+        // set response code - 400 bad request
+        http_response_code(400);
 
         // tell the user
-        echo json_encode(array("message" => "Ballot was created."));
-    }else {
-
-        // set response code - 503 service unavailable
-        http_response_code(503);
-
-        // tell the user
-        echo json_encode(array("message" => "Unable to create ballot."));
+        echo json_encode(array("message" => "Unable to create ballot. Data is incomplete."));
     }
-    
-    
-}
-else {
-
-    // set response code - 400 bad request
-    http_response_code(400);
-
-    // tell the user
-    echo json_encode(array("message" => "Unable to create ballot. Data is incomplete."));
+} else {
+    http_response_code(401);
 }
