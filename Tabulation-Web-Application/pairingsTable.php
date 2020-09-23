@@ -24,87 +24,85 @@ require_once SITE_ROOT . "/objects/team.php";
 //get team data;
 $teams = getAllTeams();
 
-if(!empty($teams)){
+if (!empty($teams)) {
     //generate select content
-$pSelects = [];
-$dSelects = [];
-for ($c = 1; $c <= 4; $c++) { //non-zero indexed to match round number
-    for ($a = 0; $a < sizeOf($teams) / 2; $a++) {
-        $pSelect = "<select id='round$c" . "p$a'>\n";
-        $dSelect = "<select id='round$c" . "d$a'>\n";
-        for ($b = 0; $b < sizeOf($teams); $b++) {
-            $pSelect = $pSelect . "<option value='" . $teams[$b]["number"] . "'>" . $teams[$b]["number"] . " " . $teams[$b]["name"] . "</option>\n";
-            $dSelect = $dSelect . "<option value='" . $teams[$b]["number"] . "'>" . $teams[$b]["number"] . " " . $teams[$b]["name"] . "</option>\n";
+    $pSelects = [];
+    $dSelects = [];
+    for ($c = 1; $c <= 4; $c++) { //non-zero indexed to match round number
+        for ($a = 0; $a < sizeOf($teams) / 2; $a++) {
+            $pSelect = "<select id='round$c" . "p$a'>\n";
+            $dSelect = "<select id='round$c" . "d$a'>\n";
+            for ($b = 0; $b < sizeOf($teams); $b++) {
+                $pSelect = $pSelect . "<option value='" . $teams[$b]["number"] . "'>" . $teams[$b]["number"] . " " . $teams[$b]["name"] . "</option>\n";
+                $dSelect = $dSelect . "<option value='" . $teams[$b]["number"] . "'>" . $teams[$b]["number"] . " " . $teams[$b]["name"] . "</option>\n";
+            }
+            $pSelect = $pSelect . "</select>\n";
+            $dSelect = $dSelect . "</select>\n";
+            $pSelects[$c][] = $pSelect;
+            $dSelects[$c][] = $dSelect;
         }
-        $pSelect = $pSelect . "</select>\n";
-        $dSelect = $dSelect . "</select>\n";
-        $pSelects[$c][] = $pSelect;
-        $dSelects[$c][] = $dSelect;
     }
-}
 
 //fill page html variables
-$tabHTML = [];
-$tabHTML[1] = "<h3>Round 1</h3>
+    $tabHTML = [];
+    $tabHTML[1] = "<h3>Round 1</h3>
                 <table>
                     <tr>
                         <th>π</th>
                         <th>∆</th>
                     </tr>";
-$tabHTML[2] = "<h3>Round 2</h3>
+    $tabHTML[2] = "<h3>Round 2</h3>
                 <table>
                     <tr>
                         <th>π</th>
                         <th>∆</th>
                     </tr>";
-$tabHTML[3] = "<h3>Round 3</h3>
+    $tabHTML[3] = "<h3>Round 3</h3>
                 <table>
                     <tr>
                         <th>π</th>
                         <th>∆</th>
                     </tr>";
-$tabHTML[4] = "<h3>Round 4</h3>
+    $tabHTML[4] = "<h3>Round 4</h3>
                 <table>
                     <tr>
                         <th>π</th>
                         <th>∆</th>
                     </tr>";
-for ($b = 1; $b <= 4; $b++) {
-    for ($a = 0; $a < sizeOf($pSelects[$b]); $a++) {
-        $tabHTML[$b] .= "<tr>\n";
-        $tabHTML[$b] .= "<td>\n" . $pSelects[$b][$a] . "</td>\n";
-        $tabHTML[$b] .= "<td>\n" . $dSelects[$b][$a] . "</td>\n";
-        $tabHTML[$b] .= "</tr>\n";
+    for ($b = 1; $b <= 4; $b++) {
+        for ($a = 0; $a < sizeOf($pSelects[$b]); $a++) {
+            $tabHTML[$b] .= "<tr>\n";
+            $tabHTML[$b] .= "<td>\n" . $pSelects[$b][$a] . "</td>\n";
+            $tabHTML[$b] .= "<td>\n" . $dSelects[$b][$a] . "</td>\n";
+            $tabHTML[$b] .= "</tr>\n";
+        }
+        $tabHTML[$b] .= "</table>";
     }
-    $tabHTML[$b] .= "</table>";
 }
-}
-
-
 ?>
 
 
 <div class="tab-content">
     <div id="round1" class="tab-pane fade in active">
 
-        <?php
-        echo $tabHTML[1];
-        ?>    
+<?php
+echo $tabHTML[1];
+?>    
     </div>
     <div id="round2" class="tab-pane fade">
-        <?php
-        echo $tabHTML[2];
-        ?>
+<?php
+echo $tabHTML[2];
+?>
     </div>
     <div id="round3" class="tab-pane fade">
-        <?php
-        echo $tabHTML[3];
-        ?>
+<?php
+echo $tabHTML[3];
+?>
     </div>
     <div id="round4" class="tab-pane fade">
-        <?php
-        echo $tabHTML[4];
-        ?>
+<?php
+echo $tabHTML[4];
+?>
     </div>
 </div>
 <ul class="nav nav-tabs">
@@ -119,7 +117,7 @@ for ($b = 1; $b <= 4; $b++) {
     let round2PairingsExist = false;
     let round3PairingsExist = false;
     let round4PairingsExist = false;
-    
+
 
     //Pull all data from server
     getPairings().then(data => {
@@ -182,17 +180,17 @@ for ($b = 1; $b <= 4; $b++) {
 
 
 
-function getPairings() {
-    return new Promise(function (resolve, reject) {
-        $.ajax({
-            url: "../api/pairings/getAll.php",
-            dataType: "json"
-        }).then(data => {
-            pairings = data;
-            resolve();
+    function getPairings() {
+        return new Promise(function (resolve, reject) {
+            $.ajax({
+                url: "../api/pairings/getAll.php",
+                dataType: "json"
+            }).then(data => {
+                pairings = data;
+                resolve();
+            });
         });
-    });
-}
+    }
 
 
 </script>

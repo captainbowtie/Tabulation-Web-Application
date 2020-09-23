@@ -5,7 +5,14 @@ if ($_SESSION["isAdmin"]) {
     require_once __DIR__ . "/config.php";
     require_once SITE_ROOT . "/database.php";
     require_once SITE_ROOT . "/objects/team.php";
+    require_once SITE_ROOT . "/loginHeader.php";
 
+    //prepare navigation header
+    $navigation = '<a href="index.php">Home</a>
+        <a href="ballots.php">Ballots</a>
+    <a href="pairings.php">Pairings</a>
+    <a href="judges.php">Judges</a>';
+    
 //prepare strings for team table
     $tableHTML = "";
     $teams = getAllTeams();
@@ -18,6 +25,8 @@ if ($_SESSION["isAdmin"]) {
             $tableHTML .= "</tr>\n";
         }
     }
+}else{
+    die ("Access denied");
 }
 ?>
 
@@ -57,6 +66,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <title></title>
     </head>
     <body>
+<?php
+echo $navigation;
+echo $header;
+?>
         <div id="teamTable"></div>
         <table>
             <tr>
@@ -64,9 +77,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 <th>Name</th>
                 <th></th>
             </tr>
-            <?php
-            echo $tableHTML;
-            ?>
+<?php
+echo $tableHTML;
+?>
             <tr>
                 <td>
                     <label for="number"></label>

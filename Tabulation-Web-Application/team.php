@@ -1,5 +1,10 @@
 <?php
-$number = htmlspecialchars(strip_tags($_GET["number"]));
+session_start();
+if($_SESSION["isAdmin"]){
+    $number = htmlspecialchars(strip_tags($_GET["number"]));
+}else{
+    die ("Access denied");
+}
 ?>
 
 <!DOCTYPE html>

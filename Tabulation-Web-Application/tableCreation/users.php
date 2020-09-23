@@ -35,15 +35,11 @@ isAdmin BOOLEAN NOT NULL DEFAULT false,
 isCoach BOOLEAN NOT NULL DEFAULT false
 )";
 
-$timeTarget = 0.06; // 50 milliseconds 
-
-
-
 if ($conn->query($query) === TRUE) {
     $adminCheckQuery = "SELECT * FROM users";
     $numRows = mysqli_num_rows($conn->query($adminCheckQuery));
     if ($numRows === 0) {
-        if (createUser("allen@allenbarr.com", "password", true)) {
+        if (createUser("allen@allenbarr.com", "password", true, false)) {
             
         } else {
             echo "Error creating default user: " . $conn->error;

@@ -16,15 +16,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+session_start();
+
 //import requirements
 require_once __DIR__ . "/config.php";
 require_once SITE_ROOT . "/database.php";
 require_once SITE_ROOT . "/objects/team.php";
+require_once SITE_ROOT ."/loginHeader.php";
 
 //get team data;
 $teams = getAllTeams();
 
-//generate select content
+    if (!empty($teams)) {//generate select content
 $pSelects = [];
 $dSelects = [];
 for ($c = 1; $c <= 4; $c++) { //non-zero indexed to match round number
@@ -41,6 +44,7 @@ for ($c = 1; $c <= 4; $c++) { //non-zero indexed to match round number
         $dSelects[$c][] = $dSelect;
     }
 }
+
 
 //fill page html variables
 $tabHTML = [];
@@ -79,7 +83,15 @@ for ($b = 1; $b <= 4; $b++) {
                 <br>
                 <input type='button' id='pair$b' value='Generate Pairings' class='pairButton'>
                 <input type='submit' id='submit$b' value='Save Pairings' class='saveButton'>";
+}}
+
+if ($_SESSION["isAdmin"]) {
+    $navigation = '<a href="index.php">Home</a>
+        <a href="teams.php">Teams</a>
+    <a href="ballots.php">Ballots</a>
+    <a href="judges.php">Judges</a>';
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -120,7 +132,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <title></title>
     </head>
     <body>
-
+        <?php
+        echo $header;
+        echo $navigation;
+        ?>
         <div class="tab-content">
             <div id="round1" class="tab-pane fade in active">
 

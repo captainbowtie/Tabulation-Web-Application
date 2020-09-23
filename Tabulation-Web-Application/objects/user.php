@@ -25,32 +25,36 @@ class User {
     public $email;
     private $password;
     public $isAdmin;
+    public $isCoach;
 
-    public function __construct($email, $password,$isAdmin) {
+    public function __construct($email, $password, $isAdmin) {
         $this->email = $email;
         $this->password = $password;
         $this->isAdmin = $isAdmin;
+        $this->isCoach = $isCoach;
     }
+
 }
 
-function createUser($email, $password, $isAdmin) {
+function createUser($email, $password, $isAdmin, $isCoach) {
     $hashedPassword = password_hash($password, PASSWORD_BCRYPT, ['cost' => 11,]);
     $userCreated = false;
     $db = new Database();
     $conn = $db->getConnection();
-    $query = "INSERT INTO users (email, password, isAdmin) VALUES ("
+    $query = "INSERT INTO users (email, password, isAdmin, isCoach) VALUES ("
             . "'$email',"
             . "'$hashedPassword',"
-            . "$isAdmin)";
+            . "$isAdmin,"
+            . "$isCoach)";
     $conn->query($query);
-    if($conn->affected_rows == 1){
+    if ($conn->affected_rows == 1) {
         $userCreated = true;
     }
     $conn->close();
     return $userCreated;
 }
 
-function getUser($email){
+function getUser($email) {
     $db = new Database();
     $conn = $db->getConnection();
     $query = "SELECT * FROM users WHERE email = '$email'";
@@ -66,54 +70,56 @@ function getUser($email){
     return $user;
 }
 
-function updateUser($existingEmail, $newE, $name) {
-    $teamUpdated = false;
-    $db = new Database();
-    $conn = $db->getConnection();
-    $query = "UPDATE teams SET number = $newNumber, name = '$name' WHERE number = $existingNumber";
-    $conn->query($query);
-    if($conn->affected_rows == 1){
-        $teamUpdated = true;
-    }
-    $conn->close();
-    return $teamUpdated;
-}
-
 function getAllUsers() {
-    global $teams;
+    global $users;
 
     //connect to database
     $db = new Database();
     $conn = $db->getConnection();
 
-    //get basic team data (number and name)
-    $teamsQuery = "SELECT * FROM teams ORDER BY number";
-    if ($result = $conn->query($teamsQuery)) {
+    //get user data
+    $userQuery = "SELECT id,email,isAdmin,isCoach FROM users ORDER BY email";
+    if ($result = $conn->query($userQuery)) {
         $i = 0;
         while ($row = $result->fetch_assoc()) {
-            $teams[$i]["number"] = intval($row["number"]);
-            $teams[$i]["name"] = $row["name"];
+            $users[$i]["id"] = $row["id"];
+            $users[$i]["email"] = $row["email"];
+            $users[$i]["isAdmin"] = $row["isAdmin"];
+            $users[$i]["isCoach"] = $row["isCoach"];
             $i++;
         }
         /* free result set */
         $result->close();
     }
     $conn->close();
-    return $teams;
+    return $users;
 }
 
-function getUserPassword($number){
-    //connect to database
+function updateUser($id, $field, $value) {
+    $userUpdated = false;
     $db = new Database();
     $conn = $db->getConnection();
-    
-    //query database for name
-    $nameQuery = "SELECT name FROM teams WHERE number = $number";
-    if ($result = $conn->query($nameQuery)) {
-        $row = $result->fetch_assoc();
-        return $row["name"];
-    }else{
-        return false;
+    switch ($field) {
+        case "email":
+            $query = "UPDATE users SET email = '$value' WHERE id = $id";
+            break;
+        case "password":
+            $hashed = password_hash($value, PASSWORD_BCRYPT, ['cost' => 11,]);
+            $query = "UPDATE users SET password = '$hashed' WHERE id = $id";
+            break;
+        case "isAdmin":
+            $query = "UPDATE users SET isAdmin = $value WHERE id = $id";
+            break;
+        case "isCoach":
+            $query = "UPDATE users SET isCoach = $value WHERE id = $id";
+            break;
+        default:
+            break;
     }
-    
+    $conn->query($query);
+    if ($conn->affected_rows == 1) {
+        $userUpdated = true;
+    }
+    $conn->close();
+    return $userUpdated;
 }

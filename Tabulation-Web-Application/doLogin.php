@@ -35,7 +35,6 @@ if (
         $_SESSION["user"] = $email;
         $_SESSION["isAdmin"] = $user["isAdmin"];
         $_SESSION["isCoach"] = $user["isCoach"];
-        echo $_SESSION["isAdmin"];
         // set response code - 200 ok
         http_response_code(200);
         //tell the user
