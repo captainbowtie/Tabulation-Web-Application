@@ -25,6 +25,8 @@ require_once SITE_ROOT . "/tableCreation/impermissibles.php";
 require_once SITE_ROOT . "/tableCreation/pairings.php";
 require_once SITE_ROOT . "/tableCreation/teams.php";
 require_once SITE_ROOT . "/tableCreation/users.php";
+require_once SITE_ROOT . "/tableCreation/judges.php";
+require_once SITE_ROOT . "/tableCreation/judgeConflicts.php";
 require_once SITE_ROOT . "/tableCreation/settings.php";
 require_once SITE_ROOT . "/loginHeader.php";
 
@@ -33,16 +35,6 @@ $db = new Database();
 $conn = $db->getConnection();
 
 $bodyHTML = "";
-if ($_SESSION["isCoach"]) {
-    $bodyHTML .= '<a href="ballots.php">Roster Entry</a>
-    <a href="ballots.php">Ballots</a>';
-}
-if ($_SESSION["isAdmin"]) {
-    $bodyHTML .= '<a href="teams.php">Teams</a>
-        <a href="ballots.php">Ballots</a>
-    <a href="pairings.php">Pairings</a>
-    <a href="judges.php">Judges</a>';
-}
 ?>
 <!DOCTYPE HTML>
 <html>

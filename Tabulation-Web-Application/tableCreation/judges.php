@@ -17,23 +17,30 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once __DIR__ . "/config.php";
+// Get config information
+require_once __DIR__ . "/../config.php";
 require_once SITE_ROOT . "/database.php";
-session_start();
-$header = "<div>\n";
-if ($_SESSION["isAdmin"]) {
-    $header .= '<a href="index.php">Home</a>
-        <a href="ballots.php">Ballots</a>
-    <a href="pairings.php">Pairings</a>
-    <a href="judges.php">Judges</a>
-    <a href="teams.php">Teams</a>
-    <a href="users.php">Users</a>';
-    $header .= "<a style='float: right' href='logout.php'>Log Out</a>\n";
-} elseif ($_SESSION["isCoach"]) {
-    $header .= '<a href="index.php">Home</a>
-        <a href="ballots.php">Ballots</a>';
-    $header .= "<a style='float: right' href='logout.php'>Log Out</a>\n";
+require_once SITE_ROOT . "/objects/judge.php";
+
+// Create db connection
+$db = new Database();
+$conn = $db->getConnection();
+
+//Query to create table
+$query = "CREATE TABLE IF NOT EXISTS judges (
+id INT(3) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+name VARCHAR(64) NOT NULL,
+category TINYINT(1) UNSIGNED NOT NULL,
+round1 BOOLEAN NOT NULL DEFAULT false,
+round2 BOOLEAN NOT NULL DEFAULT false,
+round3 BOOLEAN NOT NULL DEFAULT false,
+round4 BOOLEAN NOT NULL DEFAULT false
+)";
+
+if ($conn->query($query) === TRUE) {
+    
 } else {
-    $header .= "<a style='float: right' href='login.php'>Log In</a>\n";
+    echo "Error creating table: " . $conn->error;
 }
-$header .= "</div>\n";
+
+$conn->close();

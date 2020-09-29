@@ -7,11 +7,6 @@ if ($_SESSION["isAdmin"]) {
     require_once SITE_ROOT . "/objects/team.php";
     require_once SITE_ROOT . "/loginHeader.php";
 
-    //prepare navigation header
-    $navigation = '<a href="index.php">Home</a>
-        <a href="ballots.php">Ballots</a>
-    <a href="pairings.php">Pairings</a>
-    <a href="judges.php">Judges</a>';
     
 //prepare strings for team table
     $tableHTML = "";

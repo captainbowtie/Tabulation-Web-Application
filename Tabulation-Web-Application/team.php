@@ -1,6 +1,9 @@
 <?php
 session_start();
 if($_SESSION["isAdmin"]){
+    require_once __DIR__ . "/config.php";
+    require_once SITE_ROOT . "/loginHeader.php";
+
     $number = htmlspecialchars(strip_tags($_GET["number"]));
 }else{
     die ("Access denied");
@@ -42,6 +45,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <title></title>
     </head>
     <body>
+        <?php
+        echo $header;
+        ?>
         <table>
             <tr>
                 <th id="number"><?php echo $number; ?></th>

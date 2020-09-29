@@ -1,6 +1,6 @@
 <?php
 
-/*
+/* 
  * Copyright (C) 2020 allen
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,23 +17,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once __DIR__ . "/config.php";
-require_once SITE_ROOT . "/database.php";
 session_start();
-$header = "<div>\n";
 if ($_SESSION["isAdmin"]) {
-    $header .= '<a href="index.php">Home</a>
-        <a href="ballots.php">Ballots</a>
-    <a href="pairings.php">Pairings</a>
-    <a href="judges.php">Judges</a>
-    <a href="teams.php">Teams</a>
-    <a href="users.php">Users</a>';
-    $header .= "<a style='float: right' href='logout.php'>Log Out</a>\n";
-} elseif ($_SESSION["isCoach"]) {
-    $header .= '<a href="index.php">Home</a>
-        <a href="ballots.php">Ballots</a>';
-    $header .= "<a style='float: right' href='logout.php'>Log Out</a>\n";
+    require_once __DIR__ . '/../../config.php';
+    require_once SITE_ROOT . '/objects/judge.php';
+
+    echo json_encode(getAllJudges());
 } else {
-    $header .= "<a style='float: right' href='login.php'>Log In</a>\n";
+    http_response_code(401);
 }
-$header .= "</div>\n";

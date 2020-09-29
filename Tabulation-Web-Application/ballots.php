@@ -22,11 +22,8 @@ session_start();
 require_once __DIR__ . "/config.php";
 require_once SITE_ROOT . "/loginHeader.php";
 
-if ($_SESSION["isAdmin"]) {
-    $navigation = '<a href="index.php">Home</a>
-        <a href="teams.php">Teams</a>
-    <a href="pairings.php">Pairings</a>
-    <a href="judges.php">Judges</a>';
+if ($_SESSION["isAdmin"] || $_SESSION["isCoach"]) {
+
 }else{
     die ("Access denied");
 }

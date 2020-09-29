@@ -26,24 +26,28 @@ require_once __DIR__ . "/../config.php";
 require_once SITE_ROOT . "/database.php";
 
 class Impermissible {
-
-    // object properties
-    public $id;
-    public $team0;
-    public $team1;
-
-    public function __construct($team0, $team1) {
-        $this->team0 = $team0;
-        $this->team1 = $team1;
-    }
-
+    
 }
 
 function createImpermissible($team0, $team1) {
     $db = new Database();
     $conn = $db->getConnection();
+
+    //convert team numbers to ids
+    $team0query = "SELECT id FROM teams WHERE number = $team0";
+    $team0result = $conn->query($team0query);
+    $team0row = $team0result->fetch_assoc();
+    $id0 = intval($team0row["id"]);
+    $team0result->close();
+    $team1query = "SELECT id FROM teams WHERE number = $team1";
+    $team1result = $conn->query($team1query);
+    $team1row = $team1result->fetch_assoc();
+    $id1 = intval($team1row["id"]);
+    $team1result->close();
+
+    //insert impermissible into database
     $stmt = $conn->prepare("INSERT INTO impermissibles (team0, team1) VALUES (?, ?)");
-    $stmt->bind_param('ii', $team0, $team1);
+    $stmt->bind_param('ii', $id0, $id1);
     $stmt->execute();
     $stmt->close();
     $conn->close();
@@ -52,11 +56,24 @@ function createImpermissible($team0, $team1) {
 
 function deleteImpermissible($team0, $team1) {
     $impermissibleDeleted = false;
-    $query = "DELETE FROM `impermissibles` WHERE (team0 = $team0 && team1 = $team1) || (team0 = $team1 && team1 = $team0)";
+
+    //convert team numbers to ids
+    $team0query = "SELECT id FROM teams WHERE number = $team0";
+    $team0result = $conn->query($team0query);
+    $team0row = $team0result->fetch_assoc();
+    $id0 = intval($team0row["id"]);
+    $team0result->close();
+    $team1query = "SELECT id FROM teams WHERE number = $team1";
+    $team1result = $conn->query($team1query);
+    $team1row = $team1result->fetch_assoc();
+    $id1 = intval($team1row["id"]);
+    $team1result->close();
+
+    $query = "DELETE FROM `impermissibles` WHERE (team0 = $id0 && team1 = $id1) || (team0 = $id1 && team1 = $id0)";
     $db = new Database();
     $conn = $db->getConnection();
     $conn->query($query);
-    if($conn->affected_rows == 1){
+    if ($conn->affected_rows == 1) {
         $impermissibleDeleted = true;
     }
     $conn->close();
@@ -68,15 +85,33 @@ function getAllImpermissibles() {
     $db = new Database();
     $conn = $db->getConnection();
     if ($result = $conn->query($query)) {
-        $i = 0;
+        $a = 0;
         global $impermissibles;
         while ($row = $result->fetch_assoc()) {
-            $impermissibles[$i]["team0"] = intval($row["team0"]);
-            $impermissibles[$i]["team1"] = intval($row["team1"]);
-            $i++;
+            $impermissibles[$a]["team0"] = intval($row["team0"]);
+            $impermissibles[$a]["team1"] = intval($row["team1"]);
+            $a++;
         }
         /* free result set */
         $result->close();
     }
+
+    //convert ids to team numbers
+    $teamQuery = "SELECT id,number FROM teams";
+    if ($teamResult = $conn->query($teamQuery)) {
+        $a = 0;
+        while ($teamRow = $teamResult->fetch_assoc()) {
+            for ($b = 0; $b < sizeOf($impermissibles); $b++) {
+                if ($impermissibles[$b]["team0"] == $teamRow[$a]["id"]) {
+                    $impermissibles[$b]["team0"] = $teamRow[$a]["number"];
+                } else if ($impermissibles[$b]["team1"] == $teamRow[$a]["id"]) {
+                    $impermissibles[$b]["team1"] = $teamRow[$a]["number"];
+                }
+            }
+        }
+    }
+    $teamResult->close();
+    $conn->close();
+
     return $impermissibles;
 }
