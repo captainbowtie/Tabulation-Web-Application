@@ -101,16 +101,7 @@ echo $tableHTML;
                         <h4 class="modal-title">Warning</h4>
                     </div>
                     <div class="modal-body">
-                        <form>
-                            <label for="fname">First name:</label>
-                            <input type="text" id="fname" name="fname"><br><br>
-                            <label for="lname">Last name:</label>
-                            <input type="text" id="lname" name="lname"><br><br>
-                        </form>
                         <p id="warningModalText">Some text in the modal.</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Submit</button>
                     </div>
                 </div>
             </div>

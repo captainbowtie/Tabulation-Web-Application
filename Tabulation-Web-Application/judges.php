@@ -94,7 +94,7 @@ if ($_SESSION["isAdmin"]) {
     if (!empty($teams)) {
         for ($a = 0; $a < sizeOf($teams); $a++) {
             $conflictsHTML .= "<div>\n";
-            $conflictsHTML .= "<label><input class='conflictCheckbox' type='checkbox'>" . $teams[$a]["number"] ." ". $teams[$a]["name"] . "</label>\n";
+            $conflictsHTML .= "<label><input class='conflictCheckbox' type='checkbox' id='".$teams[$a]["number"]."checkbox'>" . $teams[$a]["number"] ." ". $teams[$a]["name"] . "</label>\n";
             $conflictsHTML .= "</div>\n";
         }
     }

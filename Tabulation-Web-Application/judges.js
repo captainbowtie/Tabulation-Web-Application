@@ -16,6 +16,11 @@
  */
 
 var conflictJudge;
+var conflicts;
+
+$(document).ready(function () {
+    updateConflicts();
+});
 
 $(".name").on("change", function () {
     let editRow = $(this).closest("tr");
@@ -55,8 +60,54 @@ $(".round4").on("change", function () {
 
 $(".conflictsButton").on("click", function () {
     let editRow = $(this).closest("tr");
-    conflictJudge = (editRow[0].id.substring(5));
+    conflictJudge = parseInt((editRow[0].id.substring(5)));
+    fillConflictModal(conflictJudge);
     $("#conflictsModal").modal();
+});
+
+function fillConflictModal(judgeID) {
+    //start by unchecking all checkboxes
+    $(".conflictCheckbox").prop("checked",false);
+    
+    //then check the ones with conflicts
+    for(var a = 0;a<conflicts.length;a++){
+        if(conflicts[a].judge===judgeID){
+            $(`#${conflicts[a].team}checkbox`).prop("checked",true);
+        }
+    }
+}
+
+$(".conflictCheckbox").on("click", function () {
+    let teamNumber = $(this).closest("label").html().substring(66, 70);
+    let conflictData = `{
+    "judge":${conflictJudge},
+    "team":${teamNumber}
+    }`;
+    if ($(this).prop("checked")) {
+        $.ajax({
+            url: "../api/judgeConflicts/create.php",
+            method: "POST",
+            data: conflictData,
+            dataType: "json"
+        }).then(response => {
+            if (response.message != 0) {
+                warningModal(response.message);
+            }
+            updateConflicts();
+        });
+    } else {
+        $.ajax({
+            url: "../api/judgeConflicts/delete.php",
+            method: "POST",
+            data: conflictData,
+            dataType: "json"
+        }).then(response => {
+            if (response.message != 0) {
+                warningModal(response.message);
+            }
+            updateConflicts();
+        });
+    }
 });
 
 function updateJudge(id, field, value) {
@@ -113,3 +164,12 @@ $("#addJudge").on("click", function () {
         }
     });
 });
+
+function updateConflicts(){
+    $.ajax({
+        url: "../api/judgeConflicts/getAll.php",
+        dataType: "json"
+    }).then(data => {
+        conflicts = data;
+    });
+}

@@ -22,18 +22,7 @@ require_once __DIR__ . "/../config.php";
 require_once SITE_ROOT . "/database.php";
 
 class Pairing {
-
-    public $id;
-    public $round;
-    public $plaintiff;
-    public $defense;
-
-    public function __construct($round, $plaintiff, $defense) {
-        $this->round = $round;
-        $this->plaintiff = $plaintiff;
-        $this->defense = $defense;
-    }
-
+    
 }
 
 function createPairing($round, $plaintiff, $defense) {
@@ -41,10 +30,25 @@ function createPairing($round, $plaintiff, $defense) {
     $db = new Database();
     $conn = $db->getConnection();
 
+    //convert team numbers to ids
+    $teamQuery = "SELECT id,number FROM teams WHERE number = $plaintiff || number = $defense";
+    $teamResult = $conn->query($teamQuery);
+    $teamRow = $teamResult->fetch_assoc();
+    if ($plaintiff == intval($teamRow["number"])) {
+        $plaintiffID = intval($teamRow["id"]);
+        $teamRow = $teamResult->fetch_assoc();
+        $defenseID = intval($teamRow["id"]);
+    } else {
+        $defenseID = intval($teamRow["id"]);
+        $teamRow = $teamResult->fetch_assoc();
+        $plaintiffID = intval($teamRow["id"]);
+    }
+    $teamResult->close();
+
 
     $stmt = $conn->prepare("INSERT INTO pairings (round, plaintiff, defense) VALUES (?, ?, ?)");
     echo($stmt->error_list);
-    $stmt->bind_param('iii', $round, $plaintiff, $defense);
+    $stmt->bind_param('iii', $round, $plaintiffID, $defenseID);
     $stmt->execute();
     $stmt->close();
     $conn->close();
@@ -59,9 +63,23 @@ function createPairings($round, $pairings) {
     $deleteQuery = "DELETE FROM `pairings` WHERE round = $round";
     $conn->query($deleteQuery);
 
+    //convert team numberrs into ids
+    $teamQuery = "SELECT id,number FROM teams";
+    $teamResult = $conn->query($teamQuery);
+    while ($teamRow = $teamResult->fetch_assoc()) {
+        for ($a = 0; $a < sizeOf($pairings); $a++) {
+            if ($pairings[$a]["plaintiff"] === intval($teamRow["number"])) {
+                $pairings[$a]["plaintiff"] = intval($teamRow["id"]);
+            } else if ($pairings[$a]["defense"] === intval($teamRow["number"])) {
+                $pairings[$a]["defense"] = intval($teamRow["id"]);
+            }
+        }
+    }
+
     //insert the new pairings
     $stmt = $conn->prepare("INSERT INTO pairings (round, plaintiff, defense) VALUES (?, ?, ?)");
     for ($a = 0; $a < sizeOf($pairings); $a++) {
+        //send to database
         $stmt->bind_param('iii', $round, $pairings[$a]["plaintiff"], $pairings[$a]["defense"]);
         $stmt->execute();
     }
@@ -73,7 +91,7 @@ function createPairings($round, $pairings) {
     if ($result = $conn->query($idQuery)) {
         $i = 0;
         while ($row = $result->fetch_assoc()) {
-            $ids[$i]=intval($row["id"]);
+            $ids[$i] = intval($row["id"]);
         }
         $result->close();
     }
@@ -104,6 +122,21 @@ function getAllPairings() {
         /* free result set */
         $result->close();
     }
+
+    //convert ids to team numbers
+    $teamQuery = "SELECT id,number FROM teams";
+    $teamResult = $conn->query($teamQuery);
+    while ($teamRow = $teamResult->fetch_assoc()) {
+        for ($a = 0; $a < sizeOf($pairings); $a++) {
+            if ($pairings[$a]["plaintiff"] === intval($teamRow["id"])) {
+                $pairings[$a]["plaintiff"] = intval($teamRow["number"]);
+            } else if ($pairings[$a]["defense"] === intval($teamRow["id"])) {
+                $pairings[$a]["defense"] = intval($teamRow["number"]);
+            }
+        }
+    }
+    $teamResult->close();
+    $conn->close();
     return $pairings;
 }
 
@@ -126,6 +159,20 @@ function getRoundPairings($round) {
         }
         /* free result set */
         $result->close();
+
+
+        //convert ids to team numbers
+        $teamQuery = "SELECT id,number FROM teams";
+        $teamResult = $conn->query($teamQuery);
+        while ($teamRow = $teamResult->fetch_assoc()) {
+            for ($a = 0; $a < sizeOf($pairings); $a++) {
+                if ($pairings[$a]["plaintiff"] === intval($teamRow["id"])) {
+                    $pairings[$a]["plaintiff"] = intval($teamRow["number"]);
+                } else if ($pairings[$a]["defense"] === intval($teamRow["id"])) {
+                    $pairings[$a]["defense"] = intval($teamRow["number"]);
+                }
+            }
+        }
         $conn->close();
         return $pairings;
     } else {
@@ -138,7 +185,14 @@ function getTeamPairings($number) {
     $db = new Database();
     $conn = $db->getConnection();
 
-    $pairingssQuery = "SELECT * FROM pairings WHERE plaintiff = $number || defense = $number";
+    //convert team number to id
+    $teamQuery = "SELECT id FROM teams WHERE number = $number";
+    $teamResult = $conn->query($teamQuery);
+    $teamRow = $teamResult->fetch_assoc();
+    $id = intval($teamRow["id"]);
+    $teamResult->close();
+
+    $pairingssQuery = "SELECT * FROM pairings WHERE plaintiff = $id || defense = $id";
     if ($result = $conn->query($pairingssQuery)) {
         $pairings = [];
         while ($row = $result->fetch_assoc()) {
