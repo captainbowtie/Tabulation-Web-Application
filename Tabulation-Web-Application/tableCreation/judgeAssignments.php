@@ -1,6 +1,5 @@
 <?php
-
-/*
+/* 
  * Copyright (C) 2020 allen
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,31 +17,25 @@
  */
 
 // Get config information
-require_once __DIR__ . "/../config.php";
-require_once SITE_ROOT . "/database.php";
+require_once __DIR__."/../config.php";
+require_once SITE_ROOT."/database.php";
 
 // Create db connection
 $db = new Database();
 $conn = $db->getConnection();
 
 //Query to create table
-$query = "CREATE TABLE IF NOT EXISTS settings (
-id INT(1) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-judgesPerRound INT(2) UNSIGNED NOT NULL,
-lowerTeamIsHigherRank BOOLEAN NOT NULL,
-snakeStartsOnPlaintiff BOOLEAN NOT NULL
+$query = "CREATE TABLE IF NOT EXISTS judgeAssignments (
+id INT(3) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+pairing INT(4) UNSIGNED NOT NULL,
+judge INT(4) UNSIGNED NOT NULL
 )";
 
 if ($conn->query($query) === TRUE) {
-    $settingsExistQuery = "SELECT * FROM settings";
-    $numRows = mysqli_num_rows($conn->query($settingsExistQuery));
-    if ($numRows === 0) {
-        $defaultsQuery = "INSERT INTO settings (judgesPerRound, lowerTeamIsHigherRank, snakeStartsOnPlaintiff) VALUES "
-                . "(2,TRUE,TRUE)";
-        $conn->query($defaultsQuery);
-    }
+    
 } else {
     echo "Error creating table: " . $conn->error;
 }
 
 $conn->close();
+?>

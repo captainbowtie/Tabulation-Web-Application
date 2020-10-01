@@ -16,42 +16,43 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-/**
- *
- * @author allen
- */
 session_start();
 if ($_SESSION["isAdmin"]) {
     require_once __DIR__ . '/../../config.php';
-    require_once SITE_ROOT . "/database.php";
+    require_once SITE_ROOT . '/objects/settings.php';
 
-    $judgesPerRound = json_decode(file_get_contents("php://input"))->judgesPerRound;
-//echo json_decode(file_get_contents("php://input"));
+    $data = json_decode(file_get_contents("php://input"));
+
     if (
-            true //TODO: create some actual tests, sike whether the value is already set
+            isset($data->judgesPerRound) &&
+            isset($data->lowerTeamIsHigherRank) &&
+            isset($data->snakeStartsOnPlaintiff)
     ) {
-        $query = "INSERT INTO settings (judgesPerRound) VALUES ($judgesPerRound)";
-        $db = new Database();
-        $conn = $db->getConnection();
+        $settings["judgesPerRound"] = htmlspecialchars(strip_tags($data->judgesPerRound));
+        $settings["lowerTeamIsHigherRank"] = htmlspecialchars(strip_tags($data->lowerTeamIsHigherRank));
+        $settings["snakeStartsOnPlaintiff"] = htmlspecialchars(strip_tags($data->snakeStartsOnPlaintiff));
+        if (setSettings($settings)) {
+            // set response code - 201 created
+            http_response_code(201);
 
-        if (!$conn->query($query)) {
+            // tell the user
+            echo json_encode(array("message" => 0));
+        } else {
+
             // set response code - 503 service unavailable
             http_response_code(503);
 
             // tell the user
-            echo json_encode(array("message" => "Unable to create set judges per round."));
-        } else {
-            http_response_code(201);
-            echo json_encode(array("message" => 0));
+            echo json_encode(array("message" => "Unable to set setting."));
         }
     } else {
+
         // set response code - 400 bad request
         http_response_code(400);
 
         // tell the user
-        echo json_encode(array("message" => "Unable to set judges per round. Data is incomplete."));
+        echo json_encode(array("message" => "Unable to set setting. Data is incomplete."));
     }
 } else {
-    http_response_code(401);
+    die("Access denied.");
 }

@@ -163,6 +163,41 @@ $("#modalSave").on("click", function (e) {
     submitPairings(roundToSubmit);
 });
 
+$("#settings").on("submit",e=>e.preventDefault());
+
+$("#judgesPerRound").on("change", function () {
+    if(Number.isInteger(parseInt($(this).val()))){
+        updateSetting("judgesPerRound",$(this).val());
+    }   
+});
+
+$("#tieBreaker").on("change", function () {
+    updateSetting("lowerTeamIsHigherRank",$(this).val());
+});
+
+$("#snakeStart").on("change", function () {
+    updateSetting("snakeStartsOnPlaintiff",$(this).val());  
+});
+
+function updateSetting(field,value){
+    let updateData = `{
+    "field":"${field}",
+    "value":${value}
+    }`;
+    $.ajax({
+        url: "../api/settings/set.php",
+        method: "POST",
+        data: updateData,
+        dataType: "json"
+    }).then(response => {
+        if (response.message != 0) {
+            warningModal(response.message);
+        }else if(field==="judgesPerRound"){
+            location.reload(); 
+        }
+    });
+}
+
 function submitPairings(round) {
     //create pairings json object
     let data = `{"round":${round},"pairings":[`;

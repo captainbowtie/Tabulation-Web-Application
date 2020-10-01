@@ -30,11 +30,6 @@ require_once SITE_ROOT . "/tableCreation/judgeConflicts.php";
 require_once SITE_ROOT . "/tableCreation/settings.php";
 require_once SITE_ROOT . "/loginHeader.php";
 
-//check if number of judges per round has been set
-$db = new Database();
-$conn = $db->getConnection();
-
-$bodyHTML = "";
 ?>
 <!DOCTYPE HTML>
 <html>
@@ -58,7 +53,6 @@ $bodyHTML = "";
     <body>
         <?php
         echo $header;
-        echo $bodyHTML;
         require_once SITE_ROOT . "/pairingsTable.php";
         ?>
     </body>

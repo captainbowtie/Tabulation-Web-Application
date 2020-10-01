@@ -18,15 +18,19 @@
 
 session_start();
 if ($_SESSION["isAdmin"]) {
-    
+
     //import requirements
     require_once __DIR__ . "/config.php";
     require_once SITE_ROOT . "/database.php";
     require_once SITE_ROOT . "/objects/team.php";
+    require_once SITE_ROOT . "/objects/settings.php";
     require_once SITE_ROOT . "/loginHeader.php";
 
-//get team data;
+    //get team data;
     $teams = getAllTeams();
+
+    //get settings data
+    $settings = getAllSettings();
 
     if (!empty($teams)) {//generate select content
         $pSelects = [];
@@ -125,34 +129,48 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <!-- Latest compiled and minified JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
-
+        <link rel="stylesheet" href="pairings.css">
         <title></title>
     </head>
     <body>
-<?php
-echo $header;
-?>
+        <?php
+        echo $header;
+        ?>
+        <form id="settings">
+            <label id="judgesPerRoundLabel" for="judgesPerRound">Judges Per Round:</label>
+            <input id="judgesPerRound" value="<?php echo $settings["judgesPerRound"];?>">
+            <label id="tieBreakerLabel" for="tieBreaker">Team Number Tiebreaker:</label>
+            <select id="tieBreaker">
+                <option <?php if($settings["lowerTeamIsHigherRank"]){echo "selected";}?> value="true">Lower Team Number Is Better Rank</option>
+                <option <?php if(!$settings["lowerTeamIsHigherRank"]){echo "selected";}?> value="false">Higher Team Number Is Better Rank</option>
+            </select>
+            <label id="snakeStartLabel" for="snakeStart">Start Round 3 Snake On:</label>
+            <select id="snakeStart">
+                <option <?php if($settings["snakeStartsOnPlaintiff"]){echo "selected";}?> value="true">Plaintiff</option>
+                <option <?php if(!$settings["snakeStartsOnPlaintiff"]){echo "selected";}?> value="false">Defense</option>
+            </select>
+        </form>
         <div class="tab-content">
             <div id="round1" class="tab-pane fade in active">
 
-<?php
-echo $tabHTML[1];
-?>    
+                <?php
+                echo $tabHTML[1];
+                ?>    
             </div>
             <div id="round2" class="tab-pane fade">
-<?php
-echo $tabHTML[2];
-?>
+                <?php
+                echo $tabHTML[2];
+                ?>
             </div>
             <div id="round3" class="tab-pane fade">
-<?php
-echo $tabHTML[3];
-?>
+                <?php
+                echo $tabHTML[3];
+                ?>
             </div>
             <div id="round4" class="tab-pane fade">
-<?php
-echo $tabHTML[4];
-?>
+                <?php
+                echo $tabHTML[4];
+                ?>
             </div>
         </div>
         <ul class="nav nav-tabs">
