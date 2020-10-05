@@ -40,26 +40,21 @@ function createBallot($pairing) {
     return true;
 }
 
-function createBallots($pairings) {
+function createBallots($ballots) {
     $db = new Database();
     $conn = $db->getConnection();
-
-    //determine number of ballots per round and create that many ballots for each pairing
-    $judgeCountQuery = "SELECT judgesPerRound FROM settings";
-    $judgeCountResult = $conn->query($judgeCountQuery);
-    $judgeCountRow = $judgeCountResult->fetch_assoc();
-    $judgeCount = $judgeCountRow["judgesPerRound"];
-
     //create ballots
-    $stmt = $conn->prepare("INSERT INTO ballots (pairing) VALUES (?)");
-    for ($a = 0; $a < sizeOf($pairings); $a++) {
-        $stmt->bind_param('i', $pairings[$a]);
-        //execute statement as many times as there are judges per round
-        for ($b = 0; b < $judgeCount; $b++) {
-            $stmt->execute();
-        }
+    $stmt = $conn->prepare("INSERT INTO ballots (pairing,judge,url) VALUES (?,?,?)");
+    for ($a = 0; $a < sizeOf($ballots); $a++) {
+        $url = bin2hex(random_bytes(32));
+        $stmt->bind_param('iis', intval($ballots[$a]["pairing"]), intval($ballots[$a]["judge"]), $url);
+        //execute statement as many times as there are needed ballots
+        $stmt->execute();
+
     }
     $stmt->close();
+    $conn->close();
+    echo"test";
     return true;
 }
 
@@ -77,6 +72,8 @@ function getAllBallots() {
         while ($row = $result->fetch_assoc()) {
             $ballots[$i]["id"] = intval($row["id"]);
             $ballots[$i]["pairing"] = intval($row["pairing"]);
+            $ballots[$i]["judge"] = intval($row["judge"]);
+            $ballots[$i]["url"] = $row["url"];
             $ballots[$i]["pOpen"] = intval($row["pOpen"]);
             $ballots[$i]["dOpen"] = intval($row["dOpen"]);
             $ballots[$i]["pDx1"] = intval($row["pDx1"]);
@@ -261,6 +258,20 @@ function updateBallot($ballot) {
     $conn = $db->getConnection();
     $conn->query($stmt);
     $conn->close();
-    echo $stmt;
+    return true;
+}
+
+function updateScore($ballot){
+
+    $part = $ballot["part"];
+    $score = $ballot["score"];
+    $url = $ballot["url"];
+    $query = "UPDATE ballots SET $part = $score WHERE url = '$url'";
+
+    $db = new Database();
+    $conn = $db->getConnection();
+    $conn->query($query);
+    $conn->close();
+    
     return true;
 }

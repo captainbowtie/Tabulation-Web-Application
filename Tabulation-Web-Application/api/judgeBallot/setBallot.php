@@ -1,6 +1,7 @@
 <?php
+
 /* 
- * Copyright (C) 2019 allen
+ * Copyright (C) 2020 allen
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -16,5 +17,3 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-define('SITE_ROOT', __DIR__);
-define('HOST_NAME','localhost:8000');

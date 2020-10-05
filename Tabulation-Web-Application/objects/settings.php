@@ -70,6 +70,7 @@ function getSetting($setting) {
 
     //get setting
     if ($result = $conn->query($query)) {
+        $row = $result->fetch_assoc();
         $value = intval($row["$setting"]);
         /* free result set */
         $result->close();

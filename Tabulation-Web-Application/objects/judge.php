@@ -63,9 +63,9 @@ function getAllJudges() {
     if ($result = $conn->query($userQuery)) {
         $i = 0;
         while ($row = $result->fetch_assoc()) {
-            $judges[$i]["id"] = $row["id"];
+            $judges[$i]["id"] = intval($row["id"]);
             $judges[$i]["name"] = $row["name"];
-            $judges[$i]["category"] = $row["category"];
+            $judges[$i]["category"] = intval($row["category"]);
             $judges[$i]["round1"] = $row["round1"];
             $judges[$i]["round2"] = $row["round2"];
             $judges[$i]["round3"] = $row["round3"];

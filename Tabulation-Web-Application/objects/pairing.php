@@ -47,7 +47,6 @@ function createPairing($round, $plaintiff, $defense) {
 
 
     $stmt = $conn->prepare("INSERT INTO pairings (round, plaintiff, defense) VALUES (?, ?, ?)");
-    echo($stmt->error_list);
     $stmt->bind_param('iii', $round, $plaintiffID, $defenseID);
     $stmt->execute();
     $stmt->close();
@@ -77,10 +76,11 @@ function createPairings($round, $pairings) {
     }
 
     //insert the new pairings
-    $stmt = $conn->prepare("INSERT INTO pairings (round, plaintiff, defense) VALUES (?, ?, ?)");
+    $stmt = $conn->prepare("INSERT INTO pairings (round, plaintiff, defense, captainsURL) VALUES (?, ?, ?, ?)");
     for ($a = 0; $a < sizeOf($pairings); $a++) {
+        $captainsURL = bin2hex(random_bytes(32));
         //send to database
-        $stmt->bind_param('iii', $round, $pairings[$a]["plaintiff"], $pairings[$a]["defense"]);
+        $stmt->bind_param('iiis', $round, $pairings[$a]["plaintiff"], $pairings[$a]["defense"], $captainsURL);
         $stmt->execute();
     }
     $stmt->close();
@@ -117,6 +117,7 @@ function getAllPairings() {
             $pairings[$i]["round"] = intval($row["round"]);
             $pairings[$i]["plaintiff"] = intval($row["plaintiff"]);
             $pairings[$i]["defense"] = intval($row["defense"]);
+            $pairings[$i]["captainsURL"] = $row["captainsURL"];
             $i++;
         }
         /* free result set */
@@ -207,4 +208,45 @@ function getTeamPairings($number) {
     } else {
         return false;
     }
+}
+
+function submitCaptains($captains) {
+    $db = new Database();
+    $conn = $db->getConnection();
+
+    //update pairing with captains data
+    $query = "UPDATE pairings SET " .
+            "pOpen = '" . $captains["pOpen"] . "', " .
+            "dOpen = '" . $captains["dOpen"] . "', " .
+            "pDx1 = '" . $captains["pDx1"] . "', " .
+            "pDx2 = '" . $captains["pDx2"] . "', " .
+            "pDx3 = '" . $captains["pDx3"] . "', " .
+            "pWDx1 = '" . $captains["pWDx1"] . "', " .
+            "pWDx2 = '" . $captains["pWDx2"] . "', " .
+            "pWDx3 = '" . $captains["pWDx3"] . "', " .
+            "pCx1 = '" . $captains["pCx1"] . "', " .
+            "pCx2 = '" . $captains["pCx2"] . "', " .
+            "pCx3 = '" . $captains["pCx3"] . "', " .
+            "dDx1 = '" . $captains["dDx1"] . "', " .
+            "dDx2 = '" . $captains["dDx2"] . "', " .
+            "dDx3 = '" . $captains["dDx3"] . "', " .
+            "dWDx1 = '" . $captains["dWDx1"] . "', " .
+            "dWDx2 = '" . $captains["dWDx2"] . "', " .
+            "dWDx3 = '" . $captains["dWDx3"] . "', " .
+            "dCx1 = '" . $captains["dCx1"] . "', " .
+            "dCx2 = '" . $captains["dCx2"] . "', " .
+            "dCx3 = '" . $captains["dCx3"] . "', " .
+            "pClose = '" . $captains["pClose"] . "', " .
+            "dClose = '" . $captains["dClose"] . "', " .
+            "wit1 = '" . $captains["wit1"] . "', " .
+            "wit2 = '" . $captains["wit2"] . "', " .
+            "wit3 = '" . $captains["wit3"] . "', " .
+            "wit4 = '" . $captains["wit4"] . "', " .
+            "wit5 = '" . $captains["wit5"] . "', " .
+            "wit6 = '" . $captains["wit6"] . "' " .
+            "WHERE captainsURL = '" . $captains["url"]."'";
+    echo $query;
+    $conn->query($query);
+    $conn->close();
+    return true;
 }

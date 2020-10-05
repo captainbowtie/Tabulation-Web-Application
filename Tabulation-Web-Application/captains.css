@@ -1,0 +1,231 @@
+/*
+Copyright (C) 2020 allen
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+/* 
+    Created on : Oct 5, 2020, 10:11:10 AM
+    Author     : allen
+*/
+
+#inputDiv{
+    display:grid;
+}
+
+#pOpenLabel{
+    grid-row:1/1;
+    grid-column:1/1;
+}
+#pOpen{
+    grid-row:1/1;
+    grid-column:2/2;
+}
+#dOpenLabel{
+    grid-row:1/1;
+    grid-column:3/3;
+}
+#dOpen{
+    grid-row:1/1;
+    grid-column:4/4;
+}
+#wit1{
+    grid-row:3/3;
+    grid-column: 1/1;
+}
+#pDx1Label{
+    grid-row:4/4;
+    grid-column: 1/1;
+}
+#pDx1{
+    grid-row:4/4;
+    grid-column: 2/2;
+}
+#dCx1Label{
+    grid-row:4/4;
+    grid-column: 3/3;
+}
+#dCx1{
+    grid-row:4/4;
+    grid-column: 4/4;
+}
+#pWDx1Label{
+    grid-row:5/5;
+    grid-column: 1/1;
+}
+#pWDx1{
+    grid-row:5/5;
+    grid-column: 2/2;
+}
+
+#wit2{
+    grid-row:7/7;
+    grid-column: 1/1;
+}
+#pDx2Label{
+    grid-row:8/8;
+    grid-column: 1/1;
+}
+#pDx2{
+    grid-row:8/8;
+    grid-column: 2/2;
+}
+#dCx2Label{
+    grid-row:8/8;
+    grid-column: 3/3;
+}
+#dCx2{
+    grid-row:8/8;
+    grid-column: 4/4;
+}
+#pWDx2Label{
+    grid-row:9/9;
+    grid-column: 1/1;
+}
+#pWDx2{
+    grid-row:9/9;
+    grid-column: 2/2;
+}
+
+#wit3{
+    grid-row:11/11;
+    grid-column: 1/1;
+}
+#pDx3Label{
+    grid-row:12/12;
+    grid-column: 1/1;
+}
+#pDx3{
+    grid-row:12/12;
+    grid-column: 2/2;
+}
+#dCx3Label{
+    grid-row:12/12;
+    grid-column: 3/3;
+}
+#dCx3{
+    grid-row:12/12;
+    grid-column: 4/4;
+}
+#pWDx3Label{
+    grid-row:13/13;
+    grid-column: 1/1;
+}
+#pWDx3{
+    grid-row:13/13;
+    grid-column: 2/2;
+}
+
+#wit4{
+    grid-row:15/15;
+    grid-column: 1/1;
+}
+#dDx1Label{
+    grid-row:16/16;
+    grid-column: 3/3;
+}
+#dDx1{
+    grid-row:16/16;
+    grid-column: 4/4;
+}
+#pCx1Label{
+    grid-row:16/16;
+    grid-column: 1/1;
+}
+#pCx1{
+    grid-row:16/16;
+    grid-column: 2/2;
+}
+#dWDx1Label{
+    grid-row:17/17;
+    grid-column: 3/3;
+}
+#dWDx1{
+    grid-row:17/17;
+    grid-column: 4/4;
+}
+
+#wit5{
+    grid-row:19/19;
+    grid-column: 1/1;
+}
+#dDx2Label{
+    grid-row:20/20;
+    grid-column: 3/3;
+}
+#dDx2{
+    grid-row:20/20;
+    grid-column: 4/4;
+}
+#pCx2Label{
+    grid-row:20/20;
+    grid-column: 1/1;
+}
+#pCx2{
+    grid-row:20/20;
+    grid-column: 2/2;
+}
+#dWDx2Label{
+    grid-row:21/21;
+    grid-column: 3/3;
+}
+#dWDx2{
+    grid-row:21/21;
+    grid-column: 4/4;
+}
+
+#wit6{
+    grid-row:23/23;
+    grid-column: 1/1;
+}
+#dDx3Label{
+    grid-row:24/24;
+    grid-column: 3/3;
+}
+#dDx3{
+    grid-row:24/24;
+    grid-column: 4/4;
+}
+#pCx3Label{
+    grid-row:24/24;
+    grid-column: 1/1;
+}
+#pCx3{
+    grid-row:24/24;
+    grid-column: 2/2;
+}
+#dWDx3Label{
+    grid-row:25/25;
+    grid-column: 3/3;
+}
+#dWDx3{
+    grid-row:25/25;
+    grid-column: 4/4;
+}
+
+#pCloseLabel{
+    grid-row:27/27;
+    grid-column: 1/1;
+}
+#pClose{
+    grid-row:27/27;
+    grid-column: 2/2;
+}
+#dCloseLabel{
+    grid-row:27/27;
+    grid-column: 3/3;
+}
+#dClose{
+    grid-row:27/27;
+    grid-column: 4/4;
+}

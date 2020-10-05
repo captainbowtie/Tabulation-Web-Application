@@ -22,6 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #settings {
     display:grid;
 }
+
 #judgesPerRoundLabel {
     grid-column: 1 / 1;
     grid-row: 1 / 1;
@@ -53,4 +54,59 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #snakeStart {
     grid-column: 2 / 2;
     grid-row: 3 / 3;
+}
+
+#round1{
+    display: grid;
+}
+
+#round2{
+    display: grid;
+}
+
+#round3{
+    display: grid;
+}
+
+#round4{
+    display: grid;
+}
+
+#round1Header{
+    grid-row: 1/1;
+    grid-column:1/1;
+}
+
+#round2Header{
+    grid-row: 1/1;
+    grid-column:1/1;
+}
+
+
+#round3Header{
+    grid-row: 1/1;
+    grid-column:1/1;
+}
+
+#round4Header{
+    grid-row: 1/1;
+    grid-column:1/1;
+}
+.pHeader{
+    grid-column: 1 / 1;
+    grid-row: 2 / 2;
+}
+
+.dHeader{
+    grid-column: 2 / 2;
+    grid-row: 2 / 2;
+}
+
+
+.pSelect{
+    grid-column: 1 / 1;
+}
+
+.dSelect{
+    grid-column: 2 / 2;
 }

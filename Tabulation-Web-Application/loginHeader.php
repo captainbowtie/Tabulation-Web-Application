@@ -27,7 +27,10 @@ if ($_SESSION["isAdmin"]) {
     <a href="pairings.php">Pairings</a>
     <a href="judges.php">Judges</a>
     <a href="teams.php">Teams</a>
-    <a href="users.php">Users</a>';
+    <a href="users.php">Users</a>
+    <a href="judgesURLs.php">Judges URLs</a>
+    <a href="captainsURLs.php">Captains URLs</a>';
+    
     $header .= "<a style='float: right' href='logout.php'>Log Out</a>\n";
 } elseif ($_SESSION["isCoach"]) {
     $header .= '<a href="index.php">Home</a>

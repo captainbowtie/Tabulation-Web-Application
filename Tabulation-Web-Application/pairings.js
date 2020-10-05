@@ -20,19 +20,31 @@ var teams;
 var pairings;
 var ballots;
 var impermissibles;
+var judges;
 let round1PairingsExist = false;
 let round2PairingsExist = false;
 let round3PairingsExist = false;
 let round4PairingsExist = false;
+let round1BallotsExist = false;
+let round2BallotsExist = false;
+let round3BallotsExist = false;
+let round4BallotsExist = false;
+
+var ballotWarningBallots;
+
 
 $(document).ready(function () {
     //Pull all data from server
     updateData().then(data => {
-        //to the extent pairings exist, fill them in
+        //to the extent pairings and judges exist, fill them in
         var round1Pairings = [];
         var round2Pairings = [];
         var round3Pairings = [];
         var round4Pairings = [];
+        var round1Ballots = [];
+        var round2Ballots = [];
+        var round3Ballots = [];
+        var round4Ballots = [];
         //categorize pairings into rounds
         for (var a = 0; a < pairings.length; a++) {
             switch (pairings[a].round) {
@@ -49,8 +61,38 @@ $(document).ready(function () {
                     round4Pairings.push(pairings[a]);
                     break;
             }
+            for (var b = 0; b < ballots.length; b++) {
+                if (ballots[b].pairing === pairings[a].id) {
+                    switch (pairings[a].round) {
+                        case 1:
+                            round1Ballots.push(ballots[b]);
+                            break;
+                        case 2:
+                            round2Ballots.push(ballots[b]);
+                            break;
+                        case 3:
+                            round3Ballots.push(ballots[b]);
+                            break;
+                        case 4:
+                            round4Ballots.push(ballots[b]);
+                            break;
+                    }
+                }
+            }
         }
-        //fill in each round that exists
+
+        //sort pairings and ballots by pairing id
+        round1Pairings = round1Pairings.sort(sortByPairing);
+        round2Pairings = round2Pairings.sort(sortByPairing);
+        round3Pairings = round3Pairings.sort(sortByPairing);
+        round4Pairings = round4Pairings.sort(sortByPairing);
+        round1Ballots = round1Ballots.sort(sortByPairing);
+        round2Ballots = round2Ballots.sort(sortByPairing);
+        round3Ballots = round3Ballots.sort(sortByPairing);
+        round4Ballots = round4Ballots.sort(sortByPairing);
+
+
+        //fill in each round's pairings that exist
         for (var a = 0; a < round1Pairings.length; a++) {
             $(`#round1p${a}`).val(round1Pairings[a].plaintiff);
             $(`#round1d${a}`).val(round1Pairings[a].defense);
@@ -71,6 +113,29 @@ $(document).ready(function () {
             $(`#round4d${a}`).val(round4Pairings[a].defense);
             round4PairingsExist = true;
         }
+
+        //fill in each round's judges that exist
+        let r1judgeSelects = $(".judgeSelect[data-round='1']");
+        let r2judgeSelects = $(".judgeSelect[data-round='2']");
+        let r3judgeSelects = $(".judgeSelect[data-round='3']");
+        let r4judgeSelects = $(".judgeSelect[data-round='4']");
+        for (var a = 0; a < round1Ballots.length; a++) {
+            $(r1judgeSelects[a]).val(round1Ballots[a].judge);
+            round1BallotsExist = true;
+        }
+        for (var a = 0; a < round2Ballots.length; a++) {
+            $(r2judgeSelects[a]).val(round2Ballots[a].judge);
+            round2BallotsExist = true;
+        }
+        for (var a = 0; a < round3Ballots.length; a++) {
+            $(r3judgeSelects[a]).val(round3Ballots[a].judge);
+            round3BallotsExist = true;
+        }
+        for (var a = 0; a < round4Ballots.length; a++) {
+            $(r4judgeSelects[a]).val(round4Ballots[a].judge);
+            round4BallotsExist = true;
+        }
+
 
         //switch tab to current round
         if (round4PairingsExist) {
@@ -124,7 +189,7 @@ $("#pair4").on("click", function (e) {
 $("#submit1").on("click", function (e) {
     e.preventDefault();
     if (round1PairingsExist) {
-        warningModal("Round 1 pairings already exist. Saving these pairings will overwrite the existing pairings.");
+        pairingsWarningModal("Round 1 pairings already exist. Saving these pairings will overwrite the existing pairings.");
     } else {
         submitPairings(1);
     }
@@ -133,7 +198,7 @@ $("#submit1").on("click", function (e) {
 $("#submit2").on("click", function (e) {
     e.preventDefault();
     if (round2PairingsExist) {
-        warningModal("Round 2 pairings already exist. Saving these pairings will overwrite the existing pairings.");
+        pairingsWarningModal("Round 2 pairings already exist. Saving these pairings will overwrite the existing pairings.");
     } else {
         submitPairings(2);
     }
@@ -142,7 +207,7 @@ $("#submit2").on("click", function (e) {
 $("#submit3").on("click", function (e) {
     e.preventDefault();
     if (round3PairingsExist) {
-        warningModal("Round 3 pairings already exist. Saving these pairings will overwrite the existing pairings.");
+        pairingsWarningModal("Round 3 pairings already exist. Saving these pairings will overwrite the existing pairings.");
     } else {
         submitPairings(3);
     }
@@ -151,35 +216,96 @@ $("#submit3").on("click", function (e) {
 $("#submit4").on("click", function (e) {
     e.preventDefault();
     if (round4PairingsExist) {
-        warningModal("Round 4 pairings already exist. Saving these pairings will overwrite the existing pairings.");
+        pairingsWarningModal("Round 4 pairings already exist. Saving these pairings will overwrite the existing pairings.");
     } else {
         submitPairings(4);
     }
 });
 
-$("#modalSave").on("click", function (e) {
+$("#submitJudges1").on("click", function (e) {
+    e.preventDefault();
+    if (validateJudges(1)) {
+        let ballots = generateBallots(1);
+        if (round1BallotsExist) {
+            ballotWarningBallots = ballots;
+            ballotsWarningModal("Round 1 judges are already assigned. Submitting these assignments will overwrite the existing assignments.");
+        } else {
+            submitBallots(ballots);
+        }
+
+    }
+});
+
+$("#submitJudges2").on("click", function (e) {
+    e.preventDefault();
+    if (validateJudges(2)) {
+        let ballots = generateBallots(2);
+        if (round1BallotsExist) {
+            ballotWarningBallots = ballots;
+            ballotsWarningModal("Round 2 judges are already assigned. Submitting these assignments will overwrite the existing assignments.");
+        } else {
+            submitBallots(ballots);
+        }
+
+    }
+});
+
+$("#submitJudges3").on("click", function (e) {
+    e.preventDefault();
+    if (validateJudges(3)) {
+        let ballots = generateBallots(3);
+        if (round1BallotsExist) {
+            ballotWarningBallots = ballots;
+            ballotsWarningModal("Round 3 judges are already assigned. Submitting these assignments will overwrite the existing assignments.");
+        } else {
+            submitBallots(ballots);
+        }
+
+    }
+});
+
+$("#submitJudges4").on("click", function (e) {
+    e.preventDefault();
+    if (validateJudges(4)) {
+        let ballots = generateBallots(4);
+        if (round1BallotsExist) {
+            ballotWarningBallots = ballots;
+            ballotsWarningModal("Round 4 judges are already assigned. Submitting these assignments will overwrite the existing assignments.");
+        } else {
+            submitBallots(ballots);
+        }
+
+    }
+});
+
+$("#pairingSave").on("click", function (e) {
     e.preventDefault();
     const roundToSubmit = $(".active").attr("id").substring(5);
     submitPairings(roundToSubmit);
 });
 
-$("#settings").on("submit",e=>e.preventDefault());
+$("#ballotSave").on("click", function (e) {
+    e.preventDefault();
+    submitBallots(ballotWarningBallots);
+});
+
+$("#settings").on("submit", e => e.preventDefault());
 
 $("#judgesPerRound").on("change", function () {
-    if(Number.isInteger(parseInt($(this).val()))){
-        updateSetting("judgesPerRound",$(this).val());
-    }   
+    if (Number.isInteger(parseInt($(this).val()))) {
+        updateSetting("judgesPerRound", $(this).val());
+    }
 });
 
 $("#tieBreaker").on("change", function () {
-    updateSetting("lowerTeamIsHigherRank",$(this).val());
+    updateSetting("lowerTeamIsHigherRank", $(this).val());
 });
 
 $("#snakeStart").on("change", function () {
-    updateSetting("snakeStartsOnPlaintiff",$(this).val());  
+    updateSetting("snakeStartsOnPlaintiff", $(this).val());
 });
 
-function updateSetting(field,value){
+function updateSetting(field, value) {
     let updateData = `{
     "field":"${field}",
     "value":${value}
@@ -192,8 +318,8 @@ function updateSetting(field,value){
     }).then(response => {
         if (response.message != 0) {
             warningModal(response.message);
-        }else if(field==="judgesPerRound"){
-            location.reload(); 
+        } else if (field === "judgesPerRound") {
+            location.reload();
         }
     });
 }
@@ -206,13 +332,13 @@ function submitPairings(round) {
         let defense = $(`#round${round}d${a}`).val();
         let pairing = `{"plaintiff":${plaintiff},"defense":${defense}}`;
         data += pairing;
-        if(a!==(teams.length/2-1)){
+        if (a !== (teams.length / 2 - 1)) {
             data += ",";
         }
     }
     data += "]}";
-    
- 
+
+
     //send pairings to the server
     $.ajax({
         url: "../api/pairings/create.php",
@@ -224,6 +350,22 @@ function submitPairings(round) {
             window.location.reload();
         } else {
             warningModal(response.message);
+        }
+    });
+}
+
+function submitBallots(ballots) {
+    data = JSON.stringify(ballots);
+    $.ajax({
+        url: "../api/ballots/create.php",
+        method: "POST",
+        data: data,
+        dataType: "json"
+    }).then(response => {
+        if (response.message === 0) {
+            window.location.reload();
+        } else {
+            alert(response.message);
         }
     });
 }
@@ -713,18 +855,6 @@ function pair4() {
     return pairings;
 }
 
-function updateData() {
-    return new Promise(function (resolve, reject) {
-        Promise.all([getTeams(), getPairings(), getImpermissibles(), getBallots()]).then(data => {
-            teams = data[0];
-            pairings = data[1];
-            impermissibles = data[2];
-            ballots = data[3];
-            resolve();
-        });
-    });
-}
-
 function pairingsHaveConflicts(plaintiffTeams, defenseTeams) {
     //initialize return variable
     var conflicts = false;
@@ -742,6 +872,19 @@ function pairingsHaveConflicts(plaintiffTeams, defenseTeams) {
         }
     }
     return conflicts;
+}
+
+function updateData() {
+    return new Promise(function (resolve, reject) {
+        Promise.all([getTeams(), getPairings(), getImpermissibles(), getBallots(), getJudges]).then(data => {
+            teams = data[0];
+            pairings = data[1];
+            impermissibles = data[2];
+            ballots = data[3];
+            judges = data[4];
+            resolve();
+        });
+    });
 }
 
 function getTeams() {
@@ -805,10 +948,36 @@ function getImpermissibles() {
 function getBallots() {
     return new Promise(function (resolve, reject) {
         $.ajax({
-            url: "../api/ballots/getAllPDs.php",
+            url: "../api/ballots/getAll.php",
             dataType: "json"
         }).then(ballots => {
+            for (var a = 0; a < ballots.length; a++) {
+                ballots[a].plaintiffPD =
+                        (ballots[a].pClose +
+                                ballots[a].pCx1 + ballots[a].pCx2 + ballots[a].pCx3 +
+                                ballots[a].pDx1 + ballots[a].pDx2 + ballots[a].pDx3 +
+                                ballots[a].pOpen +
+                                ballots[a].pWCx1 + ballots[a].pWCx2 + ballots[a].pWCx3 +
+                                ballots[a].pWDx1 + ballots[a].pWDx2 + ballots[a].pWDx3) -
+                        (ballots[a].dClose +
+                                ballots[a].dCx1 + ballots[a].dCx2 + ballots[a].dCx3 +
+                                ballots[a].dDx1 + ballots[a].dDx2 + ballots[a].dDx3 +
+                                ballots[a].dOpen +
+                                ballots[a].dWCx1 + ballots[a].dWCx2 + ballots[a].dWCx3 +
+                                ballots[a].dWDx1 + ballots[a].dWDx2 + ballots[a].dWDx3);
+            }
             resolve(ballots);
+        });
+    });
+}
+
+function getJudges() {
+    return new Promise(function (resolve, reject) {
+        $.ajax({
+            url: "../api/judges/getAll.php",
+            dataType: "json"
+        }).then(judges => {
+            resolve(judges);
         });
     });
 }
@@ -887,9 +1056,49 @@ function rankSwaps(swaps) {
     return swaps.sort(sortFunction);
 }
 
-function warningModal(warning) {
-    $("#warningModalText").text(warning);
-    $("#warningModal").modal();
+function validateJudges(round) {
+    return true; //TODO actually validate
+}
+
+function generateBallots(round) {
+    var ballots = [];
+    let judgeSelects = $(".judgeSelect");
+    let pSelects = $(".pSelect");
+    let dSelects = $(".dSelect");
+    for (var a = 0; a < judgeSelects.length; a++) {//iterate through all judge selects
+        if (parseInt(judgeSelects[a].attributes["data-round"].value) === round) {//check that we're in correct round
+            for (var b = 0; b < pSelects.length; b++) {//then iterate through all plaintiff selects
+                if (parseInt(pSelects[b].attributes["data-round"].value) === round && //check that the plaintiff is in round one
+                        parseInt(pSelects[b].attributes["data-pairing"].value) === parseInt(judgeSelects[a].attributes["data-pairing"].value)) {//and that the rows match
+                    for (var c = 0; c < dSelects.length; c++) {//finally, iterate through defense selects
+                        if (parseInt(dSelects[c].attributes["data-round"].value) === round && //check that the defense is in round one
+                                parseInt(dSelects[c].attributes["data-pairing"].value) === parseInt(judgeSelects[a].attributes["data-pairing"].value)) {//and that the rows match
+                            let ballot = {
+                                "plaintiff": parseInt(pSelects[b].value),
+                                "defense": parseInt(dSelects[c].value),
+                                "judge": parseInt(judgeSelects[a].value)};
+                            ballots.push(ballot);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return ballots;
+}
+
+function pairingsWarningModal(warning) {
+    $("#pairingsWarningModalText").text(warning);
+    $("#pairingsWarningModal").modal();
+}
+
+function ballotsWarningModal(warning) {
+    $("#ballotsWarningModalText").text(warning);
+    $("#ballotsWarningModal").modal();
+}
+
+function sortByPairing(objA, objB) {
+    return objA.pairing - objB.pairing;
 }
 
 //cc-by-sa by CoolAJ86 https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
