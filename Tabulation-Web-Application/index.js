@@ -14,21 +14,27 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+$("#submitJudgesPerRound").on("click", function (e) {
+    e.preventDefault();
+    let judgesPerRound = Number.parseInt($("#judgesPerRound").val());
+    if (Number.isInteger(judgesPerRound) && judgesPerRound > 0) {
+        setJudgesPerRound(judgesPerRound);
+    } else {
+        alert("Invalid entry for number of judges per round");
+    }
+});
 
-$("#button").on("click",function(){
-    let email = $("#email").val();
-    let password = $("#password").val();
-    let data = '{"email":"' + email + '","password":"' + password + '"}';
+function setJudgesPerRound(judgesPerRound) {
     $.ajax({
-        url: "doLogin.php",
+        url: "../api/settings/setJudgesPerRound.php",
         method: "POST",
-        data: data,
+        data: `{"judgesPerRound":${judgesPerRound}}`,
         dataType: "json"
     }).then(response => {
         if (response.message === 0) {
-            window.location.href = "index.php";
+            window.location.reload();
         } else {
-            alert("Incorrect login");
+            alert(response.message);
         }
     });
-});
+}

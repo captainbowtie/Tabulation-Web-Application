@@ -1,5 +1,5 @@
 /* 
- * Copyright (C) 2017 allen
+ * Copyright (C) 2020 allen
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -15,100 +15,136 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-$("input").on("change", function () {
-    var ballotId = $("#judge").attr('ballotId');
-    var role = this.name;
-    var score = this.value;
-    var postString = '{"id":' + ballotId + ',"field":' + role + '","value":' + score + '}';
-    var postData = JSON.parse(postString);
-
-    $.ajax({
-
-        // The URL for the request
-        url: "/postBallot.php",
-
-        // The data to send (will be converted to a query string)
-        data: postData,
-
-        // Whether this is a POST or GET request
-        type: "POST",
-
-        // The type of data we expect back
-        dataType: "text",
-    })
-            // Code to run if the request succeeds (is done);
-            // The response is passed to the function
-            .done(function (response) {
-
-            })
+$("input[type='number']").on("change", function () {
+    if (validateScore($(this).val())) {
+        updateScore($(this).attr("id"),$(this).val());
+    } else {
+        let part = determinePart($(this).attr("id"));
+        alert("Error: " + part + " must be a number between 0 and 10.");
+    }
 });
 
-$(".rankSelect").on("change", function () {
-    var ballotId = $("#judge").attr('ballotId');
-    var rankSlot = this.id;
-    var competitor = this.value;
-    var postString = '{"id":' + ballotId + ',"field":"' + rankSlot + '","value":' + competitor + '}';
-    var postData = JSON.parse(postString);
+function updateScore(part,score){
+    let updateData = `{"part":"${part}","score":${score},"url":"${url}"}`;
 
     $.ajax({
+            url: "../api/judgeBallot/updateScore.php",
+            method: "POST",
+            data: updateData,
+            dataType: "json"
+        }).then(response => {
+            if (response.message === 0) {
+                
+            } else {
+                alert(response.message);
+            }
+        });
+}
 
-        // The URL for the request
-        url: "/postBallot.php",
+function validateScore(score) {
+    if (!score) {
+        return false;
+    } else if (score === "") {
+        return false
+    } else if (isNaN(score)) {
+        return false;
+    } else if (!Number.isInteger(score * 1)) {
+        return false;
+    } else if (score < 0) {
+        return false;
+    } else if (score > 10) {
+        return false;
+    } else {
+        return true;
+    }
+}
 
-        // The data to send (will be converted to a query string)
-        data: postData,
+function determinePart(part) {
+    switch (part) {
+        case "pOpen":
+            return "Plaintiff Open";
+            break;
+        case "dOpen":
+            return "Defense Open";
+            break;
+        case "pDx1":
+            return "Plaintiff Directing Attorney 1";
+            break;
+        case "pDx2":
+            return "Plaintiff Directing Attorney 2";
+            break;
+        case "pDx3":
+            return "Plaintiff Directing Attorney 3";
+            break;
+        case "pCx1":
+            return "Plaintiff Crossing Attorney 1";
+            break;
+        case "pCx2":
+            return "Plaintiff Crossing Attorney 2";
+            break;
+        case "pCx3":
+            return "Plaintiff Crossing Attorney 3";
+            break;
+        case "dDx1":
+            return "Defense Directing Attorney 1";
+            break;
+        case "dDx2":
+            return "Defense Directing Attorney 2";
+            break;
+        case "dDx3":
+            return "Defense Directing Attorney 3";
+            break;
+        case "dCx1":
+            return "Defense Crossing Attorney 1";
+            break;
+        case "dCx2":
+            return "Defense Crossing Attorney 2";
+            break;
+        case "dCx3":
+            return "Defense Crossing Attorney 3";
+            break;
+        case "dWDx1":
+            return "Defense Witness Direct 1";
+            break;
+        case "dWDx2":
+            return "Defense Witness Direct 2";
+            break;
+        case "dWDx3":
+            return "Defense Witness Direct 3";
+            break;
+        case "dWCx1":
+            return "Defense Witness Cross 1";
+            break;
+        case "dWCx2":
+            return "Defense Witness Cross 2";
+            break;
+        case "dWCx3":
+            return "Defense Witness Cross 3";
+            break;
+        case "pWDx1":
+            return "Plaintiff Witness Direct 1";
+            break;
+        case "pWDx2":
+            return "Plaintiff Witness Direct 2";
+            break;
+        case "pWDx3":
+            return "Plaintiff Witness Direct 3";
+            break;
+        case "pWCx1":
+            return "Plaintiff Witness Cross 1";
+            break;
+        case "pWCx2":
+            return "Plaintiff Witness Cross 2";
+            break;
+        case "pWCx3":
+            return "Plaintiff Witness Cross 3";
+            break;
+        case "pClose":
+            return "Plaintiff Close";
+            break;
+        case "dClose":
+            return "Defense Close";
+            break;
 
-        // Whether this is a POST or GET request
-        type: "POST",
-
-        // The type of data we expect back
-        dataType: "text",
-    })
-            // Code to run if the request succeeds (is done);
-            // The response is passed to the function
-            .done(function (response) {
-
-            })
-});
-
-$('#ballot').submit(function (e) {
-    e.preventDefault();
-    var ballotId = $("#judge").attr('ballotId');
-    var ballot = $("#ballot").serializeArray();
-    ballot[28] = {name: "attyRank1",value: $("#attyRank1 option:selected").attr("value")};
-    ballot[29] = {name: "attyRank2",value: $("#attyRank2 option:selected").attr("value")};
-    ballot[30] = {name: "attyRank3",value: $("#attyRank3 option:selected").attr("value")};
-    ballot[31] = {name: "attyRank4",value: $("#attyRank4 option:selected").attr("value")};
-    ballot[32] = {name: "attyRank5",value: $("#attyRank5 option:selected").attr("value")};
-    ballot[33] = {name: "attyRank6",value: $("#attyRank6 option:selected").attr("value")};
-    ballot[34] = {name: "witRank1",value: $("#witRank1 option:selected").attr("value")};
-    ballot[35] = {name: "witRank2",value: $("#witRank2 option:selected").attr("value")};
-    ballot[36] = {name: "witRank3",value: $("#witRank3 option:selected").attr("value")};
-    ballot[37] = {name: "witRank4",value: $("#witRank4 option:selected").attr("value")};
-    ballot[38] = {name: "witRank5",value: $("#witRank5 option:selected").attr("value")};
-    ballot[39] = {name: "witRank6",value: $("#witRank6 option:selected").attr("value")};
-    ballot[40] = {name: "id", value: ballotId};
-    ballot[41] = {name: "finalized",value : "yes"};
-
-
-    $.ajax({
-
-        // The URL for the request
-        url: "/postBallot.php",
-
-        // The data to send (will be converted to a query string)
-        data: ballot,
-
-        // Whether this is a POST or GET request
-        type: "POST",
-
-        // The type of data we expect back
-        dataType: "text",
-    })
-            // Code to run if the request succeeds (is done);
-            // The response is passed to the function
-            .done(function (response) {
-
-            })
-
-});
+    }
+}

@@ -1,4 +1,6 @@
-/* 
+<?php
+
+/*
  * Copyright (C) 2020 allen
  *
  * This program is free software: you can redistribute it and/or modify
@@ -14,21 +16,20 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+require_once __DIR__ . '/../../config.php';
+require_once SITE_ROOT . '/objects/pairing.php';
 
-$("#button").on("click",function(){
-    let email = $("#email").val();
-    let password = $("#password").val();
-    let data = '{"email":"' + email + '","password":"' + password + '"}';
-    $.ajax({
-        url: "doLogin.php",
-        method: "POST",
-        data: data,
-        dataType: "json"
-    }).then(response => {
-        if (response.message === 0) {
-            window.location.href = "index.php";
-        } else {
-            alert("Incorrect login");
-        }
-    });
-});
+if (
+        isset($_GET["round"])
+) {
+    $round = htmlspecialchars(strip_tags($_GET["round"]));
+    echo json_encode(getRoundPairings($round));
+} else {
+
+    // set response code - 400 bad request
+    http_response_code(400);
+
+    // tell the user
+    echo json_encode(array("message" => "Unable to read pairings. Request error."));
+}
+

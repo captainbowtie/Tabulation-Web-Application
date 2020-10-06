@@ -1,5 +1,6 @@
+<?php
 /* 
- * Copyright (C) 2020 allen
+ * Copyright (C) 2019 allen
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -15,20 +16,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-$("#button").on("click",function(){
-    let email = $("#email").val();
-    let password = $("#password").val();
-    let data = '{"email":"' + email + '","password":"' + password + '"}';
-    $.ajax({
-        url: "doLogin.php",
-        method: "POST",
-        data: data,
-        dataType: "json"
-    }).then(response => {
-        if (response.message === 0) {
-            window.location.href = "index.php";
-        } else {
-            alert("Incorrect login");
-        }
-    });
-});
+// Get config information
+require_once __DIR__."/../config.php";
+require_once SITE_ROOT."/database.php";
+
+// Create db connection
+$db = new Database();
+$conn = $db->getConnection();
+
+//Query to create table
+$query = "CREATE TABLE IF NOT EXISTS teams (
+id INT(3) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+number INT(4) UNSIGNED,
+name VARCHAR(50) NOT NULL,
+UNIQUE (number)
+)";
+
+if ($conn->query($query) === TRUE) {
+    
+} else {
+    echo "Error creating table: " . $conn->error;
+}
+
+$conn->close();
+?>
