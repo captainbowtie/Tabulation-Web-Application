@@ -41,7 +41,7 @@ if (isset($_GET["ballot"])) {
 
     //get team numbers to put at top
     $pairingID = $scores["pairing"];
-    $pairingQuery = "SELECT plaintiff,defense FROM pairings WHERE id = $pairingID";
+    $pairingQuery = "SELECT * FROM pairings WHERE id = $pairingID";
     $pairingResult = $conn->query($pairingQuery);
     $pairing = $pairingResult->fetch_assoc();
     $pairingResult->close();
@@ -57,6 +57,21 @@ if (isset($_GET["ballot"])) {
     $dResult->close();
     $pTeamNumber = $pTeam["number"];
     $dTeamNumber = $dTeam["number"];
+
+    //fill outstanding selects
+    $attySelectOptions = "<option value='" . $pairing["pDx1"] . "'>" . $pairing["pDx1"] . "</option>\n";
+    $attySelectOptions .= "<option value='" . $pairing["pDx2"] . "'>" . $pairing["pDx2"] . "</option>\n";
+    $attySelectOptions .= "<option value='" . $pairing["pDx3"] . "'>" . $pairing["pDx3"] . "</option>\n";
+    $attySelectOptions .= "<option value='" . $pairing["dDx1"] . "'>" . $pairing["dDx1"] . "</option>\n";
+    $attySelectOptions .= "<option value='" . $pairing["dDx2"] . "'>" . $pairing["dDx2"] . "</option>\n";
+    $attySelectOptions .= "<option value='" . $pairing["dDx3"] . "'>" . $pairing["dDx3"] . "</option>\n";
+    $witSelectOptions = "<option value='" . $pairing["pWDx1"] . "'>" . $pairing["pWDx1"] . "</option>\n";
+    $witSelectOptions .= "<option value='" . $pairing["pWDx2"] . "'>" . $pairing["pWDx2"] . "</option>\n";
+    $witSelectOptions .= "<option value='" . $pairing["pWDx3"] . "'>" . $pairing["pWDx3"] . "</option>\n";
+    $witSelectOptions .= "<option value='" . $pairing["dWDx1"] . "'>" . $pairing["dWDx1"] . "</option>\n";
+    $witSelectOptions .= "<option value='" . $pairing["dWDx2"] . "'>" . $pairing["dWDx2"] . "</option>\n";
+    $witSelectOptions .= "<option value='" . $pairing["dWDx3"] . "'>" . $pairing["dWDx3"] . "</option>\n";
+
 
     $conn->close();
 } else {
@@ -120,9 +135,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
                     <div id="openingScores" class="collapse show" aria-labelledby="headingOne" data-parent="#scores">
                         <div class="card-body speech">
-                            <label for="pOpen" class="pSpeechLabel">π Open:</label>
+                            <label for="pOpen" class="pSpeechLabel">π Open (<?php echo $pairing["pOpen"]; ?>):</label>
                             <input type="number" min="0" max="10" step="1" size="2" class="pSpeech" id="pOpen" name="pOpen" value="<?php echo $scores["pOpen"]; ?>">
-                            <label for="dOpen" class="dSpeechLabel">∆ Open:</label>
+                            <label for="dOpen" class="dSpeechLabel">∆ Open (<?php echo $pairing["dOpen"]; ?>):</label>
                             <input type="number" min="0" max="10" step="1" value="<?php echo $scores["dOpen"]; ?>" class="dSpeech" id="dOpen" name="dOpen">
                             <textarea class="pSpeechComments" id="pOpenComments">
                                 <?php echo $scores["pOpenComments"]; ?>
@@ -138,16 +153,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     <div class="card-header">
                         <h2 class="mb-0">
                             <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#p1Scores" aria-expanded="true" aria-controls="p1Scores">
-                                Plaintiff Witness 1
+                                Plaintiff Witness 1 (<?php echo $pairing["Wit1"];//TODO: make Wit lower case?>)
                             </button>
                         </h2>
                     </div>
 
                     <div id="p1Scores" class="collapse" aria-labelledby="headingOne" data-parent="#scores">
                         <div class="card-body plaintiffWitness">
-                            <label for="pDx1" class="pDxLabel" id="pDx1Label">Dx (Atty):</label>
+                            <label for="pDx1" class="pDxLabel" id="pDx1Label">Atty Dx (<?php echo $pairing["pDx1"]; ?>):</label>
                             <input type="number" min="0" max="10" step="1" size="2" value="<?php echo $scores["pDx1"]; ?>" class="pDx" id="pDx1" name="pDx1">
-                            <label for="dCx1" class="dCxLabel" id="dCx1Label">Cx (Atty):</label>
+                            <label for="dCx1" class="dCxLabel" id="dCx1Label">Atty Cx (<?php echo $pairing["dCx1"]; ?>):</label>
                             <input type="number" min="0" max="10" step="1" size="2" value="<?php echo $scores["dCx1"]; ?>" class="dCx" id="dCx1" name="dCx1">
                             <textarea class="pDxComments" id="pDx1Comments">
                                 <?php echo $scores["pDx1Comments"]; ?>
@@ -156,13 +171,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                                 <?php echo $scores["dCx1Comments"]; ?>
                             </textarea>
 
-                            <label for="pWDx1" class="pWDxLabel" id="pWDx1Label">Dx (Wit):</label>
+                            <label for="pWDx1" class="pWDxLabel" id="pWDx1Label">Wit Dx (<?php echo $pairing["pWDx1"]; ?>):</label>
                             <input type="number" min="0" max="10" step="1" size="2" value="<?php echo $scores["pWDx1"]; ?>" class="pWDx" id="pWDx1" name="pWDx1">
                             <textarea class="pWDxComments" id="pWDx1Comments">
                                 <?php echo $scores["pWDx1Comments"]; ?>
                             </textarea>
 
-                            <label for="pWCx1" class="pWCxLabel" id="pWCx1Label">Cx (Wit):</label>
+                            <label for="pWCx1" class="pWCxLabel" id="pWCx1Label">Wit Cx (<?php echo $pairing["pWDx1"]; ?>):</label>
                             <input type="number" min="0" max="10" step="1" size="2" value="<?php echo $scores["pWCx1"]; ?>" class="pWCx" id="pWCx1" name="pWCx1">
                             <textarea class="pWCxComments" id="dWCx1Comments">
                                 <?php echo $scores["dWCx1Comments"]; ?>
@@ -175,16 +190,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     <div class="card-header">
                         <h2 class="mb-0">
                             <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#p2Scores" aria-expanded="true" aria-controls="p2Scores">
-                                Plaintiff Witness 2
+                                Plaintiff Witness 2 (<?php echo $pairing["Wit2"];?>)
                             </button>
                         </h2>
                     </div>
 
                     <div id="p2Scores" class="collapse" aria-labelledby="headingOne" data-parent="#scores">
                         <div class="card-body plaintiffWitness">
-                            <label for="pDx2" class="pDxLabel" id="pDx2Label">Dx (Atty):</label>
+                            <label for="pDx2" class="pDxLabel" id="pDx2Label">Atty Dx (<?php echo $pairing["pDx2"]; ?>):</label>
                             <input type="number" min="0" max="10" step="1" size="2" value="<?php echo $scores["pDx2"]; ?>" class="pDx" id="pDx2" name="pDx2">
-                            <label for="dCx2" class="dCxLabel" id="dCx2Label">Cx (Atty):</label>
+                            <label for="dCx2" class="dCxLabel" id="dCx2Label">Atty Cx (<?php echo $pairing["dCx2"]; ?>):</label>
                             <input type="number" min="0" max="10" step="1" size="2" value="<?php echo $scores["dCx2"]; ?>" class="dCx" id="dCx2" name="dCx2">
 
                             <textarea class="pDxComments" id="pDx2Comments">
@@ -194,12 +209,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                                 <?php echo $scores["dCx2Comments"]; ?>
                             </textarea>
 
-                            <label for="pWDx2" class="pWDxLabel" id="pWDx2Label">Dx (Wit):</label>
+                            <label for="pWDx2" class="pWDxLabel" id="pWDx2Label">Wit Dx (<?php echo $pairing["pWDx2"]; ?>):</label>
                             <input type="number" min="0" max="10" step="1" size="2" value="<?php echo $scores["pWDx2"]; ?>" class="pWDx" id="pWDx2" name="pWDx2">
                             <textarea class="pWDxComments" id="pWDx2Comments">
                                 <?php echo $scores["pWDx2Comments"]; ?>
                             </textarea>
-                            <label for="pWCx2" class="pWCxLabel" id="pWCx2Label">Cx (Wit):</label>
+                            <label for="pWCx2" class="pWCxLabel" id="pWCx2Label">Wit Cx (<?php echo $pairing["pWDx2"]; ?>):</label>
                             <input type="number" min="0" max="10" step="1" size="2" value="<?php echo $scores["pWCx2"]; ?>" class="pWCx" id="pWCx2" name="pWCx2">
                             <textarea class="pWCxComments" id="dWCx2Comments">
                                 <?php echo $scores["dWCx2Comments"]; ?>
@@ -214,16 +229,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     <div class="card-header">
                         <h2 class="mb-0">
                             <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#p3Scores" aria-expanded="true" aria-controls="p3Scores">
-                                Plaintiff Witness 3
+                                Plaintiff Witness 3 (<?php echo $pairing["Wit3"];?>)
                             </button>
                         </h2>
                     </div>
 
                     <div id="p3Scores" class="collapse" aria-labelledby="headingOne" data-parent="#scores">
                         <div class="card-body plaintiffWitness">
-                            <label for="pDx3" class="pDxLabel" id="pDx3Label">Dx (Atty):</label>
+                            <label for="pDx3" class="pDxLabel" id="pDx3Label">Atty Dx (<?php echo $pairing["pDx3"]; ?>):</label>
                             <input type="number" min="0" max="10" step="1" size="2" value="<?php echo $scores["pDx3"]; ?>" class="pDx" id="pDx3" name="pDx3">
-                            <label for="dCx3" class="dCxLabel" id="dCx3Label">Cx (Atty):</label>
+                            <label for="dCx3" class="dCxLabel" id="dCx3Label">Atty Cx (<?php echo $pairing["dCx3"]; ?>):</label>
                             <input type="number" min="0" max="10" step="1" size="2" value="<?php echo $scores["dCx3"]; ?>" class="dCx" id="dCx3" name="dCx3">
 
                             <textarea class="pDxComments" id="pDx3Comments">
@@ -233,14 +248,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                                 <?php echo $scores["dCx3Comments"]; ?>
                             </textarea>
 
-                            <label for="pWDx3" class="pWDxLabel" id="pWDx3Label">Dx (Wit):</label>
+                            <label for="pWDx3" class="pWDxLabel" id="pWDx3Label">Wit Dx (<?php echo $pairing["pWDx3"]; ?>):</label>
                             <input type="number" min="0" max="10" step="1" size="2" value="<?php echo $scores["pWDx3"]; ?>" class="pWDx" id="pWDx3" name="pWDx3">
 
                             <textarea class="pWDxComments" id="pWDx3Comments">
                                 <?php echo $scores["pWDx3Comments"]; ?>
                             </textarea>
 
-                            <label for="pWCx3" class="pWCxLabel" id="pWCx3Label">Cx (Wit):</label>
+                            <label for="pWCx3" class="pWCxLabel" id="pWCx3Label">Wit Cx (<?php echo $pairing["pWDx3"]; ?>):</label>
                             <input type="number" min="0" max="10" step="1" size="2" value="<?php echo $scores["pWCx3"]; ?>" class="pWCx" id="pWCx3" name="pWCx3">
                             <textarea class="pWCxComments" id="dWCx3Comments">
                                 <?php echo $scores["dWCx3Comments"]; ?>
@@ -253,16 +268,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     <div class="card-header">
                         <h2 class="mb-0">
                             <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#d1Scores" aria-expanded="true" aria-controls="d1Scores">
-                                Defense Witness 1
+                                Defense Witness 1 (<?php echo $pairing["Wit4"];?>)
                             </button>
                         </h2>
                     </div>
 
                     <div id="d1Scores" class="collapse" aria-labelledby="headingOne" data-parent="#scores">
                         <div class="card-body defenseWitness">
-                            <label for="pCx1" class="pCxLabel" id="pCx1Label">Cx (Atty):</label>
+                            <label for="pCx1" class="pCxLabel" id="pCx1Label">Atty Cx (<?php echo $pairing["pCx1"]; ?>):</label>
                             <input type="number" min="0" max="10" step="1" size="2" value="<?php echo $scores["pCx1"]; ?>" class="pCx" id="pCx1" name="pDx1">
-                            <label for="dDx1" class="dDxLabel" id="dDx1Label">Dx (Atty):</label>
+                            <label for="dDx1" class="dDxLabel" id="dDx1Label">Atty Dx (<?php echo $pairing["dDx1"]; ?>):</label>
                             <input type="number" min="0" max="10" step="1" size="2" value="<?php echo $scores["dDx1"]; ?>" class="dDx" id="dDx1" name="dCx1">
 
                             <textarea class="pCxComments" id="pCx1Comments">
@@ -273,14 +288,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                             </textarea>
 
 
-                            <label for="dWDx1" class="dWDxLabel" id="dWDx1Label">Dx (Wit):</label>
+                            <label for="dWDx1" class="dWDxLabel" id="dWDx1Label">Wit Dx (<?php echo $pairing["dWDx1"]; ?>):</label>
                             <input type="number" min="0" max="10" step="1" size="2" value="<?php echo $scores["dWDx1"]; ?>" class="dWDx" id="dWDx1" name="dWDx1">
 
                             <textarea class="dWDxComments" id="dWDx1Comments">
                                 <?php echo $scores["dWDx1Comments"]; ?>
                             </textarea>
 
-                            <label for="dWCx1" class="dWCxLabel" id="dWCx1Label">Cx (Wit):</label>
+                            <label for="dWCx1" class="dWCxLabel" id="dWCx1Label">Wit Cx (<?php echo $pairing["dWDx1"]; ?>):</label>
                             <input type="number" min="0" max="10" step="1" size="2" value="<?php echo $scores["dWCx1"]; ?>" class="dWCx" id="dWCx1" name="dWCx1">
 
                             <textarea class="dWCxComments" id="dWCx1Comments">
@@ -295,16 +310,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     <div class="card-header">
                         <h2 class="mb-0">
                             <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#d2Scores" aria-expanded="true" aria-controls="d2Scores">
-                                Defense Witness 2
+                                Defense Witness 2 (<?php echo $pairing["Wit5"];?>)
                             </button>
                         </h2>
                     </div>
 
                     <div id="d2Scores" class="collapse" aria-labelledby="headingOne" data-parent="#scores">
                         <div class="card-body defenseWitness">
-                            <label for="pCx2" class="pCxLabel" id="pCx2Label">Cx (Atty):</label>
+                            <label for="pCx2" class="pCxLabel" id="pCx2Label">Wit Cx (<?php echo $pairing["pCx2"]; ?>):</label>
                             <input type="number" min="0" max="10" step="1" size="2" value="<?php echo $scores["pCx2"]; ?>" class="pCx" id="pCx2" name="pDx2">
-                            <label for="dDx2" class="dDxLabel" id="dDx2Label">Dx (Atty):</label>
+                            <label for="dDx2" class="dDxLabel" id="dDx2Label">Wit Dx (<?php echo $pairing["dDx2"]; ?>):</label>
                             <input type="number" min="0" max="10" step="1" size="2" value="<?php echo $scores["dDx2"]; ?>" class="dDx" id="dDx2" name="dCx2">
 
                             <textarea class="pCxComments" id="pCx2Comments">
@@ -313,21 +328,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                             <textarea class="dDxComments" id="dDx2Comments">
                                 <?php echo $scores["dDx2Comments"]; ?>
                             </textarea>
-                            
-                            <label for="dWDx2" class="dWDxLabel" id="dWDx2Label">Dx (Wit):</label>
+
+                            <label for="dWDx2" class="dWDxLabel" id="dWDx2Label">Wit Dx (<?php echo $pairing["dWDx2"]; ?>):</label>
                             <input type="number" min="0" max="10" step="1" size="2" value="<?php echo $scores["dWDx2"]; ?>" class="dWDx" id="dWDx2" name="dWDx2">
-                           
+
                             <textarea class="dWDxComments" id="dWDx2Comments">
                                 <?php echo $scores["dWDx2Comments"]; ?>
                             </textarea>
-                            
-                            <label for="dWCx2" class="dWCxLabel" id="dWCx2Label">Cx (Wit):</label>
+
+                            <label for="dWCx2" class="dWCxLabel" id="dWCx2Label">Wit Cx (<?php echo $pairing["dWDx2"]; ?>):</label>
                             <input type="number" min="0" max="10" step="1" size="2" value="<?php echo $scores["dWCx2"]; ?>" class="dWCx" id="dWCx2" name="dWCx2">
-                        
-                        <textarea class="dWCxComments" id="dWCx2Comments">
+
+                            <textarea class="dWCxComments" id="dWCx2Comments">
                                 <?php echo $scores["dWCx2Comments"]; ?>
                             </textarea>
-                        
+
                         </div>
                     </div>
                 </div>
@@ -336,16 +351,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     <div class="card-header">
                         <h2 class="mb-0">
                             <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#d3Scores" aria-expanded="true" aria-controls="d3Scores">
-                                Defense Witness 3
+                                Defense Witness 3 (<?php echo $pairing["Wit6"];?>)
                             </button>
                         </h2>
                     </div>
 
                     <div id="d3Scores" class="collapse" aria-labelledby="headingOne" data-parent="#scores">
                         <div class="card-body defenseWitness">
-                            <label for="pCx3" class="pCxLabel" id="pCx3Label">Cx (Atty):</label>
+                            <label for="pCx3" class="pCxLabel" id="pCx3Label">Atty Cx (<?php echo $pairing["pCx3"]; ?>):</label>
                             <input type="number" min="0" max="10" step="1" size="2" value="<?php echo $scores["pCx3"]; ?>" class="pCx" id="pCx3" name="pDx3">
-                            <label for="dDx3" class="dDxLabel" id="dDx3Label">Dx (Atty):</label>
+                            <label for="dDx3" class="dDxLabel" id="dDx3Label">Atty Dx (<?php echo $pairing["dDx3"]; ?>):</label>
                             <input type="number" min="0" max="10" step="1" size="2" value="<?php echo $scores["dDx3"]; ?>" class="dDx" id="dDx3" name="dCx3">
 
                             <textarea class="pCxComments" id="pCx3Comments">
@@ -354,21 +369,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                             <textarea class="dDxComments" id="dDx3Comments">
                                 <?php echo $scores["dDx3Comments"]; ?>
                             </textarea>
-                            
-                            <label for="dWDx3" class="dWDxLabel" id="dWDx3Label">Dx (Wit):</label>
+
+                            <label for="dWDx3" class="dWDxLabel" id="dWDx3Label">Wit Dx (<?php echo $pairing["dWDx3"]; ?>):</label>
                             <input type="number" min="0" max="10" step="1" size="2" value="<?php echo $scores["dWDx3"]; ?>" class="dWDx" id="dWDx3" name="dWDx3">
-                            
+
                             <textarea class="dWDxComments" id="dWDx3Comments">
                                 <?php echo $scores["dWDx3Comments"]; ?>
                             </textarea>
-                            
-                            <label for="dWCx3" class="dWCxLabel" id="dWCx3Label">Cx (Wit):</label>
+
+                            <label for="dWCx3" class="dWCxLabel" id="dWCx3Label">Wit Cx (<?php echo $pairing["dWDx3"]; ?>):</label>
                             <input type="number" min="0" max="10" step="1" size="2" value="<?php echo $scores["dWCx3"]; ?>" class="dWCx" id="dWCx3" name="dWCx3">
-                        
-                        <textarea class="dWCxComments" id="dWCx3Comments">
+
+                            <textarea class="dWCxComments" id="dWCx3Comments">
                                 <?php echo $scores["dWCx3Comments"]; ?>
                             </textarea>
-                        
+
                         </div>
                     </div>
                 </div>
@@ -384,17 +399,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
                     <div id="closingScores" class="collapse" aria-labelledby="headingOne" data-parent="#scores">
                         <div class="card-body speech">
-                            <label for="pClose" class="pSpeechLabel">π Close:</label>
+                            <label for="pClose" class="pSpeechLabel">π Close (<?php echo $pairing["pClose"]; ?>):</label>
                             <input type="number" min="0" max="10" step="1" size="2" value="<?php echo $scores["pClose"]; ?>" class="pSpeech" id="pClose">
-                            <label for="dClose" class="dSpeechLabel">∆ Close:</label>
+                            <label for="dClose" class="dSpeechLabel">∆ Close (<?php echo $pairing["dClose"]; ?>):</label>
                             <input type="number" min="0" max="10" step="1" size="2" value="<?php echo $scores["dClose"]; ?>" class="dSpeech" id="dClose">
-                        <textarea class="pSpeechComments" id="pCloseComments">
+                            <textarea class="pSpeechComments" id="pCloseComments">
                                 <?php echo $scores["pCloseComments"]; ?>
                             </textarea>
                             <textarea class="dSpeechComments" id="dCloseComments">
                                 <?php echo $scores["dCloseComments"]; ?>
                             </textarea>
-                        
+
                         </div>
                     </div>
                 </div>
@@ -444,7 +459,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                         </select>
                         <label for="wit4" class="witSelectLabel" id="wit4Label">Wit 4:</label>
                         <select id="wit4">
-                            <?php echo $attySelectOptions ?>
+                            <?php echo $witSelectOptions ?>
                         </select>
                     </div>
                 </div>
