@@ -16,7 +16,7 @@
  */
 
 var passwordId;
-var coaches =[];
+var coaches = [];
 var coachUser;
 
 $(document).ready(function () {
@@ -125,9 +125,13 @@ function fillTeamsModal(userID) {
     $(".teamCheckbox").prop("checked", false);
 
     //then check the ones with conflicts
-    for (var a = 0; a < coaches.length; a++) {
-        if (coaches[a].user === userID) {
-            $(`#${coaches[a].team}checkbox`).prop("checked", true);
+    if (!coaches) {
+
+    } else {
+        for (var a = 0; a < coaches.length; a++) {
+            if (coaches[a].user === userID) {
+                $(`#${coaches[a].team}checkbox`).prop("checked", true);
+            }
         }
     }
 }

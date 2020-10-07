@@ -39,7 +39,7 @@ if ($conn->query($query) === TRUE) {
     $adminCheckQuery = "SELECT * FROM users";
     $numRows = mysqli_num_rows($conn->query($adminCheckQuery));
     if ($numRows === 0) {
-        if (createUser("allen@allenbarr.com", "password", true, false)) {
+        if (createUser("allen@allenbarr.com", "password", 1, 0)) {
             
         } else {
             echo "Error creating default user: " . $conn->error;
