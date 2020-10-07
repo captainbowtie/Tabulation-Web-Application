@@ -1,6 +1,6 @@
 <?php
 
-/* 
+/*
  * Copyright (C) 2020 allen
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,16 +16,12 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+session_start();
+if ($_SESSION["isAdmin"]) {
+    require_once __DIR__ . '/../../config.php';
+    require_once SITE_ROOT . '/objects/coach.php';
 
-require_once __DIR__ . "/config.php";
-require_once SITE_ROOT . "/database.php";
-
-require_once SITE_ROOT . "/tableCreation/ballots.php";
-require_once SITE_ROOT . "/tableCreation/impermissibles.php";
-require_once SITE_ROOT . "/tableCreation/pairings.php";
-require_once SITE_ROOT . "/tableCreation/teams.php";
-require_once SITE_ROOT . "/tableCreation/users.php";
-require_once SITE_ROOT . "/tableCreation/judges.php";
-require_once SITE_ROOT . "/tableCreation/judgeConflicts.php";
-require_once SITE_ROOT . "/tableCreation/settings.php";
-require_once SITE_ROOT . "/tableCreation/coaches.php";
+    echo json_encode(getAllCoaches());
+} else {
+    die("Access denied.");
+}

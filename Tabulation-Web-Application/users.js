@@ -16,6 +16,12 @@
  */
 
 var passwordId;
+var coaches =[];
+var coachUser;
+
+$(document).ready(function () {
+    updateCoaches();
+});
 
 $(".email").on("change", function () {
     let editRow = $(this).closest("tr");
@@ -41,37 +47,49 @@ $(".passwordButton").on("click", function () {
     passwordModal();
 });
 
-function passwordModal() {
-    $("#newPassword").val("");
-    $("#passwordModal").modal();
-}
-
 $("#changePassword").on("click", function () {
     let password = $("#newPassword").val();
     updateUser(passwordId, "password", password);
 });
 
-function updateUser(id, field, value) {
-    let updateData = `{
-    "id":${id},
-    "field":"${field}",
-    "value":"${value}"
-    }`;
-    $.ajax({
-        url: "../api/users/update.php",
-        method: "POST",
-        data: updateData,
-        dataType: "json"
-    }).then(response => {
-        if (response.message != 0) {
-            warningModal(response.message);
-        }
-    });
-}
+$(".teamsButton").on("click", function () {
+    coachUser = parseInt($(this).attr("data-user"));
+    fillTeamsModal(coachUser);
+    $("#teamsModal").modal();
+});
 
-function warningModal(warning) {
-    alert(warning);
-}
+$(".teamCheckbox").on("click", function () {
+    let teamNumber = parseInt($(this).attr("data-number"));
+    let coachData = `{
+    "user":${coachUser},
+    "team":${teamNumber}
+    }`;
+    if ($(this).prop("checked")) {
+        $.ajax({
+            url: "../api/coaches/create.php",
+            method: "POST",
+            data: coachData,
+            dataType: "json"
+        }).then(response => {
+            if (response.message != 0) {
+                warningModal(response.message);
+            }
+            updateCoaches();
+        });
+    } else {
+        $.ajax({
+            url: "../api/coaches/delete.php",
+            method: "POST",
+            data: coachData,
+            dataType: "json"
+        }).then(response => {
+            if (response.message != 0) {
+                warningModal(response.message);
+            }
+            updateCoaches();
+        });
+    }
+});
 
 $("#newUser").on("click", function () {
     $("#email").val("");
@@ -101,3 +119,52 @@ $("#addUser").on("click", function () {
         }
     });
 });
+
+function fillTeamsModal(userID) {
+    //start by unchecking all checkboxes
+    $(".teamCheckbox").prop("checked", false);
+
+    //then check the ones with conflicts
+    for (var a = 0; a < coaches.length; a++) {
+        if (coaches[a].user === userID) {
+            $(`#${coaches[a].team}checkbox`).prop("checked", true);
+        }
+    }
+}
+
+function passwordModal() {
+    $("#newPassword").val("");
+    $("#passwordModal").modal();
+}
+
+function updateUser(id, field, value) {
+    let updateData = `{
+    "id":${id},
+    "field":"${field}",
+    "value":"${value}"
+    }`;
+    $.ajax({
+        url: "../api/users/update.php",
+        method: "POST",
+        data: updateData,
+        dataType: "json"
+    }).then(response => {
+        if (response.message != 0) {
+            warningModal(response.message);
+        }
+    });
+}
+
+function warningModal(warning) {
+    alert(warning);
+}
+
+function updateCoaches() {
+    $.ajax({
+        url: "../api/coaches/getAll.php",
+        dataType: "json"
+    }).then(data => {
+        coaches = data;
+    });
+}
+

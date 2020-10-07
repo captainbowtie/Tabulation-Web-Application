@@ -20,18 +20,6 @@
 require_once __DIR__ . "/../config.php";
 require_once SITE_ROOT . "/database.php";
 
-class Judge {
-
-    public $name;
-    public $category;
-    public $round1;
-    public $round2;
-    public $round3;
-    public $round4;
-
-
-}
-
 function createJudge($name, $category, $round1, $round2, $round3, $round4) {
     $judgeCreated = false;
     $db = new Database();
