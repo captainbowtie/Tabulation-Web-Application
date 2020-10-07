@@ -60,6 +60,7 @@ function getUser($email) {
     $query = "SELECT * FROM users WHERE email = '$email'";
     if ($result = $conn->query($query)) {
         $row = $result->fetch_assoc();
+        $user["id"] = intval($row["id"]);
         $user["email"] = $email;
         $user["password"] = $row["password"];
         $user["isAdmin"] = $row["isAdmin"];

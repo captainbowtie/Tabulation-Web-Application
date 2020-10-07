@@ -16,124 +16,245 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-if (isset($_GET["ballot"])) {
-    $url = htmlspecialchars(strip_tags($_GET["ballot"]));
-
+session_start();
+if ($_SESSION["isCoach"] || $_SESSION[isAdmin]) {
     require_once __DIR__ . "/config.php";
     require_once SITE_ROOT . "/database.php";
 
-    $ballotQuery = "SELECT * FROM ballots WHERE url = '$url' && locked = 0";
-
-    //get data for ballot
     $db = new Database();
     $conn = $db->getConnection();
+
+//get ballot data
+    $ballotQuery = "SELECT * FROM ballots WHERE locked = 1";
     $ballotResult = $conn->query($ballotQuery);
-    $scores = $ballotResult->fetch_assoc();
+    $i = 0;
+    while ($row = $ballotResult->fetch_assoc()) {
+        $ballots[$i]["pairing"] = intval($row["pairing"]);
+        $ballots[$i]["judge"] = intval($row["judge"]);
+        $ballots[$i]["pOpen"] = intval($row["pOpen"]);
+        $ballots[$i]["dOpen"] = intval($row["dOpen"]);
+        $ballots[$i]["pDx1"] = intval($row["pDx1"]);
+        $ballots[$i]["pWDx1"] = intval($row["pWDx1"]);
+        $ballots[$i]["pWCx1"] = intval($row["pWCx1"]);
+        $ballots[$i]["dCx1"] = intval($row["dCx1"]);
+        $ballots[$i]["pDx2"] = intval($row["pDx2"]);
+        $ballots[$i]["pWDx2"] = intval($row["pWDx2"]);
+        $ballots[$i]["pWCx2"] = intval($row["pWCx2"]);
+        $ballots[$i]["dCx2"] = intval($row["dCx2"]);
+        $ballots[$i]["pDx3"] = intval($row["pDx3"]);
+        $ballots[$i]["pWDx3"] = intval($row["pWDx3"]);
+        $ballots[$i]["pWCx3"] = intval($row["pWCx3"]);
+        $ballots[$i]["dCx3"] = intval($row["dCx3"]);
+        $ballots[$i]["dDx1"] = intval($row["dDx1"]);
+        $ballots[$i]["dWDx1"] = intval($row["dWDx1"]);
+        $ballots[$i]["dWCx1"] = intval($row["dWCx1"]);
+        $ballots[$i]["pCx1"] = intval($row["pCx1"]);
+        $ballots[$i]["dDx2"] = intval($row["dDx2"]);
+        $ballots[$i]["dWDx2"] = intval($row["dWDx2"]);
+        $ballots[$i]["dWCx2"] = intval($row["dWCx2"]);
+        $ballots[$i]["pCx2"] = intval($row["pCx2"]);
+        $ballots[$i]["dDx3"] = intval($row["dDx3"]);
+        $ballots[$i]["dWDx3"] = intval($row["dWDx3"]);
+        $ballots[$i]["dWCx3"] = intval($row["dWCx3"]);
+        $ballots[$i]["pCx3"] = intval($row["pCx3"]);
+        $ballots[$i]["pClose"] = intval($row["pClose"]);
+        $ballots[$i]["dClose"] = intval($row["dClose"]);
+        $ballots[$i]["pOpenComments"] = $row["pOpenComments"];
+        $ballots[$i]["dOpenComments"] = $row["dOpenComments"];
+        $ballots[$i]["pDx1Comments"] = $row["pDx1Comments"];
+        $ballots[$i]["pWDx1Comments"] = $row["pWDx1Comments"];
+        $ballots[$i]["pWCx1Comments"] = $row["pWCx1Comments"];
+        $ballots[$i]["dCx1Comments"] = $row["dCx1Comments"];
+        $ballots[$i]["pDx2Comments"] = $row["pDx2Comments"];
+        $ballots[$i]["pWDx2Comments"] = $row["pWDx2Comments"];
+        $ballots[$i]["pWCx2Comments"] = $row["pWCx2Comments"];
+        $ballots[$i]["dCx2Comments"] = $row["dCx2Comments"];
+        $ballots[$i]["pDx3Comments"] = $row["pDx3Comments"];
+        $ballots[$i]["pWDx3Comments"] = $row["pWDx3Comments"];
+        $ballots[$i]["pWCx3Comments"] = $row["pWCx3Comments"];
+        $ballots[$i]["dCx3Comments"] = $row["dCx3Comments"];
+        $ballots[$i]["dDx1Comments"] = $row["dDx1Comments"];
+        $ballots[$i]["dWDx1Comments"] = $row["dWDx1Comments"];
+        $ballots[$i]["dWCx1Comments"] = $row["dWCx1Comments"];
+        $ballots[$i]["pCx1Comments"] = $row["pCx1Comments"];
+        $ballots[$i]["dDx2Comments"] = $row["dDx2Comments"];
+        $ballots[$i]["dWDx2Comments"] = $row["dWDx2Comments"];
+        $ballots[$i]["dWCx2Comments"] = $row["dWCx2Comments"];
+        $ballots[$i]["pCx2Comments"] = $row["pCx2Comments"];
+        $ballots[$i]["dDx3Comments"] = $row["dDx3Comments"];
+        $ballots[$i]["dWDx3Comments"] = $row["dWDx3Comments"];
+        $ballots[$i]["dWCx3Comments"] = $row["dWCx3Comments"];
+        $ballots[$i]["pCx3Comments"] = $row["pCx3Comments"];
+        $ballots[$i]["pCloseComments"] = $row["pCloseComments"];
+        $ballots[$i]["dCloseComments"] = $row["dCloseComments"];
+        $ballots[$i]["aty1"] = ($row["aty1"]);
+        $ballots[$i]["aty2"] = $row["aty2"];
+        $ballots[$i]["aty3"] = $row["aty3"];
+        $ballots[$i]["aty4"] = $row["aty4"];
+        $ballots[$i]["wit1"] = $row["wit1"];
+        $ballots[$i]["wit2"] = $row["wit2"];
+        $ballots[$i]["wit3"] = $row["wit3"];
+        $ballots[$i]["wit4"] = $row["wit4"];
+        $i++;
+    }
     $ballotResult->close();
 
-    //get judge name to put at top
-    $judgeID = $scores["judge"];
-    $judgeQuery = "SELECT name FROM judges WHERE id = $judgeID";
+//fill in judge names
+    $judgeQuery = "SELECT id,name FROM judges";
     $judgeResult = $conn->query($judgeQuery);
-    $judge = $judgeResult->fetch_assoc();
+    while ($row = $judgeResult->fetch_assoc()) {
+        for ($a = 0; $a < sizeOf($ballots); $a++) {
+            if ($ballots[$a]["judge"] === intval($row["id"])) {
+                $ballots[$a]["judge"] = $row["name"];
+            }
+        }
+    }
     $judgeResult->close();
-    $judgeName = $judge["name"];
 
-    //get team numbers to put at top
-    $pairingID = $scores["pairing"];
-    $pairingQuery = "SELECT * FROM pairings WHERE id = $pairingID";
+//fill in team numbers and names
+//first need to convert pairing id to team ids
+    $pairingQuery = "SELECT * FROM pairings";
     $pairingResult = $conn->query($pairingQuery);
-    $pairing = $pairingResult->fetch_assoc();
+    while ($row = $pairingResult->fetch_assoc()) {
+        for ($a = 0; $a < sizeOf($ballots); $a++) {
+            if ($ballots[$a]["pairing"] === intval($row["id"])) {
+                $ballots[$a]["pID"] = intval($row["plaintiff"]);
+                $ballots[$a]["dID"] = intval($row["defense"]);
+                $ballots[$a]["round"] = intval($row["round"]);
+                $ballots[$a]["pOpenAttorney"] = $row["pOpen"];
+                $ballots[$a]["dOpenAttorney"] = $row["dOpen"];
+                $ballots[$a]["pDx1Attorney"] = $row["pDx1"];
+                $ballots[$a]["pWDx1Witness"] = $row["pWDx1"];
+                $ballots[$a]["dCx1Attorney"] = $row["dCx1"];
+                $ballots[$a]["pDx2Attorney"] = $row["pDx2"];
+                $ballots[$a]["pWDx2Witness"] = $row["pWDx2"];
+                $ballots[$a]["dCx2Attorney"] = $row["dCx2"];
+                $ballots[$a]["pDx3Attorney"] = $row["pDx3"];
+                $ballots[$a]["pWDx3Witness"] = $row["pWDx3"];
+                $ballots[$a]["dCx3Attorney"] = $row["dCx3"];
+                $ballots[$a]["dDx1Attorney"] = $row["dDx1"];
+                $ballots[$a]["dWDx1Witness"] = $row["dWDx1"];
+                $ballots[$a]["pCx1Attorney"] = $row["pCx1"];
+                $ballots[$a]["dDx2Attorney"] = $row["dDx2"];
+                $ballots[$a]["dWDx2Witness"] = $row["dWDx2"];
+                $ballots[$a]["pCx2Attorney"] = $row["pCx2"];
+                $ballots[$a]["dDx3Attorney"] = $row["dDx3"];
+                $ballots[$a]["dWDx3Witness"] = $row["dWDx3"];
+                $ballots[$a]["pCx3Attorney"] = $row["pCx3"];
+                $ballots[$a]["pCloseAttorney"] = $row["pClose"];
+                $ballots[$a]["dCloseAttorney"] = $row["dClose"];
+                $ballots[$a]["witness1"] = $row["Wit1"];
+                $ballots[$a]["witness2"] = $row["Wit2"];
+                $ballots[$a]["witness3"] = $row["Wit3"];
+                $ballots[$a]["witness4"] = $row["Wit4"];
+                $ballots[$a]["witness5"] = $row["Wit5"];
+                $ballots[$a]["witness6"] = $row["Wit6"];
+            }
+        }
+    }
     $pairingResult->close();
-    $pID = $pairing["plaintiff"];
-    $dID = $pairing["defense"];
-    $pQuery = "SELECT number FROM teams WHERE id = $pID";
-    $dQuery = "SELECT number FROM teams WHERE id = $dID";
-    $pResult = $conn->query($pQuery);
-    $pTeam = $pResult->fetch_assoc();
-    $pResult->close();
-    $dResult = $conn->query($dQuery);
-    $dTeam = $dResult->fetch_assoc();
-    $dResult->close();
-    $pTeamNumber = $pTeam["number"];
-    $dTeamNumber = $dTeam["number"];
+    $ballots = teamIDsToNumbers($ballots);
 
-    //fill outstanding selects
-    for ($a = 0; $a < 4; $a++) {
-        //atty selects
-        $attySelectOptions[$a] = "<option value='N/A'>---</option>";
-        $attySelectOptions[$a] .= "<option value='" . $pairing["pDx1"] . "'";
-        if($scores["aty".($a+1)]===$pairing["pDx1"]){
-            $attySelectOptions[$a] .= " selected";
+//delete any comments that the user is not authorized to see
+    if ($_SESSION["isCoach"]) {
+        $coachQuery = "SELECT team FROM coaches WHERE user = " . $_SESSION["id"];
+        $coachResult = $conn->query($coachQuery);
+        $coachedTeams = array();
+        while ($row = $coachResult->fetch_assoc()) {
+            array_push($coachedTeams, intval($row["team"]));
         }
-        $attySelectOptions[$a] .= ">".$pairing["pDx1"] . "</option>\n";
-        $attySelectOptions[$a] .= "<option value='" . $pairing["pDx2"] . "'";
-                if($scores["aty".($a+1)]===$pairing["pDx2"]){
-            $attySelectOptions[$a] .= " selected";
+    }
+    $coachResult->close();
+    for ($a = 0; $a < sizeOf($ballots); $a++) {
+        if (!in_array($ballots[$a]["pID"], $coachedTeams) && !in_array($ballots[$a]["dID"], $coachedTeams)) {
+            $ballots[$a]["pOpenComments"] = "N/A";
+            $ballots[$a]["dOpenComments"] = "N/A";
+            $ballots[$a]["pDx1Comments"] = "N/A";
+            $ballots[$a]["pWDx1Comments"] = "N/A";
+            $ballots[$a]["pWCx1Comments"] = "N/A";
+            $ballots[$a]["dCx1Comments"] = "N/A";
+            $ballots[$a]["pDx2Comments"] = "N/A";
+            $ballots[$a]["pWDx2Comments"] = "N/A";
+            $ballots[$a]["pWCx2Comments"] = "N/A";
+            $ballots[$a]["dCx2Comments"] = "N/A";
+            $ballots[$a]["pDx3Comments"] = "N/A";
+            $ballots[$a]["pWDx3Comments"] = "N/A";
+            $ballots[$a]["pWCx3Comments"] = "N/A";
+            $ballots[$a]["dCx3Comments"] = "N/A";
+            $ballots[$a]["dDx1Comments"] = "N/A";
+            $ballots[$a]["dWDx1Comments"] = "N/A";
+            $ballots[$a]["dWCx1Comments"] = "N/A";
+            $ballots[$a]["pCx1Comments"] = "N/A";
+            $ballots[$a]["dDx2Comments"] = "N/A";
+            $ballots[$a]["dWDx2Comments"] = "N/A";
+            $ballots[$a]["dWCx2Comments"] = "N/A";
+            $ballots[$a]["pCx2Comments"] = "N/A";
+            $ballots[$a]["dDx3Comments"] = "N/A";
+            $ballots[$a]["dWDx3Comments"] = "N/A";
+            $ballots[$a]["dWCx3Comments"] = "N/A";
+            $ballots[$a]["pCx3Comments"] = "N/A";
+            $ballots[$a]["pCloseComments"] = "N/A";
+            $ballots[$a]["dCloseComments"] = "N/A";
+            $ballots[$a]["witness1"] = "N/A";
+            $ballots[$a]["witness2"] = "N/A";
+            $ballots[$a]["witness3"] = "N/A";
+            $ballots[$a]["witness4"] = "N/A";
+            $ballots[$a]["witness5"] = "N/A";
+            $ballots[$a]["witness6"] = "N/A";
+            $ballots[$a]["pOpenAttorney"] = "N/A";
+            $ballots[$a]["dOpenAttorney"] = "N/A";
+            $ballots[$a]["pDx1Attorney"] = "N/A";
+            $ballots[$a]["pWDx1Witness"] = "N/A";
+            $ballots[$a]["dCx1Attorney"] = "N/A";
+            $ballots[$a]["pDx2Attorney"] = "N/A";
+            $ballots[$a]["pWDx2Witness"] = "N/A";
+            $ballots[$a]["dCx2Attorney"] = "N/A";
+            $ballots[$a]["pDx3Attorney"] = "N/A";
+            $ballots[$a]["pWDx3Witness"] = "N/A";
+            $ballots[$a]["dCx3Attorney"] = "N/A";
+            $ballots[$a]["dDx1Attorney"] = "N/A";
+            $ballots[$a]["dWDx1Witness"] = "N/A";
+            $ballots[$a]["pCx1Attorney"] = "N/A";
+            $ballots[$a]["dDx2Attorney"] = "N/A";
+            $ballots[$a]["dWDx2Witness"] = "N/A";
+            $ballots[$a]["pCx2Attorney"] = "N/A";
+            $ballots[$a]["dDx3Attorney"] = "N/A";
+            $ballots[$a]["dWDx3Witness"] = "N/A";
+            $ballots[$a]["pCx3Attorney"] = "N/A";
+            $ballots[$a]["pCloseAttorney"] = "N/A";
+            $ballots[$a]["dCloseAttorney"] = "N/A";
         }
-        $attySelectOptions[$a] .= ">".$pairing["pDx2"] . "</option>\n";
-        $attySelectOptions[$a] .= "<option value='" . $pairing["pDx3"] . "'";
-                if($scores["aty".($a+1)]===$pairing["pDx3"]){
-            $attySelectOptions[$a] .= " selected";
-        }
-        $attySelectOptions[$a] .= ">".$pairing["pDx3"] . "</option>\n";
-        $attySelectOptions[$a] .= "<option value='" . $pairing["dDx1"] . "'";
-                if($scores["aty".($a+1)]===$pairing["dDx1"]){
-            $attySelectOptions[$a] .= " selected";
-        }
-        $attySelectOptions[$a] .= ">".$pairing["dDx1"] . "</option>\n";
-        $attySelectOptions[$a] .= "<option value='" . $pairing["dDx2"] . "'";
-                if($scores["aty".($a+1)]===$pairing["dDx2"]){
-            $attySelectOptions[$a] .= " selected";
-        }
-        $attySelectOptions[$a] .= ">".$pairing["dDx2"] . "</option>\n";
-        $attySelectOptions[$a] .= "<option value='" . $pairing["dDx3"] . "'";
-                if($scores["aty".($a+1)]===$pairing["dDx3"]){
-            $attySelectOptions[$a] .= " selected";
-        }
-        $attySelectOptions[$a] .= ">".$pairing["dDx3"] . "</option>\n";
-        
-        //wit selects
-                $witSelectOptions[$a] = "<option value='N/A'>---</option>";
-        $witSelectOptions[$a] .= "<option value='" . $pairing["pWDx1"] . "'";
-        if($scores["wit".($a+1)]===$pairing["pWDx1"]){
-            $witSelectOptions[$a] .= " selected";
-        }
-        $witSelectOptions[$a] .= ">".$pairing["pWDx1"] . "</option>\n";
-        $witSelectOptions[$a] .= "<option value='" . $pairing["pWDx2"] . "'";
-                if($scores["wit".($a+1)]===$pairing["pWDx2"]){
-            $witSelectOptions[$a] .= " selected";
-        }
-        $witSelectOptions[$a] .= ">".$pairing["pWDx2"] . "</option>\n";
-        $witSelectOptions[$a] .= "<option value='" . $pairing["pWDx3"] . "'";
-                if($scores["wit".($a+1)]===$pairing["pWDx3"]){
-            $witSelectOptions[$a] .= " selected";
-        }
-        $witSelectOptions[$a] .= ">".$pairing["pWDx3"] . "</option>\n";
-        $witSelectOptions[$a] .= "<option value='" . $pairing["dWDx1"] . "'";
-                if($scores["wit".($a+1)]===$pairing["dWDx1"]){
-            $witSelectOptions[$a] .= " selected";
-        }
-        $witSelectOptions[$a] .= ">".$pairing["dWDx1"] . "</option>\n";
-        $witSelectOptions[$a] .= "<option value='" . $pairing["dWDx2"] . "'";
-                if($scores["wit".($a+1)]===$pairing["dWDx2"]){
-            $witSelectOptions[$a] .= " selected";
-        }
-        $witSelectOptions[$a] .= ">".$pairing["dWDx2"] . "</option>\n";
-        $witSelectOptions[$a] .= "<option value='" . $pairing["dWDx3"] . "'";
-                if($scores["wit".($a+1)]===$pairing["dWDx3"]){
-            $witSelectOptions[$a] .= " selected";
-        }
-        $witSelectOptions[$a] .= ">".$pairing["dWDx3"] . "</option>\n";
     }
 
     $conn->close();
 } else {
     die("Access denied.");
 }
-?>
 
-<!DOCTYPE html>
+function teamIDsToNumbers($ballots) {
+
+    $teamDB = new Database();
+    $teamConn = $teamDB->getConnection();
+//then need to convert team ids to numbers and names
+    $teamQuery = "SELECT id,number,name FROM teams";
+    $teamResult = $teamConn->query($teamQuery);
+    while ($row = $teamResult->fetch_assoc()) {
+        for ($a = 0; $a < sizeOf($ballots); $a++) {
+            if ($ballots[$a]["pID"] === intval($row["id"])) {
+                $ballots[$a]["pNumber"] = intval($row["number"]);
+                $ballots[$a]["pName"] = $row["name"];
+            }
+            if ($ballots[$a]["dID"] === intval($row["id"])) {
+                $ballots[$a]["dNumber"] = intval($row["number"]);
+                $ballots[$a]["dName"] = $row["name"];
+            }
+        }
+    }
+    $teamResult->close();
+    $teamConn->close();
+    return $ballots;
+}
+?><!DOCTYPE html>
 <!--
 Copyright (C) 2020 allen
 
@@ -170,9 +291,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <title></title>
     </head>
     <body>
-        <div>
-            <p><?php echo $pTeamNumber; ?> v. <?php echo $dTeamNumber; ?></p>
-            <p>Judge <?php echo $judgeName; ?></p>
+        <div id="selects">
+            <select id="round"> 
+                <option value="1">Round 1</option>
+                <option value="2">Round 2</option>
+                <option value="3">Round 3</option>
+                <option value="4">Round 4</option>
+            </select>
+            <select id="pairing">
+            </select>
+            <select id="ballot">
+            </select>
         </div>
 
         <div id="scoresDiv">
@@ -188,9 +317,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
                     <div id="openingScores" class="collapse show" aria-labelledby="headingOne" data-parent="#scores">
                         <div class="card-body speech">
-                            <label for="pOpen" class="pSpeechLabel">π Open (<?php echo $pairing["pOpen"]; ?>):</label>
+                            <label for="pOpen" class="pSpeechLabel" id="pOpenLabel">π Open (<?php echo $pairing["pOpen"]; ?>):</label>
                             <input type="number" min="0" max="10" step="1" size="2" class="pSpeech" id="pOpen" name="pOpen" value="<?php echo $scores["pOpen"]; ?>">
-                            <label for="dOpen" class="dSpeechLabel">∆ Open (<?php echo $pairing["dOpen"]; ?>):</label>
+                            <label for="dOpen" class="dSpeechLabel" id="dOpenLabel">∆ Open (<?php echo $pairing["dOpen"]; ?>):</label>
                             <input type="number" min="0" max="10" step="1" value="<?php echo $scores["dOpen"]; ?>" class="dSpeech" id="dOpen" name="dOpen">
                             <textarea class="pSpeechComments" id="pOpenComments"><?php echo $scores["pOpenComments"]; ?></textarea>
                             <textarea class="dSpeechComments" id="dOpenComments"><?php echo $scores["dOpenComments"]; ?></textarea>
@@ -201,8 +330,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 <div class="card">
                     <div class="card-header">
                         <h2 class="mb-0">
-                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#p1Scores" aria-expanded="true" aria-controls="p1Scores">
-                                Plaintiff Witness 1 (<?php echo $pairing["Wit1"]; //TODO: make Wit lower case  ?>)
+                            <button id="witness1Header" class="btn btn-link" type="button" data-toggle="collapse" data-target="#p1Scores" aria-expanded="true" aria-controls="p1Scores">
+                                Plaintiff Witness 1 (<?php echo $pairing["Wit1"]; //TODO: make Wit lower case?>)
                             </button>
                         </h2>
                     </div>
@@ -230,7 +359,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 <div class="card">
                     <div class="card-header">
                         <h2 class="mb-0">
-                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#p2Scores" aria-expanded="true" aria-controls="p2Scores">
+                            <button id="witness2Header" class="btn btn-link" type="button" data-toggle="collapse" data-target="#p2Scores" aria-expanded="true" aria-controls="p2Scores">
                                 Plaintiff Witness 2 (<?php echo $pairing["Wit2"]; ?>)
                             </button>
                         </h2>
@@ -261,7 +390,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 <div class="card">
                     <div class="card-header">
                         <h2 class="mb-0">
-                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#p3Scores" aria-expanded="true" aria-controls="p3Scores">
+                            <button id="witness3Header" class="btn btn-link" type="button" data-toggle="collapse" data-target="#p3Scores" aria-expanded="true" aria-controls="p3Scores">
                                 Plaintiff Witness 3 (<?php echo $pairing["Wit3"]; ?>)
                             </button>
                         </h2>
@@ -292,7 +421,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 <div class="card">
                     <div class="card-header">
                         <h2 class="mb-0">
-                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#d1Scores" aria-expanded="true" aria-controls="d1Scores">
+                            <button id="witness4Header" class="btn btn-link" type="button" data-toggle="collapse" data-target="#d1Scores" aria-expanded="true" aria-controls="d1Scores">
                                 Defense Witness 1 (<?php echo $pairing["Wit4"]; ?>)
                             </button>
                         </h2>
@@ -326,7 +455,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 <div class="card">
                     <div class="card-header">
                         <h2 class="mb-0">
-                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#d2Scores" aria-expanded="true" aria-controls="d2Scores">
+                            <button id="witness5Header" class="btn btn-link" type="button" data-toggle="collapse" data-target="#d2Scores" aria-expanded="true" aria-controls="d2Scores">
                                 Defense Witness 2 (<?php echo $pairing["Wit5"]; ?>)
                             </button>
                         </h2>
@@ -359,7 +488,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 <div class="card">
                     <div class="card-header">
                         <h2 class="mb-0">
-                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#d3Scores" aria-expanded="true" aria-controls="d3Scores">
+                            <button id="witness6Header" class="btn btn-link" type="button" data-toggle="collapse" data-target="#d3Scores" aria-expanded="true" aria-controls="d3Scores">
                                 Defense Witness 3 (<?php echo $pairing["Wit6"]; ?>)
                             </button>
                         </h2>
@@ -400,9 +529,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
                     <div id="closingScores" class="collapse" aria-labelledby="headingOne" data-parent="#scores">
                         <div class="card-body speech">
-                            <label for="pClose" class="pSpeechLabel">π Close (<?php echo $pairing["pClose"]; ?>):</label>
+                            <label for="pClose" class="pSpeechLabel" id="pCloseLabel">π Close (<?php echo $pairing["pClose"]; ?>):</label>
                             <input type="number" min="0" max="10" step="1" size="2" value="<?php echo $scores["pClose"]; ?>" class="pSpeech" id="pClose">
-                            <label for="dClose" class="dSpeechLabel">∆ Close (<?php echo $pairing["dClose"]; ?>):</label>
+                            <label for="dClose" class="dSpeechLabel" id="dCloseLabel">∆ Close (<?php echo $pairing["dClose"]; ?>):</label>
                             <input type="number" min="0" max="10" step="1" size="2" value="<?php echo $scores["dClose"]; ?>" class="dSpeech" id="dClose">
                             <textarea class="pSpeechComments" id="pCloseComments"><?php echo $scores["pCloseComments"]; ?></textarea>
                             <textarea class="dSpeechComments" id="dCloseComments"><?php echo $scores["dCloseComments"]; ?></textarea>
@@ -426,65 +555,36 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     <div class="card-body" id="awards">
                         <p id="attyLabel">Outstanding Attorneys</p>
                         <label for="aty1" class="attySelectLabel" id="atty1Label">Atty 1:</label>
-                        <select id="aty1">
-<?php echo $attySelectOptions[0] ?>
-                        </select>
+                        <input id="aty1">
+
                         <label for="aty2" class="attySelectLabel" id="atty2Label">Atty 2:</label>
-                        <select id="aty2">
-<?php echo $attySelectOptions[1] ?>
-                        </select>
+                        <input id="aty2">
+
                         <label for="aty3" class="attySelectLabel" id="atty3Label">Atty 3:</label>
-                        <select id="aty3">
-<?php echo $attySelectOptions[2] ?>
-                        </select>
+                        <input id="aty3">
+
                         <label for="aty4" class="attySelectLabel" id="atty4Label">Atty 4:</label>
-                        <select id="aty4">
-<?php echo $attySelectOptions[3] ?>
-                        </select>
+                        <input id="aty4">
+
                         <p id="witLabel">Outstanding Witnesses</p>
                         <label for="wit1" class="witSelectLabel" id="wit1Label">Wit 1:</label>
-                        <select id="wit1">
-<?php echo $witSelectOptions[0] ?>
-                        </select>
-                        <label for="wit2" class="witSelectLabel" id="wit2Label">Wit 2:</label>
-                        <select id="wit2">
-<?php echo $witSelectOptions[1] ?>
-                        </select>
-                        <label for="wit3" class="witSelectLabel" id="wit3Label">Wit 3:</label>
-                        <select id="wit3">
-<?php echo $witSelectOptions[2] ?>
-                        </select>
-                        <label for="wit4" class="witSelectLabel" id="wit4Label">Wit 4:</label>
-                        <select id="wit4">
-<?php echo $witSelectOptions[3] ?>
-                        </select>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <button id="submit">Lock</button>
-        
-        <!-- Lock Modal -->
-        <div id="lockModal" class="modal fade" role="dialog">
-            <div class="modal-dialog">
+                        <input id="wit1">
 
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title"></h4>
-                    </div>
-                    <div class="modal-body">
-                        Locking the ballot will prevent further changes. If you need to modify the ballot, you will have to contact the tournament's tabulation director at allen@allenbarr.com. Would you like to lock the ballot?
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" id="lockButton" class="btn btn-default" data-dismiss="modal">Lock Ballot</button>
+                        <label for="wit2" class="witSelectLabel" id="wit2Label">Wit 2:</label>
+                        <input id="wit2">
+
+                        <label for="wit3" class="witSelectLabel" id="wit3Label">Wit 3:</label>
+                        <input id="wit3">
+
+                        <label for="wit4" class="witSelectLabel" id="wit4Label">Wit 4:</label>
+                        <input id="wit4">
+
                     </div>
                 </div>
             </div>
         </div>
-        
-        <script>const url = "<?php echo $url; ?>"</script>
-        <script src="judgeBallot.js"></script>
+
+        <script>var ballots = <?php echo json_encode($ballots); ?></script>
+        <script src="comments.js"></script>
     </body>
 </html>

@@ -32,6 +32,7 @@ if (
     $user = getUser($email);
     if ($user["email"] === $email &&
             password_verify($password, $user["password"])) {
+        $_SESSION["id"] = $user["id"];
         $_SESSION["user"] = $email;
         $_SESSION["isAdmin"] = $user["isAdmin"];
         $_SESSION["isCoach"] = $user["isCoach"];
