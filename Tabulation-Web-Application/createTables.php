@@ -17,6 +17,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-if(isset($_GET["url"])){
-    
-}
+require_once SITE_ROOT . "/tableCreation/ballots.php";
+require_once SITE_ROOT . "/tableCreation/impermissibles.php";
+require_once SITE_ROOT . "/tableCreation/pairings.php";
+require_once SITE_ROOT . "/tableCreation/teams.php";
+require_once SITE_ROOT . "/tableCreation/users.php";
+require_once SITE_ROOT . "/tableCreation/judges.php";
+require_once SITE_ROOT . "/tableCreation/judgeConflicts.php";
+require_once SITE_ROOT . "/tableCreation/settings.php";
+require_once SITE_ROOT . "/tableCreation/coaches.php";

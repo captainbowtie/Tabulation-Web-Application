@@ -245,7 +245,6 @@ function submitCaptains($captains) {
             "wit5 = '" . $captains["wit5"] . "', " .
             "wit6 = '" . $captains["wit6"] . "' " .
             "WHERE captainsURL = '" . $captains["url"]."'";
-    echo $query;
     $conn->query($query);
     $conn->close();
     return true;
