@@ -15,30 +15,194 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+var zeroScore = false;
+
 $("input[type='number']").on("change", function () {
+    zeroScore = false;
     if (validateScore($(this).val())) {
-        updateScore($(this).attr("id"),$(this).val());
+        updateScore($(this).attr("id"), $(this).val());
     } else {
         let part = determinePart($(this).attr("id"));
         alert("Error: " + part + " must be a number between 0 and 10.");
     }
 });
 
-function updateScore(part,score){
+$("textarea").on("change", function () {
+    zeroScore = false;
+    let commentData = {"part": $(this).attr("id")};
+    commentData.comment = $(this).val();
+    commentData.url = url;
+
+    $.ajax({
+        url: "../api/judgeBallot/updateComment.php",
+        method: "POST",
+        data: commentData,
+        dataType: "json"
+    }).then(response => {
+        if (response.message === 0) {
+
+        } else {
+            alert(response.message);
+        }
+    });
+})
+
+$("select").on("change", function () {
+    zeroScore = false;
+    let individualData = {"part": $(this).attr("id")};
+    individualData.studentName = $(this).val();
+    individualData.url = url;
+
+    $.ajax({
+        url: "../api/judgeBallot/updateIndividual.php",
+        method: "POST",
+        data: individualData,
+        dataType: "json"
+    }).then(response => {
+        if (response.message === 0) {
+
+        } else {
+            alert(response.message);
+        }
+    });
+})
+
+$("#submit").on("click", function () {
+    if (validateBallot()) {
+        $("#lockModal").modal();
+    }
+
+});
+
+$("#lockButton").on("click", function () {
+    let ballotData = {"pOpen": $("#pOpen").val()};
+    ballotData.pOpenComments = $("#pOpenComments").val();
+    ballotData.dOpen = $("#dOpen").val();
+    ballotData.dOpenComments = $("#dOpenComments").val();
+    ballotData.pDx1 = $("#pDx1").val();
+    ballotData.pDx1Comments = $("#pDx1Comments").val();
+    ballotData.pWDx1 = $("#pWDx1").val();
+    ballotData.pWDx1Comments = $("#pWDx1Comments").val();
+    ballotData.pWCx1 = $("#pWCx1").val();
+    ballotData.pWCx1Comments = $("#pWCx1Comments").val();
+    ballotData.dCx1 = $("#dCx1").val();
+    ballotData.dCx1Comments = $("#dCx1Comments").val();
+    ballotData.pDx2 = $("#pDx2").val();
+    ballotData.pDx2Comments = $("#pDx2Comments").val();
+    ballotData.pWDx2 = $("#pWDx2").val();
+    ballotData.pWDx2Comments = $("#pWDx2Comments").val();
+    ballotData.pWCx2 = $("#pWCx2").val();
+    ballotData.pWCx2Comments = $("#pWCx2Comments").val();
+    ballotData.dCx2 = $("#dCx2").val();
+    ballotData.dCx2Comments = $("#dCx2Comments").val();
+    ballotData.pDx3 = $("#pDx3").val();
+    ballotData.pDx3Comments = $("#pDx3Comments").val();
+    ballotData.pWDx3 = $("#pWDx3").val();
+    ballotData.pWDx3Comments = $("#pWDx3Comments").val();
+    ballotData.pWCx3 = $("#pWCx3").val();
+    ballotData.pWCx3Comments = $("#pWCx3Comments").val();
+    ballotData.dCx3 = $("#dCx3").val();
+    ballotData.dCx3Comments = $("#dCx3Comments").val();
+    ballotData.dDx1 = $("#dDx1").val();
+    ballotData.dDx1Comments = $("#dDx1Comments").val();
+    ballotData.dWDx1 = $("#dWDx1").val();
+    ballotData.dWDx1Comments = $("#dWDx1Comments").val();
+    ballotData.dWCx1 = $("#dWCx1").val();
+    ballotData.dWCx1Comments = $("#dWCx1Comments").val();
+    ballotData.pCx1 = $("#pCx1").val();
+    ballotData.pCx1Comments = $("#pCx1Comments").val();
+    ballotData.dDx2 = $("#dDx2").val();
+    ballotData.dDx2Comments = $("#dDx2Comments").val();
+    ballotData.dWDx2 = $("#dWDx2").val();
+    ballotData.dWDx2Comments = $("#dWDx2Comments").val();
+    ballotData.dWCx2 = $("#dWCx2").val();
+    ballotData.dWCx2Comments = $("#dWCx2Comments").val();
+    ballotData.pCx2 = $("#pCx2").val();
+    ballotData.pCx2Comments = $("#pCx2Comments").val();
+    ballotData.dDx3 = $("#dDx3").val();
+    ballotData.dDx3Comments = $("#dDx3Comments").val();
+    ballotData.dWDx3 = $("#pOpen").val();
+    ballotData.dWDx3Comments = $("#dWDx3Comments").val();
+    ballotData.dWCx3 = $("#dWCx3").val();
+    ballotData.dWCx3Comments = $("#dWCx3Comments").val();
+    ballotData.pCx3 = $("#pCx3").val();
+    ballotData.pCx3Comments = $("#pCx3Comments").val();
+    ballotData.pClose = $("#pClose").val();
+    ballotData.pCloseComments = $("#pCloseComments").val();
+    ballotData.dClose = $("#dClose").val();
+    ballotData.dCloseComments = $("#dCloseComments").val();
+    ballotData.aty1 = $("#aty1").val();
+    ballotData.aty2 = $("#aty2").val();
+    ballotData.aty3 = $("#aty3").val();
+    ballotData.aty4 = $("#aty4").val();
+    ballotData.wit1 = $("#wit1").val();
+    ballotData.wit2 = $("#wit2").val();
+    ballotData.wit3 = $("#wit3").val();
+    ballotData.wit4 = $("#wit4").val();
+    ballotData.url = url;
+    
+    $.ajax({
+        url: "../api/judgeBallot/lockBallot.php",
+        method: "POST",
+        data: ballotData,
+        dataType: "json"
+    }).then(response => {
+        if (response.message === 0) {
+            alert("Ballot successfully submitted. If you need to make any changes, please contact allen@allenbarr.com.");
+        } else {
+            alert(response.message);
+        }
+    });
+});
+
+function validateBallot() {
+    //check individual awards
+    let individuals = $("select");
+    for (var a = 0; a < individuals.length; a++) {
+        if (individuals[a].value === "N/A") {
+            alert("Please fill out all individual awards.")
+            return false;
+        }
+    }
+    if (!awardsUnique(individuals)) {
+        alert("Please ensure you have different individuals listed for each individual award ranking.");
+        return false;
+    }
+
+    //check scores
+    let scores = $("input[type='number']");
+    for (var a = 0; a < scores.length; a++) {
+        if (!validateScore(scores[a].value)) {
+            let part = determinePart(scores[a].id);
+            alert("Error: " + part + " must be a number between 0 and 10.");
+            return false;
+        } else if (parseInt(scores[a].value) === 0 && !zeroScore) {
+            let part = determinePart(scores[a].id);
+            alert("You have entered a 0 for: " + part + ". A score of 0 may only be used if the part was " +
+                    "not performed. If the part was performed, please enter a score. If the part was not performed, please click the lock button again to confirm.");
+            zeroScore = true;
+            return false;
+        }
+    }
+
+    return true;
+}
+
+function updateScore(part, score) {
     let updateData = `{"part":"${part}","score":${score},"url":"${url}"}`;
 
     $.ajax({
-            url: "../api/judgeBallot/updateScore.php",
-            method: "POST",
-            data: updateData,
-            dataType: "json"
-        }).then(response => {
-            if (response.message === 0) {
-                
-            } else {
-                alert(response.message);
-            }
-        });
+        url: "../api/judgeBallot/updateScore.php",
+        method: "POST",
+        data: updateData,
+        dataType: "json"
+    }).then(response => {
+        if (response.message === 0) {
+
+        } else {
+            alert(response.message);
+        }
+    });
 }
 
 function validateScore(score) {
@@ -146,5 +310,21 @@ function determinePart(part) {
             return "Defense Close";
             break;
 
+    }
+}
+
+function awardsUnique(individuals) {
+    let individualsSet = new Set();
+    for (var a = 0; a < individuals.length; a++) {
+        individualsSet.add(individuals[a].value);
+    }
+    let individualsArray = [];
+    for (var a = 0; a < individuals.length; a++) {
+        individualsArray.push(individuals[a].value);
+    }
+    if (individualsArray.length === individualsSet.size) {
+        return true;
+    } else {
+        return false;
     }
 }

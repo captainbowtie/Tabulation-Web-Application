@@ -52,7 +52,7 @@ $("#submit").on("click", function (e) {
         data: JSON.stringify(roles),
         dataType: "json"
     }).then(response => {
-        if (response.message === 0) {
+        if (response.message == 0) {
             alert("Roles successfully submitted.");
         } else {
             alert(response.message);

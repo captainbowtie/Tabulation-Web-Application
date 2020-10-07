@@ -128,7 +128,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #wit4{
     grid-row:15/15;
-    grid-column: 1/1;
+    grid-column: 3/3;
 }
 #dDx1Label{
     grid-row:16/16;
@@ -157,7 +157,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #wit5{
     grid-row:19/19;
-    grid-column: 1/1;
+    grid-column: 3/3;
 }
 #dDx2Label{
     grid-row:20/20;
@@ -186,7 +186,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #wit6{
     grid-row:23/23;
-    grid-column: 1/1;
+    grid-column: 3/3;
 }
 #dDx3Label{
     grid-row:24/24;
