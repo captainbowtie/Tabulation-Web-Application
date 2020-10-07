@@ -67,7 +67,7 @@ if ($_SESSION["isAdmin"]) {
                 $bodyHTML .= " checked";
             }
             $bodyHTML .= "></td>\n";
-            $bodyHTML .= "<td><input class='round2' type='checkbox' id='round3$a'";
+            $bodyHTML .= "<td><input class='round2' type='checkbox' id='round2$a'";
             if ($judges[$a]["round3"]) {
                 $bodyHTML .= " checked";
             }
