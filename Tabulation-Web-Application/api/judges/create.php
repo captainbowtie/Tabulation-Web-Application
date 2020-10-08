@@ -21,24 +21,22 @@ if ($_SESSION["isAdmin"]) {
     require_once __DIR__ . '/../../config.php';
     require_once SITE_ROOT . '/objects/judge.php';
 
-    $data = json_decode(file_get_contents("php://input"));
-
     if (
-            isset($data->name) &&
-            isset($data->category) &&
-            isset($data->round1) &&
-            isset($data->round2) &&
-            isset($data->round3) &&
-            isset($data->round4)
+            $_POST["name"] &&
+            $_POST["category"] &&
+            $_POST["round1"] &&
+            $_POST["round2"] &&
+            $_POST["round3"] &&
+            $_POST["round4"]
     ) {
-        $name = htmlspecialchars(strip_tags($data->name));
-        $category = htmlspecialchars(strip_tags($data->category));
-        $round1 = htmlspecialchars(strip_tags($data->round1));
-        $round2 = htmlspecialchars(strip_tags($data->round2));
-        $round3 = htmlspecialchars(strip_tags($data->round3));
-        $round4 = htmlspecialchars(strip_tags($data->round4));
-        
-        if (createJudge($name, $category,$round1,$round2,$round3,$round4)) {
+        $name = htmlspecialchars(strip_tags($_POST["name"]));
+        $category = htmlspecialchars(strip_tags($_POST["category"]));
+        $round1 = htmlspecialchars(strip_tags($_POST["round1"]));
+        $round2 = htmlspecialchars(strip_tags($_POST["round2"]));
+        $round3 = htmlspecialchars(strip_tags($_POST["round3"]));
+        $round4 = htmlspecialchars(strip_tags($_POST["round4"]));
+
+        if (createJudge($name, $category, $round1, $round2, $round3, $round4)) {
             // set response code - 201 created
             http_response_code(201);
 
@@ -60,7 +58,7 @@ if ($_SESSION["isAdmin"]) {
         // tell the user
         echo json_encode(array("message" => "Unable to create judge. Data is incomplete."));
     }
-}else{
+} else {
     http_response_code(401);
 }
 
