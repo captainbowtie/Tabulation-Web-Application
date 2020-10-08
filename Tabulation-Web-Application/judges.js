@@ -67,12 +67,12 @@ $(".conflictsButton").on("click", function () {
 
 function fillConflictModal(judgeID) {
     //start by unchecking all checkboxes
-    $(".conflictCheckbox").prop("checked",false);
-    
+    $(".conflictCheckbox").prop("checked", false);
+
     //then check the ones with conflicts
-    for(var a = 0;a<conflicts.length;a++){
-        if(conflicts[a].judge===judgeID){
-            $(`#${conflicts[a].team}checkbox`).prop("checked",true);
+    for (var a = 0; a < conflicts.length; a++) {
+        if (conflicts[a].judge === judgeID) {
+            $(`#${conflicts[a].team}checkbox`).prop("checked", true);
         }
     }
 }
@@ -143,14 +143,13 @@ $("#newJudge").on("click", function () {
 });
 
 $("#addJudge").on("click", function () {
-    let judgeData = `{
-    "name":"${$("#name").val()}",
-    "category":"${$("#category").val()}",
-    "round1":"${$("#round1").prop("checked")}",
-    "round2":"${$("#round2").prop("checked")}",
-    "round3":"${$("#round3").prop("checked")}",
-    "round4":"${$("#round4").prop("checked")}"
-    }`;
+    let judgeData = {"name": $("#name").val()};
+    judgeData.category = $("#category").val();
+    judgeData.round1 = $("#round1").prop("checked");
+    judgeData.round2 = $("#round2").prop("checked");
+    judgeData.round3 = $("#round3").prop("checked");
+    judgeData.round4 = $("#round4").prop("checked");
+
     $.ajax({
         url: "../api/judges/create.php",
         method: "POST",
@@ -165,7 +164,7 @@ $("#addJudge").on("click", function () {
     });
 });
 
-function updateConflicts(){
+function updateConflicts() {
     $.ajax({
         url: "../api/judgeConflicts/getAll.php",
         dataType: "json"
