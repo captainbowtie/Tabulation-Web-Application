@@ -25,12 +25,13 @@ function createJudge($name, $category, $round1, $round2, $round3, $round4) {
     $db = new Database();
     $conn = $db->getConnection();
     $query = "INSERT INTO judges (name, category, round1, round2, round3, round4) VALUES ("
-            . "'$name',"
+            . "'".addslashes($name)."',"
             . "$category,"
             . "$round1,"
             . "$round2,"
             . "$round3,"
             . "$round4)";
+
     $conn->query($query);
     if ($conn->affected_rows == 1) {
         $judgeCreated = true;
