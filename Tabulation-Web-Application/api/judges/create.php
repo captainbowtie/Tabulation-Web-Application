@@ -20,14 +20,14 @@ session_start();
 if ($_SESSION["isAdmin"]) {
     require_once __DIR__ . '/../../config.php';
     require_once SITE_ROOT . '/objects/judge.php';
-
+    
     if (
-            $_POST["name"] &&
-            $_POST["category"] &&
-            $_POST["round1"] &&
-            $_POST["round2"] &&
-            $_POST["round3"] &&
-            $_POST["round4"]
+            isset($_POST["name"]) &&
+            isset($_POST["category"]) &&
+            isset($_POST["round1"]) &&
+            isset($_POST["round2"]) &&
+            isset($_POST["round3"]) &&
+            isset($_POST["round4"])
     ) {
         $name = htmlspecialchars(strip_tags($_POST["name"]));
         $category = htmlspecialchars(strip_tags($_POST["category"]));
