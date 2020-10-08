@@ -39,7 +39,7 @@ if ($_SESSION["isAdmin"]) {
     if (!empty($judges)) {
         for ($a = 0; $a < sizeof($judges); $a++) {
             $bodyHTML .= "<tr id='judge" . $judges[$a]["id"] . "'>\n";
-            $bodyHTML .= "<td><input class='name' id='name$a' value='" . $judges[$a]["name"] . "'></td>\n";
+            $bodyHTML .= "<td><input class='name' id='name$a' value='" . addslashes($judges[$a]["name"]) . "'></td>\n";
             $bodyHTML .= "<td>"
                     . "<select class='category' id='category$a'>\n";
             switch ($judges[$a]["category"]) {
