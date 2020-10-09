@@ -49,7 +49,7 @@ $("#submit").on("click", function (e) {
     $.ajax({
         url: "../api/pairings/submitCaptains.php",
         method: "POST",
-        data: JSON.stringify(roles),
+        data: roles,
         dataType: "json"
     }).then(response => {
         if (response.message == 0) {

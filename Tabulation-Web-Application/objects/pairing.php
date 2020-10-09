@@ -216,35 +216,35 @@ function submitCaptains($captains) {
 
     //update pairing with captains data
     $query = "UPDATE pairings SET " .
-            "pOpen = '" . $captains["pOpen"] . "', " .
-            "dOpen = '" . $captains["dOpen"] . "', " .
-            "pDx1 = '" . $captains["pDx1"] . "', " .
-            "pDx2 = '" . $captains["pDx2"] . "', " .
-            "pDx3 = '" . $captains["pDx3"] . "', " .
-            "pWDx1 = '" . $captains["pWDx1"] . "', " .
-            "pWDx2 = '" . $captains["pWDx2"] . "', " .
-            "pWDx3 = '" . $captains["pWDx3"] . "', " .
-            "pCx1 = '" . $captains["pCx1"] . "', " .
-            "pCx2 = '" . $captains["pCx2"] . "', " .
-            "pCx3 = '" . $captains["pCx3"] . "', " .
-            "dDx1 = '" . $captains["dDx1"] . "', " .
-            "dDx2 = '" . $captains["dDx2"] . "', " .
-            "dDx3 = '" . $captains["dDx3"] . "', " .
-            "dWDx1 = '" . $captains["dWDx1"] . "', " .
-            "dWDx2 = '" . $captains["dWDx2"] . "', " .
-            "dWDx3 = '" . $captains["dWDx3"] . "', " .
-            "dCx1 = '" . $captains["dCx1"] . "', " .
-            "dCx2 = '" . $captains["dCx2"] . "', " .
-            "dCx3 = '" . $captains["dCx3"] . "', " .
-            "pClose = '" . $captains["pClose"] . "', " .
-            "dClose = '" . $captains["dClose"] . "', " .
-            "wit1 = '" . $captains["wit1"] . "', " .
-            "wit2 = '" . $captains["wit2"] . "', " .
-            "wit3 = '" . $captains["wit3"] . "', " .
-            "wit4 = '" . $captains["wit4"] . "', " .
-            "wit5 = '" . $captains["wit5"] . "', " .
-            "wit6 = '" . $captains["wit6"] . "' " .
-            "WHERE captainsURL = '" . $captains["url"]."'";
+            "pOpen = '" . addslashes($captains["pOpen"]) . "', " .
+            "dOpen = '" . addslashes($captains["dOpen"]) . "', " .
+            "pDx1 = '" . addslashes($captains["pDx1"]) . "', " .
+            "pDx2 = '" . addslashes($captains["pDx2"]) . "', " .
+            "pDx3 = '" . addslashes($captains["pDx3"]) . "', " .
+            "pWDx1 = '" . addslashes($captains["pWDx1"]) . "', " .
+            "pWDx2 = '" . addslashes($captains["pWDx2"]) . "', " .
+            "pWDx3 = '" . addslashes($captains["pWDx3"]) . "', " .
+            "pCx1 = '" . addslashes($captains["pCx1"]) . "', " .
+            "pCx2 = '" . addslashes($captains["pCx2"]) . "', " .
+            "pCx3 = '" . addslashes($captains["pCx3"]) . "', " .
+            "dDx1 = '" . addslashes($captains["dDx1"]) . "', " .
+            "dDx2 = '" . addslashes($captains["dDx2"]) . "', " .
+            "dDx3 = '" . addslashes($captains["dDx3"]) . "', " .
+            "dWDx1 = '" . addslashes($captains["dWDx1"]) . "', " .
+            "dWDx2 = '" . addslashes($captains["dWDx2"]) . "', " .
+            "dWDx3 = '" . addslashes($captains["dWDx3"]) . "', " .
+            "dCx1 = '" . addslashes($captains["dCx1"]) . "', " .
+            "dCx2 = '" . addslashes($captains["dCx2"]) . "', " .
+            "dCx3 = '" . addslashes($captains["dCx3"]) . "', " .
+            "pClose = '" . addslashes($captains["pClose"]) . "', " .
+            "dClose = '" . addslashes($captains["dClose"]) . "', " .
+            "wit1 = '" . addslashes($captains["wit1"]) . "', " .
+            "wit2 = '" . addslashes($captains["wit2"]) . "', " .
+            "wit3 = '" . addslashes($captains["wit3"]) . "', " .
+            "wit4 = '" . addslashes($captains["wit4"]) . "', " .
+            "wit5 = '" . addslashes($captains["wit5"]) . "', " .
+            "wit6 = '" . addslashes($captains["wit6"]) . "' " .
+            "WHERE captainsURL = '" . $captains["url"] . "'";
     $conn->query($query);
     $conn->close();
     return true;

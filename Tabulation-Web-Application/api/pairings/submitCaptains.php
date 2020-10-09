@@ -23,65 +23,65 @@ require_once SITE_ROOT . '/objects/pairing.php';
 $data = json_decode(file_get_contents("php://input"));
 
 if (
-        isset($data->pOpen) &&
-        isset($data->dOpen) &&
-        isset($data->pDx1) &&
-        isset($data->pDx2) &&
-        isset($data->pDx3) &&
-        isset($data->pWDx1) &&
-        isset($data->pWDx2) &&
-        isset($data->pWDx3) &&
-        isset($data->pCx1) &&
-        isset($data->pCx2) &&
-        isset($data->pCx3) &&
-        isset($data->dDx1) &&
-        isset($data->dDx2) &&
-        isset($data->dDx3) &&
-        isset($data->dWDx1) &&
-        isset($data->dWDx2) &&
-        isset($data->dWDx3) &&
-        isset($data->dCx1) &&
-        isset($data->dCx2) &&
-        isset($data->dCx3) &&
-        isset($data->pClose) &&
-        isset($data->dClose) &&
-        isset($data->wit1) &&
-        isset($data->wit2) &&
-        isset($data->wit3) &&
-        isset($data->wit4) &&
-        isset($data->wit5) &&
-        isset($data->wit6) &&
-        isset($data->url)
+        isset($_POST["pOpen"]) &&
+        isset($_POST["dOpen"]) &&
+        isset($_POST["pDx1"]) &&
+        isset($_POST["pDx2"]) &&
+        isset($_POST["pDx3"]) &&
+        isset($_POST["pWDx1"]) &&
+        isset($_POST["pWDx2"]) &&
+        isset($_POST["pWDx3"]) &&
+        isset($_POST["pCx1"]) &&
+        isset($_POST["pCx2"]) &&
+        isset($_POST["pCx3"]) &&
+        isset($_POST["dDx1"]) &&
+        isset($_POST["dDx2"]) &&
+        isset($_POST["dDx3"]) &&
+        isset($_POST["dWDx1"]) &&
+        isset($_POST["dWDx2"]) &&
+        isset($_POST["dWDx3"]) &&
+        isset($_POST["dCx1"]) &&
+        isset($_POST["dCx2"]) &&
+        isset($_POST["dCx3"]) &&
+        isset($_POST["pClose"]) &&
+        isset($_POST["dClose"]) &&
+        isset($_POST["wit1"]) &&
+        isset($_POST["wit2"]) &&
+        isset($_POST["wit3"]) &&
+        isset($_POST["wit4"]) &&
+        isset($_POST["wit5"]) &&
+        isset($_POST["wit6"]) &&
+        isset($_POST["url"])
 ) {
-    $captains["pOpen"] = htmlspecialchars(strip_tags($data->pOpen));
-    $captains["dOpen"] = htmlspecialchars(strip_tags($data->dOpen));
-    $captains["pDx1"] = htmlspecialchars(strip_tags($data->pDx1));
-    $captains["pDx2"] = htmlspecialchars(strip_tags($data->pDx2));
-    $captains["pDx3"] = htmlspecialchars(strip_tags($data->pDx3));
-    $captains["pWDx1"] = htmlspecialchars(strip_tags($data->pWDx1));
-    $captains["pWDx2"] = htmlspecialchars(strip_tags($data->pWDx2));
-    $captains["pWDx3"] = htmlspecialchars(strip_tags($data->pWDx3));
-    $captains["pCx1"] = htmlspecialchars(strip_tags($data->pCx1));
-    $captains["pCx2"] = htmlspecialchars(strip_tags($data->pCx2));
-    $captains["pCx3"] = htmlspecialchars(strip_tags($data->pCx3));
-    $captains["dDx1"] = htmlspecialchars(strip_tags($data->dDx1));
-    $captains["dDx2"] = htmlspecialchars(strip_tags($data->dDx2));
-    $captains["dDx3"] = htmlspecialchars(strip_tags($data->dDx3));
-    $captains["dWDx1"] = htmlspecialchars(strip_tags($data->dWDx1));
-    $captains["dWDx2"] = htmlspecialchars(strip_tags($data->dWDx2));
-    $captains["dWDx3"] = htmlspecialchars(strip_tags($data->dWDx3));
-    $captains["dCx1"] = htmlspecialchars(strip_tags($data->dCx1));
-    $captains["dCx2"] = htmlspecialchars(strip_tags($data->dCx2));
-    $captains["dCx3"] = htmlspecialchars(strip_tags($data->dCx3));
-    $captains["pClose"] = htmlspecialchars(strip_tags($data->pClose));
-    $captains["dClose"] = htmlspecialchars(strip_tags($data->dClose));
-    $captains["wit1"] = htmlspecialchars(strip_tags($data->wit1));
-    $captains["wit2"] = htmlspecialchars(strip_tags($data->wit2));
-    $captains["wit3"] = htmlspecialchars(strip_tags($data->wit3));
-    $captains["wit4"] = htmlspecialchars(strip_tags($data->wit4));
-    $captains["wit5"] = htmlspecialchars(strip_tags($data->wit5));
-    $captains["wit6"] = htmlspecialchars(strip_tags($data->wit6));
-    $captains["url"] = htmlspecialchars(strip_tags($data->url));
+    $captains["pOpen"] = htmlspecialchars(strip_tags($_POST["pOpen"]));
+    $captains["dOpen"] = htmlspecialchars(strip_tags($_POST["dOpen"]));
+    $captains["pDx1"] = htmlspecialchars(strip_tags($_POST["pDx1"]));
+    $captains["pDx2"] = htmlspecialchars(strip_tags($_POST["pDx2"]));
+    $captains["pDx3"] = htmlspecialchars(strip_tags($_POST["pDx3"]));
+    $captains["pWDx1"] = htmlspecialchars(strip_tags($_POST["pWDx1"]));
+    $captains["pWDx2"] = htmlspecialchars(strip_tags($_POST["pWDx2"]));
+    $captains["pWDx3"] = htmlspecialchars(strip_tags($_POST["pWDx3"]));
+    $captains["pCx1"] = htmlspecialchars(strip_tags($_POST["pCx1"]));
+    $captains["pCx2"] = htmlspecialchars(strip_tags($_POST["pCx2"]));
+    $captains["pCx3"] = htmlspecialchars(strip_tags($_POST["pCx3"]));
+    $captains["dDx1"] = htmlspecialchars(strip_tags($_POST["dDx1"]));
+    $captains["dDx2"] = htmlspecialchars(strip_tags($_POST["dDx2"]));
+    $captains["dDx3"] = htmlspecialchars(strip_tags($_POST["dDx3"]));
+    $captains["dWDx1"] = htmlspecialchars(strip_tags($_POST["dWDx1"]));
+    $captains["dWDx2"] = htmlspecialchars(strip_tags($_POST["dWDx2"]));
+    $captains["dWDx3"] = htmlspecialchars(strip_tags($_POST["dWDx3"]));
+    $captains["dCx1"] = htmlspecialchars(strip_tags($_POST["dCx1"]));
+    $captains["dCx2"] = htmlspecialchars(strip_tags($_POST["dCx2"]));
+    $captains["dCx3"] = htmlspecialchars(strip_tags($_POST["dCx3"]));
+    $captains["pClose"] = htmlspecialchars(strip_tags($_POST["pClose"]));
+    $captains["dClose"] = htmlspecialchars(strip_tags($_POST["dClose"]));
+    $captains["wit1"] = htmlspecialchars(strip_tags($_POST["wit1"]));
+    $captains["wit2"] = htmlspecialchars(strip_tags($_POST["wit2"]));
+    $captains["wit3"] = htmlspecialchars(strip_tags($_POST["wit3"]));
+    $captains["wit4"] = htmlspecialchars(strip_tags($_POST["wit4"]));
+    $captains["wit5"] = htmlspecialchars(strip_tags($_POST["wit5"]));
+    $captains["wit6"] = htmlspecialchars(strip_tags($_POST["wit6"]));
+    $captains["url"] = htmlspecialchars(strip_tags($_POST["url"]));
 
     if (submitCaptains($captains)) {
         // set response code - 201 created
