@@ -541,12 +541,12 @@ function pair2() {
 
     }
     //return pairings
-    let pairings = [];
+    let r2pairings = [];
     for (var a = 0; a < plaintiffTeams.length; a++) {
         let pairing = `{"plaintiff":${plaintiffTeams[a].number},"defense":${defenseTeams[a].number}}`;
-        pairings.push(JSON.parse(pairing));
+        r2pairings.push(JSON.parse(pairing));
     }
-    return pairings;
+    return r2pairings;
 }
 
 function pair3() {
@@ -675,7 +675,7 @@ function pair3() {
 
     //return pairings, flipping the side assignment of half of them at random
     const snakeFlag = Math.random();
-    let pairings = [];
+    let r3pairings = [];
     if (snakeFlag < .5) {
         for (var a = 0; a < teams.length; a += 2) {
             if (a % 4 === 0) {
@@ -683,7 +683,7 @@ function pair3() {
             } else {
                 let pairing = `{"plaintiff":${teams[a + 1].number},"defense":${teams[a].number}`;
             }
-            pairings.push(JSON.parse(pairing));
+            r3pairings.push(JSON.parse(pairing));
         }
     } else {
         for (var a = 0; a < teams.length; a += 2) {
@@ -692,10 +692,10 @@ function pair3() {
             } else {
                 let pairing = `{"plaintiff":${teams[a].number},"defense":${teams[a + 1].number}`;
             }
-            pairings.push(JSON.parse(pairing));
+            r3pairings.push(JSON.parse(pairing));
         }
     }
-    return pairings;
+    return r3pairings;
 }
 
 function pair4() {
@@ -847,12 +847,12 @@ function pair4() {
 
 
     //return pairings
-    let pairings = [];
+    let r4pairings = [];
     for (var a = 0; a < plaintiffTeams.length; a++) {
         let pairing = `{"plaintiff":${plaintiffTeams[a].number},"defense":${defenseTeams[a].number}}`;
-        pairings.push(JSON.parse(pairing));
+        r4pairings.push(JSON.parse(pairing));
     }
-    return pairings;
+    return r4pairings;
 }
 
 function pairingsHaveConflicts(plaintiffTeams, defenseTeams) {
