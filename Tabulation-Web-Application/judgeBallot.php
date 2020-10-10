@@ -334,9 +334,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
                     <div id="d2Scores" class="collapse" aria-labelledby="headingOne" data-parent="#scores">
                         <div class="card-body defenseWitness">
-                            <label for="pCx2" class="pCxLabel" id="pCx2Label">Wit Cx (<?php echo $pairing["pCx2"]; ?>):</label>
+                            <label for="pCx2" class="pCxLabel" id="pCx2Label">Aty Cx (<?php echo $pairing["pCx2"]; ?>):</label>
                             <input type="number" min="0" max="10" step="1" size="2" value="<?php echo $scores["pCx2"]; ?>" class="pCx" id="pCx2" name="pDx2">
-                            <label for="dDx2" class="dDxLabel" id="dDx2Label">Wit Dx (<?php echo $pairing["dDx2"]; ?>):</label>
+                            <label for="dDx2" class="dDxLabel" id="dDx2Label">Aty Dx (<?php echo $pairing["dDx2"]; ?>):</label>
                             <input type="number" min="0" max="10" step="1" size="2" value="<?php echo $scores["dDx2"]; ?>" class="dDx" id="dDx2" name="dCx2">
 
                             <textarea class="pCxComments" id="pCx2Comments"><?php echo $scores["pCx2Comments"]; ?></textarea>

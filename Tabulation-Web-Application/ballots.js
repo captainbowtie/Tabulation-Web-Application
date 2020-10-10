@@ -130,6 +130,39 @@ function fillBallot() {
     $("#dCx3").val(ballot.dCx3);
     $("#pClose").val(ballot.pClose);
     $("#dClose").val(ballot.dClose);
+    let plaintiffPoints = ballot.pOpen +
+            ballot.pDx1 +
+            ballot.pDx2 +
+            ballot.pDx3 +
+            ballot.pWDx1 +
+            ballot.pWDx2 +
+            ballot.pWDx3 +
+            ballot.pWCx1 +
+            ballot.pWCx2 +
+            ballot.pWCx3 +
+            ballot.pCx1 +
+            ballot.pCx2 +
+            ballot.pCx3 + ballot.pClose;
+    let defensePoints = ballot.dOpen +
+            ballot.dDx1 +
+            ballot.dDx2 +
+            ballot.dDx3 +
+            ballot.dWDx1 +
+            ballot.dWDx2 +
+            ballot.dWDx3 +
+            ballot.dWCx1 +
+            ballot.dWCx2 +
+            ballot.dWCx3 +
+            ballot.dCx1 +
+            ballot.dCx2 +
+            ballot.dCx3 + ballot.dClose;
+    if((plaintiffPoints - defensePoints) > 0){
+        $("#tabRoomPD").html("Plaintiff wins: +" + (plaintiffPoints - defensePoints));
+    }else if((plaintiffPoints - defensePoints) < 0){
+        $("#tabRoomPD").html("Defense wins: +" + (defensePoints - plaintiffPoints));
+    }else{
+        $("#tabRoomPD").html("Tie");
+    }
 }
 
 $("#submit").on("click", function (event) {
@@ -173,7 +206,7 @@ $("#submit").on("click", function (event) {
             dataType: "json"
         }).then(response => {
             if (response.message === 0) {
-                
+
             } else {
                 warningModal(response.message);
             }
