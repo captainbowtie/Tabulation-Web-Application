@@ -15,6 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+session_start();
 
 if (isset($_GET["ballot"])) {
     $url = htmlspecialchars(strip_tags($_GET["ballot"]));
@@ -24,6 +25,10 @@ if (isset($_GET["ballot"])) {
 
     $ballotQuery = "SELECT * FROM ballots WHERE url = '$url' && locked = 0";
 
+    if($_SESSION["isAdmin"]){
+        $ballotQuery = "SELECT * FROM ballots WHERE url = '$url'";
+    }
+    
     //get data for ballot
     $db = new Database();
     $conn = $db->getConnection();
