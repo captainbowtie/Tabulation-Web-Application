@@ -46,7 +46,6 @@ if (isset($_GET["round"])) {
     $dTeamNumber = $dTeam["number"];
 
     $conn->close();
-    
 } else {
     die("Access denied.");
 }
@@ -95,123 +94,321 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         ?>
         <div id="pairingInfo">
             <h2>
-            <?php
-            echo $pTeam["number"] ."-".$pTeam["name"] ." v. " .$dTeam["number"]."-".$dTeam["name"];
-            ?>
+                <?php
+                echo $pTeam["number"] . "-" . $pTeam["name"] . " v. " . $dTeam["number"] . "-" . $dTeam["name"];
+                ?>
             </h2>
+        </div>
+        <div id="sideSelectDiv">
+            <input type ="radio" name="side" value="plainitff" id="pRadio">
+            <label for="pRadio">Plaintiff</label><br>
+            <input type="radio" name="side" value="defense" id="dRadio">
+            <label for="dRadio">Defense</label><br>
         </div>
         <div id="inputDiv">
             <label id="pOpenLabel" for="pOpen">Plaintiff Open:</label>
-            <input id="pOpen" value="<?php echo $pairing["pOpen"];?>">
+            <input class="pInput" id="pOpen" value="<?php echo $pairing["pOpen"]; ?>">
             <label id="dOpenLabel" for="dOpen">Defense Open:</label>
-            <input id="dOpen" value="<?php echo $pairing["dOpen"];?>">
-            
-            <select id="wit1">
-                <option value="Rodriguez" <?php if($pairing["Wit1"]==="Rodriguez"){echo "selected";}?>>Rodriguez</option>
-                <option value="Paras" <?php if($pairing["Wit1"]=="Paras"){echo "selected";}?>>Paras</option>
-                <option value="OKeefe" <?php if($pairing["Wit1"]=="OKeefe"){echo "selected";}?>>O'Keefe</option>
-                <option value="Kwon" <?php if($pairing["Wit1"]=="Kwon"){echo "selected";}?>>Kwon</option>
-                <option value="Cannon" <?php if($pairing["Wit1"]=="Cannon"){echo "selected";}?>>Cannon</option>
-                <option value="Arnould" <?php if($pairing["Wit1"]=="Arnould"){echo "selected";}?>>Arnould</option>
-                <option value="Francazio" <?php if($pairing["Wit1"]=="Francazio"){echo "selected";}?>>Francazio</option>
-                <option value="Soto" <?php if($pairing["Wit1"]=="Soto"){echo "selected";}?>>Soto</option>      
+            <input class="dInput" id="dOpen" value="<?php echo $pairing["dOpen"]; ?>">
+
+            <select class="pInput" id="wit1">
+                <option value="Rodriguez" <?php
+                if ($pairing["Wit1"] === "Rodriguez") {
+                    echo "selected";
+                }
+                ?>>Rodriguez</option>
+                <option value="Paras" <?php
+                if ($pairing["Wit1"] == "Paras") {
+                    echo "selected";
+                }
+                ?>>Paras</option>
+                <option value="OKeefe" <?php
+                        if ($pairing["Wit1"] == "OKeefe") {
+                            echo "selected";
+                        }
+                        ?>>O'Keefe</option>
+                <option value="Kwon" <?php
+                if ($pairing["Wit1"] == "Kwon") {
+                    echo "selected";
+                }
+                ?>>Kwon</option>
+                <option value="Cannon" <?php
+                if ($pairing["Wit1"] == "Cannon") {
+                    echo "selected";
+                }
+                ?>>Cannon</option>
+                <option value="Arnould" <?php
+                        if ($pairing["Wit1"] == "Arnould") {
+                            echo "selected";
+                        }
+                ?>>Arnould</option>
+                <option value="Francazio" <?php
+                        if ($pairing["Wit1"] == "Francazio") {
+                            echo "selected";
+                        }
+                ?>>Francazio</option>
+                <option value="Soto" <?php
+                        if ($pairing["Wit1"] == "Soto") {
+                            echo "selected";
+                        }
+                ?>>Soto</option>      
             </select>
             <label id="pDx1Label" for="pDx1">Directing Attorney:</label>
-            <input id="pDx1" value="<?php echo $pairing["pDx1"];?>">
+            <input class="pInput" id="pDx1" value="<?php echo $pairing["pDx1"]; ?>">
             <label id="pWDx1Label" for="pWDx1">Witness:</label>
-            <input id="pWDx1" value="<?php echo $pairing["pWDx1"];?>">
+            <input class="pInput" id="pWDx1" value="<?php echo $pairing["pWDx1"]; ?>">
             <label id="dCx1Label" for="dCx1">Crossing Attorney:</label>
-            <input id="dCx1" value="<?php echo $pairing["dCx1"];?>">
+            <input class="dInput" id="dCx1" value="<?php echo $pairing["dCx1"]; ?>">
 
-            <select id="wit2">
-                <option value="Rodriguez" <?php if($pairing["Wit2"]==="Rodriguez"){echo "selected";}?>>Rodriguez</option>
-                <option value="Paras" <?php if($pairing["Wit2"]=="Paras"){echo "selected";}?>>Paras</option>
-                <option value="OKeefe" <?php if($pairing["Wit2"]=="OKeefe"){echo "selected";}?>>O'Keefe</option>
-                <option value="Kwon" <?php if($pairing["Wit2"]=="Kwon"){echo "selected";}?>>Kwon</option>
-                <option value="Cannon" <?php if($pairing["Wit2"]=="Cannon"){echo "selected";}?>>Cannon</option>
-                <option value="Arnould" <?php if($pairing["Wit2"]=="Arnould"){echo "selected";}?>>Arnould</option>
-                <option value="Francazio" <?php if($pairing["Wit2"]=="Francazio"){echo "selected";}?>>Francazio</option>
-                <option value="Soto" <?php if($pairing["Wit2"]=="Soto"){echo "selected";}?>>Soto</option>      
+            <select class="pInput" id="wit2">
+                <option value="Rodriguez" <?php
+                        if ($pairing["Wit2"] === "Rodriguez") {
+                            echo "selected";
+                        }
+                        ?>>Rodriguez</option>
+                <option value="Paras" <?php
+                if ($pairing["Wit2"] == "Paras") {
+                    echo "selected";
+                }
+                ?>>Paras</option>
+                <option value="OKeefe" <?php
+                if ($pairing["Wit2"] == "OKeefe") {
+                    echo "selected";
+                }
+                ?>>O'Keefe</option>
+                <option value="Kwon" <?php
+                if ($pairing["Wit2"] == "Kwon") {
+                    echo "selected";
+                }
+                ?>>Kwon</option>
+                <option value="Cannon" <?php
+                if ($pairing["Wit2"] == "Cannon") {
+                    echo "selected";
+                }
+                ?>>Cannon</option>
+                <option value="Arnould" <?php
+                if ($pairing["Wit2"] == "Arnould") {
+                    echo "selected";
+                }
+                ?>>Arnould</option>
+                <option value="Francazio" <?php
+                        if ($pairing["Wit2"] == "Francazio") {
+                            echo "selected";
+                        }
+                        ?>>Francazio</option>
+                <option value="Soto" <?php
+                if ($pairing["Wit2"] == "Soto") {
+                    echo "selected";
+                }
+                ?>>Soto</option>      
             </select>
             <label id="pDx2Label" for="pDx2">Directing Attorney:</label>
-            <input id="pDx2" value="<?php echo $pairing["pDx2"];?>">
+            <input class="pInput" id="pDx2" value="<?php echo $pairing["pDx2"]; ?>">
             <label id="pWDx2Label" for="pWDx2">Witness:</label>
-            <input id="pWDx2" value="<?php echo $pairing["pWDx2"];?>">
+            <input class="pInput" id="pWDx2" value="<?php echo $pairing["pWDx2"]; ?>">
             <label id="dCx2Label" for="dCx2">Crossing Attorney:</label>
-            <input id="dCx2" value="<?php echo $pairing["dCx2"];?>">
+            <input class="dInput" id="dCx2" value="<?php echo $pairing["dCx2"]; ?>">
 
-            <select id="wit3">
-                <option value="Rodriguez" <?php if($pairing["Wit3"]==="Rodriguez"){echo "selected";}?>>Rodriguez</option>
-                <option value="Paras" <?php if($pairing["Wit3"]=="Paras"){echo "selected";}?>>Paras</option>
-                <option value="OKeefe" <?php if($pairing["Wit3"]=="OKeefe"){echo "selected";}?>>O'Keefe</option>
-                <option value="Kwon" <?php if($pairing["Wit3"]=="Kwon"){echo "selected";}?>>Kwon</option>
-                <option value="Cannon" <?php if($pairing["Wit3"]=="Cannon"){echo "selected";}?>>Cannon</option>
-                <option value="Arnould" <?php if($pairing["Wit3"]=="Arnould"){echo "selected";}?>>Arnould</option>
-                <option value="Francazio" <?php if($pairing["Wit3"]=="Francazio"){echo "selected";}?>>Francazio</option>
-                <option value="Soto" <?php if($pairing["Wit3"]=="Soto"){echo "selected";}?>>Soto</option>      
+            <select class="pInput" id="wit3">
+                <option value="Rodriguez" <?php
+                if ($pairing["Wit3"] === "Rodriguez") {
+                    echo "selected";
+                }
+                ?>>Rodriguez</option>
+                <option value="Paras" <?php
+                        if ($pairing["Wit3"] == "Paras") {
+                            echo "selected";
+                        }
+                        ?>>Paras</option>
+                <option value="OKeefe" <?php
+                if ($pairing["Wit3"] == "OKeefe") {
+                    echo "selected";
+                }
+                ?>>O'Keefe</option>
+                <option value="Kwon" <?php
+                if ($pairing["Wit3"] == "Kwon") {
+                    echo "selected";
+                }
+                ?>>Kwon</option>
+                <option value="Cannon" <?php
+                        if ($pairing["Wit3"] == "Cannon") {
+                            echo "selected";
+                        }
+                        ?>>Cannon</option>
+                <option value="Arnould" <?php
+                if ($pairing["Wit3"] == "Arnould") {
+                    echo "selected";
+                }
+                        ?>>Arnould</option>
+                <option value="Francazio" <?php
+                if ($pairing["Wit3"] == "Francazio") {
+                    echo "selected";
+                }
+                        ?>>Francazio</option>
+                <option value="Soto" <?php
+                        if ($pairing["Wit3"] == "Soto") {
+                            echo "selected";
+                        }
+                        ?>>Soto</option>      
             </select>
             <label id="pDx3Label" for="pDx3">Directing Attorney:</label>
-            <input id="pDx3" value="<?php echo $pairing["pDx3"];?>">
+            <input class="pInput" id="pDx3" value="<?php echo $pairing["pDx3"]; ?>">
             <label id="pWDx3Label" for="pWDx3">Witness:</label>
-            <input id="pWDx3" value="<?php echo $pairing["pWDx3"];?>">
+            <input class="pInput" id="pWDx3" value="<?php echo $pairing["pWDx3"]; ?>">
             <label id="dCx3Label" for="dCx3">Crossing Attorney:</label>
-            <input id="dCx3" value="<?php echo $pairing["dCx3"];?>">
+            <input class="dInput" id="dCx3" value="<?php echo $pairing["dCx3"]; ?>">
 
-            <select id="wit4">
-                <option value="Martini" <?php if($pairing["Wit4"]=="Martini"){echo "selected";}?>>Martini</option>
-                <option value="Lewis" <?php if($pairing["Wit4"]=="Lewis"){echo "selected";}?>>Lewis</option>
-                <option value="Osborne" <?php if($pairing["Wit4"]=="Osborne"){echo "selected";}?>>Osborne</option>
-                <option value="Kwon" <?php if($pairing["Wit4"]=="Kwon"){echo "selected";}?>>Kwon</option>
-                <option value="Cannon" <?php if($pairing["Wit4"]=="Cannon"){echo "selected";}?>>Cannon</option>
-                <option value="Arnould" <?php if($pairing["Wit4"]=="Arnould"){echo "selected";}?>>Arnould</option>
-                <option value="Francazio" <?php if($pairing["Wit4"]=="Francazio"){echo "selected";}?>>Francazio</option>
-                <option value="Soto" <?php if($pairing["Wit4"]=="Soto"){echo "selected";}?>>Soto</option>      
+            <select class="dInput" id="wit4">
+                <option value="Martini" <?php
+                if ($pairing["Wit4"] == "Martini") {
+                    echo "selected";
+                }
+                ?>>Martini</option>
+                <option value="Lewis" <?php
+                if ($pairing["Wit4"] == "Lewis") {
+                    echo "selected";
+                }
+                ?>>Lewis</option>
+                <option value="Osborne" <?php
+                        if ($pairing["Wit4"] == "Osborne") {
+                            echo "selected";
+                        }
+                ?>>Osborne</option>
+                <option value="Kwon" <?php
+                        if ($pairing["Wit4"] == "Kwon") {
+                            echo "selected";
+                        }
+                ?>>Kwon</option>
+                <option value="Cannon" <?php
+                        if ($pairing["Wit4"] == "Cannon") {
+                            echo "selected";
+                        }
+                ?>>Cannon</option>
+                <option value="Arnould" <?php
+                        if ($pairing["Wit4"] == "Arnould") {
+                            echo "selected";
+                        }
+                        ?>>Arnould</option>
+                <option value="Francazio" <?php
+                if ($pairing["Wit4"] == "Francazio") {
+                    echo "selected";
+                }
+                ?>>Francazio</option>
+                <option value="Soto" <?php
+                if ($pairing["Wit4"] == "Soto") {
+                    echo "selected";
+                }
+                ?>>Soto</option>      
             </select>
             <label id="dDx1Label" for="dDx1">Directing Attorney:</label>
-            <input id="dDx1" value="<?php echo $pairing["dDx1"];?>">
+            <input class="dInput" id="dDx1" value="<?php echo $pairing["dDx1"]; ?>">
             <label id="dWDx1Label" for="dWDx1">Witness:</label>
-            <input id="dWDx1" value="<?php echo $pairing["dWDx1"];?>">
+            <input class="dInput" id="dWDx1" value="<?php echo $pairing["dWDx1"]; ?>">
             <label id="pCx1Label" for="pCx1">Crossing Attorney:</label>
-            <input id="pCx1" value="<?php echo $pairing["pCx1"];?>">
+            <input class="pInput" id="pCx1" value="<?php echo $pairing["pCx1"]; ?>">
 
-            <select id="wit5">
-                <option value="Martini" <?php if($pairing["Wit5"]=="Martini"){echo "selected";}?>>Martini</option>
-                <option value="Lewis" <?php if($pairing["Wit5"]=="Lewis"){echo "selected";}?>>Lewis</option>
-                <option value="Osborne" <?php if($pairing["Wit5"]=="Osborne"){echo "selected";}?>>Osborne</option>
-                <option value="Kwon" <?php if($pairing["Wit5"]=="Kwon"){echo "selected";}?>>Kwon</option>
-                <option value="Cannon" <?php if($pairing["Wit5"]=="Cannon"){echo "selected";}?>>Cannon</option>
-                <option value="Arnould" <?php if($pairing["Wit5"]=="Arnould"){echo "selected";}?>>Arnould</option>
-                <option value="Francazio" <?php if($pairing["Wit5"]=="Francazio"){echo "selected";}?>>Francazio</option>
-                <option value="Soto" <?php if($pairing["Wit5"]=="Soto"){echo "selected";}?>>Soto</option>      
+            <select class="dInput" id="wit5">
+                <option value="Martini" <?php
+                        if ($pairing["Wit5"] == "Martini") {
+                            echo "selected";
+                        }
+                ?>>Martini</option>
+                <option value="Lewis" <?php
+                        if ($pairing["Wit5"] == "Lewis") {
+                            echo "selected";
+                        }
+                ?>>Lewis</option>
+                <option value="Osborne" <?php
+                        if ($pairing["Wit5"] == "Osborne") {
+                            echo "selected";
+                        }
+                ?>>Osborne</option>
+                <option value="Kwon" <?php
+                        if ($pairing["Wit5"] == "Kwon") {
+                            echo "selected";
+                        }
+                ?>>Kwon</option>
+                <option value="Cannon" <?php
+                        if ($pairing["Wit5"] == "Cannon") {
+                            echo "selected";
+                        }
+                ?>>Cannon</option>
+                <option value="Arnould" <?php
+                        if ($pairing["Wit5"] == "Arnould") {
+                            echo "selected";
+                        }
+                ?>>Arnould</option>
+                <option value="Francazio" <?php
+                        if ($pairing["Wit5"] == "Francazio") {
+                            echo "selected";
+                        }
+                ?>>Francazio</option>
+                <option value="Soto" <?php
+                        if ($pairing["Wit5"] == "Soto") {
+                            echo "selected";
+                        }
+                ?>>Soto</option>      
             </select>
             <label id="dDx2Label" for="dDx2">Directing Attorney:</label>
-            <input id="dDx2" value="<?php echo $pairing["dDx2"];?>">
+            <input class="dInput" id="dDx2" value="<?php echo $pairing["dDx2"]; ?>">
             <label id="dWDx2Label" for="dWDx2">Witness:</label>
-            <input id="dWDx2" value="<?php echo $pairing["dWDx2"];?>">
+            <input class="dInput" id="dWDx2" value="<?php echo $pairing["dWDx2"]; ?>">
             <label id="pCx2Label" for="pCx2">Crossing Attorney:</label>
-            <input id="pCx2" value="<?php echo $pairing["pCx2"];?>">
+            <input class="pInput" id="pCx2" value="<?php echo $pairing["pCx2"]; ?>">
 
-            <select id="wit6">
-                <option value="Martini" <?php if($pairing["Wit6"]=="Martini"){echo "selected";}?>>Martini</option>
-                <option value="Lewis" <?php if($pairing["Wit6"]=="Lewis"){echo "selected";}?>>Lewis</option>
-                <option value="Osborne" <?php if($pairing["Wit6"]=="Osborne"){echo "selected";}?>>Osborne</option>
-                <option value="Kwon" <?php if($pairing["Wit6"]=="Kwon"){echo "selected";}?>>Kwon</option>
-                <option value="Cannon" <?php if($pairing["Wit6"]=="Cannon"){echo "selected";}?>>Cannon</option>
-                <option value="Arnould" <?php if($pairing["Wit6"]=="Arnould"){echo "selected";}?>>Arnould</option>
-                <option value="Francazio" <?php if($pairing["Wit6"]=="Francazio"){echo "selected";}?>>Francazio</option>
-                <option value="Soto" <?php if($pairing["Wit6"]=="Soto"){echo "selected";}?>>Soto</option>      
+            <select class="dInput" id="wit6">
+                <option value="Martini" <?php
+                        if ($pairing["Wit6"] == "Martini") {
+                            echo "selected";
+                        }
+                ?>>Martini</option>
+                <option value="Lewis" <?php
+                        if ($pairing["Wit6"] == "Lewis") {
+                            echo "selected";
+                        }
+                ?>>Lewis</option>
+                <option value="Osborne" <?php
+                        if ($pairing["Wit6"] == "Osborne") {
+                            echo "selected";
+                        }
+                ?>>Osborne</option>
+                <option value="Kwon" <?php
+                        if ($pairing["Wit6"] == "Kwon") {
+                            echo "selected";
+                        }
+                ?>>Kwon</option>
+                <option value="Cannon" <?php
+                        if ($pairing["Wit6"] == "Cannon") {
+                            echo "selected";
+                        }
+                ?>>Cannon</option>
+                <option value="Arnould" <?php
+                        if ($pairing["Wit6"] == "Arnould") {
+                            echo "selected";
+                        }
+                ?>>Arnould</option>
+                <option value="Francazio" <?php
+                        if ($pairing["Wit6"] == "Francazio") {
+                            echo "selected";
+                        }
+                ?>>Francazio</option>
+                <option value="Soto" <?php
+                        if ($pairing["Wit6"] == "Soto") {
+                            echo "selected";
+                        }
+                ?>>Soto</option>      
             </select>
             <label id="dDx3Label" for="dDx3">Directing Attorney:</label>
-            <input id="dDx3" value="<?php echo $pairing["dDx3"];?>">
+            <input class="dInput" id="dDx3" value="<?php echo $pairing["dDx3"]; ?>">
             <label id="dWDx3Label" for="dWDx3">Witness:</label>
-            <input id="dWDx3" value="<?php echo $pairing["dWDx3"];?>">
+            <input class="dInput" id="dWDx3" value="<?php echo $pairing["dWDx3"]; ?>">
             <label id="pCx3Label" for="pCx3">Crossing Attorney:</label>
-            <input id="pCx3" value="<?php echo $pairing["pCx3"];?>">
-            
+            <input class="pInput" id="pCx3" value="<?php echo $pairing["pCx3"]; ?>">
+
             <label id="pCloseLabel" for="pClose">Plaintiff Close:</label>
-            <input id="pClose" value="<?php echo $pairing["pClose"];?>">
+            <input class="pInput" id="pClose" value="<?php echo $pairing["pClose"]; ?>">
             <label id="dCloseLabel" for="dClose">Defense Close:</label>
-            <input id="dClose" value="<?php echo $pairing["dClose"];?>">
+            <input class="dInput" id="dClose" value="<?php echo $pairing["dClose"]; ?>">
         </div>
         <button id="submit">Submit</button>
         <script>const url = "<?php echo $url; ?>"</script>
