@@ -321,8 +321,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                             <p class="pSpeech" id="pOpen"></p>
                             <label for="dOpen" class="dSpeechLabel" id="dOpenLabel">∆ Open (<?php echo $pairing["dOpen"]; ?>):</label>
                             <p class="dSpeech" id="dOpen"></p>
-                            <textarea class="pSpeechComments" id="pOpenComments"><?php echo $scores["pOpenComments"]; ?></textarea>
-                            <textarea class="dSpeechComments" id="dOpenComments"><?php echo $scores["dOpenComments"]; ?></textarea>
+                            <p class="pSpeechComments" id="pOpenComments"></p>
+                            <p class="dSpeechComments" id="dOpenComments"></p>
                         </div>
                     </div>
                 </div>
@@ -342,16 +342,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                             <p class="pDx" id="pDx1"></p>
                             <label for="dCx1" class="dCxLabel" id="dCx1Label">Atty Cx (<?php echo $pairing["dCx1"]; ?>):</label>
                             <p class="dCx" id="dCx1"></p>
-                            <textarea class="pDxComments" id="pDx1Comments"><?php echo $scores["pDx1Comments"]; ?></textarea>
-                            <textarea class="dCxComments" id="dCx1Comments"><?php echo $scores["dCx1Comments"]; ?></textarea>
+                            <p class="pDxComments" id="pDx1Comments"></p>
+                            <p class="dCxComments" id="dCx1Comments"></p>
 
                             <label for="pWDx1" class="pWDxLabel" id="pWDx1Label">Wit Dx (<?php echo $pairing["pWDx1"]; ?>):</label>
                             <p class="pWDx" id="pWDx1"></p>
-                            <textarea class="pWDxComments" id="pWDx1Comments"><?php echo $scores["pWDx1Comments"]; ?></textarea>
+                            <p class="pWDxComments" id="pWDx1Comments"></p>
 
                             <label for="pWCx1" class="pWCxLabel" id="pWCx1Label">Wit Cx (<?php echo $pairing["pWDx1"]; ?>):</label>
                             <p class="pWCx" id="pWCx1"></p>
-                            <textarea class="pWCxComments" id="pWCx1Comments"><?php echo $scores["pWCx1Comments"]; ?></textarea>
+                            <p class="pWCxComments" id="pWCx1Comments"></p>
                         </div>
                     </div>
                 </div>
@@ -372,15 +372,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                             <label for="dCx2" class="dCxLabel" id="dCx2Label">Atty Cx (<?php echo $pairing["dCx2"]; ?>):</label>
                             <p class="dCx" id="dCx2"></p>
 
-                            <textarea class="pDxComments" id="pDx2Comments"><?php echo $scores["pDx2Comments"]; ?></textarea>
-                            <textarea class="dCxComments" id="dCx2Comments"><?php echo $scores["dCx2Comments"]; ?></textarea>
+                            <p class="pDxComments" id="pDx2Comments"></p>
+                            <p class="dCxComments" id="dCx2Comments"></p>
 
                             <label for="pWDx2" class="pWDxLabel" id="pWDx2Label">Wit Dx (<?php echo $pairing["pWDx2"]; ?>):</label>
                             <p class="pWDx" id="pWDx2" ></p>
-                            <textarea class="pWDxComments" id="pWDx2Comments"><?php echo $scores["pWDx2Comments"]; ?></textarea>
+                            <p class="pWDxComments" id="pWDx2Comments"></p>
                             <label for="pWCx2" class="pWCxLabel" id="pWCx2Label">Wit Cx (<?php echo $pairing["pWDx2"]; ?>):</label>
                             <p class="pWCx" id="pWCx2"></p>
-                            <textarea class="pWCxComments" id="pWCx2Comments"><?php echo $scores["pWCx2Comments"]; ?></textarea>
+                            <p class="pWCxComments" id="pWCx2Comments"></p>
                         </div>
 
 
@@ -403,17 +403,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                             <label for="dCx3" class="dCxLabel" id="dCx3Label">Atty Cx (<?php echo $pairing["dCx3"]; ?>):</label>
                             <p class="dCx" id="dCx3"></p>
 
-                            <textarea class="pDxComments" id="pDx3Comments"><?php echo $scores["pDx3Comments"]; ?></textarea>
-                            <textarea class="dCxComments" id="dCx3Comments"><?php echo $scores["dCx3Comments"]; ?></textarea>
+                            <p class="pDxComments" id="pDx3Comments"></p>
+                            <p class="dCxComments" id="dCx3Comments"></p>
 
                             <label for="pWDx3" class="pWDxLabel" id="pWDx3Label">Wit Dx (<?php echo $pairing["pWDx3"]; ?>):</label>
                             <p class="pWDx" id="pWDx3"></p>
 
-                            <textarea class="pWDxComments" id="pWDx3Comments"><?php echo $scores["pWDx3Comments"]; ?></textarea>
+                            <p class="pWDxComments" id="pWDx3Comments"></p>
 
                             <label for="pWCx3" class="pWCxLabel" id="pWCx3Label">Wit Cx (<?php echo $pairing["pWDx3"]; ?>):</label>
                             <p class="pWCx" id="pWCx3"></p>
-                            <textarea class="pWCxComments" id="pWCx3Comments"><?php echo $scores["pWCx3Comments"]; ?></textarea>
+                            <p class="pWCxComments" id="pWCx3Comments"></p>
                         </div>
                     </div>
                 </div>
@@ -434,19 +434,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                             <label for="dDx1" class="dDxLabel" id="dDx1Label">Atty Dx (<?php echo $pairing["dDx1"]; ?>):</label>
                             <p class="dDx" id="dDx1"></p>
 
-                            <textarea class="pCxComments" id="pCx1Comments"><?php echo $scores["pCx1Comments"]; ?></textarea>
-                            <textarea class="dDxComments" id="dDx1Comments"><?php echo $scores["dDx1Comments"]; ?></textarea>
+                            <p class="pCxComments" id="pCx1Comments"></p>
+                            <p class="dDxComments" id="dDx1Comments"></p>
 
 
                             <label for="dWDx1" class="dWDxLabel" id="dWDx1Label">Wit Dx (<?php echo $pairing["dWDx1"]; ?>):</label>
                             <p class="dWDx" id="dWDx1"></p>
 
-                            <textarea class="dWDxComments" id="dWDx1Comments"><?php echo $scores["dWDx1Comments"]; ?></textarea>
+                            <p class="dWDxComments" id="dWDx1Comments"></p>
 
                             <label for="dWCx1" class="dWCxLabel" id="dWCx1Label">Wit Cx (<?php echo $pairing["dWDx1"]; ?>):</label>
                             <p class="dWCx" id="dWCx1"></p>
 
-                            <textarea class="dWCxComments" id="dWCx1Comments"><?php echo $scores["dWCx1Comments"]; ?></textarea>
+                            <p class="dWCxComments" id="dWCx1Comments"></p>
 
                         </div>
                     </div>
@@ -468,18 +468,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                             <label for="dDx2" class="dDxLabel" id="dDx2Label">Wit Dx (<?php echo $pairing["dDx2"]; ?>):</label>
                             <p class="dDx" id="dDx2"></p>
 
-                            <textarea class="pCxComments" id="pCx2Comments"><?php echo $scores["pCx2Comments"]; ?></textarea>
-                            <textarea class="dDxComments" id="dDx2Comments"><?php echo $scores["dDx2Comments"]; ?></textarea>
+                            <p class="pCxComments" id="pCx2Comments"></p>
+                            <p class="dDxComments" id="dDx2Comments"></p>
 
                             <label for="dWDx2" class="dWDxLabel" id="dWDx2Label">Wit Dx (<?php echo $pairing["dWDx2"]; ?>):</label>
                             <p class="dWDx" id="dWDx2"></p>
 
-                            <textarea class="dWDxComments" id="dWDx2Comments"><?php echo $scores["dWDx2Comments"]; ?></textarea>
+                            <p class="dWDxComments" id="dWDx2Comments"></p>
 
                             <label for="dWCx2" class="dWCxLabel" id="dWCx2Label">Wit Cx (<?php echo $pairing["dWDx2"]; ?>):</label>
                             <p class="dWCx" id="dWCx2"></p>
 
-                            <textarea class="dWCxComments" id="dWCx2Comments"><?php echo $scores["dWCx2Comments"]; ?></textarea>
+                            <p class="dWCxComments" id="dWCx2Comments"></p>
 
                         </div>
                     </div>
@@ -501,18 +501,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                             <label for="dDx3" class="dDxLabel" id="dDx3Label">Atty Dx (<?php echo $pairing["dDx3"]; ?>):</label>
                             <p class="dDx" id="dDx3"></p>
 
-                            <textarea class="pCxComments" id="pCx3Comments"><?php echo $scores["pCx3Comments"]; ?></textarea>
-                            <textarea class="dDxComments" id="dDx3Comments"><?php echo $scores["dDx3Comments"]; ?></textarea>
+                            <p class="pCxComments" id="pCx3Comments"></p>
+                            <p class="dDxComments" id="dDx3Comments"></p>
 
                             <label for="dWDx3" class="dWDxLabel" id="dWDx3Label">Wit Dx (<?php echo $pairing["dWDx3"]; ?>):</label>
                             <p class="dWDx" id="dWDx3"></p>
 
-                            <textarea class="dWDxComments" id="dWDx3Comments"><?php echo $scores["dWDx3Comments"]; ?></textarea>
+                            <p class="dWDxComments" id="dWDx3Comments"></p>
 
                             <label for="dWCx3" class="dWCxLabel" id="dWCx3Label">Wit Cx (<?php echo $pairing["dWDx3"]; ?>):</label>
                             <p class="dWCx" id="dWCx3"></p>
 
-                            <textarea class="dWCxComments" id="dWCx3Comments"><?php echo $scores["dWCx3Comments"]; ?></textarea>
+                            <p class="dWCxComments" id="dWCx3Comments"></p>
 
                         </div>
                     </div>
@@ -533,8 +533,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                             <p class="pSpeech" id="pClose"></p>
                             <label for="dClose" class="dSpeechLabel" id="dCloseLabel">∆ Close (<?php echo $pairing["dClose"]; ?>):</label>
                             <p class="dSpeech" id="dClose"></p>
-                            <textarea class="pSpeechComments" id="pCloseComments"><?php echo $scores["pCloseComments"]; ?></textarea>
-                            <textarea class="dSpeechComments" id="dCloseComments"><?php echo $scores["dCloseComments"]; ?></textarea>
+                            <p class="pSpeechComments" id="pCloseComments"></p>
+                            <p class="dSpeechComments" id="dCloseComments"></p>
 
                         </div>
                     </div>
