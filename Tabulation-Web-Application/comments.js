@@ -227,6 +227,44 @@ function fillBallot() {
             $("#witness4Header").html(`Defense Witness 1 (${ballots[a].witness4}):`);
             $("#witness5Header").html(`Defense Witness 2 (${ballots[a].witness5}):`);
             $("#witness6Header").html(`Defense Witness 3 (${ballots[a].witness6}):`);
+
+            let plaintiffPoints = parseInt(ballots[a].pOpen) +
+                    parseInt(ballots[a].pDx1) +
+                    parseInt(ballots[a].pDx2) +
+                    parseInt(ballots[a].pDx3) +
+                    parseInt(ballots[a].pWDx1) +
+                    parseInt(ballots[a].pWDx2) +
+                    parseInt(ballots[a].pWDx3) +
+                    parseInt(ballots[a].pWCx1) +
+                    parseInt(ballots[a].pWCx2) +
+                    parseInt(ballots[a].pWCx3) +
+                    parseInt(ballots[a].pCx1) +
+                    parseInt(ballots[a].pCx2) +
+                    parseInt(ballots[a].pCx3) +
+                    parseInt(ballots[a].pClose);
+            let defensePoints = parseInt(ballots[a].dOpen) +
+                    parseInt(ballots[a].dDx1) +
+                    parseInt(ballots[a].dDx2) +
+                    parseInt(ballots[a].dDx3) +
+                    parseInt(ballots[a].dWDx1) +
+                    parseInt(ballots[a].dWDx2) +
+                    parseInt(ballots[a].dWDx3) +
+                    parseInt(ballots[a].dWCx1) +
+                    parseInt(ballots[a].dWCx2) +
+                    parseInt(ballots[a].dWCx3) +
+                    parseInt(ballots[a].dCx1) +
+                    parseInt(ballots[a].dCx2) +
+                    parseInt(ballots[a].dCx3) +
+                    parseInt(ballots[a].dClose);
+
+            if ((plaintiffPoints - defensePoints) > 0) {
+                $("#pointTotalDiv").html("Plaintiff wins: +" + (plaintiffPoints - defensePoints));
+            } else if ((plaintiffPoints - defensePoints) < 0) {
+                $("#pointTotalDiv").html("Defense wins: +" + (defensePoints - plaintiffPoints));
+            } else {
+                $("#pointTotalDiv").html("Tie");
+            }
         }
+
     }
 }

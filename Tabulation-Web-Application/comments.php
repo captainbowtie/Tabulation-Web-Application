@@ -303,7 +303,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             <select id="ballot">
             </select>
         </div>
-
+        <div id="pointTotalDiv"></div>
         <div id="scoresDiv">
             <div class="accordion" id="scores">
                 <div class="card">
