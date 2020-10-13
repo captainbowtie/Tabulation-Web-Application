@@ -69,6 +69,68 @@ $("select").on("change", function () {
 
 $("#submit").on("click", function () {
     if (validateBallot()) {
+        let ballotData = {"pOpen": $("#pOpen").val()};
+        ballotData.dOpen = $("#dOpen").val();
+        ballotData.pDx1 = $("#pDx1").val();
+        ballotData.pWDx1 = $("#pWDx1").val();
+        ballotData.pWCx1 = $("#pWCx1").val();
+        ballotData.dCx1 = $("#dCx1").val();
+        ballotData.pDx2 = $("#pDx2").val();
+        ballotData.pWDx2 = $("#pWDx2").val();
+        ballotData.pWCx2 = $("#pWCx2").val();
+        ballotData.dCx2 = $("#dCx2").val();
+        ballotData.pDx3 = $("#pDx3").val();
+        ballotData.pWDx3 = $("#pWDx3").val();
+        ballotData.pWCx3 = $("#pWCx3").val();
+        ballotData.dCx3 = $("#dCx3").val();
+        ballotData.dDx1 = $("#dDx1").val();
+        ballotData.dWDx1 = $("#dWDx1").val();
+        ballotData.dWCx1 = $("#dWCx1").val();
+        ballotData.pCx1 = $("#pCx1").val();
+        ballotData.dDx2 = $("#dDx2").val();
+        ballotData.dWDx2 = $("#dWDx2").val();
+        ballotData.dWCx2 = $("#dWCx2").val();
+        ballotData.pCx2 = $("#pCx2").val();
+        ballotData.dDx3 = $("#dDx3").val();
+        ballotData.dWDx3 = $("#pOpen").val();
+        ballotData.dWCx3 = $("#dWCx3").val();
+        ballotData.pCx3 = $("#pCx3").val();
+        ballotData.pClose = $("#pClose").val();
+        ballotData.dClose = $("#dClose").val();
+
+        let plaintiffPoints = parseInt(ballotData.pOpen) +
+                parseInt(ballotData.pDx1) +
+                parseInt(ballotData.pDx2) +
+                parseInt(ballotData.pDx3) +
+                parseInt(ballotData.pWDx1) +
+                parseInt(ballotData.pWDx2) +
+                parseInt(ballotData.pWDx3) +
+                parseInt(ballotData.pWCx1) +
+                parseInt(ballotData.pWCx2) +
+                parseInt(ballotData.pWCx3) +
+                parseInt(ballotData.pCx1) +
+                parseInt(ballotData.pCx2) +
+                parseInt(ballotData.pCx3) +
+                parseInt(ballotData.pClose);
+        let defensePoints = parseInt(ballotData.dOpen) +
+                parseInt(ballotData.dDx1) +
+                parseInt(ballotData.dDx2) +
+                parseInt(ballotData.dDx3) +
+                parseInt(ballotData.dWDx1) +
+                parseInt(ballotData.dWDx2) +
+                parseInt(ballotData.dWDx3) +
+                parseInt(ballotData.dWCx1) +
+                parseInt(ballotData.dWCx2) +
+                parseInt(ballotData.dWCx3) +
+                parseInt(ballotData.dCx1) +
+                parseInt(ballotData.dCx2) +
+                parseInt(ballotData.dCx3) +
+                parseInt(ballotData.dClose);
+
+        $("#lockModalText").html(
+                `Plaintiff Points: ${plaintiffPoints}<br>` +
+                `Defense Points: ${defensePoints}<br>` +
+                `Locking the ballot will prevent further changes. If you need to modify the ballot, you will have to contact the tournament's tabulation director at allen@allenbarr.com. Would you like to lock the ballot?`);
         $("#lockModal").modal();
     }
 
@@ -140,7 +202,7 @@ $("#lockButton").on("click", function () {
     ballotData.wit3 = $("#wit3").val();
     ballotData.wit4 = $("#wit4").val();
     ballotData.url = url;
-    
+
     $.ajax({
         url: "../api/judgeBallot/lockBallot.php",
         method: "POST",
