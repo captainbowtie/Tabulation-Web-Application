@@ -19,8 +19,31 @@ $("document").ready(function () {
     $(".pInput").prop("disabled", true);
     $(".dInput").prop("disabled", true);
     $("button").prop("disabled", true);
-    $("#pRadio").prop("disabled", false);
-    $("#dRadio").prop("disabled", false);
+    $("#pRadio").prop("disabled", true);
+    $("#dRadio").prop("disabled", true);
+});
+
+$("#pairingSelect").on("change", function () {
+    if ($(this).val() === "0") {
+        $(".pInput").prop("disabled", true);
+        $(".dInput").prop("disabled", true);
+        $("button").prop("disabled", true);
+        $("#pRadio").prop("disabled", true);
+        $("#dRadio").prop("disabled", true);
+    } else {
+        $("#pRadio").prop("disabled", false);
+        $("#dRadio").prop("disabled", false);
+        if ($("#pRadio").prop("checked")) {
+            $(".pInput").prop("disabled", false);
+            $(".dInput").prop("disabled", true);
+            $("button").prop("disabled", false);
+        } else if ($("#dRadio").prop("checked")) {
+            $(".pInput").prop("disabled", true);
+            $(".dInput").prop("disabled", false);
+            $("button").prop("disabled", false);
+        }
+
+    }
 });
 
 $("#pRadio").on("click", function () {
@@ -72,7 +95,8 @@ $("#submit").on("click", function (e) {
         alert("Submission error. Neither side has been selected at top.");
 
     }
-    roles.url = url;
+    roles.round = round;
+    roles.plaintiff = $("#pairingSelect").val();
 
     $.ajax({
         url: "../api/pairings/submitCaptains.php",

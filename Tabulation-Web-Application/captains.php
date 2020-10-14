@@ -16,38 +16,59 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-if (isset($_GET["round"])) {
-    $url = htmlspecialchars(strip_tags($_GET["round"]));
 
-    require_once __DIR__ . "/config.php";
-    require_once SITE_ROOT . "/database.php";
+require_once __DIR__ . "/config.php";
+require_once SITE_ROOT . "/database.php";
 
-    $pairingQuery = "SELECT * FROM pairings WHERE captainsURL = '$url'";
+$pairingQuery = "SELECT plaintiff,defense,round FROM pairings";
 
-    //get data for ballot
-    $db = new Database();
-    $conn = $db->getConnection();
-    $pairingResult = $conn->query($pairingQuery);
-    $pairing = $pairingResult->fetch_assoc();
-    $pairingResult->close();
+//get pairing data
+$db = new Database();
+$conn = $db->getConnection();
+$pairingResult = $conn->query($pairingQuery);
+$maxRound = 0;
+$a = 0;
+while ($pairing = $pairingResult->fetch_assoc()) {
+    $pairings[$a]["plaintiff"] = intVal($pairing["plaintiff"]);
+    $pairings[$a]["defense"] = intVal($pairing["defense"]);
+    $pairings[$a]["round"] = intVal($pairing["round"]);
+    if (intVal($pairing["round"]) > $maxRound) {
+        $maxRound = intVal($pairing["round"]);
+    }
+    $a++;
+}
+$pairingResult->close();
 
-    //get team numbers to put at top
-    $pID = $pairing["plaintiff"];
-    $dID = $pairing["defense"];
-    $pQuery = "SELECT name,number FROM teams WHERE id = $pID";
-    $dQuery = "SELECT name,number FROM teams WHERE id = $dID";
-    $pResult = $conn->query($pQuery);
-    $pTeam = $pResult->fetch_assoc();
-    $pResult->close();
-    $dResult = $conn->query($dQuery);
-    $dTeam = $dResult->fetch_assoc();
-    $dResult->close();
-    $pTeamNumber = $pTeam["number"];
-    $dTeamNumber = $dTeam["number"];
+//remove pairings from past rounds
+$roundPairings = [];
+for ($a = 0; $a < sizeOf($pairings); $a++) {
+    if ($pairings[$a]["round"] === $maxRound) {
+        array_push($roundPairings, $pairings[$a]);
+    }
+}
 
-    $conn->close();
-} else {
-    die("Access denied.");
+
+//convert team ids to team numbers
+$teamQuery = "SELECT id,number FROM teams";
+$teamResult = $conn->query($teamQuery);
+while ($team = $teamResult->fetch_assoc()) {
+    for ($a = 0; $a < sizeOf($roundPairings); $a++) {
+        if ($roundPairings[$a]["plaintiff"] === intVal($team["id"])) {
+            $roundPairings[$a]["plaintiff"] = intVal($team["number"]);
+        } else if ($roundPairings[$a]["defense"] === intVal($team["id"])) {
+            $roundPairings[$a]["defense"] = intVal($team["number"]);
+        }
+    }
+}
+$teamResult->close();
+$conn->close();
+
+//create select options
+$pairingOptionsHTML = "<option value='0'>Select Pairing:</option>\n";
+for ($a = 0; $a < sizeOf($roundPairings); $a++) {
+    $pTeamNumber = $roundPairings[$a]["plaintiff"];
+    $dTeamNumber = $roundPairings[$a]["defense"];
+    $pairingOptionsHTML .= "<option value='$pTeamNumber'>$pTeamNumber v. $dTeamNumber</option>\n";
 }
 ?>
 
@@ -92,12 +113,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <?php
         echo $header;
         ?>
-        <div id="pairingInfo">
-            <h2>
-                <?php
-                echo $pTeam["number"] . "-" . $pTeam["name"] . " v. " . $dTeam["number"] . "-" . $dTeam["name"];
-                ?>
-            </h2>
+        <div id="selectDiv">
+            <select id="pairingSelect">
+                <?php echo $pairingOptionsHTML; ?>
+            </select>
         </div>
         <div id="sideSelectDiv">
             <input type ="radio" name="side" value="plainitff" id="pRadio">
@@ -123,10 +142,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 }
                 ?>>Paras</option>
                 <option value="OKeefe" <?php
-                        if ($pairing["Wit1"] == "OKeefe") {
-                            echo "selected";
-                        }
-                        ?>>O'Keefe</option>
+                if ($pairing["Wit1"] == "OKeefe") {
+                    echo "selected";
+                }
+                ?>>O'Keefe</option>
                 <option value="Kwon" <?php
                 if ($pairing["Wit1"] == "Kwon") {
                     echo "selected";
@@ -138,19 +157,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 }
                 ?>>Cannon</option>
                 <option value="Arnould" <?php
-                        if ($pairing["Wit1"] == "Arnould") {
-                            echo "selected";
-                        }
+                if ($pairing["Wit1"] == "Arnould") {
+                    echo "selected";
+                }
                 ?>>Arnould</option>
                 <option value="Francazio" <?php
-                        if ($pairing["Wit1"] == "Francazio") {
-                            echo "selected";
-                        }
+                if ($pairing["Wit1"] == "Francazio") {
+                    echo "selected";
+                }
                 ?>>Francazio</option>
                 <option value="Soto" <?php
-                        if ($pairing["Wit1"] == "Soto") {
-                            echo "selected";
-                        }
+                if ($pairing["Wit1"] == "Soto") {
+                    echo "selected";
+                }
                 ?>>Soto</option>      
             </select>
             <label id="pDx1Label" for="pDx1">Directing Attorney:</label>
@@ -162,10 +181,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
             <select class="pInput" id="wit2">
                 <option value="Rodriguez" <?php
-                        if ($pairing["Wit2"] === "Rodriguez") {
-                            echo "selected";
-                        }
-                        ?>>Rodriguez</option>
+                if ($pairing["Wit2"] === "Rodriguez") {
+                    echo "selected";
+                }
+                ?>>Rodriguez</option>
                 <option value="Paras" <?php
                 if ($pairing["Wit2"] == "Paras") {
                     echo "selected";
@@ -192,10 +211,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 }
                 ?>>Arnould</option>
                 <option value="Francazio" <?php
-                        if ($pairing["Wit2"] == "Francazio") {
-                            echo "selected";
-                        }
-                        ?>>Francazio</option>
+                if ($pairing["Wit2"] == "Francazio") {
+                    echo "selected";
+                }
+                ?>>Francazio</option>
                 <option value="Soto" <?php
                 if ($pairing["Wit2"] == "Soto") {
                     echo "selected";
@@ -216,10 +235,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 }
                 ?>>Rodriguez</option>
                 <option value="Paras" <?php
-                        if ($pairing["Wit3"] == "Paras") {
-                            echo "selected";
-                        }
-                        ?>>Paras</option>
+                if ($pairing["Wit3"] == "Paras") {
+                    echo "selected";
+                }
+                ?>>Paras</option>
                 <option value="OKeefe" <?php
                 if ($pairing["Wit3"] == "OKeefe") {
                     echo "selected";
@@ -231,25 +250,25 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 }
                 ?>>Kwon</option>
                 <option value="Cannon" <?php
-                        if ($pairing["Wit3"] == "Cannon") {
-                            echo "selected";
-                        }
-                        ?>>Cannon</option>
+                if ($pairing["Wit3"] == "Cannon") {
+                    echo "selected";
+                }
+                ?>>Cannon</option>
                 <option value="Arnould" <?php
                 if ($pairing["Wit3"] == "Arnould") {
                     echo "selected";
                 }
-                        ?>>Arnould</option>
+                ?>>Arnould</option>
                 <option value="Francazio" <?php
                 if ($pairing["Wit3"] == "Francazio") {
                     echo "selected";
                 }
-                        ?>>Francazio</option>
+                ?>>Francazio</option>
                 <option value="Soto" <?php
-                        if ($pairing["Wit3"] == "Soto") {
-                            echo "selected";
-                        }
-                        ?>>Soto</option>      
+                if ($pairing["Wit3"] == "Soto") {
+                    echo "selected";
+                }
+                ?>>Soto</option>      
             </select>
             <label id="pDx3Label" for="pDx3">Directing Attorney:</label>
             <input class="pInput" id="pDx3" value="<?php echo $pairing["pDx3"]; ?>">
@@ -270,25 +289,25 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 }
                 ?>>Lewis</option>
                 <option value="Osborne" <?php
-                        if ($pairing["Wit4"] == "Osborne") {
-                            echo "selected";
-                        }
+                if ($pairing["Wit4"] == "Osborne") {
+                    echo "selected";
+                }
                 ?>>Osborne</option>
                 <option value="Kwon" <?php
-                        if ($pairing["Wit4"] == "Kwon") {
-                            echo "selected";
-                        }
+                if ($pairing["Wit4"] == "Kwon") {
+                    echo "selected";
+                }
                 ?>>Kwon</option>
                 <option value="Cannon" <?php
-                        if ($pairing["Wit4"] == "Cannon") {
-                            echo "selected";
-                        }
+                if ($pairing["Wit4"] == "Cannon") {
+                    echo "selected";
+                }
                 ?>>Cannon</option>
                 <option value="Arnould" <?php
-                        if ($pairing["Wit4"] == "Arnould") {
-                            echo "selected";
-                        }
-                        ?>>Arnould</option>
+                if ($pairing["Wit4"] == "Arnould") {
+                    echo "selected";
+                }
+                ?>>Arnould</option>
                 <option value="Francazio" <?php
                 if ($pairing["Wit4"] == "Francazio") {
                     echo "selected";
@@ -309,44 +328,44 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
             <select class="dInput" id="wit5">
                 <option value="Martini" <?php
-                        if ($pairing["Wit5"] == "Martini") {
-                            echo "selected";
-                        }
+                if ($pairing["Wit5"] == "Martini") {
+                    echo "selected";
+                }
                 ?>>Martini</option>
                 <option value="Lewis" <?php
-                        if ($pairing["Wit5"] == "Lewis") {
-                            echo "selected";
-                        }
+                if ($pairing["Wit5"] == "Lewis") {
+                    echo "selected";
+                }
                 ?>>Lewis</option>
                 <option value="Osborne" <?php
-                        if ($pairing["Wit5"] == "Osborne") {
-                            echo "selected";
-                        }
+                if ($pairing["Wit5"] == "Osborne") {
+                    echo "selected";
+                }
                 ?>>Osborne</option>
                 <option value="Kwon" <?php
-                        if ($pairing["Wit5"] == "Kwon") {
-                            echo "selected";
-                        }
+                if ($pairing["Wit5"] == "Kwon") {
+                    echo "selected";
+                }
                 ?>>Kwon</option>
                 <option value="Cannon" <?php
-                        if ($pairing["Wit5"] == "Cannon") {
-                            echo "selected";
-                        }
+                if ($pairing["Wit5"] == "Cannon") {
+                    echo "selected";
+                }
                 ?>>Cannon</option>
                 <option value="Arnould" <?php
-                        if ($pairing["Wit5"] == "Arnould") {
-                            echo "selected";
-                        }
+                if ($pairing["Wit5"] == "Arnould") {
+                    echo "selected";
+                }
                 ?>>Arnould</option>
                 <option value="Francazio" <?php
-                        if ($pairing["Wit5"] == "Francazio") {
-                            echo "selected";
-                        }
+                if ($pairing["Wit5"] == "Francazio") {
+                    echo "selected";
+                }
                 ?>>Francazio</option>
                 <option value="Soto" <?php
-                        if ($pairing["Wit5"] == "Soto") {
-                            echo "selected";
-                        }
+                if ($pairing["Wit5"] == "Soto") {
+                    echo "selected";
+                }
                 ?>>Soto</option>      
             </select>
             <label id="dDx2Label" for="dDx2">Directing Attorney:</label>
@@ -358,44 +377,44 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
             <select class="dInput" id="wit6">
                 <option value="Martini" <?php
-                        if ($pairing["Wit6"] == "Martini") {
-                            echo "selected";
-                        }
+                if ($pairing["Wit6"] == "Martini") {
+                    echo "selected";
+                }
                 ?>>Martini</option>
                 <option value="Lewis" <?php
-                        if ($pairing["Wit6"] == "Lewis") {
-                            echo "selected";
-                        }
+                if ($pairing["Wit6"] == "Lewis") {
+                    echo "selected";
+                }
                 ?>>Lewis</option>
                 <option value="Osborne" <?php
-                        if ($pairing["Wit6"] == "Osborne") {
-                            echo "selected";
-                        }
+                if ($pairing["Wit6"] == "Osborne") {
+                    echo "selected";
+                }
                 ?>>Osborne</option>
                 <option value="Kwon" <?php
-                        if ($pairing["Wit6"] == "Kwon") {
-                            echo "selected";
-                        }
+                if ($pairing["Wit6"] == "Kwon") {
+                    echo "selected";
+                }
                 ?>>Kwon</option>
                 <option value="Cannon" <?php
-                        if ($pairing["Wit6"] == "Cannon") {
-                            echo "selected";
-                        }
+                if ($pairing["Wit6"] == "Cannon") {
+                    echo "selected";
+                }
                 ?>>Cannon</option>
                 <option value="Arnould" <?php
-                        if ($pairing["Wit6"] == "Arnould") {
-                            echo "selected";
-                        }
+                if ($pairing["Wit6"] == "Arnould") {
+                    echo "selected";
+                }
                 ?>>Arnould</option>
                 <option value="Francazio" <?php
-                        if ($pairing["Wit6"] == "Francazio") {
-                            echo "selected";
-                        }
+                if ($pairing["Wit6"] == "Francazio") {
+                    echo "selected";
+                }
                 ?>>Francazio</option>
                 <option value="Soto" <?php
-                        if ($pairing["Wit6"] == "Soto") {
-                            echo "selected";
-                        }
+                if ($pairing["Wit6"] == "Soto") {
+                    echo "selected";
+                }
                 ?>>Soto</option>      
             </select>
             <label id="dDx3Label" for="dDx3">Directing Attorney:</label>
@@ -411,7 +430,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             <input class="dInput" id="dClose" value="<?php echo $pairing["dClose"]; ?>">
         </div>
         <button id="submit">Submit</button>
-        <script>const url = "<?php echo $url; ?>"</script>
+        <script>const round = <?php echo $maxRound; ?></script>
         <script src="captains.js"></script>
     </body>
 </html>

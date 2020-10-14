@@ -214,6 +214,14 @@ function submitCaptains($captains) {
     $db = new Database();
     $conn = $db->getConnection();
 
+    //convert team number to id
+    $pNumber = $captains["plaintiff"];
+    $teamQuery = "SELECT id FROM teams WHERE number = $pNumber";
+    $teamResult = $conn->query($teamQuery);
+    $teamRow = $teamResult->fetch_assoc();
+    $pID = intval($teamRow["id"]);
+    $teamResult->close();
+
     if ($captains["side"] == "plaintiff") {
         //update pairing with captains data
         $query = "UPDATE pairings SET " .
@@ -231,7 +239,7 @@ function submitCaptains($captains) {
                 "wit1 = '" . addslashes($captains["wit1"]) . "', " .
                 "wit2 = '" . addslashes($captains["wit2"]) . "', " .
                 "wit3 = '" . addslashes($captains["wit3"]) . "' " .
-                "WHERE captainsURL = '" . $captains["url"] . "'";
+                "WHERE round = " . $captains["round"] . " AND plaintiff = " . $pID;
         $conn->query($query);
         $conn->close();
         return true;
@@ -252,7 +260,7 @@ function submitCaptains($captains) {
                 "wit4 = '" . addslashes($captains["wit4"]) . "', " .
                 "wit5 = '" . addslashes($captains["wit5"]) . "', " .
                 "wit6 = '" . addslashes($captains["wit6"]) . "' " .
-                "WHERE captainsURL = '" . $captains["url"] . "'";
+                "WHERE round = " . $captains["round"] . " AND plaintiff = " . $pID;
         $conn->query($query);
         $conn->close();
         return true;

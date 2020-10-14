@@ -53,7 +53,6 @@ function createBallots($ballots) {
     }
     $stmt->close();
     $conn->close();
-    echo"test";
     return true;
 }
 
@@ -73,6 +72,7 @@ function getAllBallots() {
             $ballots[$i]["pairing"] = intval($row["pairing"]);
             $ballots[$i]["judge"] = intval($row["judge"]);
             $ballots[$i]["url"] = $row["url"];
+            $ballots[$i]["locked"] = $row["locked"];
             $ballots[$i]["pOpen"] = intval($row["pOpen"]);
             $ballots[$i]["dOpen"] = intval($row["dOpen"]);
             $ballots[$i]["pDx1"] = intval($row["pDx1"]);
@@ -368,7 +368,7 @@ function lockBallot($ballot) {
             "wit3 = '" . addslashes($ballot["wit3"]) . "', " .
             "wit4 = '" . addslashes($ballot["wit4"]) . "', " .
             "locked = " . 1 .
-            " WHERE url = '" . $ballot["url"]."' AND locked = 0";
+            " WHERE url = '" . $ballot["url"] . "' AND locked = 0";
 
     $db = new Database();
     $conn = $db->getConnection();

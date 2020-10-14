@@ -137,7 +137,6 @@ if (isset($_GET["ballot"])) {
     die("Access denied.");
 }
 ?>
-
 <!DOCTYPE html>
 <!--
 Copyright (C) 2020 allen

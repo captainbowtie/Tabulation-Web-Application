@@ -22,10 +22,12 @@ require_once SITE_ROOT . '/objects/pairing.php';
 
 if (
         isset($_POST["side"]) &&
-        isset($_POST["url"])
+        isset($_POST["round"]) &&
+        isset($_POST["plaintiff"])
 ) {
     $captains["side"] = htmlspecialchars(strip_tags($_POST["side"]));
-    $captains["url"] = htmlspecialchars(strip_tags($_POST["url"]));
+    $captains["round"] = intVal(htmlspecialchars(strip_tags($_POST["round"])));
+    $captains["plaintiff"] = intVal(htmlspecialchars(strip_tags($_POST["plaintiff"])));
     if ($captains["side"] == "plaintiff") {
         if (
                 isset($_POST["pOpen"]) &&

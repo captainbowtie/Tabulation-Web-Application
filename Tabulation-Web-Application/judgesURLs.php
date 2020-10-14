@@ -54,13 +54,18 @@ if ($_SESSION["isAdmin"]) {
             }
         }
         for ($b = 0; $b < sizeOf($judges); $b++) {
-            if($ballots[$a]["judge"] === $judges[$b]["id"]){
+            if ($ballots[$a]["judge"] === $judges[$b]["id"]) {
                 $judgeName = $judges[$b]["name"];
             }
         }
-        $url = HOST_NAME."/judgeBallot.php?ballot=".$ballots[$a]["url"];
-        
-        $tabHTML[$roundNumber] .= "$pNumber - $pName v. $dNumber - $dName, $judgeName, <a href='https://$url'>$url</a><br>";
+        $url = HOST_NAME . "/judgeBallot.php?ballot=" . $ballots[$a]["url"];
+
+        if ($ballots[$a]["locked"] == false) {
+            $lockStatus = "Unlocked";
+        } else if ($ballots[$a]["locked"] == true) {
+            $lockStatus = "Locked";
+        }
+        $tabHTML[$roundNumber] .= "<span class='teamNumbers'>$pNumber v. $dNumber</span><a class='url' href='https://$url'>$judgeName</a><span class='lockStatus'>$lockStatus</span><br>";
     }
 } else {
     die("Access denied.");
@@ -90,16 +95,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width = device-width, initial-scale = 1.0">
-        <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
 
         <!--Latest compiled and minified CSS-->
-        <link rel = "stylesheet" href = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity = "sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin = "anonymous">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
 
-        <!--Optional theme-->
-        <link rel = "stylesheet" href = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity = "sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin = "anonymous">
+        <!-- Optional theme -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 
-        <!--Latest compiled and minified JavaScript-->
-        <script src = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity = "sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin = "anonymous"></script>
+        <!-- grid css -->
+        <link rel="stylesheet" href="judgeURLs.css">
 
         <title></title>
     </head>
@@ -109,24 +116,33 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         ?>
         <div class="tab-content">
             <div id="round1" class="tab-pane fade in active">
-                <?php
-                echo $tabHTML[1];
-                ?>    
+                <div id="round1Div">
+                    <?php
+                    echo $tabHTML[1];
+                    ?> 
+                </div>
+
             </div>
             <div id="round2" class="tab-pane fade">
-                <?php
-                echo $tabHTML[2];
-                ?>
+                <div id="round2Div">
+                    <?php
+                    echo $tabHTML[2];
+                    ?> 
+                </div>
             </div>
             <div id="round3" class="tab-pane fade">
-                <?php
-                echo $tabHTML[3];
-                ?>
+                <div id="round3Div">
+                    <?php
+                    echo $tabHTML[3];
+                    ?> 
+                </div>
             </div>
             <div id="round4" class="tab-pane fade">
-                <?php
-                echo $tabHTML[4];
-                ?>
+                <div id="round4Div">
+                    <?php
+                    echo $tabHTML[4];
+                    ?> 
+                </div>
             </div>
         </div>
         <ul class="nav nav-tabs">
