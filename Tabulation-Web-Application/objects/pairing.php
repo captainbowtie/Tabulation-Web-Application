@@ -76,11 +76,10 @@ function createPairings($round, $pairings) {
     }
 
     //insert the new pairings
-    $stmt = $conn->prepare("INSERT INTO pairings (round, plaintiff, defense, captainsURL) VALUES (?, ?, ?, ?)");
+    $stmt = $conn->prepare("INSERT INTO pairings (round, plaintiff, defense) VALUES (?, ?, ?)");
     for ($a = 0; $a < sizeOf($pairings); $a++) {
-        $captainsURL = bin2hex(random_bytes(32));
         //send to database
-        $stmt->bind_param('iiis', $round, $pairings[$a]["plaintiff"], $pairings[$a]["defense"], $captainsURL);
+        $stmt->bind_param('iiis', $round, $pairings[$a]["plaintiff"], $pairings[$a]["defense"]);
         $stmt->execute();
     }
     $stmt->close();
