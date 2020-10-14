@@ -25,10 +25,10 @@ if (isset($_GET["ballot"])) {
 
     $ballotQuery = "SELECT * FROM ballots WHERE url = '$url' && locked = 0";
 
-    if($_SESSION["isAdmin"]){
+    if ($_SESSION["isAdmin"]) {
         $ballotQuery = "SELECT * FROM ballots WHERE url = '$url'";
     }
-    
+
     //get data for ballot
     $db = new Database();
     $conn = $db->getConnection();
@@ -68,68 +68,68 @@ if (isset($_GET["ballot"])) {
         //atty selects
         $attySelectOptions[$a] = "<option value='N/A'>---</option>";
         $attySelectOptions[$a] .= "<option value='" . $pairing["pDx1"] . "'";
-        if($scores["aty".($a+1)]===$pairing["pDx1"]){
+        if ($scores["aty" . ($a + 1)] === $pairing["pDx1"]) {
             $attySelectOptions[$a] .= " selected";
         }
-        $attySelectOptions[$a] .= ">".$pairing["pDx1"] . "</option>\n";
+        $attySelectOptions[$a] .= ">" . $pairing["pDx1"] . "</option>\n";
         $attySelectOptions[$a] .= "<option value='" . $pairing["pDx2"] . "'";
-                if($scores["aty".($a+1)]===$pairing["pDx2"]){
+        if ($scores["aty" . ($a + 1)] === $pairing["pDx2"]) {
             $attySelectOptions[$a] .= " selected";
         }
-        $attySelectOptions[$a] .= ">".$pairing["pDx2"] . "</option>\n";
+        $attySelectOptions[$a] .= ">" . $pairing["pDx2"] . "</option>\n";
         $attySelectOptions[$a] .= "<option value='" . $pairing["pDx3"] . "'";
-                if($scores["aty".($a+1)]===$pairing["pDx3"]){
+        if ($scores["aty" . ($a + 1)] === $pairing["pDx3"]) {
             $attySelectOptions[$a] .= " selected";
         }
-        $attySelectOptions[$a] .= ">".$pairing["pDx3"] . "</option>\n";
+        $attySelectOptions[$a] .= ">" . $pairing["pDx3"] . "</option>\n";
         $attySelectOptions[$a] .= "<option value='" . $pairing["dDx1"] . "'";
-                if($scores["aty".($a+1)]===$pairing["dDx1"]){
+        if ($scores["aty" . ($a + 1)] === $pairing["dDx1"]) {
             $attySelectOptions[$a] .= " selected";
         }
-        $attySelectOptions[$a] .= ">".$pairing["dDx1"] . "</option>\n";
+        $attySelectOptions[$a] .= ">" . $pairing["dDx1"] . "</option>\n";
         $attySelectOptions[$a] .= "<option value='" . $pairing["dDx2"] . "'";
-                if($scores["aty".($a+1)]===$pairing["dDx2"]){
+        if ($scores["aty" . ($a + 1)] === $pairing["dDx2"]) {
             $attySelectOptions[$a] .= " selected";
         }
-        $attySelectOptions[$a] .= ">".$pairing["dDx2"] . "</option>\n";
+        $attySelectOptions[$a] .= ">" . $pairing["dDx2"] . "</option>\n";
         $attySelectOptions[$a] .= "<option value='" . $pairing["dDx3"] . "'";
-                if($scores["aty".($a+1)]===$pairing["dDx3"]){
+        if ($scores["aty" . ($a + 1)] === $pairing["dDx3"]) {
             $attySelectOptions[$a] .= " selected";
         }
-        $attySelectOptions[$a] .= ">".$pairing["dDx3"] . "</option>\n";
-        
+        $attySelectOptions[$a] .= ">" . $pairing["dDx3"] . "</option>\n";
+
         //wit selects
-                $witSelectOptions[$a] = "<option value='N/A'>---</option>";
+        $witSelectOptions[$a] = "<option value='N/A'>---</option>";
         $witSelectOptions[$a] .= "<option value='" . $pairing["pWDx1"] . "'";
-        if($scores["wit".($a+1)]===$pairing["pWDx1"]){
+        if ($scores["wit" . ($a + 1)] === $pairing["pWDx1"]) {
             $witSelectOptions[$a] .= " selected";
         }
-        $witSelectOptions[$a] .= ">".$pairing["pWDx1"] . "</option>\n";
+        $witSelectOptions[$a] .= ">" . $pairing["pWDx1"] . "</option>\n";
         $witSelectOptions[$a] .= "<option value='" . $pairing["pWDx2"] . "'";
-                if($scores["wit".($a+1)]===$pairing["pWDx2"]){
+        if ($scores["wit" . ($a + 1)] === $pairing["pWDx2"]) {
             $witSelectOptions[$a] .= " selected";
         }
-        $witSelectOptions[$a] .= ">".$pairing["pWDx2"] . "</option>\n";
+        $witSelectOptions[$a] .= ">" . $pairing["pWDx2"] . "</option>\n";
         $witSelectOptions[$a] .= "<option value='" . $pairing["pWDx3"] . "'";
-                if($scores["wit".($a+1)]===$pairing["pWDx3"]){
+        if ($scores["wit" . ($a + 1)] === $pairing["pWDx3"]) {
             $witSelectOptions[$a] .= " selected";
         }
-        $witSelectOptions[$a] .= ">".$pairing["pWDx3"] . "</option>\n";
+        $witSelectOptions[$a] .= ">" . $pairing["pWDx3"] . "</option>\n";
         $witSelectOptions[$a] .= "<option value='" . $pairing["dWDx1"] . "'";
-                if($scores["wit".($a+1)]===$pairing["dWDx1"]){
+        if ($scores["wit" . ($a + 1)] === $pairing["dWDx1"]) {
             $witSelectOptions[$a] .= " selected";
         }
-        $witSelectOptions[$a] .= ">".$pairing["dWDx1"] . "</option>\n";
+        $witSelectOptions[$a] .= ">" . $pairing["dWDx1"] . "</option>\n";
         $witSelectOptions[$a] .= "<option value='" . $pairing["dWDx2"] . "'";
-                if($scores["wit".($a+1)]===$pairing["dWDx2"]){
+        if ($scores["wit" . ($a + 1)] === $pairing["dWDx2"]) {
             $witSelectOptions[$a] .= " selected";
         }
-        $witSelectOptions[$a] .= ">".$pairing["dWDx2"] . "</option>\n";
+        $witSelectOptions[$a] .= ">" . $pairing["dWDx2"] . "</option>\n";
         $witSelectOptions[$a] .= "<option value='" . $pairing["dWDx3"] . "'";
-                if($scores["wit".($a+1)]===$pairing["dWDx3"]){
+        if ($scores["wit" . ($a + 1)] === $pairing["dWDx3"]) {
             $witSelectOptions[$a] .= " selected";
         }
-        $witSelectOptions[$a] .= ">".$pairing["dWDx3"] . "</option>\n";
+        $witSelectOptions[$a] .= ">" . $pairing["dWDx3"] . "</option>\n";
     }
 
     $conn->close();
@@ -207,7 +207,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     <div class="card-header">
                         <h2 class="mb-0">
                             <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#p1Scores" aria-expanded="true" aria-controls="p1Scores">
-                                Plaintiff Witness 1 (<?php echo $pairing["Wit1"]; //TODO: make Wit lower case  ?>)
+                                Plaintiff Witness 1 (<?php echo $pairing["Wit1"]; //TODO: make Wit lower case   ?>)
                             </button>
                         </h2>
                     </div>
@@ -432,43 +432,43 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                         <p id="attyLabel">Outstanding Attorneys</p>
                         <label for="aty1" class="attySelectLabel" id="atty1Label">Atty 1:</label>
                         <select id="aty1">
-<?php echo $attySelectOptions[0] ?>
+                            <?php echo $attySelectOptions[0] ?>
                         </select>
                         <label for="aty2" class="attySelectLabel" id="atty2Label">Atty 2:</label>
                         <select id="aty2">
-<?php echo $attySelectOptions[1] ?>
+                            <?php echo $attySelectOptions[1] ?>
                         </select>
                         <label for="aty3" class="attySelectLabel" id="atty3Label">Atty 3:</label>
                         <select id="aty3">
-<?php echo $attySelectOptions[2] ?>
+                            <?php echo $attySelectOptions[2] ?>
                         </select>
                         <label for="aty4" class="attySelectLabel" id="atty4Label">Atty 4:</label>
                         <select id="aty4">
-<?php echo $attySelectOptions[3] ?>
+                            <?php echo $attySelectOptions[3] ?>
                         </select>
                         <p id="witLabel">Outstanding Witnesses</p>
                         <label for="wit1" class="witSelectLabel" id="wit1Label">Wit 1:</label>
                         <select id="wit1">
-<?php echo $witSelectOptions[0] ?>
+                            <?php echo $witSelectOptions[0] ?>
                         </select>
                         <label for="wit2" class="witSelectLabel" id="wit2Label">Wit 2:</label>
                         <select id="wit2">
-<?php echo $witSelectOptions[1] ?>
+                            <?php echo $witSelectOptions[1] ?>
                         </select>
                         <label for="wit3" class="witSelectLabel" id="wit3Label">Wit 3:</label>
                         <select id="wit3">
-<?php echo $witSelectOptions[2] ?>
+                            <?php echo $witSelectOptions[2] ?>
                         </select>
                         <label for="wit4" class="witSelectLabel" id="wit4Label">Wit 4:</label>
                         <select id="wit4">
-<?php echo $witSelectOptions[3] ?>
+                            <?php echo $witSelectOptions[3] ?>
                         </select>
                     </div>
                 </div>
             </div>
         </div>
         <button id="submit">Lock</button>
-        
+
         <!-- Lock Modal -->
         <div id="lockModal" class="modal fade" role="dialog">
             <div class="modal-dialog">
@@ -488,7 +488,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 </div>
             </div>
         </div>
-        
+
         <script>const url = "<?php echo $url; ?>"</script>
         <script src="judgeBallot.js"></script>
     </body>

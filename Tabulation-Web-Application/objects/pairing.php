@@ -230,7 +230,7 @@ function submitCaptains($captains) {
                 "pClose = '" . addslashes($captains["pClose"]) . "', " .
                 "wit1 = '" . addslashes($captains["wit1"]) . "', " .
                 "wit2 = '" . addslashes($captains["wit2"]) . "', " .
-                "wit3 = '" . addslashes($captains["wit3"]) . "', " .
+                "wit3 = '" . addslashes($captains["wit3"]) . "' " .
                 "WHERE captainsURL = '" . $captains["url"] . "'";
         $conn->query($query);
         $conn->close();

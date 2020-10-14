@@ -144,38 +144,3 @@ if (
     // tell the user
     echo json_encode(array("message" => "Unable to write captains data. Data is incomplete."));
 }
-
-
-
-
-
-
-
-
-if (
-        true
-) {
-
-
-    if (submitCaptains($captains)) {
-        // set response code - 201 created
-        http_response_code(201);
-
-        // tell the user
-        echo json_encode(array("message" => 0));
-    } else {
-
-        // set response code - 503 service unavailable
-        http_response_code(503);
-
-        // tell the user
-        echo json_encode(array("message" => "Unable to write captains data."));
-    }
-} else {
-
-    // set response code - 400 bad request
-    http_response_code(400);
-
-    // tell the user
-    echo json_encode(array("message" => "Unable to write captains data. Data is incomplete."));
-}
