@@ -144,14 +144,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <meta name="viewport" content="width = device-width, initial-scale = 1.0">
         <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
 
-        <!--Latest compiled and minified CSS-->
-        <link rel = "stylesheet" href = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity = "sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin = "anonymous">
-
-        <!--Optional theme-->
-        <link rel = "stylesheet" href = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity = "sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin = "anonymous">
-
         <!--Latest compiled and minified JavaScript-->
-        <script src = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity = "sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin = "anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+
+        <!--Latest compiled and minified CSS-->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+        <!-- Optional theme -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 
         <link rel="stylesheet" href="pairings.css">
         <title></title>
@@ -166,15 +166,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             <label id="tieBreakerLabel" for="tieBreaker">Team Number Tiebreaker:</label>
             <select id="tieBreaker">
                 <option <?php
-        if ($settings["lowerTeamIsHigherRank"]) {
-            echo "selected";
-        }
-        ?> value="true">Lower Team Number Is Better Rank</option>
+                if ($settings["lowerTeamIsHigherRank"]) {
+                    echo "selected";
+                }
+                ?> value="true">Lower Team Number Is Better Rank</option>
                 <option <?php
                 if (!$settings["lowerTeamIsHigherRank"]) {
                     echo "selected";
                 }
-        ?> value="false">Higher Team Number Is Better Rank</option>
+                ?> value="false">Higher Team Number Is Better Rank</option>
             </select>
             <label id="snakeStartLabel" for="snakeStart">Start Round 3 Snake On:</label>
             <select id="snakeStart">
@@ -182,34 +182,42 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 if ($settings["snakeStartsOnPlaintiff"]) {
                     echo "selected";
                 }
-        ?> value="true">Plaintiff</option>
+                ?> value="true">Plaintiff</option>
                 <option <?php
                 if (!$settings["snakeStartsOnPlaintiff"]) {
                     echo "selected";
                 }
-        ?> value="false">Defense</option>
+                ?> value="false">Defense</option>
             </select>
         </form>
         <div class="tab-content">
             <div id="round1" class="tab-pane fade in active">
-                <?php
-                echo $tabHTML[1];
-                ?>    
+                <div id="round1Div">
+                    <?php
+                    echo $tabHTML[1];
+                    ?>  
+                </div>
             </div>
             <div id="round2" class="tab-pane fade">
-                <?php
-                echo $tabHTML[2];
-                ?>
+                <div id="round2Div">
+                    <?php
+                    echo $tabHTML[2];
+                    ?>  
+                </div>
             </div>
             <div id="round3" class="tab-pane fade">
-                <?php
-                echo $tabHTML[3];
-                ?>
+                <div id="round3Div">
+                    <?php
+                    echo $tabHTML[3];
+                    ?>  
+                </div>
             </div>
             <div id="round4" class="tab-pane fade">
-                <?php
-                echo $tabHTML[4];
-                ?>
+                <div id="round4Div">
+                    <?php
+                    echo $tabHTML[4];
+                    ?>  
+                </div>
             </div>
         </div>
         <ul class="nav nav-tabs">

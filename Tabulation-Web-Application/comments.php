@@ -143,12 +143,12 @@ if ($_SESSION["isCoach"] || $_SESSION[isAdmin]) {
                 $ballots[$a]["pCx3Attorney"] = $row["pCx3"];
                 $ballots[$a]["pCloseAttorney"] = $row["pClose"];
                 $ballots[$a]["dCloseAttorney"] = $row["dClose"];
-                $ballots[$a]["witness1"] = $row["Wit1"];
-                $ballots[$a]["witness2"] = $row["Wit2"];
-                $ballots[$a]["witness3"] = $row["Wit3"];
-                $ballots[$a]["witness4"] = $row["Wit4"];
-                $ballots[$a]["witness5"] = $row["Wit5"];
-                $ballots[$a]["witness6"] = $row["Wit6"];
+                $ballots[$a]["witness1"] = $row["wit1"];
+                $ballots[$a]["witness2"] = $row["wit2"];
+                $ballots[$a]["witness3"] = $row["wit3"];
+                $ballots[$a]["witness4"] = $row["wit4"];
+                $ballots[$a]["witness5"] = $row["wit5"];
+                $ballots[$a]["witness6"] = $row["wit6"];
             }
         }
     }

@@ -116,7 +116,6 @@ function getAllPairings() {
             $pairings[$i]["round"] = intval($row["round"]);
             $pairings[$i]["plaintiff"] = intval($row["plaintiff"]);
             $pairings[$i]["defense"] = intval($row["defense"]);
-            $pairings[$i]["captainsURL"] = $row["captainsURL"];
             $i++;
         }
         /* free result set */

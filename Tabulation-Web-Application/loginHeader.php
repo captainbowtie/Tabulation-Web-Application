@@ -29,7 +29,7 @@ if ($_SESSION["isAdmin"]) {
     <a href="teams.php">Teams</a>
     <a href="users.php">Users</a>
     <a href="judgesURLs.php">Judges URLs</a>
-    <a href="captainsURLs.php">Captains URLs</a>
+    <a href="individuals.php">Individual Awards</a>
     <a href="comments.php">Comments</a>';
     
     $header .= "<a style='float: right' href='logout.php'>Log Out</a>\n";

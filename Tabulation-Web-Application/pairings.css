@@ -56,19 +56,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     grid-row: 3 / 3;
 }
 
-#round1{
+#round1Div{
     display: grid;
 }
 
-#round2{
+#round2Div{
     display: grid;
 }
 
-#round3{
+#round3Div{
     display: grid;
 }
 
-#round4{
+#round4Div{
     display: grid;
 }
 

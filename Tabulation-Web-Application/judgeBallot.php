@@ -206,7 +206,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     <div class="card-header">
                         <h2 class="mb-0">
                             <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#p1Scores" aria-expanded="true" aria-controls="p1Scores">
-                                Plaintiff Witness 1 (<?php echo $pairing["Wit1"]; //TODO: make Wit lower case   ?>)
+                                Plaintiff Witness 1 (<?php echo $pairing["wit1"]; //TODO: make Wit lower case   ?>)
                             </button>
                         </h2>
                     </div>
@@ -235,7 +235,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     <div class="card-header">
                         <h2 class="mb-0">
                             <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#p2Scores" aria-expanded="true" aria-controls="p2Scores">
-                                Plaintiff Witness 2 (<?php echo $pairing["Wit2"]; ?>)
+                                Plaintiff Witness 2 (<?php echo $pairing["wit2"]; ?>)
                             </button>
                         </h2>
                     </div>
@@ -266,7 +266,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     <div class="card-header">
                         <h2 class="mb-0">
                             <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#p3Scores" aria-expanded="true" aria-controls="p3Scores">
-                                Plaintiff Witness 3 (<?php echo $pairing["Wit3"]; ?>)
+                                Plaintiff Witness 3 (<?php echo $pairing["wit3"]; ?>)
                             </button>
                         </h2>
                     </div>
@@ -297,7 +297,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     <div class="card-header">
                         <h2 class="mb-0">
                             <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#d1Scores" aria-expanded="true" aria-controls="d1Scores">
-                                Defense Witness 1 (<?php echo $pairing["Wit4"]; ?>)
+                                Defense Witness 1 (<?php echo $pairing["wit4"]; ?>)
                             </button>
                         </h2>
                     </div>
@@ -331,7 +331,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     <div class="card-header">
                         <h2 class="mb-0">
                             <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#d2Scores" aria-expanded="true" aria-controls="d2Scores">
-                                Defense Witness 2 (<?php echo $pairing["Wit5"]; ?>)
+                                Defense Witness 2 (<?php echo $pairing["wit5"]; ?>)
                             </button>
                         </h2>
                     </div>
@@ -364,7 +364,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     <div class="card-header">
                         <h2 class="mb-0">
                             <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#d3Scores" aria-expanded="true" aria-controls="d3Scores">
-                                Defense Witness 3 (<?php echo $pairing["Wit6"]; ?>)
+                                Defense Witness 3 (<?php echo $pairing["wit6"]; ?>)
                             </button>
                         </h2>
                     </div>
