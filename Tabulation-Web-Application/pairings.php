@@ -67,7 +67,6 @@ if ($_SESSION["isAdmin"]) {
                             . "data-judge='$c' "
                             . "style='grid-row:" . ($b + 3) . "; grid-column:" . ($c + 3) . "'>\n";
                     for ($d = 0; $d < sizeOf($judges); $d++) {
-                        ;
                         if ($a === 1 && $judges[$d]["round1"]) {
                             $judgeSelects[$a][$b][$c] .= "<option value='" . $judges[$d]["id"] . "'>" . $judges[$d]["name"] . "</option>\n";
                         } else if ($a === 2 && $judges[$d]["round2"]) {

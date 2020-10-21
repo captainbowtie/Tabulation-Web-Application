@@ -108,14 +108,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <!-- grid css -->
         <link rel="stylesheet" href="judgeURLs.css">
 
-        <title></title>
+        <title>Judge URLs</title>
     </head>
     <body>
         <?php
         echo $header;
         ?>
         <div class="tab-content">
-            <div id="round1" class="tab-pane fade in active">
+            <div id="round1"  class="tab-pane container active">
                 <div id="round1Div">
                     <?php
                     echo $tabHTML[1];
@@ -123,21 +123,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 </div>
 
             </div>
-            <div id="round2" class="tab-pane fade">
+            <div id="round2" class="tab-pane container fade">
                 <div id="round2Div">
                     <?php
                     echo $tabHTML[2];
                     ?> 
                 </div>
             </div>
-            <div id="round3" class="tab-pane fade">
+            <div id="round3" class="tab-pane container fade">
                 <div id="round3Div">
                     <?php
                     echo $tabHTML[3];
                     ?> 
                 </div>
             </div>
-            <div id="round4" class="tab-pane fade">
+            <div id="round4" class="tab-pane container fade">
                 <div id="round4Div">
                     <?php
                     echo $tabHTML[4];
@@ -146,10 +146,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             </div>
         </div>
         <ul class="nav nav-tabs">
-            <li class="active"><a data-toggle="tab" href="#round1">Round 1</a></li>
-            <li><a data-toggle="tab" href="#round2">Round 2</a></li>
-            <li><a data-toggle="tab" href="#round3">Round 3</a></li>
-            <li><a data-toggle="tab" href="#round4">Round 4</a></li>
+            <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab" href="#round1">Round 1</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#round2">Round 2</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#round3">Round 3</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#round4">Round 4</a>
+            </li>
         </ul>
     </body>
 </html>
