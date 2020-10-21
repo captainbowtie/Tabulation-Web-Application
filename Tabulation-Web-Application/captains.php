@@ -183,14 +183,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             <input class="dInput" id="dCx3">
 
             <select class="dInput" id="wit4">
-                <option value="Rodriguez">Rodriguez</option>
-                <option value="Paras">Paras</option>
-                <option value="OKeefe">O'Keefe</option>
+                <option value="Martini">Martini</option>
+                <option value="Lewis">Lewis</option>
+                <option value="Osborne">Osborne</option>
                 <option value="Kwon">Kwon</option>
                 <option value="Cannon">Cannon</option>
                 <option value="Arnould">Arnould</option>
                 <option value="Francazio">Francazio</option>
-                <option value="Soto">Soto</option>      
+                <option value="Soto">Soto</option>       
             </select>
             <label id="dDx1Label" for="dDx1">Directing Attorney:</label>
             <input class="dInput" id="dDx1">
