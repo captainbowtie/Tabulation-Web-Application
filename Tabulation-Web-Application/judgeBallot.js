@@ -38,12 +38,8 @@ $("textarea").on("change", function () {
         method: "POST",
         data: commentData,
         dataType: "json"
-    }).then(response => {
-        if (response.message === 0) {
-
-        } else {
-            alert(response.message);
-        }
+    }).fail(function (jqXHR, textStatus, errorThrown) {
+        alert("Error updating comments. Please contact the tabulation room at allen@allenbarr.com");
     });
 })
 
@@ -58,12 +54,8 @@ $("select").on("change", function () {
         method: "POST",
         data: individualData,
         dataType: "json"
-    }).then(response => {
-        if (response.message === 0) {
-
-        } else {
-            alert(response.message);
-        }
+    }).fail(function (jqXHR, textStatus, errorThrown) {
+        alert("Error updating individual award. Please contact the tabulation room at allen@allenbarr.com");
     });
 })
 
@@ -208,12 +200,10 @@ $("#lockButton").on("click", function () {
         method: "POST",
         data: ballotData,
         dataType: "json"
-    }).then(response => {
-        if (response.message === 0) {
-            alert("Ballot successfully submitted. If you need to make any changes, please contact allen@allenbarr.com.");
-        } else {
-            alert(response.message);
-        }
+    }).done(function ( ) {
+        alert('Ballot successfully submitted. If you need to make any changes, please contact allen@allenbarr.com');
+    }).fail(function (jqXHR, textStatus, errorThrown) {
+        alert("Error updating score. Please contact the tabulation room at allen@allenbarr.com");
     });
 });
 
@@ -258,12 +248,8 @@ function updateScore(part, score) {
         method: "POST",
         data: updateData,
         dataType: "json"
-    }).then(response => {
-        if (response.message === 0) {
-
-        } else {
-            alert(response.message);
-        }
+    }).fail(function (jqXHR, textStatus, errorThrown) {
+        alert("Error updating score. Please contact the tabulation room at allen@allenbarr.com");
     });
 }
 
