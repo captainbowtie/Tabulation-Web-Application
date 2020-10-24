@@ -76,13 +76,11 @@ function createPairings($round, $pairings) {
     }
 
     //insert the new pairings
-    $stmt = $conn->prepare("INSERT INTO pairings (round, plaintiff, defense) VALUES (?, ?, ?)");
     for ($a = 0; $a < sizeOf($pairings); $a++) {
+        $query = "INSERT INTO pairings (round, plaintiff, defense) VALUES (" . $round . ", " . $pairings[$a]["plaintiff"] . ", " . $pairings[$a]["defense"].")";
         //send to database
-        $stmt->bind_param('iiis', $round, $pairings[$a]["plaintiff"], $pairings[$a]["defense"]);
-        $stmt->execute();
+        $conn->query($query);
     }
-    $stmt->close();
 
     //get id of new pairings
     $idQuery = "SELECT id FROM pairings WHERE round = $round";

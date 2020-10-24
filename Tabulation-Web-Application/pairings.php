@@ -141,7 +141,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width = device-width, initial-scale = 1.0">
-        <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
         <!--Latest compiled and minified JavaScript-->
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
