@@ -104,32 +104,32 @@ if (isset($_GET["ballot"])) {
         if ($scores["wit" . ($a + 1)] === $pairing["pWDx1"]) {
             $witSelectOptions[$a] .= " selected";
         }
-        $witSelectOptions[$a] .= ">" . $pairing["pWDx1"] . "</option>\n";
+        $witSelectOptions[$a] .= ">" . $pairing["pWDx1"] . " (" . $pairing["wit1"] . ")" . "</option>\n";
         $witSelectOptions[$a] .= "<option value='" . $pairing["pWDx2"] . "'";
         if ($scores["wit" . ($a + 1)] === $pairing["pWDx2"]) {
             $witSelectOptions[$a] .= " selected";
         }
-        $witSelectOptions[$a] .= ">" . $pairing["pWDx2"] . "</option>\n";
+        $witSelectOptions[$a] .= ">" . $pairing["pWDx2"] . " (" . $pairing["wit2"] . ")" . "</option>\n";
         $witSelectOptions[$a] .= "<option value='" . $pairing["pWDx3"] . "'";
         if ($scores["wit" . ($a + 1)] === $pairing["pWDx3"]) {
             $witSelectOptions[$a] .= " selected";
         }
-        $witSelectOptions[$a] .= ">" . $pairing["pWDx3"] . "</option>\n";
+        $witSelectOptions[$a] .= ">" . $pairing["pWDx3"] . " (" . $pairing["wit3"] . ")" . "</option>\n";
         $witSelectOptions[$a] .= "<option value='" . $pairing["dWDx1"] . "'";
         if ($scores["wit" . ($a + 1)] === $pairing["dWDx1"]) {
             $witSelectOptions[$a] .= " selected";
         }
-        $witSelectOptions[$a] .= ">" . $pairing["dWDx1"] . "</option>\n";
+        $witSelectOptions[$a] .= ">" . $pairing["dWDx1"] . " (" . $pairing["wit4"] . ")" . "</option>\n";
         $witSelectOptions[$a] .= "<option value='" . $pairing["dWDx2"] . "'";
         if ($scores["wit" . ($a + 1)] === $pairing["dWDx2"]) {
             $witSelectOptions[$a] .= " selected";
         }
-        $witSelectOptions[$a] .= ">" . $pairing["dWDx2"] . "</option>\n";
+        $witSelectOptions[$a] .= ">" . $pairing["dWDx2"] . " (" . $pairing["wit5"] . ")" . "</option>\n";
         $witSelectOptions[$a] .= "<option value='" . $pairing["dWDx3"] . "'";
         if ($scores["wit" . ($a + 1)] === $pairing["dWDx3"]) {
             $witSelectOptions[$a] .= " selected";
         }
-        $witSelectOptions[$a] .= ">" . $pairing["dWDx3"] . "</option>\n";
+        $witSelectOptions[$a] .= ">" . $pairing["dWDx3"] . " (" . $pairing["wit6"] . ")" . "</option>\n";
     }
 
     $conn->close();
@@ -206,7 +206,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     <div class="card-header">
                         <h2 class="mb-0">
                             <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#p1Scores" aria-expanded="true" aria-controls="p1Scores">
-                                Plaintiff Witness 1 (<?php echo $pairing["wit1"]; //TODO: make Wit lower case   ?>)
+                                Plaintiff Witness 1 (<?php echo $pairing["wit1"]; //TODO: make Wit lower case    ?>)
                             </button>
                         </h2>
                     </div>
