@@ -33,6 +33,7 @@ if ($_SESSION["isAdmin"]) {
     $pairings = getAllPairings();
     $teams = getAllTeams();
     $judges = getAllJudges();
+    $currentRound = 1;
 
     for ($a = 0; $a < 4; $a++) {
         $tabHTML[$a] = "";
@@ -51,6 +52,10 @@ if ($_SESSION["isAdmin"]) {
                         $dName = $teams[$c]["name"];
                     }
                 }
+            }
+            //set current round
+            if ($pairings[$b]["round"] > $currentRound) {
+                $currentRound = $pairings[$b]["round"];
             }
         }
         for ($b = 0; $b < sizeOf($judges); $b++) {
@@ -97,6 +102,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <meta name="viewport" content="width = device-width, initial-scale = 1.0">
         <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
+        <!--Latest compiled and minified JavaScript-->
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
 
         <!--Latest compiled and minified CSS-->
@@ -105,7 +111,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <!-- Optional theme -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 
-        <!-- grid css -->
         <link rel="stylesheet" href="judgeURLs.css">
 
         <title>Judge URLs</title>
@@ -115,30 +120,34 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         echo $header;
         ?>
         <div class="tab-content">
-            <div id="round1"  class="tab-pane container active">
+            <div id="round1"  class="tab-pane fade in active">
                 <div id="round1Div">
+                    <h3>Round 1</h3>
                     <?php
                     echo $tabHTML[1];
                     ?> 
                 </div>
 
             </div>
-            <div id="round2" class="tab-pane container fade">
+            <div id="round2" class="tab-pane fade">
                 <div id="round2Div">
+                    <h3>Round 2</h3>
                     <?php
                     echo $tabHTML[2];
                     ?> 
                 </div>
             </div>
-            <div id="round3" class="tab-pane container fade">
+            <div id="round3" class="tab-pane fade">
                 <div id="round3Div">
+                    <h3>Round 3</h3>
                     <?php
                     echo $tabHTML[3];
                     ?> 
                 </div>
             </div>
-            <div id="round4" class="tab-pane container fade">
+            <div id="round4" class="tab-pane fade">
                 <div id="round4Div">
+                    <h3>Round 4</h3>
                     <?php
                     echo $tabHTML[4];
                     ?> 
@@ -159,5 +168,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 <a class="nav-link" data-toggle="tab" href="#round4">Round 4</a>
             </li>
         </ul>
+        <script>
+            switch(<?php echo $currentRound;?>){
+                case 1:
+                    $('.nav-tabs a[href="#round1"]').tab('show');
+                    break;
+                case 2:
+                    $('.nav-tabs a[href="#round2"]').tab('show');
+                    break;
+                case 3:
+                    $('.nav-tabs a[href="#round3"]').tab('show');
+                    break;
+                case 4:
+                    $('.nav-tabs a[href="#round4"]').tab('show');
+                    break;
+            }
+        </script>
     </body>
 </html>

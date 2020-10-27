@@ -76,26 +76,17 @@ function createPairings($round, $pairings) {
     }
 
     //insert the new pairings
+    $stmt = $conn->prepare("INSERT INTO pairings (round, plaintiff, defense) VALUES (?, ?, ?)");
     for ($a = 0; $a < sizeOf($pairings); $a++) {
-        $query = "INSERT INTO pairings (round, plaintiff, defense) VALUES (" . $round . ", " . $pairings[$a]["plaintiff"] . ", " . $pairings[$a]["defense"].")";
         //send to database
-        $conn->query($query);
+        $stmt->bind_param('iii', $round, $pairings[$a]["plaintiff"], $pairings[$a]["defense"]);
+        $stmt->execute();
     }
+    $stmt->close();
 
-    //get id of new pairings
-    $idQuery = "SELECT id FROM pairings WHERE round = $round";
-    $ids = [];
-    if ($result = $conn->query($idQuery)) {
-        $i = 0;
-        while ($row = $result->fetch_assoc()) {
-            $ids[$i] = intval($row["id"]);
-        }
-        $result->close();
-    }
-
-    //close connection, return ids of new pairings
+    //close connection, return true
     $conn->close();
-    return $ids;
+    return true;
 }
 
 function getAllPairings() {

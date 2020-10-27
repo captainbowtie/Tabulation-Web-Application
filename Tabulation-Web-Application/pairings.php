@@ -153,7 +153,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 
         <link rel="stylesheet" href="pairings.css">
-        <title></title>
+        <title>Pairings</title>
     </head>
     <body>
         <?php
@@ -220,10 +220,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             </div>
         </div>
         <ul class="nav nav-tabs">
-            <li class="active"><a data-toggle="tab" href="#round1">Round 1</a></li>
-            <li><a data-toggle="tab" href="#round2">Round 2</a></li>
-            <li><a data-toggle="tab" href="#round3">Round 3</a></li>
-            <li><a data-toggle="tab" href="#round4">Round 4</a></li>
+            <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab" href="#round1">Round 1</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#round2">Round 2</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#round3">Round 3</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#round4">Round 4</a>
+            </li>
         </ul>
 
         <!-- Pairings Warning Modal -->
