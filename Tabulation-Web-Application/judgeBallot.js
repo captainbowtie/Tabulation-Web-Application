@@ -202,8 +202,10 @@ $("#lockButton").on("click", function () {
         dataType: "json"
     }).done(function ( ) {
         alert('Ballot successfully submitted. If you need to make any changes, please contact allen@allenbarr.com');
+        $("#submit").prop("disabled",true);
+        $("#submit").html("Ballot Submitted");
     }).fail(function (jqXHR, textStatus, errorThrown) {
-        alert("Error updating score. Please contact the tabulation room at allen@allenbarr.com");
+        alert("Error locking ballot. Please contact the tabulation room at allen@allenbarr.com");
     });
 });
 
