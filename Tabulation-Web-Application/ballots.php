@@ -83,192 +83,92 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             </select>
         </div>
         <div id="tabRoomPD"></div>
+        <h3>Opening</h3>
         <div id="scoresDiv">
-            <div class="accordion" id="scores">
-                <div class="card">
-                    <div class="card-header">
-                        <h2 class="mb-0">
-                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#openingScores" aria-expanded="true" aria-controls="openingScores">
-                                Opening
-                            </button>
-                        </h2>
-                    </div>
-
-                    <div id="openingScores" class="collapse show" aria-labelledby="headingOne" data-parent="#scores">
-                        <div class="card-body speech">
-                            <label for="pOpen" class="pSpeechLabel">π Open:</label>
-                            <input type="number" min="0" max="10" step="1" size="2" value="0" class="pSpeech" id="pOpen" name="pOpen">
-                            <label for="dOpen" class="dSpeechLabel">∆ Open:</label>
-                            <input type="number" min="0" max="10" step="1" size="2" value="0" class="dSpeech" id="dOpen" name="dOpen">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header">
-                        <h2 class="mb-0">
-                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#p1Scores" aria-expanded="true" aria-controls="p1Scores">
-                                Plaintiff Witness 1
-                            </button>
-                        </h2>
-                    </div>
-
-                    <div id="p1Scores" class="collapse" aria-labelledby="headingOne" data-parent="#scores">
-                        <div class="card-body plaintiffWitness">
-                            <label for="pDx1" class="pDxLabel" id="pDx1Label">Dx (Atty):</label>
-                            <input type="number" min="0" max="10" step="1" size="2" value="0" class="pDx" id="pDx1" name="pDx1">
-                            <label for="dCx1" class="dCxLabel" id="dCx1Label">Cx (Atty):</label>
-                            <input type="number" min="0" max="10" step="1" size="2" value="0" class="dCx" id="dCx1" name="dCx1">
-
-                            <label for="pWDx1" class="pWDxLabel" id="pWDx1Label">Dx (Wit):</label>
-                            <input type="number" min="0" max="10" step="1" size="2" value="0" class="pWDx" id="pWDx1" name="pWDx1">
-                            <label for="pWCx1" class="pWCxLabel" id="pWCx1Label">Cx (Wit):</label>
-                            <input type="number" min="0" max="10" step="1" size="2" value="0" class="pWCx" id="pWCx1" name="pWCx1">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header">
-                        <h2 class="mb-0">
-                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#p2Scores" aria-expanded="true" aria-controls="p2Scores">
-                                Plaintiff Witness 2
-                            </button>
-                        </h2>
-                    </div>
-
-                    <div id="p2Scores" class="collapse" aria-labelledby="headingOne" data-parent="#scores">
-                        <div class="card-body plaintiffWitness">
-                            <label for="pDx3" class="pDxLabel" id="pDx3Label">Dx (Atty):</label>
-                            <input type="number" min="0" max="10" step="1" size="2" value="0" class="pDx" id="pDx3" name="pDx3">
-                            <label for="dCx3" class="dCxLabel" id="dCx3Label">Cx (Atty):</label>
-                            <input type="number" min="0" max="10" step="1" size="2" value="0" class="dCx" id="dCx3" name="dCx3">
-
-                            <label for="pWDx3" class="pWDxLabel" id="pWDx3Label">Dx (Wit):</label>
-                            <input type="number" min="0" max="10" step="1" size="2" value="0" class="pWDx" id="pWDx3" name="pWDx3">
-                            <label for="pWCx3" class="pWCxLabel" id="pWCx3Label">Cx (Wit):</label>
-                            <input type="number" min="0" max="10" step="1" size="2" value="0" class="pWCx" id="pWCx3" name="pWCx3">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header">
-                        <h2 class="mb-0">
-                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#p3Scores" aria-expanded="true" aria-controls="p3Scores">
-                                Plaintiff Witness 3
-                            </button>
-                        </h2>
-                    </div>
-
-                    <div id="p3Scores" class="collapse" aria-labelledby="headingOne" data-parent="#scores">
-                        <div class="card-body plaintiffWitness">
-                            <label for="pDx2" class="pDxLabel" id="pDx2Label">Dx (Atty):</label>
-                            <input type="number" min="0" max="10" step="1" size="2" value="0" class="pDx" id="pDx2" name="pDx2">
-                            <label for="dCx2" class="dCxLabel" id="dCx2Label">Cx (Atty):</label>
-                            <input type="number" min="0" max="10" step="1" size="2" value="0" class="dCx" id="dCx2" name="dCx2">
-
-                            <label for="pWDx2" class="pWDxLabel" id="pWDx2Label">Dx (Wit):</label>
-                            <input type="number" min="0" max="10" step="1" size="2" value="0" class="pWDx" id="pWDx2" name="pWDx2">
-                            <label for="pWCx2" class="pWCxLabel" id="pWCx2Label">Cx (Wit):</label>
-                            <input type="number" min="0" max="10" step="1" size="2" value="0" class="pWCx" id="pWCx2" name="pWCx2">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header">
-                        <h2 class="mb-0">
-                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#d1Scores" aria-expanded="true" aria-controls="d1Scores">
-                                Defense Witness 1
-                            </button>
-                        </h2>
-                    </div>
-
-                    <div id="d1Scores" class="collapse" aria-labelledby="headingOne" data-parent="#scores">
-                        <div class="card-body defenseWitness">
-                            <label for="pCx1" class="pCxLabel" id="pCx1Label">Cx (Atty):</label>
-                            <input type="number" min="0" max="10" step="1" size="2" value="0" class="pCx" id="pCx1" name="pDx1">
-                            <label for="dDx1" class="dDxLabel" id="dDx1Label">Dx (Atty):</label>
-                            <input type="number" min="0" max="10" step="1" size="2" value="0" class="dDx" id="dDx1" name="dCx1">
-
-                            <label for="dWDx1" class="dWDxLabel" id="dWDx1Label">Dx (Wit):</label>
-                            <input type="number" min="0" max="10" step="1" size="2" value="0" class="dWDx" id="dWDx1" name="dWDx1">
-                            <label for="dWCx1" class="dWCxLabel" id="dWCx1Label">Cx (Wit):</label>
-                            <input type="number" min="0" max="10" step="1" size="2" value="0" class="dWCx" id="dWCx1" name="dWCx1">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header">
-                        <h2 class="mb-0">
-                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#d2Scores" aria-expanded="true" aria-controls="d2Scores">
-                                Defense Witness 2
-                            </button>
-                        </h2>
-                    </div>
-
-                    <div id="d2Scores" class="collapse" aria-labelledby="headingOne" data-parent="#scores">
-                        <div class="card-body defenseWitness">
-                            <label for="pCx2" class="pCxLabel" id="pCx2Label">Cx (Atty):</label>
-                            <input type="number" min="0" max="10" step="1" size="2" value="0" class="pCx" id="pCx2" name="pDx2">
-                            <label for="dDx2" class="dDxLabel" id="dDx2Label">Dx (Atty):</label>
-                            <input type="number" min="0" max="10" step="1" size="2" value="0" class="dDx" id="dDx2" name="dCx2">
-
-                            <label for="dWDx2" class="dWDxLabel" id="dWDx2Label">Dx (Wit):</label>
-                            <input type="number" min="0" max="10" step="1" size="2" value="0" class="dWDx" id="dWDx2" name="dWDx2">
-                            <label for="dWCx2" class="dWCxLabel" id="dWCx2Label">Cx (Wit):</label>
-                            <input type="number" min="0" max="10" step="1" size="2" value="0" class="dWCx" id="dWCx2" name="dWCx2">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header">
-                        <h2 class="mb-0">
-                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#d3Scores" aria-expanded="true" aria-controls="d3Scores">
-                                Defense Witness 3
-                            </button>
-                        </h2>
-                    </div>
-
-                    <div id="d3Scores" class="collapse" aria-labelledby="headingOne" data-parent="#scores">
-                        <div class="card-body defenseWitness">
-                            <label for="pCx3" class="pCxLabel" id="pCx3Label">Cx (Atty):</label>
-                            <input type="number" min="0" max="10" step="1" size="2" value="0" class="pCx" id="pCx3" name="pDx3">
-                            <label for="dDx3" class="dDxLabel" id="dDx3Label">Dx (Atty):</label>
-                            <input type="number" min="0" max="10" step="1" size="2" value="0" class="dDx" id="dDx3" name="dCx3">
-
-                            <label for="dWDx3" class="dWDxLabel" id="dWDx3Label">Dx (Wit):</label>
-                            <input type="number" min="0" max="10" step="1" size="2" value="0" class="dWDx" id="dWDx3" name="dWDx3">
-                            <label for="dWCx3" class="dWCxLabel" id="dWCx3Label">Cx (Wit):</label>
-                            <input type="number" min="0" max="10" step="1" size="2" value="0" class="dWCx" id="dWCx3" name="dWCx3">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header">
-                        <h2 class="mb-0">
-                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#closingScores" aria-expanded="true" aria-controls="closingScores">
-                                Closing
-                            </button>
-                        </h2>
-                    </div>
-
-                    <div id="closingScores" class="collapse" aria-labelledby="headingOne" data-parent="#scores">
-                        <div class="card-body speech">
-                            <label for="pClose" class="pSpeechLabel">π Close:</label>
-                            <input type="number" min="0" max="10" step="1" size="2" value="0" class="pSpeech" id="pClose" name="pClose">
-                            <label for="dClose" class="dSpeechLabel">∆ Close:</label>
-                            <input type="number" min="0" max="10" step="1" size="2" value="0" class="dSpeech" id="dClose" name="dClose">
-                        </div>
-                    </div>
-                </div>
+            <div id="openingScores" class="speech">
+                <label for="pOpen" class="pSpeechLabel">π Open:</label>
+                <p class="pSpeech" id="pOpen"></p>
+                <label for="dOpen" class="dSpeechLabel">∆ Open:</label>
+                <p class="dSpeech" id="dOpen"></p>
             </div>
-            <button id="submit">Submit</button>
+        <h3>Witness 1</h3>
+            <div id="p1Scores" class="plaintiffWitness">
+                <label for="pDx1" class="pDxLabel" id="pDx1Label">Dx (Atty):</label>
+                <p class="pDx" id="pDx1"></p>
+                <label for="dCx1" class="dCxLabel" id="dCx1Label">Cx (Atty):</label>
+                <p class="dCx" id="dCx1"></p>
+                <label for="pWDx1" class="pWDxLabel" id="pWDx1Label">Dx (Wit):</label>
+                <p class="pWDx" id="pWDx1"></p>
+                <label for="pWCx1" class="pWCxLabel" id="pWCx1Label">Cx (Wit):</label>
+                <p class="pWCx" id="pWCx1"></p>
+            </div>
+        <h3>Witness 2</h3>
+            <div id="p2Scores" class="plaintiffWitness">
+                <label for="pDx3" class="pDxLabel" id="pDx3Label">Dx (Atty):</label>
+                <p class="pDx" id="pDx3"></p>
+                <label for="dCx3" class="dCxLabel" id="dCx3Label">Cx (Atty):</label>
+                <p class="dCx" id="dCx3"></p>
+                <label for="pWDx3" class="pWDxLabel" id="pWDx3Label">Dx (Wit):</label>
+                <p class="pWDx" id="pWDx3"></p>
+                <label for="pWCx3" class="pWCxLabel" id="pWCx3Label">Cx (Wit):</label>
+                <p class="pWCx" id="pWCx3"></p>
+            </div>
+        <h3>Witness 3</h3>
+            <div id="p3Scores" class="plaintiffWitness">
+                <label for="pDx2" class="pDxLabel" id="pDx2Label">Dx (Atty):</label>
+                <p class="pDx" id="pDx2"></p>
+                <label for="dCx2" class="dCxLabel" id="dCx2Label">Cx (Atty):</label>
+                <p class="dCx" id="dCx2"></p>
+                <label for="pWDx2" class="pWDxLabel" id="pWDx2Label">Dx (Wit):</label>
+                <p class="pWDx" id="pWDx2"></p>
+                <label for="pWCx2" class="pWCxLabel" id="pWCx2Label">Cx (Wit):</label>
+                <p class="pWCx" id="pWCx2"></p>
+            </div>
+        <h3>Witness 4</h3>
+            <div id="d1Scores" class="defenseWitness">
+                <label for="pCx1" class="pCxLabel" id="pCx1Label">Cx (Atty):</label>
+                <p class="pCx" id="pCx1"></p>
+                <label for="dDx1" class="dDxLabel" id="dDx1Label">Dx (Atty):</label>
+                <p class="dDx" id="dDx1"></p>
+
+                <label for="dWDx1" class="dWDxLabel" id="dWDx1Label">Dx (Wit):</label>
+                <p class="dWDx" id="dWDx1"></p>
+                <label for="dWCx1" class="dWCxLabel" id="dWCx1Label">Cx (Wit):</label>
+                <p class="dWCx" id="dWCx1"></p>
+            </div>
+        <h3>Witness 5</h3>
+            <div id="d2Scores" class="defenseWitness">
+                <label for="pCx2" class="pCxLabel" id="pCx2Label">Cx (Atty):</label>
+                <p class="pCx" id="pCx2"></p>
+                <label for="dDx2" class="dDxLabel" id="dDx2Label">Dx (Atty):</label>
+                <p class="dDx" id="dDx2"></p>
+
+                <label for="dWDx2" class="dWDxLabel" id="dWDx2Label">Dx (Wit):</label>
+                <p class="dWDx" id="dWDx2"></p>
+                <label for="dWCx2" class="dWCxLabel" id="dWCx2Label">Cx (Wit):</label>
+                <p class="dWCx" id="dWCx2"></p>
+            </div>
+        <h3>Witness 6</h3>
+            <div id="d3Scores" class="defenseWitness">
+                <label for="pCx3" class="pCxLabel" id="pCx3Label">Cx (Atty):</label>
+                <p class="pCx" id="pCx3"></p>
+                <label for="dDx3" class="dDxLabel" id="dDx3Label">Dx (Atty):</label>
+                <p class="dDx" id="dDx3"></p>
+
+                <label for="dWDx3" class="dWDxLabel" id="dWDx3Label">Dx (Wit):</label>
+                <p class="dWDx" id="dWDx3"></p>
+                <label for="dWCx3" class="dWCxLabel" id="dWCx3Label">Cx (Wit):</label>
+                <p class="dWCx" id="dWCx3"></p>
+            </div>
+        <h3>Closing</h3>
+            <div id="closingScores" class='speech'>
+                <label for="pClose" class="pSpeechLabel">π Close:</label>
+                <p class="pSpeech" id="pClose"></p>
+                <label for="dClose" class="dSpeechLabel">∆ Close:</label>
+                <p class="dSpeech" id="dClose"></p>
+            </div>
         </div>
+        <button id="unlockButton">Unlock Ballot</button>
 
         <!-- Warning Modal -->
         <div id="warningModal" class="modal fade" role="dialog">
@@ -278,7 +178,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Warning</h4>
+                        <h4 class="modal-title">Ballot Unlocked</h4>
                     </div>
                     <div class="modal-body">
                         <p id="warningModalText">Error. Modal unexpectedly displayed.</p>

@@ -72,7 +72,7 @@ function getAllBallots() {
             $ballots[$i]["pairing"] = intval($row["pairing"]);
             $ballots[$i]["judge"] = intval($row["judge"]);
             $ballots[$i]["url"] = $row["url"];
-            $ballots[$i]["locked"] = $row["locked"];
+            $ballots[$i]["locked"] = intval($row["locked"]);
             $ballots[$i]["pOpen"] = intval($row["pOpen"]);
             $ballots[$i]["dOpen"] = intval($row["dOpen"]);
             $ballots[$i]["pDx1"] = intval($row["pDx1"]);
@@ -375,4 +375,31 @@ function lockBallot($ballot) {
     $conn->query($query);
     $conn->close();
     return true;
+}
+
+function unlockBallot($id) {
+    $query = "UPDATE ballots SET locked = 0 WHERE id = " . $id;
+    $db = new Database();
+    $conn = $db->getConnection();
+    $conn->query($query);
+    $conn->close();
+    return true;
+}
+
+function getBallotURL($id) {
+    $query = "SELECT url FROM ballots WHERE id = " . $id;
+
+    //get url from database
+    $db = new Database();
+    $conn = $db->getConnection();
+    $result = $conn->query($query);
+    $row = $result->fetch_assoc();
+
+    //close connection
+    $result->close();
+    $conn->close();
+
+    //return full url
+    $url = "https://" . HOST_NAME . "/judgeBallot.php?ballot=" . $row["url"];
+    return $url;
 }

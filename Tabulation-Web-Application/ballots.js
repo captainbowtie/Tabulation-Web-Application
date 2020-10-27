@@ -37,11 +37,30 @@ $(document).ready(function () {
 $("#round").on("change", function () {
     fillPairingSelect();
 });
+
 $("#pairing").on("change", function () {
     fillBallotSelect();
 });
+
 $("#ballot").on("change", function () {
     fillBallot();
+});
+
+$("#unlockButton").on("click", function () {
+    let ballotNumber = Number($("#ballot").val().substring(7));
+    let unlockData = {"id":ballotNumber};
+    $.ajax({
+        url: "../api/ballots/unlock.php",
+        method: "POST",
+        data: unlockData,
+        dataType: "json"
+    }).then(response => {
+        if (response.message === 0) {
+            warningModal(`Ballot Unlocked.\nYou can edit the ballot <a href="${response.url}">here</a>.`);
+        } else {
+            alert(response.message);
+        }
+    });
 });
 
 function fillPairingSelect() {
@@ -63,7 +82,7 @@ function fillPairingSelect() {
     });
     fillBallotSelect();
 }
-;
+
 
 function fillBallotSelect() {
     //determine which pairing should have its ballots listed
@@ -102,34 +121,37 @@ function fillBallot() {
             ballot = ballots[a];
         }
     }
-    $("#pOpen").val(ballot.pOpen);
-    $("#dOpen").val(ballot.dOpen);
-    $("#pDx1").val(ballot.pDx1);
-    $("#pDx2").val(ballot.pDx2);
-    $("#pDx3").val(ballot.pDx3);
-    $("#pWDx1").val(ballot.pWDx1);
-    $("#pWDx2").val(ballot.pWDx2);
-    $("#pWDx3").val(ballot.pWDx3);
-    $("#pWCx1").val(ballot.pWCx1);
-    $("#pWCx2").val(ballot.pWCx2);
-    $("#pWCx3").val(ballot.pWCx3);
-    $("#pCx1").val(ballot.pCx1);
-    $("#pCx2").val(ballot.pCx2);
-    $("#pCx3").val(ballot.pCx3);
-    $("#dDx1").val(ballot.dDx1);
-    $("#dDx2").val(ballot.dDx2);
-    $("#dDx3").val(ballot.dDx3);
-    $("#dWDx1").val(ballot.dWDx1);
-    $("#dWDx2").val(ballot.dWDx2);
-    $("#dWDx3").val(ballot.dWDx3);
-    $("#dWCx1").val(ballot.dWCx1);
-    $("#dWCx2").val(ballot.dWCx2);
-    $("#dWCx3").val(ballot.dWCx3);
-    $("#dCx1").val(ballot.dCx1);
-    $("#dCx2").val(ballot.dCx2);
-    $("#dCx3").val(ballot.dCx3);
-    $("#pClose").val(ballot.pClose);
-    $("#dClose").val(ballot.dClose);
+    //put numbers in ballot
+    $("#pOpen").html(ballot.pOpen);
+    $("#dOpen").html(ballot.dOpen);
+    $("#pDx1").html(ballot.pDx1);
+    $("#pDx2").html(ballot.pDx2);
+    $("#pDx3").html(ballot.pDx3);
+    $("#pWDx1").html(ballot.pWDx1);
+    $("#pWDx2").html(ballot.pWDx2);
+    $("#pWDx3").html(ballot.pWDx3);
+    $("#pWCx1").html(ballot.pWCx1);
+    $("#pWCx2").html(ballot.pWCx2);
+    $("#pWCx3").html(ballot.pWCx3);
+    $("#pCx1").html(ballot.pCx1);
+    $("#pCx2").html(ballot.pCx2);
+    $("#pCx3").html(ballot.pCx3);
+    $("#dDx1").html(ballot.dDx1);
+    $("#dDx2").html(ballot.dDx2);
+    $("#dDx3").html(ballot.dDx3);
+    $("#dWDx1").html(ballot.dWDx1);
+    $("#dWDx2").html(ballot.dWDx2);
+    $("#dWDx3").html(ballot.dWDx3);
+    $("#dWCx1").html(ballot.dWCx1);
+    $("#dWCx2").html(ballot.dWCx2);
+    $("#dWCx3").html(ballot.dWCx3);
+    $("#dCx1").html(ballot.dCx1);
+    $("#dCx2").html(ballot.dCx2);
+    $("#dCx3").html(ballot.dCx3);
+    $("#pClose").html(ballot.pClose);
+    $("#dClose").html(ballot.dClose);
+
+    //calculate point totals
     let plaintiffPoints = ballot.pOpen +
             ballot.pDx1 +
             ballot.pDx2 +
@@ -156,176 +178,28 @@ function fillBallot() {
             ballot.dCx1 +
             ballot.dCx2 +
             ballot.dCx3 + ballot.dClose;
-    if((plaintiffPoints - defensePoints) > 0){
-        $("#tabRoomPD").html("Plaintiff wins: +" + (plaintiffPoints - defensePoints));
-    }else if((plaintiffPoints - defensePoints) < 0){
-        $("#tabRoomPD").html("Defense wins: +" + (defensePoints - plaintiffPoints));
-    }else{
-        $("#tabRoomPD").html("Tie");
-    }
-}
 
-$("#submit").on("click", function (event) {
-    event.preventDefault();
-    if (validateScores()) {
-        let ballot = {};
-        let regex = /[0-9]+/;
-        ballot["id"] = regex.exec($("#ballot").val())[0];
-        ballot["pOpen"] = $("#pOpen").val();
-        ballot["dOpen"] = $("#dOpen").val();
-        ballot["pDx1"] = $("#pDx1").val();
-        ballot["pDx2"] = $("#pDx2").val();
-        ballot["pDx3"] = $("#pDx3").val();
-        ballot["pWDx1"] = $("#pWDx1").val();
-        ballot["pWDx2"] = $("#pWDx2").val();
-        ballot["pWDx3"] = $("#pWDx3").val();
-        ballot["pWCx1"] = $("#pWCx1").val();
-        ballot["pWCx2"] = $("#pWCx2").val();
-        ballot["pWCx3"] = $("#pWCx3").val();
-        ballot["pCx1"] = $("#pCx1").val();
-        ballot["pCx2"] = $("#pCx2").val();
-        ballot["pCx3"] = $("#pCx3").val();
-        ballot["dDx1"] = $("#dDx1").val();
-        ballot["dDx2"] = $("#dDx2").val();
-        ballot["dDx3"] = $("#dDx3").val();
-        ballot["dWDx1"] = $("#dWDx1").val();
-        ballot["dWDx2"] = $("#dWDx2").val();
-        ballot["dWDx3"] = $("#dWDx3").val();
-        ballot["dWCx1"] = $("#dWCx1").val();
-        ballot["dWCx2"] = $("#dWCx2").val();
-        ballot["dWCx3"] = $("#dWCx3").val();
-        ballot["dCx1"] = $("#dCx1").val();
-        ballot["dCx2"] = $("#dCx2").val();
-        ballot["dCx3"] = $("#dCx3").val();
-        ballot["pClose"] = $("#pClose").val();
-        ballot["dClose"] = $("#dClose").val();
-        $.ajax({
-            url: "../api/ballots/update.php",
-            method: "POST",
-            data: JSON.stringify(ballot),
-            dataType: "json"
-        }).then(response => {
-            if (response.message === 0) {
-
-            } else {
-                warningModal(response.message);
-            }
-        });
-    }
-
-
-});
-
-function validateScores() {
-    let scoreErrorList = "";
-    if (!isBetween0and10(parseInt($("#pOpen").val()))) {
-        scoreErrorList += "Plaintiff Opening\n";
-    }
-    if (!isBetween0and10(parseInt($("#dOpen").val()))) {
-        scoreErrorList += "Defense Opening\n";
-    }
-    if (!isBetween0and10(parseInt($("#pDx1").val()))) {
-        scoreErrorList += "Plaintiff Attorney Direct 1\n";
-    }
-    if (!isBetween0and10(parseInt($("#pDx2").val()))) {
-        scoreErrorList += "Plaintiff Attorney Direct 2\n";
-    }
-    if (!isBetween0and10(parseInt($("#pDx3").val()))) {
-        scoreErrorList += "Plaintiff Attorney Direct 3\n";
-    }
-    if (!isBetween0and10(parseInt($("#pWDx1").val()))) {
-        scoreErrorList += "Plaintiff Witness Direct 1\n";
-    }
-    if (!isBetween0and10(parseInt($("#pWDx2").val()))) {
-        scoreErrorList += "Plaintiff Witness Direct 2\n";
-    }
-    if (!isBetween0and10(parseInt($("#pWDx3").val()))) {
-        scoreErrorList += "Plaintiff Witness Direct 3\n";
-    }
-    if (!isBetween0and10(parseInt($("#pWCx1").val()))) {
-        scoreErrorList += "Plaintiff Witness Cross 1\n";
-    }
-    if (!isBetween0and10(parseInt($("#pWCx2").val()))) {
-        scoreErrorList += "Plaintiff Witness Cross 2\n";
-    }
-    if (!isBetween0and10(parseInt($("#pWCx3").val()))) {
-        scoreErrorList += "Plaintiff Witness Cross 3\n";
-    }
-    if (!isBetween0and10(parseInt($("#pCx1").val()))) {
-        scoreErrorList += "Plaintiff Attorney Cross 1\n";
-    }
-    if (!isBetween0and10(parseInt($("#pCx2").val()))) {
-        scoreErrorList += "Plaintiff Attorney Cross 2\n";
-    }
-    if (!isBetween0and10(parseInt($("#pCx3").val()))) {
-        scoreErrorList += "Plaintiff Attorney Cross 3\n";
-    }
-    if (!isBetween0and10(parseInt($("#dDx1").val()))) {
-        scoreErrorList += "Defense Attorney Direct 1\n";
-    }
-    if (!isBetween0and10(parseInt($("#dDx2").val()))) {
-        scoreErrorList += "Defense Attorney Direct 2\n";
-    }
-    if (!isBetween0and10(parseInt($("#dDx3").val()))) {
-        scoreErrorList += "Defense Attorney Direct 3\n";
-    }
-    if (!isBetween0and10(parseInt($("#dWDx1").val()))) {
-        scoreErrorList += "Defense Witness Direct 1\n";
-    }
-    if (!isBetween0and10(parseInt($("#dWDx2").val()))) {
-        scoreErrorList += "Defense Witness Direct 2\n";
-    }
-    if (!isBetween0and10(parseInt($("#dWDx3").val()))) {
-        scoreErrorList += "Defense Witness Direct 3\n";
-    }
-    if (!isBetween0and10(parseInt($("#dWCx1").val()))) {
-        scoreErrorList += "Defense Witness Cross 1\n";
-    }
-    if (!isBetween0and10(parseInt($("#dWCx2").val()))) {
-        scoreErrorList += "Defense Witness Cross 2\n";
-    }
-    if (!isBetween0and10(parseInt($("#dWCx3").val()))) {
-        scoreErrorList += "Defense Witness Cross 3\n";
-    }
-    if (!isBetween0and10(parseInt($("#dCx1").val()))) {
-        scoreErrorList += "Defense Attorney Cross 1\n";
-    }
-    if (!isBetween0and10(parseInt($("#dCx2").val()))) {
-        scoreErrorList += "Defense Attorney Cross 2\n";
-    }
-    if (!isBetween0and10(parseInt($("#dCx3").val()))) {
-        scoreErrorList += "Defense Attorney Cross 3\n";
-    }
-    if (!isBetween0and10(parseInt($("#pClose").val()))) {
-        scoreErrorList += "Plaintiff Closing\n";
-    }
-    if (!isBetween0and10(parseInt($("#dClose").val()))) {
-        scoreErrorList += "Defense Opening\n";
-    }
-
-    if (scoreErrorList.length === 0) {
-        return true;
+    //determine lock status string
+    let lockString = " (";
+    if (ballot.locked) {
+        lockString += "locked)";
+        $("#unlockButton").prop("disabled", false);
     } else {
-        warningModal("The following parts have errors in their scores:\n" + scoreErrorList);
-        return false;
+        lockString += "unlocked)";
+        $("#unlockButton").prop("disabled", true);
+    }
+    if ((plaintiffPoints - defensePoints) > 0) {
+        $("#tabRoomPD").html("Plaintiff wins: +" + (plaintiffPoints - defensePoints) + lockString);
+    } else if ((plaintiffPoints - defensePoints) < 0) {
+        $("#tabRoomPD").html("Defense wins: +" + (defensePoints - plaintiffPoints) + lockString);
+    } else {
+        $("#tabRoomPD").html("Tie" + lockString);
     }
 }
 
 function warningModal(text) {
-    $("#warningModalText").text(text);
+    $("#warningModalText").html(text);
     $("#warningModal").modal();
-}
-
-function isBetween0and10(int) {
-    if (Number.isInteger(int)) {
-        if (int >= 0 && int <= 10) {
-            return true;
-        } else {
-            return false;
-        }
-    } else {
-        return false;
-    }
 }
 
 function updateData() {
