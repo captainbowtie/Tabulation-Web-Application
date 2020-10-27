@@ -305,6 +305,10 @@ $("#snakeStart").on("change", function () {
     updateSetting("snakeStartsOnPlaintiff", $(this).val());
 });
 
+$("#roundFourBallotsViewable").on("change", function () {
+    updateSetting("roundFourBallotsViewable", $(this).val());
+});
+
 function updateSetting(field, value) {
     let updateData = `{
     "field":"${field}",

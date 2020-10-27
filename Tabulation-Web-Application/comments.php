@@ -20,6 +20,7 @@ session_start();
 if ($_SESSION["isCoach"] || $_SESSION[isAdmin]) {
     require_once __DIR__ . "/config.php";
     require_once SITE_ROOT . "/database.php";
+    require_once SITE_ROOT . "/objects/settings.php";
 
     $db = new Database();
     $conn = $db->getConnection();
@@ -149,6 +150,192 @@ if ($_SESSION["isCoach"] || $_SESSION[isAdmin]) {
                 $ballots[$a]["witness4"] = $row["wit4"];
                 $ballots[$a]["witness5"] = $row["wit5"];
                 $ballots[$a]["witness6"] = $row["wit6"];
+
+                //if round 4 ballots shouln't be visible, clear the ballot
+
+                if (intVal($row["round"]) === 4 && !getSetting("roundFourBallotsViewable")) {
+                    $ballots[$a]["pairing"] = intval($row["pairing"]);
+                    $ballots[$a]["pOpen"] = 0;
+                    $ballots[$a]["dOpen"] = 0;
+                    $ballots[$a]["pDx1"] = 0;
+                    $ballots[$a]["pWDx1"] = 0;
+                    $ballots[$a]["pWCx1"] = 0;
+                    $ballots[$a]["dCx1"] = 0;
+                    $ballots[$a]["pDx2"] = 0;
+                    $ballots[$a]["pWDx2"] = 0;
+                    $ballots[$a]["pWCx2"] = 0;
+                    $ballots[$a]["dCx2"] = 0;
+                    $ballots[$a]["pDx3"] = 0;
+                    $ballots[$a]["pWDx3"] = 0;
+                    $ballots[$a]["pWCx3"] = 0;
+                    $ballots[$a]["dCx3"] = 0;
+                    $ballots[$a]["dDx1"] = 0;
+                    $ballots[$a]["dWDx1"] = 0;
+                    $ballots[$a]["dWCx1"] = 0;
+                    $ballots[$a]["pCx1"] = 0;
+                    $ballots[$a]["dDx2"] = 0;
+                    $ballots[$a]["dWDx2"] = 0;
+                    $ballots[$a]["dWCx2"] = 0;
+                    $ballots[$a]["pCx2"] = 0;
+                    $ballots[$a]["dDx3"] = 0;
+                    $ballots[$a]["dWDx3"] = 0;
+                    $ballots[$a]["dWCx3"] = 0;
+                    $ballots[$a]["pCx3"] = 0;
+                    $ballots[$a]["pClose"] = 0;
+                    $ballots[$a]["dClose"] = 0;
+                    $ballots[$a]["pOpenComments"] = "You Are Old, Father William-Lewis Carroll";
+                    $ballots[$a]["dOpenComments"] = "Alice's Adventures in Wonderland, Chapter 5";
+                    $ballots[$a]["pDx1Comments"] = "You are old, Father William, the young man said,
+    And your hair has become very white;
+And yet you incessantly stand on your head—
+    Do you think, at your age, it is right?";
+                    $ballots[$a]["pWDx1Comments"] = "In my youth, Father William replied to his son,
+    I feared it might injure the brain;
+But now that I'm perfectly sure I have none,
+    Why, I do it again and again.";
+                    $ballots[$a]["pWCx1Comments"] = "You are old, said the youth, as I mentioned before,
+    And have grown most uncommonly fat;
+Yet you turned a back-somersault in at the door—
+    Pray, what is the reason of that?";
+                    $ballots[$a]["dCx1Comments"] = "In my youth, said the sage, as he shook his grey locks,
+    I kept all my limbs very supple
+By the use of this ointment—one shilling the box—
+    Allow me to sell you a couple.";
+                    $ballots[$a]["pDx2Comments"] = "You are old, said the youth, and your jaws are too weak
+    For anything tougher than suet;
+Yet you finished the goose, with the bones and the beak—
+    Pray, how did you manage to do it?";
+                    $ballots[$a]["pWDx2Comments"] = "In my youth, said his father, I took to the law,
+    And argued each case with my wife;
+And the muscular strength, which it gave to my jaw,
+    Has lasted the rest of my life.";
+                    $ballots[$a]["pWCx2Comments"] = "You are old, said the youth, one would hardly suppose
+    That your eye was as steady as ever;
+Yet you balanced an eel on the end of your nose—
+    What made you so awfully clever?";
+                    $ballots[$a]["dCx2Comments"] = "I have answered three questions, and that is enough,
+    Said his father; don't give yourself airs!
+Do you think I can listen all day to such stuff?
+    Be off, or I'll kick you down stairs!";
+                    $ballots[$a]["pDx3Comments"] = "I'll tell thee everything I can;
+There's little to relate,
+I saw an aged, aged man,
+A-sitting on a gate.
+'Who are you, aged man?' I said.
+'And how is it you live?'
+And his answer trickled through my head
+Like water through a sieve.";
+                    $ballots[$a]["pWDx3Comments"] = "He said, 'I look for butterflies
+That sleep among the wheat;
+I make them into mutton-pies,
+And sell them in the street.
+I sell them unto men,' he said,
+'Who sail on stormy seas;
+And that's the way I get my bread
+A trifle, if you please.'";
+                    $ballots[$a]["pWCx3Comments"] = "But I was thinking of a plan
+To dye one's whiskers green,
+And always use so large a fan
+That they could not be seen.
+So, having no reply to give
+To what the old man said,
+I cried, 'Come, tell me how you live!'
+And thumped him on the head.
+";
+                    $ballots[$a]["dCx3Comments"] = "The Aged Aged Man, Lewis Carroll, Through the Looking-Glass, and What Alice Found There, Chapter 8";
+                    $ballots[$a]["dDx1Comments"] = "But I was thinking of a way
+To feed one's self on batter,
+And so go on from day to day
+Getting a little fatter.
+I shook him well from side to side,
+Until his face was blue,
+'Come, tell me how you live,' I cried,
+'And what it is you do!'
+";
+                    $ballots[$a]["dWDx1Comments"] = "He said, 'I hunt for haddocks' eyes
+Among the heather bright,
+And work them into waistcoat-buttons
+In the silent night.
+And these I do not sell for gold
+Or coin of silvery shine,
+But for a copper halfpenny,
+And that will purchase nine.";
+                    $ballots[$a]["dWCx1Comments"] = "'I sometimes dig for buttered rolls,
+Or set limed twigs for crabs;
+I sometimes search the grassy knolls
+For wheels of hansom-cabs.
+And that's the way' (he gave a wink)
+'By which I get my wealth
+And very gladly will I drink
+Your honor's noble health.'";
+                    $ballots[$a]["pCx1Comments"] = "His accents mild took up the tale;
+He said, 'I go my ways,
+And when I find a mountain-rill,
+I set it in a blaze;
+And thence they make a stuff they call
+Rowland's Macassar Oil
+Yet twopence-halfpenny is all
+They give me for my toil.'";
+                    $ballots[$a]["dDx2Comments"] = "And now, if e'er by chance I put
+My fingers into glue,
+Or madly squeeze a right-hand foot
+Into a left-hand shoe,
+Or if I drop upon my toe
+A very heavy weight,";
+                    $ballots[$a]["dWDx2Comments"] = "I weep, for it reminds me so
+Of that old man I used to know
+Whose look was mild, whose speech was slow,
+Whose hair was whiter than the snow,
+Whose face was very like a crow,
+With eyes, like cinders, all aglow,
+Who seemed distracted with his woe,";
+                    $ballots[$a]["dWCx2Comments"] = "Who rocked his body to and fro,
+And muttered mumblingly and low,
+As if his mouth were full of dough,
+Who snorted like a buffalo
+That summer evening long ago,
+A-sitting on a gate. ";
+                    $ballots[$a]["pCx2Comments"] = "I heard him then, for I had just
+Completed my design
+To keep the Menai bridge from rust
+By boiling it in wine.
+I thanked him much for telling me
+The way he got his wealth,
+But chiefly for his wish that he
+Might drink my noble health.";
+                    $ballots[$a]["dDx3Comments"] = "'Will you walk a little faster?' said a whiting to a snail,
+'There's a porpoise close behind us, and he's treading on my tail.
+See how eagerly the lobsters and the turtles all advance!
+They are waiting on the shingle—will you come and join the dance?
+    Will you, won't you, will you, won't you, will you join the dance?
+    Will you, won't you, will you, won't you, won't you join the dance?";
+                    $ballots[$a]["dWDx3Comments"] = "'You can really have no notion how delightful it will be
+When they take us up and throw us, with the lobsters, out to sea!'
+But the snail replied 'Too far, too far!' and gave a look askance—
+Said he thanked the whiting kindly, but he would not join the dance.
+    Would not, could not, would not, could not, would not join the dance.
+    Would not, could not, would not, could not, could not join the dance.";
+                    $ballots[$a]["dWCx3Comments"] = "'What matters it how far we go?' his scaly friend replied,
+'There is another shore, you know, upon the other side.
+The further off from England the nearer is to France—
+Then turn not pale, beloved snail, but come and join the dance.
+    Will you, won't you, will you, won't you, will you join the dance?
+    Will you, won't you, will you, won't you, won't you join the dance?'";
+                    $ballots[$a]["pCx3Comments"] = "The Lobster Quadrille, Lewis Carroll, Alice's Adventures in Wonderland, Chapter 10";
+                    $ballots[$a]["pCloseComments"] = "Twinkle, twinkle, little bat!
+How I wonder what you're at!
+Up above the world you fly,
+Like a teatray in the sky.";
+                    $ballots[$a]["dCloseComments"] = "Twinkle, Twinkle, Little Bat, Lewis Carroll, Alice's Adventures in Wonderland, Chapter 7";
+                    $ballots[$a]["aty1"] = "Joey Davis";
+                    $ballots[$a]["aty2"] = "Sydney Park";
+                    $ballots[$a]["aty3"] = "Parker Paige";
+                    $ballots[$a]["aty4"] = "Kirby Doolittle";
+                    $ballots[$a]["wit1"] = "Blake Lexington";
+                    $ballots[$a]["wit2"] = "Jesse Duran";
+                    $ballots[$a]["wit3"] = "Jordan Ryder";
+                    $ballots[$a]["wit4"] = "Riley Winter";
+                }
             }
         }
     }
@@ -288,7 +475,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
         <link rel="stylesheet" href="comments.css">
 
-        <title></title>
+        <title>Comments</title>
     </head>
     <body>
         <div id="selects">
@@ -331,7 +518,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     <div class="card-header">
                         <h2 class="mb-0">
                             <button id="witness1Header" class="btn btn-link" type="button" data-toggle="collapse" data-target="#p1Scores" aria-expanded="true" aria-controls="p1Scores">
-                                Plaintiff Witness 1 (<?php echo $pairing["Wit1"]; //TODO: make Wit lower case?>)
+                                Plaintiff Witness 1 (<?php echo $pairing["Wit1"]; //TODO: make Wit lower case        ?>)
                             </button>
                         </h2>
                     </div>

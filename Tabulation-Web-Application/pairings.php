@@ -188,6 +188,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 }
                 ?> value="false">Defense</option>
             </select>
+            <label id="roundFourBallotsViewableLabel" for="roundFourBallotsViewable">Allow teams to view round 4 ballots:</label>
+            <select id="roundFourBallotsViewable">
+                <option <?php
+                if ($settings["roundFourBallotsViewable"]) {
+                    echo "selected";
+                }
+                ?> value="true">Yes</option>
+                <option <?php
+                if (!$settings["roundFourBallotsViewable"]) {
+                    echo "selected";
+                }
+                ?> value="false">No</option>
+            </select>
         </form>
         <div class="tab-content">
             <div id="round1" class="tab-pane fade in active">

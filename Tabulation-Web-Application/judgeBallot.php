@@ -206,7 +206,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     <div class="card-header">
                         <h2 class="mb-0">
                             <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#p1Scores" aria-expanded="true" aria-controls="p1Scores">
-                                Plaintiff Witness 1 (<?php echo $pairing["wit1"]; //TODO: make Wit lower case    ?>)
+                                Plaintiff Witness 1 (<?php echo $pairing["wit1"]; ?>)
                             </button>
                         </h2>
                     </div>

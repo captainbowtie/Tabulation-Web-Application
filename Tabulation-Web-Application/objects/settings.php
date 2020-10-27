@@ -52,9 +52,9 @@ function setAllSettings($settings) {
     $settingsUpdated = false;
 
     //update setting
-    $query = "UPDATE settings SET judgesPerRound = ".$settings["judgesPerRound"].", "
-            . "lowerTeamIsHigherRank = ".$settings["lowerTeamIsHigherRank"].", "
-            . "snakeStartsOnPlaintiff = ".$settings["snakeStartsOnPlaintiff"];
+    $query = "UPDATE settings SET judgesPerRound = " . $settings["judgesPerRound"] . ", "
+            . "lowerTeamIsHigherRank = " . $settings["lowerTeamIsHigherRank"] . ", "
+            . "snakeStartsOnPlaintiff = " . $settings["snakeStartsOnPlaintiff"];
     $conn->query($query);
     if ($conn->affected_rows == 1) {
         $settingsUpdated = true;
@@ -88,7 +88,7 @@ function getAllSettings() {
         $settings["judgesPerRound"] = intval($row["judgesPerRound"]);
         $settings["lowerTeamIsHigherRank"] = intval($row["lowerTeamIsHigherRank"]);
         $settings["snakeStartsOnPlaintiff"] = intval($row["snakeStartsOnPlaintiff"]);
-
+        $settings["roundFourBallotsViewable"] = intval($row["roundFourBallotsViewable"]);
         /* free result set */
         $result->close();
     }

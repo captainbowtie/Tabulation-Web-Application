@@ -56,6 +56,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     grid-row: 3 / 3;
 }
 
+#roundFourBallotsViewableLabel{
+    grid-column: 1 / 1;
+    grid-row: 4 / 4;
+    justify-self: end;
+}
+
+#roundFourBallotsViewable{
+    grid-column: 2 / 2;
+    grid-row: 4 / 4;
+}
+
 #round1Div{
     display: grid;
 }

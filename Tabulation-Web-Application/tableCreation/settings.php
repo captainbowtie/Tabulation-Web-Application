@@ -30,15 +30,16 @@ $query = "CREATE TABLE IF NOT EXISTS settings (
 id INT(1) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 judgesPerRound INT(2) UNSIGNED NOT NULL,
 lowerTeamIsHigherRank BOOLEAN NOT NULL,
-snakeStartsOnPlaintiff BOOLEAN NOT NULL
+snakeStartsOnPlaintiff BOOLEAN NOT NULL,
+roundFourBallotsViewable BOOLEAN NOT NULL
 )";
 
 if ($conn->query($query) === TRUE) {
     $settingsExistQuery = "SELECT * FROM settings";
     $numRows = mysqli_num_rows($conn->query($settingsExistQuery));
     if ($numRows === 0) {
-        $defaultsQuery = "INSERT INTO settings (judgesPerRound, lowerTeamIsHigherRank, snakeStartsOnPlaintiff) VALUES "
-                . "(2,TRUE,TRUE)";
+        $defaultsQuery = "INSERT INTO settings (judgesPerRound, lowerTeamIsHigherRank, snakeStartsOnPlaintiff, roundFourBallotsViewable) VALUES "
+                . "(2,TRUE,TRUE,FALSE)";
         $conn->query($defaultsQuery);
     }
 } else {
