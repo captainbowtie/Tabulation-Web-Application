@@ -92,12 +92,12 @@ function createPairings($round, $pairings) {
 function getAllPairings() {
     $pairings = [];
 
+    $pairingsQuery = "SELECT * FROM pairings";
     //connect to database
     $db = new Database();
     $conn = $db->getConnection();
 
     //get basic team data (number and name)
-    $pairingsQuery = "SELECT * FROM pairings";
     if ($result = $conn->query($pairingsQuery)) {
         $i = 0;
         while ($row = $result->fetch_assoc()) {

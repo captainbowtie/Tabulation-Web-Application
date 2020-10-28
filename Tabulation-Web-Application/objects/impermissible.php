@@ -76,12 +76,14 @@ function deleteImpermissible($team0, $team1) {
 }
 
 function getAllImpermissibles() {
+    $impermissibles = [];
+    
     $query = "SELECT * FROM impermissibles";
     $db = new Database();
     $conn = $db->getConnection();
+    
     if ($result = $conn->query($query)) {
         $a = 0;
-        global $impermissibles;
         while ($row = $result->fetch_assoc()) {
             $impermissibles[$a]["team0"] = intval($row["team0"]);
             $impermissibles[$a]["team1"] = intval($row["team1"]);
