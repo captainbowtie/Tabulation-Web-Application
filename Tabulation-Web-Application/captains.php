@@ -108,7 +108,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
         <link rel="stylesheet" href="captains.css">
 
-        <title></title>
+        <title>Captains</title>
     </head>
     <body>
         <?php

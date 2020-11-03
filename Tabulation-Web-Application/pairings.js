@@ -240,7 +240,7 @@ $("#submitJudges2").on("click", function (e) {
     e.preventDefault();
     if (validateJudges(2)) {
         let ballots = generateBallots(2);
-        if (round1BallotsExist) {
+        if (round2BallotsExist) {
             ballotWarningBallots = ballots;
             ballotsWarningModal("Round 2 judges are already assigned. Submitting these assignments will overwrite the existing assignments.");
         } else {
@@ -254,7 +254,7 @@ $("#submitJudges3").on("click", function (e) {
     e.preventDefault();
     if (validateJudges(3)) {
         let ballots = generateBallots(3);
-        if (round1BallotsExist) {
+        if (round3BallotsExist) {
             ballotWarningBallots = ballots;
             ballotsWarningModal("Round 3 judges are already assigned. Submitting these assignments will overwrite the existing assignments.");
         } else {
@@ -268,7 +268,7 @@ $("#submitJudges4").on("click", function (e) {
     e.preventDefault();
     if (validateJudges(4)) {
         let ballots = generateBallots(4);
-        if (round1BallotsExist) {
+        if (round4BallotsExist) {
             ballotWarningBallots = ballots;
             ballotsWarningModal("Round 4 judges are already assigned. Submitting these assignments will overwrite the existing assignments.");
         } else {
@@ -453,6 +453,13 @@ function pair2() {
         }
     }
 
+//set bye-team to have record of -1
+    for (var a = 0; a < teams.length; a++) {
+        if (teams[a].number === 1985) {
+            teams[a].wins = -1;
+        }
+    }
+
     //divide teams into needs plaintiff and needs defense
     var needsPlaintiffTeams = [];
     var needsDefenseTeams = [];
@@ -467,6 +474,12 @@ function pair2() {
     //rank teams
     var plaintiffTeams = rankTeams(needsPlaintiffTeams);
     var defenseTeams = rankTeams(needsDefenseTeams);
+
+    //print intial pairings
+    console.log("Initial Pairings:");
+    for (var a = 0; a < plaintiffTeams.length; a++) {
+        console.log(plaintiffTeams[a].number + " " + plaintiffTeams[a].wins + " PD: "+ plaintiffTeams[a].pd + " v. " + defenseTeams[a].number + " " + defenseTeams[a].wins + " PD: "+ defenseTeams[a].pd);
+    }
 
     //check for and resolve conflicts
     var noConflicts = !pairingsHaveConflicts(plaintiffTeams, defenseTeams);
@@ -486,38 +499,58 @@ function pair2() {
                 for (var b = 0; b < plaintiffTeams.length; b++) {
                     if (b !== a) {
                         //check that proposed swap has not already occurred for plaintiff teams
-                        if (!swapList.includes([Math.min(plaintiffTeams[a].number, plaintiffTeams[b].number), Math.max(plaintiffTeams[a].number, plaintiffTeams[b].number)])) {
+                        let pSwapExists = false;
+                        let dSwapExists = false;
+                        let pSwapMin = Math.min(plaintiffTeams[a].number, plaintiffTeams[b].number);
+                        let pSwapMax = Math.max(plaintiffTeams[a].number, plaintiffTeams[b].number);
+                        let dSwapMin = Math.min(defenseTeams[a].number, defenseTeams[b].number);
+                        let dSwapMax = Math.max(defenseTeams[a].number, defenseTeams[b].number);
+                        for (var c = 0; c < swapList.length; c++) {
+                            if (swapList[c][0] === pSwapMin) {
+                                if (swapList[c][1] === pSwapMax) {
+                                    pSwapExists = true;
+                                }
+                            } else if (swapList[c][0] === dSwapMin) {
+                                if (swapList[c][1] === dSwapMax) {
+                                    dSwapExists = true;
+                                }
+                            }
+                        }
+
+                        //if pSwap has not already been performed, add it to pSwap list
+                        if (!pSwapExists) {
                             var pSwap = JSON.parse('{' +
                                     '"number":' + plaintiffTeams[b].number + ',' +
                                     '"rank":' + Math.abs(a - b) + ',' +
                                     '"wins":' + Math.abs(plaintiffTeams[a].wins - plaintiffTeams[b].wins) + ',' +
                                     '"cs":' + Math.abs(plaintiffTeams[a].cs - plaintiffTeams[b].cs) + ',' +
-                                    '"pd":' + Math.abs(plaintiffTeams[a].cs - plaintiffTeams[b].cs) + ',' +
+                                    '"pd":' + Math.abs(plaintiffTeams[a].pd - plaintiffTeams[b].pd) + ',' +
                                     '"rankSum":' + (a + b) +
                                     '}');
                             pSwaps.push(pSwap);
                         }
-                        //check that proposed swap has not already occurred for defense teams
-                        if (!swapList.includes([Math.min(defenseTeams[a].number, defenseTeams[b].number), Math.max(defenseTeams[a].number, defenseTeams[b].number)])) {
+
+                        //if dSwap has not already been performed, add it to dSwap list
+                        if (!dSwapExists) {
                             var dSwap = JSON.parse('{' +
                                     '"number":' + defenseTeams[b].number + ',' +
                                     '"rank":' + Math.abs(a - b) + ',' +
                                     '"wins":' + Math.abs(defenseTeams[a].wins - defenseTeams[b].wins) + ',' +
                                     '"cs":' + Math.abs(defenseTeams[a].cs - defenseTeams[b].cs) + ',' +
-                                    '"pd":' + Math.abs(defenseTeams[a].cs - defenseTeams[b].cs) + ',' +
+                                    '"pd":' + Math.abs(defenseTeams[a].pd - defenseTeams[b].pd) + ',' +
                                     '"rankSum":' + (a + b) +
                                     '}');
                             dSwaps.push(dSwap);
                         }
                     }
                 }
+
                 //rank the swaps within each constrained side
                 pSwaps = rankSwaps(pSwaps);
                 dSwaps = rankSwaps(dSwaps);
                 //proposed D swap is second to ensure that if all things are equal, defense gets swapped
                 var finalSwaps = [pSwaps[0], dSwaps[0]];
                 finalSwaps = rankSwaps(finalSwaps);
-
                 //execute the swap
                 if (pSwaps.includes(finalSwaps[0])) {
                     for (var b = 0; b < plaintiffTeams.length; b++) {
@@ -525,7 +558,8 @@ function pair2() {
                             var swapTeam = plaintiffTeams[b];
                             plaintiffTeams[b] = plaintiffTeams[a];
                             plaintiffTeams[a] = swapTeam;
-                            swapList.push([Math.min(plaintiffTeams[a], plaintiffTeams[b]), Math.max(plaintiffTeams[a], plaintiffTeams[b])]);
+                            swapList.push([Math.min(plaintiffTeams[a].number, plaintiffTeams[b].number), Math.max(plaintiffTeams[a].number, plaintiffTeams[b].number)]);
+                            b = plaintiffTeams.length;
                         }
                     }
                 } else {
@@ -534,10 +568,20 @@ function pair2() {
                             var swapTeam = defenseTeams[b];
                             defenseTeams[b] = defenseTeams[a];
                             defenseTeams[a] = swapTeam;
-                            swapList.push([Math.min(defenseTeams[a], defenseTeams[b]), Math.max(defenseTeams[a], defenseTeams[b])]);
+                            swapList.push([Math.min(defenseTeams[a].number, defenseTeams[b].number), Math.max(defenseTeams[a].number, defenseTeams[b].number)]);
+                            b = defenseTeams.length;
                         }
                     }
                 }
+
+                //print swap to console
+                console.log("Swap Performed:");
+                for (var b = 0; b < plaintiffTeams.length; b++) {
+                    console.log(plaintiffTeams[b].number + " " + plaintiffTeams[b].wins + " PD: "+ plaintiffTeams[b].pd + " v. " + defenseTeams[b].number + " " + defenseTeams[b].wins + " PD: "+ defenseTeams[b].pd);
+
+                }
+
+                //restart the loop
                 a = plaintiffTeams.length;
 
             }
@@ -598,8 +642,21 @@ function pair3() {
         }
     }
 
+    //give bye-team a record of -1
+    for(var a=0;a<teams.length;a++){
+        if(teams[a].number===1985){
+            teams[a].wins = -1;
+        }
+    }
+
     //rank teams
     teams = rankTeams(teams);
+
+    //print initial pairings to console
+    console.log("Initial Pairings:");
+    for (var a = 0; a < teams.length; a += 2) {
+        console.log(teams[a].number + " v. " + teams[a + 1].number);
+    }
 
     //check for and resolve conflicts
     var noConflicts = false;
@@ -617,30 +674,50 @@ function pair3() {
                 var dSwaps = [];
                 for (var b = 0; b < teams.length; b++) {
                     //check that teams will not be swapping with themselves or each other
-                    if (a !== b && b !== (a + 1)) {
+                    if (a !== b && (a + 1) !== b) {
                         //check that proposed pSwap has not already occurred
-                        if (!swapList.includes([Math.min(teams[a].number, teams[b].number), Math.max(teams[a].number, teams[b].number)])) {
+                        let pSwapExists = false;
+                        let dSwapExists = false;
+                        let pSwapMin = Math.min(teams[a].number, teams[b].number);
+                        let pSwapMax = Math.max(teams[a].number, teams[b].number);
+                        let dSwapMin = Math.min(teams[a + 1].number, teams[b].number);
+                        let dSwapMax = Math.max(teams[a + 1].number, teams[b].number);
+                        for (var c = 0; c < swapList.length; c++) {
+                            if (swapList[c][0] === pSwapMin) {
+                                if (swapList[c][1] === pSwapMax) {
+                                    pSwapExists = true;
+                                }
+                            } else if (swapList[c][0] === dSwapMin) {
+                                if (swapList[c][1] === dSwapMax) {
+                                    dSwapExists = true;
+                                }
+                            }
+                        }
+
+                        //if pSwap has not already occurred, add to possible swap list
+                        if (!pSwapExists) {
                             //create pSwap and add to list
                             var pSwap = JSON.parse('{' +
                                     '"number":' + teams[b].number + ',' +
                                     '"rank":' + Math.abs(a - b) + ',' +
                                     '"wins":' + Math.abs(teams[a].wins - teams[b].wins) + ',' +
                                     '"cs":' + Math.abs(teams[a].cs - teams[b].cs) + ',' +
-                                    '"pd":' + Math.abs(teams[a].cs - teams[b].cs) + ',' +
+                                    '"pd":' + Math.abs(teams[a].pd - teams[b].pd) + ',' +
                                     '"rankSum":' + (a + b) +
                                     '}');
                             pSwaps.push(pSwap);
                         }
-                        //check that proposed dSwap has not already occurred
-                        if (!swapList.includes([Math.min(teams[a + 1].number, teams[b].number), Math.max(teams[a + 1].number, teams[b].number)])) {
+
+                        //if dSwap has not already occurred, add to possible swap list
+                        if (!dSwapExists) {
                             //create dSwap and add to list
                             var dSwap = JSON.parse('{' +
                                     '"number":' + teams[b].number + ',' +
-                                    '"rank":' + Math.abs(a - b) + ',' +
-                                    '"wins":' + Math.abs(teams[a].wins - teams[b].wins) + ',' +
-                                    '"cs":' + Math.abs(teams[a].cs - teams[b].cs) + ',' +
-                                    '"pd":' + Math.abs(teams[a].cs - teams[b].cs) + ',' +
-                                    '"rankSum":' + (a + b) +
+                                    '"rank":' + Math.abs((a + 1) - b) + ',' +
+                                    '"wins":' + Math.abs(teams[a + 1].wins - teams[b].wins) + ',' +
+                                    '"cs":' + Math.abs(teams[a + 1].cs - teams[b].cs) + ',' +
+                                    '"pd":' + Math.abs(teams[a + 1].pd - teams[b].pd) + ',' +
+                                    '"rankSum":' + ((a + 1) + b) +
                                     '}');
                             dSwaps.push(dSwap);
                         }
@@ -659,6 +736,7 @@ function pair3() {
                             teams[b] = teams[a];
                             teams[a] = swapTeam;
                             swapList.push([Math.min(teams[a].number, teams[b].number), Math.max(teams[a].number, teams[b].number)]);
+                            b = teams.length;
                         }
                     }
                 } else {//perform the dSwap
@@ -668,9 +746,18 @@ function pair3() {
                             teams[b] = teams[a + 1];
                             teams[a + 1] = swapTeam;
                             swapList.push([Math.min(teams[a + 1].number, teams[b].number), Math.max(teams[a + 1].number, teams[b].number)]);
+                            b = teams.length;
                         }
                     }
                 }
+
+                //print swap to console
+                console.log("Swap Performed:");
+                for (var b = 0; b < teams.length; b += 2) {
+                    console.log(teams[b].number + " v. " + teams[b + 1].number);
+                }
+
+                //restart the loop
                 a = teams.length;
             }
         }
@@ -683,18 +770,18 @@ function pair3() {
     if (snakeFlag < .5) {
         for (var a = 0; a < teams.length; a += 2) {
             if (a % 4 === 0) {
-                let pairing = `{"plaintiff":${teams[a].number},"defense":${teams[a + 1].number}`;
+                var pairing = `{"plaintiff":${teams[a].number},"defense":${teams[a + 1].number}}`;
             } else {
-                let pairing = `{"plaintiff":${teams[a + 1].number},"defense":${teams[a].number}`;
+                var pairing = `{"plaintiff":${teams[a + 1].number},"defense":${teams[a].number}}`;
             }
             r3pairings.push(JSON.parse(pairing));
         }
     } else {
         for (var a = 0; a < teams.length; a += 2) {
             if (a % 4 === 0) {
-                let pairing = `{"plaintiff":${teams[a + 1].number},"defense":${teams[a].number}`;
+                var pairing = `{"plaintiff":${teams[a + 1].number},"defense":${teams[a].number}}`;
             } else {
-                let pairing = `{"plaintiff":${teams[a].number},"defense":${teams[a + 1].number}`;
+                var pairing = `{"plaintiff":${teams[a].number},"defense":${teams[a + 1].number}}`;
             }
             r3pairings.push(JSON.parse(pairing));
         }
@@ -757,6 +844,12 @@ function pair4() {
         }
     }
 
+for(var a =0;a<teams.length;a++){
+    if(teams[a].number ===1985){
+        teams[a].wins = -1;
+    }
+}
+
     //divide teams into needs plaintiff and needs defense
     var needsPlaintiffTeams = [];
     var needsDefenseTeams = [];
@@ -771,6 +864,12 @@ function pair4() {
     //rank teams
     var plaintiffTeams = rankTeams(needsPlaintiffTeams);
     var defenseTeams = rankTeams(needsDefenseTeams);
+
+    //print intial pairings
+    console.log("Initial Pairings:");
+    for (var a = 0; a < plaintiffTeams.length; a++) {
+        console.log(plaintiffTeams[a].number + " v. " + defenseTeams[a].number);
+    }
 
     //check for conflicts
     var noConflicts = !pairingsHaveConflicts(plaintiffTeams, defenseTeams);
@@ -790,25 +889,44 @@ function pair4() {
                 for (var b = 0; b < plaintiffTeams.length; b++) {
                     if (b !== a) {
                         //check that proposed swap has not already occurred for plaintiff teams
-                        if (!swapList.includes([Math.min(plaintiffTeams[a].number, plaintiffTeams[b].number), Math.max(plaintiffTeams[a].number, plaintiffTeams[b].number)])) {
+                        let pSwapExists = false;
+                        let dSwapExists = false;
+                        let pSwapMin = Math.min(plaintiffTeams[a].number, plaintiffTeams[b].number);
+                        let pSwapMax = Math.max(plaintiffTeams[a].number, plaintiffTeams[b].number);
+                        let dSwapMin = Math.min(defenseTeams[a].number, defenseTeams[b].number);
+                        let dSwapMax = Math.max(defenseTeams[a].number, defenseTeams[b].number);
+                        for (var c = 0; c < swapList.length; c++) {
+                            if (swapList[c][0] === pSwapMin) {
+                                if (swapList[c][1] === pSwapMax) {
+                                    pSwapExists = true;
+                                }
+                            } else if (swapList[c][0] === dSwapMin) {
+                                if (swapList[c][1] === dSwapMax) {
+                                    dSwapExists = true;
+                                }
+                            }
+                        }
+
+                        //check that proposed swap has not already occurred for plaintiff teams
+                        if (!pSwapExists) {
                             var pSwap = JSON.parse('{' +
                                     '"number":' + plaintiffTeams[b].number + ',' +
                                     '"rank":' + Math.abs(a - b) + ',' +
                                     '"wins":' + Math.abs(plaintiffTeams[a].wins - plaintiffTeams[b].wins) + ',' +
                                     '"cs":' + Math.abs(plaintiffTeams[a].cs - plaintiffTeams[b].cs) + ',' +
-                                    '"pd":' + Math.abs(plaintiffTeams[a].cs - plaintiffTeams[b].cs) + ',' +
+                                    '"pd":' + Math.abs(plaintiffTeams[a].pd - plaintiffTeams[b].pd) + ',' +
                                     '"rankSum":' + (a + b) +
                                     '}');
                             pSwaps.push(pSwap);
                         }
                         //check that proposed swap has not already occurred for defense teams
-                        if (!swapList.includes([Math.min(defenseTeams[a].number, defenseTeams[b].number), Math.max(defenseTeams[a].number, defenseTeams[b].number)])) {
+                        if (!dSwapExists) {
                             var dSwap = JSON.parse('{' +
                                     '"number":' + defenseTeams[b].number + ',' +
                                     '"rank":' + Math.abs(a - b) + ',' +
                                     '"wins":' + Math.abs(defenseTeams[a].wins - defenseTeams[b].wins) + ',' +
                                     '"cs":' + Math.abs(defenseTeams[a].cs - defenseTeams[b].cs) + ',' +
-                                    '"pd":' + Math.abs(defenseTeams[a].cs - defenseTeams[b].cs) + ',' +
+                                    '"pd":' + Math.abs(defenseTeams[a].pd - defenseTeams[b].pd) + ',' +
                                     '"rankSum":' + (a + b) +
                                     '}');
                             dSwaps.push(dSwap);
@@ -829,7 +947,8 @@ function pair4() {
                             var swapTeam = plaintiffTeams[b];
                             plaintiffTeams[b] = plaintiffTeams[a];
                             plaintiffTeams[a] = swapTeam;
-                            swapList.push([Math.min(plaintiffTeams[a], plaintiffTeams[b]), Math.max(plaintiffTeams[a], plaintiffTeams[b])]);
+                            swapList.push([Math.min(plaintiffTeams[a].number, plaintiffTeams[b].number), Math.max(plaintiffTeams[a].number, plaintiffTeams[b].number)]);
+                            b = plaintiffTeams.length;
                         }
                     }
                 } else {
@@ -838,10 +957,19 @@ function pair4() {
                             var swapTeam = defenseTeams[b];
                             defenseTeams[b] = defenseTeams[a];
                             defenseTeams[a] = swapTeam;
-                            swapList.push([Math.min(defenseTeams[a], defenseTeams[b]), Math.max(defenseTeams[a], defenseTeams[b])]);
+                            swapList.push([Math.min(defenseTeams[a].number, defenseTeams[b].number), Math.max(defenseTeams[a].number, defenseTeams[b].number)]);
+                            b = defenseTeams.length;
                         }
                     }
                 }
+
+                //print swap to console
+                console.log("Swap Performed:");
+                for (var b = 0; b < plaintiffTeams.length; b++) {
+                    console.log(plaintiffTeams[b].number + " v. " + defenseTeams[b].number);
+                }
+
+                //restart the loop
                 a = plaintiffTeams.length;
 
             }

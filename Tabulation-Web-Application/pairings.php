@@ -67,13 +67,13 @@ if ($_SESSION["isAdmin"]) {
                             . "data-judge='$c' "
                             . "style='grid-row:" . ($b + 3) . "; grid-column:" . ($c + 3) . "'>\n";
                     for ($d = 0; $d < sizeOf($judges); $d++) {
-                        if ($a === 1 && $judges[$d]["round1"]) {
+                        if ($a === 1) {
                             $judgeSelects[$a][$b][$c] .= "<option value='" . $judges[$d]["id"] . "'>" . $judges[$d]["name"] . "</option>\n";
-                        } else if ($a === 2 && $judges[$d]["round2"]) {
+                        } else if ($a === 2) {
                             $judgeSelects[$a][$b][$c] .= "<option value='" . $judges[$d]["id"] . "'>" . $judges[$d]["name"] . "</option>\n";
-                        } else if ($a === 3 && $judges[$d]["round3"]) {
+                        } else if ($a === 3) {
                             $judgeSelects[$a][$b][$c] .= "<option value='" . $judges[$d]["id"] . "'>" . $judges[$d]["name"] . "</option>\n";
-                        } else if ($a === 4 && $judges[$d]["round4"]) {
+                        } else if ($a === 4) {
                             $judgeSelects[$a][$b][$c] .= "<option value='" . $judges[$d]["id"] . "'>" . $judges[$d]["name"] . "</option>\n";
                         }
                     }
@@ -234,7 +234,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         </div>
         <ul class="nav nav-tabs">
             <li class="nav-item">
-                <a class="nav-link active" data-toggle="tab" href="#round1">Round 1</a>
+                <a class="nav-link" data-toggle="tab" href="#round1">Round 1</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" data-toggle="tab" href="#round2">Round 2</a>

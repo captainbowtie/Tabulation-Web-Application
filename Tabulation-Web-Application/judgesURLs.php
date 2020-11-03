@@ -156,7 +156,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         </div>
         <ul class="nav nav-tabs">
             <li class="nav-item">
-                <a class="nav-link active" data-toggle="tab" href="#round1">Round 1</a>
+                <a class="nav-link" data-toggle="tab" href="#round1">Round 1</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" data-toggle="tab" href="#round2">Round 2</a>

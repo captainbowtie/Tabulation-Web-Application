@@ -29,17 +29,6 @@ class Ballot {
 
 }
 
-function createBallot($pairing) {
-    $db = new Database();
-    $conn = $db->getConnection();
-    $stmt = $conn->prepare("INSERT INTO ballots (pairing) VALUES (?)");
-    $stmt->bind_param('i', $pairing);
-    $stmt->execute();
-    $stmt->close();
-    $conn->close();
-    return true;
-}
-
 function createBallots($ballots) {
     $db = new Database();
     $conn = $db->getConnection();

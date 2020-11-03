@@ -17,10 +17,11 @@
  */
 
 session_start();
-if ($_SESSION["isCoach"] || $_SESSION[isAdmin]) {
+if ($_SESSION["isCoach"] || $_SESSION["isAdmin"]) {
     require_once __DIR__ . "/config.php";
     require_once SITE_ROOT . "/database.php";
     require_once SITE_ROOT . "/objects/settings.php";
+    require_once SITE_ROOT . "/loginHeader.php";
 
     $db = new Database();
     $conn = $db->getConnection();
@@ -350,69 +351,70 @@ Like a teatray in the sky.";
         while ($row = $coachResult->fetch_assoc()) {
             array_push($coachedTeams, intval($row["team"]));
         }
-    }
-    $coachResult->close();
-    for ($a = 0; $a < sizeOf($ballots); $a++) {
-        if (!in_array($ballots[$a]["pID"], $coachedTeams) && !in_array($ballots[$a]["dID"], $coachedTeams)) {
-            $ballots[$a]["pOpenComments"] = "N/A";
-            $ballots[$a]["dOpenComments"] = "N/A";
-            $ballots[$a]["pDx1Comments"] = "N/A";
-            $ballots[$a]["pWDx1Comments"] = "N/A";
-            $ballots[$a]["pWCx1Comments"] = "N/A";
-            $ballots[$a]["dCx1Comments"] = "N/A";
-            $ballots[$a]["pDx2Comments"] = "N/A";
-            $ballots[$a]["pWDx2Comments"] = "N/A";
-            $ballots[$a]["pWCx2Comments"] = "N/A";
-            $ballots[$a]["dCx2Comments"] = "N/A";
-            $ballots[$a]["pDx3Comments"] = "N/A";
-            $ballots[$a]["pWDx3Comments"] = "N/A";
-            $ballots[$a]["pWCx3Comments"] = "N/A";
-            $ballots[$a]["dCx3Comments"] = "N/A";
-            $ballots[$a]["dDx1Comments"] = "N/A";
-            $ballots[$a]["dWDx1Comments"] = "N/A";
-            $ballots[$a]["dWCx1Comments"] = "N/A";
-            $ballots[$a]["pCx1Comments"] = "N/A";
-            $ballots[$a]["dDx2Comments"] = "N/A";
-            $ballots[$a]["dWDx2Comments"] = "N/A";
-            $ballots[$a]["dWCx2Comments"] = "N/A";
-            $ballots[$a]["pCx2Comments"] = "N/A";
-            $ballots[$a]["dDx3Comments"] = "N/A";
-            $ballots[$a]["dWDx3Comments"] = "N/A";
-            $ballots[$a]["dWCx3Comments"] = "N/A";
-            $ballots[$a]["pCx3Comments"] = "N/A";
-            $ballots[$a]["pCloseComments"] = "N/A";
-            $ballots[$a]["dCloseComments"] = "N/A";
-            $ballots[$a]["witness1"] = "N/A";
-            $ballots[$a]["witness2"] = "N/A";
-            $ballots[$a]["witness3"] = "N/A";
-            $ballots[$a]["witness4"] = "N/A";
-            $ballots[$a]["witness5"] = "N/A";
-            $ballots[$a]["witness6"] = "N/A";
-            $ballots[$a]["pOpenAttorney"] = "N/A";
-            $ballots[$a]["dOpenAttorney"] = "N/A";
-            $ballots[$a]["pDx1Attorney"] = "N/A";
-            $ballots[$a]["pWDx1Witness"] = "N/A";
-            $ballots[$a]["dCx1Attorney"] = "N/A";
-            $ballots[$a]["pDx2Attorney"] = "N/A";
-            $ballots[$a]["pWDx2Witness"] = "N/A";
-            $ballots[$a]["dCx2Attorney"] = "N/A";
-            $ballots[$a]["pDx3Attorney"] = "N/A";
-            $ballots[$a]["pWDx3Witness"] = "N/A";
-            $ballots[$a]["dCx3Attorney"] = "N/A";
-            $ballots[$a]["dDx1Attorney"] = "N/A";
-            $ballots[$a]["dWDx1Witness"] = "N/A";
-            $ballots[$a]["pCx1Attorney"] = "N/A";
-            $ballots[$a]["dDx2Attorney"] = "N/A";
-            $ballots[$a]["dWDx2Witness"] = "N/A";
-            $ballots[$a]["pCx2Attorney"] = "N/A";
-            $ballots[$a]["dDx3Attorney"] = "N/A";
-            $ballots[$a]["dWDx3Witness"] = "N/A";
-            $ballots[$a]["pCx3Attorney"] = "N/A";
-            $ballots[$a]["pCloseAttorney"] = "N/A";
-            $ballots[$a]["dCloseAttorney"] = "N/A";
+        $coachResult->close();
+
+
+        for ($a = 0; $a < sizeOf($ballots); $a++) {
+            if (!in_array($ballots[$a]["pID"], $coachedTeams) && !in_array($ballots[$a]["dID"], $coachedTeams)) {
+                $ballots[$a]["pOpenComments"] = "N/A";
+                $ballots[$a]["dOpenComments"] = "N/A";
+                $ballots[$a]["pDx1Comments"] = "N/A";
+                $ballots[$a]["pWDx1Comments"] = "N/A";
+                $ballots[$a]["pWCx1Comments"] = "N/A";
+                $ballots[$a]["dCx1Comments"] = "N/A";
+                $ballots[$a]["pDx2Comments"] = "N/A";
+                $ballots[$a]["pWDx2Comments"] = "N/A";
+                $ballots[$a]["pWCx2Comments"] = "N/A";
+                $ballots[$a]["dCx2Comments"] = "N/A";
+                $ballots[$a]["pDx3Comments"] = "N/A";
+                $ballots[$a]["pWDx3Comments"] = "N/A";
+                $ballots[$a]["pWCx3Comments"] = "N/A";
+                $ballots[$a]["dCx3Comments"] = "N/A";
+                $ballots[$a]["dDx1Comments"] = "N/A";
+                $ballots[$a]["dWDx1Comments"] = "N/A";
+                $ballots[$a]["dWCx1Comments"] = "N/A";
+                $ballots[$a]["pCx1Comments"] = "N/A";
+                $ballots[$a]["dDx2Comments"] = "N/A";
+                $ballots[$a]["dWDx2Comments"] = "N/A";
+                $ballots[$a]["dWCx2Comments"] = "N/A";
+                $ballots[$a]["pCx2Comments"] = "N/A";
+                $ballots[$a]["dDx3Comments"] = "N/A";
+                $ballots[$a]["dWDx3Comments"] = "N/A";
+                $ballots[$a]["dWCx3Comments"] = "N/A";
+                $ballots[$a]["pCx3Comments"] = "N/A";
+                $ballots[$a]["pCloseComments"] = "N/A";
+                $ballots[$a]["dCloseComments"] = "N/A";
+                $ballots[$a]["witness1"] = "N/A";
+                $ballots[$a]["witness2"] = "N/A";
+                $ballots[$a]["witness3"] = "N/A";
+                $ballots[$a]["witness4"] = "N/A";
+                $ballots[$a]["witness5"] = "N/A";
+                $ballots[$a]["witness6"] = "N/A";
+                $ballots[$a]["pOpenAttorney"] = "N/A";
+                $ballots[$a]["dOpenAttorney"] = "N/A";
+                $ballots[$a]["pDx1Attorney"] = "N/A";
+                $ballots[$a]["pWDx1Witness"] = "N/A";
+                $ballots[$a]["dCx1Attorney"] = "N/A";
+                $ballots[$a]["pDx2Attorney"] = "N/A";
+                $ballots[$a]["pWDx2Witness"] = "N/A";
+                $ballots[$a]["dCx2Attorney"] = "N/A";
+                $ballots[$a]["pDx3Attorney"] = "N/A";
+                $ballots[$a]["pWDx3Witness"] = "N/A";
+                $ballots[$a]["dCx3Attorney"] = "N/A";
+                $ballots[$a]["dDx1Attorney"] = "N/A";
+                $ballots[$a]["dWDx1Witness"] = "N/A";
+                $ballots[$a]["pCx1Attorney"] = "N/A";
+                $ballots[$a]["dDx2Attorney"] = "N/A";
+                $ballots[$a]["dWDx2Witness"] = "N/A";
+                $ballots[$a]["pCx2Attorney"] = "N/A";
+                $ballots[$a]["dDx3Attorney"] = "N/A";
+                $ballots[$a]["dWDx3Witness"] = "N/A";
+                $ballots[$a]["pCx3Attorney"] = "N/A";
+                $ballots[$a]["pCloseAttorney"] = "N/A";
+                $ballots[$a]["dCloseAttorney"] = "N/A";
+            }
         }
     }
-
     $conn->close();
 } else {
     die("Access denied.");
@@ -478,6 +480,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <title>Comments</title>
     </head>
     <body>
+        <?php echo $header;?>
         <div id="selects">
             <select id="round"> 
                 <option value="1">Round 1</option>
@@ -518,7 +521,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     <div class="card-header">
                         <h2 class="mb-0">
                             <button id="witness1Header" class="btn btn-link" type="button" data-toggle="collapse" data-target="#p1Scores" aria-expanded="true" aria-controls="p1Scores">
-                                Plaintiff Witness 1 (<?php echo $pairing["Wit1"]; //TODO: make Wit lower case        ?>)
+                                Plaintiff Witness 1 (<?php echo $pairing["Wit1"]; //TODO: make Wit lower case          ?>)
                             </button>
                         </h2>
                     </div>
