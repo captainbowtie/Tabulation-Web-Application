@@ -146,6 +146,8 @@ $(document).ready(function () {
             $('.nav-tabs a[href="#round2"]').tab('show');
         } else if (round1PairingsExist) {
             $('.nav-tabs a[href="#round1"]').tab('show');
+        } else {
+            $('.nav-tabs a[href="#round1"]').tab('show');
         }
     });
 });
@@ -478,7 +480,7 @@ function pair2() {
     //print intial pairings
     console.log("Initial Pairings:");
     for (var a = 0; a < plaintiffTeams.length; a++) {
-        console.log(plaintiffTeams[a].number + " " + plaintiffTeams[a].wins + " PD: "+ plaintiffTeams[a].pd + " v. " + defenseTeams[a].number + " " + defenseTeams[a].wins + " PD: "+ defenseTeams[a].pd);
+        console.log(plaintiffTeams[a].number + " " + plaintiffTeams[a].wins + " PD: " + plaintiffTeams[a].pd + " v. " + defenseTeams[a].number + " " + defenseTeams[a].wins + " PD: " + defenseTeams[a].pd);
     }
 
     //check for and resolve conflicts
@@ -577,7 +579,7 @@ function pair2() {
                 //print swap to console
                 console.log("Swap Performed:");
                 for (var b = 0; b < plaintiffTeams.length; b++) {
-                    console.log(plaintiffTeams[b].number + " " + plaintiffTeams[b].wins + " PD: "+ plaintiffTeams[b].pd + " v. " + defenseTeams[b].number + " " + defenseTeams[b].wins + " PD: "+ defenseTeams[b].pd);
+                    console.log(plaintiffTeams[b].number + " " + plaintiffTeams[b].wins + " PD: " + plaintiffTeams[b].pd + " v. " + defenseTeams[b].number + " " + defenseTeams[b].wins + " PD: " + defenseTeams[b].pd);
 
                 }
 
@@ -643,8 +645,8 @@ function pair3() {
     }
 
     //give bye-team a record of -1
-    for(var a=0;a<teams.length;a++){
-        if(teams[a].number===1985){
+    for (var a = 0; a < teams.length; a++) {
+        if (teams[a].number === 1985) {
             teams[a].wins = -1;
         }
     }
@@ -844,11 +846,11 @@ function pair4() {
         }
     }
 
-for(var a =0;a<teams.length;a++){
-    if(teams[a].number ===1985){
-        teams[a].wins = -1;
+    for (var a = 0; a < teams.length; a++) {
+        if (teams[a].number === 1985) {
+            teams[a].wins = -1;
+        }
     }
-}
 
     //divide teams into needs plaintiff and needs defense
     var needsPlaintiffTeams = [];
