@@ -26,7 +26,7 @@ $conn = $db->getConnection();
 
 //Query to create table
 $query = "CREATE TABLE IF NOT EXISTS pairings (
-id INT(3) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 round INT(1) UNSIGNED NOT NULL,
 plaintiff INT(4) UNSIGNED NOT NULL,
 defense INT(4) UNSIGNED NOT NULL,

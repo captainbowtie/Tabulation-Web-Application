@@ -32,6 +32,14 @@ class Ballot {
 function createBallots($ballots) {
     $db = new Database();
     $conn = $db->getConnection();
+    
+    //delete old ballots for the pairings in question
+    $deleteStatement = $conn->prepare("DELETE FROM ballots WHERE pairing = ?");
+    for($a = 0;$a<sizeOf($ballots);$a++){
+        $deleteStatement->bind_param('i',intval($ballots[$a]["pairing"]));
+        $deleteStatement->execute();
+    }
+    
     //create ballots
     $stmt = $conn->prepare("INSERT INTO ballots (pairing,judge,url) VALUES (?,?,?)");
     for ($a = 0; $a < sizeOf($ballots); $a++) {

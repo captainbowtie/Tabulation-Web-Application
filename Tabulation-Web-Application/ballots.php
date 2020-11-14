@@ -91,7 +91,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 <label for="dOpen" class="dSpeechLabel">∆ Open:</label>
                 <p class="dSpeech" id="dOpen"></p>
             </div>
-        <h3>Witness 1</h3>
+            <h3>Witness 1</h3>
             <div id="p1Scores" class="plaintiffWitness">
                 <label for="pDx1" class="pDxLabel" id="pDx1Label">Dx (Atty):</label>
                 <p class="pDx" id="pDx1"></p>
@@ -102,8 +102,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 <label for="pWCx1" class="pWCxLabel" id="pWCx1Label">Cx (Wit):</label>
                 <p class="pWCx" id="pWCx1"></p>
             </div>
-        <h3>Witness 2</h3>
+            <h3>Witness 2</h3>
             <div id="p2Scores" class="plaintiffWitness">
+                <label for="pDx2" class="pDxLabel" id="pDx2Label">Dx (Atty):</label>
+                <p class="pDx" id="pDx2"></p>
+                <label for="dCx2" class="dCxLabel" id="dCx2Label">Cx (Atty):</label>
+                <p class="dCx" id="dCx2"></p>
+                <label for="pWDx2" class="pWDxLabel" id="pWDx2Label">Dx (Wit):</label>
+                <p class="pWDx" id="pWDx2"></p>
+                <label for="pWCx2" class="pWCxLabel" id="pWCx2Label">Cx (Wit):</label>
+                <p class="pWCx" id="pWCx2"></p></div>
+            <h3>Witness 3</h3>
+            <div id="p3Scores" class="plaintiffWitness">
                 <label for="pDx3" class="pDxLabel" id="pDx3Label">Dx (Atty):</label>
                 <p class="pDx" id="pDx3"></p>
                 <label for="dCx3" class="dCxLabel" id="dCx3Label">Cx (Atty):</label>
@@ -113,18 +123,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 <label for="pWCx3" class="pWCxLabel" id="pWCx3Label">Cx (Wit):</label>
                 <p class="pWCx" id="pWCx3"></p>
             </div>
-        <h3>Witness 3</h3>
-            <div id="p3Scores" class="plaintiffWitness">
-                <label for="pDx2" class="pDxLabel" id="pDx2Label">Dx (Atty):</label>
-                <p class="pDx" id="pDx2"></p>
-                <label for="dCx2" class="dCxLabel" id="dCx2Label">Cx (Atty):</label>
-                <p class="dCx" id="dCx2"></p>
-                <label for="pWDx2" class="pWDxLabel" id="pWDx2Label">Dx (Wit):</label>
-                <p class="pWDx" id="pWDx2"></p>
-                <label for="pWCx2" class="pWCxLabel" id="pWCx2Label">Cx (Wit):</label>
-                <p class="pWCx" id="pWCx2"></p>
-            </div>
-        <h3>Witness 4</h3>
+            <h3>Witness 4</h3>
             <div id="d1Scores" class="defenseWitness">
                 <label for="pCx1" class="pCxLabel" id="pCx1Label">Cx (Atty):</label>
                 <p class="pCx" id="pCx1"></p>
@@ -136,7 +135,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 <label for="dWCx1" class="dWCxLabel" id="dWCx1Label">Cx (Wit):</label>
                 <p class="dWCx" id="dWCx1"></p>
             </div>
-        <h3>Witness 5</h3>
+            <h3>Witness 5</h3>
             <div id="d2Scores" class="defenseWitness">
                 <label for="pCx2" class="pCxLabel" id="pCx2Label">Cx (Atty):</label>
                 <p class="pCx" id="pCx2"></p>
@@ -148,7 +147,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 <label for="dWCx2" class="dWCxLabel" id="dWCx2Label">Cx (Wit):</label>
                 <p class="dWCx" id="dWCx2"></p>
             </div>
-        <h3>Witness 6</h3>
+            <h3>Witness 6</h3>
             <div id="d3Scores" class="defenseWitness">
                 <label for="pCx3" class="pCxLabel" id="pCx3Label">Cx (Atty):</label>
                 <p class="pCx" id="pCx3"></p>
@@ -160,7 +159,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 <label for="dWCx3" class="dWCxLabel" id="dWCx3Label">Cx (Wit):</label>
                 <p class="dWCx" id="dWCx3"></p>
             </div>
-        <h3>Closing</h3>
+            <h3>Closing</h3>
             <div id="closingScores" class='speech'>
                 <label for="pClose" class="pSpeechLabel">π Close:</label>
                 <p class="pSpeech" id="pClose"></p>
