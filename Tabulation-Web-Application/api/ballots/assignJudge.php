@@ -39,7 +39,7 @@ if ($_SESSION["isAdmin"]) {
         
         $ballotData = findPairingID($pdjData);
 
-        if (createBallots($ballotData)) {
+        if (assignJudge($ballotData)) {
             // set response code - 201 created
             http_response_code(201);
 

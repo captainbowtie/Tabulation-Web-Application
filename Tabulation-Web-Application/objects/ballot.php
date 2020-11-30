@@ -19,6 +19,7 @@
 
 require_once __DIR__ . "/../config.php";
 require_once SITE_ROOT . "/database.php";
+require_once SITE_ROOT . "/objects/settings.php";
 
 class Ballot {
 
@@ -29,25 +30,68 @@ class Ballot {
 
 }
 
-function createBallots($ballots) {
+function createBallots($pairings) {
     $db = new Database();
     $conn = $db->getConnection();
-    
+
     //delete old ballots for the pairings in question
     $deleteStatement = $conn->prepare("DELETE FROM ballots WHERE pairing = ?");
-    for($a = 0;$a<sizeOf($ballots);$a++){
-        $deleteStatement->bind_param('i',intval($ballots[$a]["pairing"]));
+    for ($a = 0; $a < sizeOf($pairings); $a++) {
+        $deleteStatement->bind_param('i', intval($pairings[$a]["id"]));
         $deleteStatement->execute();
     }
-    
+
+    //determine judges per round
+    $judgesPerRound = getSetting("judgesPerRound");
+
     //create ballots
-    $stmt = $conn->prepare("INSERT INTO ballots (pairing,judge,url) VALUES (?,?,?)");
-    for ($a = 0; $a < sizeOf($ballots); $a++) {
-        $url = bin2hex(random_bytes(32));
-        $stmt->bind_param('iis', intval($ballots[$a]["pairing"]), intval($ballots[$a]["judge"]), $url);
-        //execute statement as many times as there are needed ballots
-        $stmt->execute();
+    $stmt = $conn->prepare("INSERT INTO ballots (pairing,url) VALUES (?,?)");
+    for ($a = 0; $a < sizeOf($pairings); $a++) {
+        for ($b = 0; $b < $judgesPerRound; $b++) {
+            $url = bin2hex(random_bytes(32));
+            $stmt->bind_param('is', intval($pairings[$a]["id"]), $url);
+            //execute statement as many times as there are needed ballots
+            $stmt->execute();
+        }
     }
+    $stmt->close();
+    $conn->close();
+    return true;
+}
+
+function assignJudge($ballotData) {
+    //open connection and prepare statement
+    $db = new Database();
+    $conn = $db->getConnection();
+    $stmt = $conn->prepare("UPDATE ballots SET judge = ? WHERE id = ?");
+
+    //determine all pairing ids
+    $pairingIds = [];
+    for ($a = 0; $a < sizeOf($ballotData); $a++) {
+        array_push($pairingIds, $ballotData[$a]["pairing"]);
+    }
+    $pairingIdsUnique = array_values(array_unique($pairingIds));
+var_dump($pairingIdsUnique);
+    //update judge assignments
+    for ($a = 0; $a < sizeOf($pairingIdsUnique); $a++) {
+        //for each pairing id, find the ballots corresponding to that pairing
+        $ballots = getPairingBallots($pairingIdsUnique[$a]);
+        //then, for that same pairing, find the assigned judge ids
+        $judges = [];
+        for ($b = 0; $b < sizeOf($ballotData); $b++) {
+            if ($pairingIdsUnique[$a] === $ballotData[$b]["pairing"]) {
+                array_push($judges, $ballotData[$b]["judge"]);
+            }
+        }
+        //finally, for each ballot assigned to the pairing, assign one of the judges
+        //these arrays should be the same size, so it works out
+        for ($b = 0; $b < sizeOf($ballots); $b++) {
+            $stmt->bind_param('ii', $judges[$b], $ballots[$b]["id"]);
+            $stmt->execute();
+        }
+    }
+
+
     $stmt->close();
     $conn->close();
     return true;

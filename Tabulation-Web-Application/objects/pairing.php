@@ -84,9 +84,17 @@ function createPairings($round, $pairings) {
     }
     $stmt->close();
 
-    //close connection, return true
+    //get newly created pairing ids and return them
+    $idQuery = "SELECT id FROM pairings WHERE round = $round";
+    $idResult = $conn->query($idQuery);
+    $a = 0;
+    $pairingIds = [];
+    while ($idRow = $idResult->fetch_assoc()) {
+        $pairingIds[$a]["id"] = $idRow["id"];
+        $a++;
+    }
     $conn->close();
-    return true;
+    return $pairingIds;
 }
 
 function getAllPairings() {

@@ -228,13 +228,7 @@ $("#submitJudges1").on("click", function (e) {
     e.preventDefault();
     if (validateJudges(1)) {
         let ballots = generateBallots(1);
-        if (round1BallotsExist) {
-            ballotWarningBallots = ballots;
-            ballotsWarningModal("Round 1 judges are already assigned. Submitting these assignments will overwrite the existing assignments.");
-        } else {
-            submitBallots(ballots);
-        }
-
+        submitBallots(ballots);
     }
 });
 
@@ -242,41 +236,23 @@ $("#submitJudges2").on("click", function (e) {
     e.preventDefault();
     if (validateJudges(2)) {
         let ballots = generateBallots(2);
-        if (round2BallotsExist) {
-            ballotWarningBallots = ballots;
-            ballotsWarningModal("Round 2 judges are already assigned. Submitting these assignments will overwrite the existing assignments.");
-        } else {
             submitBallots(ballots);
-        }
-
     }
 });
 
 $("#submitJudges3").on("click", function (e) {
     e.preventDefault();
     if (validateJudges(3)) {
-        let ballots = generateBallots(3);
-        if (round3BallotsExist) {
-            ballotWarningBallots = ballots;
-            ballotsWarningModal("Round 3 judges are already assigned. Submitting these assignments will overwrite the existing assignments.");
-        } else {
+        let ballots = generateBallots(3);    
             submitBallots(ballots);
-        }
-
     }
 });
 
 $("#submitJudges4").on("click", function (e) {
     e.preventDefault();
     if (validateJudges(4)) {
-        let ballots = generateBallots(4);
-        if (round4BallotsExist) {
-            ballotWarningBallots = ballots;
-            ballotsWarningModal("Round 4 judges are already assigned. Submitting these assignments will overwrite the existing assignments.");
-        } else {
+        let ballots = generateBallots(4);  
             submitBallots(ballots);
-        }
-
     }
 });
 
@@ -363,7 +339,7 @@ function submitPairings(round) {
 function submitBallots(ballots) {
     data = JSON.stringify(ballots);
     $.ajax({
-        url: "../api/ballots/create.php",
+        url: "../api/ballots/assignJudge.php",
         method: "POST",
         data: data,
         dataType: "json"

@@ -154,7 +154,7 @@ if ($_SESSION["isCoach"] || $_SESSION["isAdmin"]) {
 
                 //if round 4 ballots shouln't be visible, clear the ballot
 
-                if (intVal($row["round"]) === 4 && !getSetting("roundFourBallotsViewable")) {
+                if (intVal($row["round"]) === 4 && !getSetting("roundFourBallotsViewable") && !$_SESSION["isAdmin"]) {
                     $ballots[$a]["pairing"] = intval($row["pairing"]);
                     $ballots[$a]["pOpen"] = 0;
                     $ballots[$a]["dOpen"] = 0;
