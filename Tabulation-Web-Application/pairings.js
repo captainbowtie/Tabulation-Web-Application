@@ -21,6 +21,7 @@ var pairings;
 var ballots;
 var impermissibles;
 var judges;
+var judgeConflicts;
 let round1PairingsExist = false;
 let round2PairingsExist = false;
 let round3PairingsExist = false;
@@ -224,6 +225,353 @@ $("#submit4").on("click", function (e) {
     }
 });
 
+$("#assignJudges1").on("click", function (e) {
+    e.preventDefault();
+
+    //find the judges that can judge this round
+    let round1Judges = [];
+    for (var a = 0; a < judges.length; a++) {
+        if (judges[a].round3 === true) {
+            round1Judges.push(judges[a]);
+        }
+    }
+
+    //create judge assignment array
+    let judgesPerRound = parseInt($("#judgesPerRound").val());
+    let judgeAssignments = [];
+    let i = 0;
+    for (var a = 0; a < pairings.length; a++) {
+        if (pairings[a].round === 1) {
+            judgeAssignments[i] = [];
+            judgeAssignments[i][0] = pairings[a];
+            for (var b = 0; b < judgesPerRound; b++) {
+                judgeAssignments[i][b + 1] = 0;
+            }
+            i++;
+        }
+    }
+
+    //ye olde monte carlo way of assigning judges
+    let judgesValid = false;
+    while (!judgesValid) {
+        let shuffledJudges = shuffle(round1Judges);
+        for (var a = 0; a < judgesPerRound; a++) {
+            for (var b = 0; b < judgeAssignments.length; b++) {
+                if (shuffledJudges.length > 0) {
+                    judgeAssignments[b][a + 1] = shuffledJudges[0];
+                    shuffledJudges.splice(0, 1);
+                } else {
+                    alert("Insufficient judges for round 1. Please assign manually");
+                    judgesValid = true;
+                }
+
+            }
+        }
+
+        //check if assignments valid
+        judgesValid = judgeAssignmentsValid(judgeAssignments);
+    }
+
+    for (var a = 0; a < judgeAssignments.length; a++) {
+        for (var b = 1; b < judgeAssignments[a].length; b++) {
+            $(`.judgeSelect[data-round='1'][data-pairing='${a}'][data-judge='${b - 1}']`).val(judgeAssignments[a][b].id);
+        }
+    }
+
+});
+
+$("#assignJudges2").on("click", function (e) {
+    e.preventDefault();
+
+    //find the judges that can judge this round
+    let round2Judges = [];
+    for (var a = 0; a < judges.length; a++) {
+        if (judges[a].round3 === true) {
+            round2Judges.push(judges[a]);
+        }
+    }
+
+    //sort the judges into tiers
+    let tier1 = [];
+    let tier2 = [];
+    let tier3 = [];
+    for (var a = 0; a < round2Judges.length; a++) {
+        switch (round2Judges[a].category) {
+            case 1:
+                tier1.push(round2Judges[a]);
+                break;
+            case 2:
+                tier2.push(round2Judges[a]);
+                break;
+            case 3:
+                tier3.push(round2Judges[a]);
+                break;
+        }
+    }
+
+    //create judge assignment array
+    let judgesPerRound = parseInt($("#judgesPerRound").val());
+    let judgeAssignments = [];
+    let i = 0;
+    for (var a = 0; a < pairings.length; a++) {
+        if (pairings[a].round === 2) {
+            judgeAssignments[i] = [];
+            judgeAssignments[i][0] = pairings[a];
+            for (var b = 0; b < judgesPerRound; b++) {
+                judgeAssignments[i][b + 1] = 0;
+            }
+            i++;
+        }
+    }
+
+    //ye olde monte carlo way of assigning judges
+    let judgesValid = false;
+    while (!judgesValid) {
+        let shuffledTier1 = shuffle(tier1);
+        let shuffledTier2 = shuffle(tier2);
+        let shuffledTier3 = shuffle(tier3);
+        for (var a = 0; a < judgesPerRound; a++) {
+            for (var b = 0; b < judgeAssignments.length; b++) {
+                if (shuffledTier1.length > 0) {
+                    judgeAssignments[b][a + 1] = shuffledTier1[0];
+                    shuffledTier1.splice(0, 1);
+                } else if (shuffledTier2.length > 0) {
+                    judgeAssignments[b][a + 1] = shuffledTier2[0];
+                    shuffledTier2.splice(0, 1);
+                } else if (shuffledTier3.length > 0) {
+                    judgeAssignments[b][a + 1] = shuffledTier3[0];
+                    shuffledTier3.splice(0, 1);
+                } else {
+                    alert("Insufficient judges for round 3. Please assign manually");
+                    judgesValid = true;
+                }
+
+            }
+        }
+
+        //check if assignments valid
+        judgesValid = judgeAssignmentsValid(judgeAssignments);
+    }
+
+    for (var a = 0; a < judgeAssignments.length; a++) {
+        for (var b = 1; b < judgeAssignments[a].length; b++) {
+            $(`.judgeSelect[data-round='2'][data-pairing='${a}'][data-judge='${b - 1}']`).val(judgeAssignments[a][b].id);
+        }
+    }
+
+});
+
+$("#assignJudges3").on("click", function (e) {
+    e.preventDefault();
+
+    //find the judges that can judge this round
+    let round3Judges = [];
+    for (var a = 0; a < judges.length; a++) {
+        if (judges[a].round3 === true) {
+            round3Judges.push(judges[a]);
+        }
+    }
+
+    //sort the judges into tiers
+    let tier1 = [];
+    let tier2 = [];
+    let tier3 = [];
+    for (var a = 0; a < round3Judges.length; a++) {
+        switch (round3Judges[a].category) {
+            case 1:
+                tier1.push(round3Judges[a]);
+                break;
+            case 2:
+                tier2.push(round3Judges[a]);
+                break;
+            case 3:
+                tier3.push(round3Judges[a]);
+                break;
+        }
+    }
+
+    //create judge assignment array
+    let judgesPerRound = parseInt($("#judgesPerRound").val());
+    let judgeAssignments = [];
+    let i = 0;
+    for (var a = 0; a < pairings.length; a++) {
+        if (pairings[a].round === 3) {
+            judgeAssignments[i] = [];
+            judgeAssignments[i][0] = pairings[a];
+            for (var b = 0; b < judgesPerRound; b++) {
+                judgeAssignments[i][b + 1] = 0;
+            }
+            i++;
+        }
+    }
+
+    //ye olde monte carlo way of assigning judges
+    let judgesValid = false;
+    while (!judgesValid) {
+        let shuffledTier1 = shuffle(tier1);
+        let shuffledTier2 = shuffle(tier2);
+        let shuffledTier3 = shuffle(tier3);
+        for (var a = 0; a < judgesPerRound; a++) {
+            for (var b = 0; b < judgeAssignments.length; b++) {
+                if (shuffledTier1.length > 0) {
+                    judgeAssignments[b][a + 1] = shuffledTier1[0];
+                    shuffledTier1.splice(0, 1);
+                } else if (shuffledTier2.length > 0) {
+                    judgeAssignments[b][a + 1] = shuffledTier2[0];
+                    shuffledTier2.splice(0, 1);
+                } else if (shuffledTier3.length > 0) {
+                    judgeAssignments[b][a + 1] = shuffledTier3[0];
+                    shuffledTier3.splice(0, 1);
+                } else {
+                    alert("Insufficient judges for round 3. Please assign manually");
+                    judgesValid = true;
+                }
+
+            }
+        }
+
+        //check if assignments valid
+        judgesValid = judgeAssignmentsValid(judgeAssignments);
+    }
+
+    for (var a = 0; a < judgeAssignments.length; a++) {
+        for (var b = 1; b < judgeAssignments[a].length; b++) {
+            $(`.judgeSelect[data-round='3'][data-pairing='${a}'][data-judge='${b - 1}']`).val(judgeAssignments[a][b].id);
+        }
+    }
+
+});
+
+$("#assignJudges4").on("click", function (e) {
+    e.preventDefault();
+
+    //find the judges that can judge this round
+    let round4Judges = [];
+    for (var a = 0; a < judges.length; a++) {
+        if (judges[a].round4 === true) {
+            round4Judges.push(judges[a]);
+        }
+    }
+
+    //sort the judges into tiers
+    let tier1 = [];
+    let tier2 = [];
+    let tier3 = [];
+    for (var a = 0; a < round4Judges.length; a++) {
+        switch (round4Judges[a].category) {
+            case 1:
+                tier1.push(round4Judges[a]);
+                break;
+            case 2:
+                tier2.push(round4Judges[a]);
+                break;
+            case 3:
+                tier3.push(round4Judges[a]);
+                break;
+        }
+    }
+
+    //create judge assignment array
+    let judgesPerRound = parseInt($("#judgesPerRound").val());
+    let judgeAssignments = [];
+    let i = 0;
+    for (var a = 0; a < pairings.length; a++) {
+        if (pairings[a].round === 4) {
+            judgeAssignments[i] = [];
+            judgeAssignments[i][0] = pairings[a];
+            for (var b = 0; b < judgesPerRound; b++) {
+                judgeAssignments[i][b + 1] = 0;
+            }
+            i++;
+        }
+    }
+
+    //ye olde monte carlo way of assigning judges
+    let judgesValid = false;
+    while (!judgesValid) {
+        let shuffledTier1 = shuffle(tier1);
+        let shuffledTier2 = shuffle(tier2);
+        let shuffledTier3 = shuffle(tier3);
+        for (var a = 0; a < judgesPerRound; a++) {
+            for (var b = 0; b < judgeAssignments.length; b++) {
+                if (shuffledTier1.length > 0) {
+                    judgeAssignments[b][a + 1] = shuffledTier1[0];
+                    shuffledTier1.splice(0, 1);
+                } else if (shuffledTier2.length > 0) {
+                    judgeAssignments[b][a + 1] = shuffledTier2[0];
+                    shuffledTier2.splice(0, 1);
+                } else if (shuffledTier3.length > 0) {
+                    judgeAssignments[b][a + 1] = shuffledTier3[0];
+                    shuffledTier3.splice(0, 1);
+                } else {
+                    alert("Insufficient judges for round 4. Please assign manually");
+                    judgesValid = true;
+                }
+
+            }
+        }
+
+        //check if assignments valid
+        judgesValid = judgeAssignmentsValid(judgeAssignments);
+    }
+
+    for (var a = 0; a < judgeAssignments.length; a++) {
+        for (var b = 1; b < judgeAssignments[a].length; b++) {
+            $(`.judgeSelect[data-round='4'][data-pairing='${a}'][data-judge='${b - 1}']`).val(judgeAssignments[a][b].id);
+        }
+    }
+
+});
+
+function judgeAssignmentsValid(judgeAssignments) {
+    if (coachConflictsExist(judgeAssignments) || pastRoundConflictsExist(judgeAssignments)) {
+        return false;
+    } else {
+        return true;
+    }
+
+    function coachConflictsExist(judgeAssignments) {
+        for (var a = 0; a < judgeAssignments.length; a++) {
+            for (var b = 1; b <= judgeAssignments[a].length; b++) {
+                for (var c = 0; c < judgeConflicts.length; c++) {
+                    let judgeID = judgeConflicts[c].judge;
+                    let teamNumber = judgeConflicts[c].team;
+                    if (judgeAssignments[a][0]["plaintiff"] === teamNumber && judgeAssignments[a][1]["id"] === judgeID) {
+                        return true;
+                    } else if (judgeAssignments[a][0]["defense"] === teamNumber && judgeAssignments[a][1]["id"] === judgeID) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+    function pastRoundConflictsExist(judgeAssignments) {
+        for (var a = 0; a < judgeAssignments.length; a++) {
+            for (var b = 1; b < judgeAssignments[a].length; b++) {
+                for (var c = 0; c < ballots.length; c++) {
+                    if (ballots[c].judge === judgeAssignments[a][b].id) {
+                        for (var d = 0; d < pairings.length; d++) {
+                            if (pairings[d].id === ballots[c].pairing) {
+                                if (pairings[d].plaintiff === judgeAssignments[a][0]["plaintiff"]) {
+                                    return true;
+                                } else if (pairings[d].defense === judgeAssignments[a][0]["plaintiff"]) {
+                                    return true;
+                                } else if (pairings[d].plaintiff === judgeAssignments[a][0]["defense"]) {
+                                    return true;
+                                } else if (pairings[d].defense === judgeAssignments[a][0]["defense"]) {
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+}
+
 $("#submitJudges1").on("click", function (e) {
     e.preventDefault();
     if (validateJudges(1)) {
@@ -236,23 +584,23 @@ $("#submitJudges2").on("click", function (e) {
     e.preventDefault();
     if (validateJudges(2)) {
         let ballots = generateBallots(2);
-            submitBallots(ballots);
+        submitBallots(ballots);
     }
 });
 
 $("#submitJudges3").on("click", function (e) {
     e.preventDefault();
     if (validateJudges(3)) {
-        let ballots = generateBallots(3);    
-            submitBallots(ballots);
+        let ballots = generateBallots(3);
+        submitBallots(ballots);
     }
 });
 
 $("#submitJudges4").on("click", function (e) {
     e.preventDefault();
     if (validateJudges(4)) {
-        let ballots = generateBallots(4);  
-            submitBallots(ballots);
+        let ballots = generateBallots(4);
+        submitBallots(ballots);
     }
 });
 
@@ -986,12 +1334,13 @@ function pairingsHaveConflicts(plaintiffTeams, defenseTeams) {
 
 function updateData() {
     return new Promise(function (resolve, reject) {
-        Promise.all([getTeams(), getPairings(), getImpermissibles(), getBallots(), getJudges]).then(data => {
+        Promise.all([getTeams(), getPairings(), getImpermissibles(), getBallots(), getJudges(), getJudgeConflicts()]).then(data => {
             teams = data[0];
             pairings = data[1];
             impermissibles = data[2];
             ballots = data[3];
             judges = data[4];
+            judgeConflicts = data[5];
             resolve();
         });
     });
@@ -1016,6 +1365,17 @@ function getPairings() {
             dataType: "json"
         }).then(pairings => {
             resolve(pairings);
+        });
+    });
+}
+
+function getJudgeConflicts() {
+    return new Promise(function (resolve, reject) {
+        $.ajax({
+            url: "../api/judgeConflicts/getAll.php",
+            dataType: "json"
+        }).then(judgeConflicts => {
+            resolve(judgeConflicts);
         });
     });
 }
@@ -1087,6 +1447,28 @@ function getJudges() {
             url: "../api/judges/getAll.php",
             dataType: "json"
         }).then(judges => {
+            for (var a = 0; a < judges.length; a++) {
+                if (judges[a].round1 === "1") {
+                    judges[a].round1 = true;
+                } else {
+                    judges[a].round1 = false;
+                }
+                if (judges[a].round2 === "1") {
+                    judges[a].round2 = true;
+                } else {
+                    judges[a].round2 = false;
+                }
+                if (judges[a].round3 === "1") {
+                    judges[a].round3 = true;
+                } else {
+                    judges[a].round3 = false;
+                }
+                if (judges[a].round4 === "1") {
+                    judges[a].round4 = true;
+                } else {
+                    judges[a].round4 = false;
+                }
+            }
             resolve(judges);
         });
     });
@@ -1213,7 +1595,8 @@ function sortByPairing(objA, objB) {
 
 //cc-by-sa by CoolAJ86 https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
 function shuffle(array) {
-    var currentIndex = array.length, temporaryValue, randomIndex;
+    var clone = array.slice(0);
+    var currentIndex = clone.length, temporaryValue, randomIndex;
 
     // While there remain elements to shuffle...
     while (0 !== currentIndex) {
@@ -1223,10 +1606,10 @@ function shuffle(array) {
         currentIndex -= 1;
 
         // And swap it with the current element.
-        temporaryValue = array[currentIndex];
-        array[currentIndex] = array[randomIndex];
-        array[randomIndex] = temporaryValue;
+        temporaryValue = clone[currentIndex];
+        clone[currentIndex] = clone[randomIndex];
+        clone[randomIndex] = temporaryValue;
     }
 
-    return array;
+    return clone;
 }

@@ -66,6 +66,8 @@ function getAllConflicts() {
     $db = new Database();
     $conn = $db->getConnection();
     
+    
+    $conflicts = [];
     $query = "SELECT * FROM judgeConflicts";
     if ($result = $conn->query($query)) {
         $a = 0;
