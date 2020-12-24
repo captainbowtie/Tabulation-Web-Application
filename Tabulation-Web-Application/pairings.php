@@ -286,6 +286,27 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 </div>
             </div>
         </div>
+        
+        <!-- Judge Assignment Modal -->
+        <div id="judgeAssignmentModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Assigning Judges</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p id="judgeAssignmentText">Error. Modal unexpectedly displayed.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" id="keepTrying">Keep Trying</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal" id="randomJudges">Assign Randomly</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <script src="pairings.js"></script>
     </body>

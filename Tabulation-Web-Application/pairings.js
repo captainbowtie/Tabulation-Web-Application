@@ -229,244 +229,81 @@ $("#assignJudges1").on("click", function (e) {
     e.preventDefault();
 
     //find the judges that can judge this round
-    let round1Judges = [];
+    let roundJudges = [];
     for (var a = 0; a < judges.length; a++) {
         if (judges[a].round3 === true) {
-            round1Judges.push(judges[a]);
+            roundJudges.push(judges[a]);
         }
     }
 
-    //create judge assignment array
-    let judgesPerRound = parseInt($("#judgesPerRound").val());
-    let judgeAssignments = [];
-    let i = 0;
-    for (var a = 0; a < pairings.length; a++) {
-        if (pairings[a].round === 1) {
-            judgeAssignments[i] = [];
-            judgeAssignments[i][0] = pairings[a];
-            for (var b = 0; b < judgesPerRound; b++) {
-                judgeAssignments[i][b + 1] = 0;
-            }
-            i++;
-        }
-    }
+    let judgeAssignments = assignJudgesRandomly(roundJudges);
 
-    //ye olde monte carlo way of assigning judges
-    let judgesValid = false;
-    while (!judgesValid) {
-        let shuffledJudges = shuffle(round1Judges);
-        for (var a = 0; a < judgesPerRound; a++) {
-            for (var b = 0; b < judgeAssignments.length; b++) {
-                if (shuffledJudges.length > 0) {
-                    judgeAssignments[b][a + 1] = shuffledJudges[0];
-                    shuffledJudges.splice(0, 1);
-                } else {
-                    alert("Insufficient judges for round 1. Please assign manually");
-                    judgesValid = true;
-                }
-
-            }
-        }
-
-        //check if assignments valid
-        judgesValid = judgeAssignmentsValid(judgeAssignments);
-    }
-
-    for (var a = 0; a < judgeAssignments.length; a++) {
-        for (var b = 1; b < judgeAssignments[a].length; b++) {
-            $(`.judgeSelect[data-round='1'][data-pairing='${a}'][data-judge='${b - 1}']`).val(judgeAssignments[a][b].id);
-        }
-    }
-
+    fillJudgeSelects(judgeAssignments, 1);
 });
 
 $("#assignJudges2").on("click", function (e) {
     e.preventDefault();
 
     //find the judges that can judge this round
-    let round2Judges = [];
+    let roundJudges = [];
     for (var a = 0; a < judges.length; a++) {
         if (judges[a].round3 === true) {
-            round2Judges.push(judges[a]);
+            roundJudges.push(judges[a]);
         }
     }
 
-    //sort the judges into tiers
-    let tier1 = [];
-    let tier2 = [];
-    let tier3 = [];
-    for (var a = 0; a < round2Judges.length; a++) {
-        switch (round2Judges[a].category) {
-            case 1:
-                tier1.push(round2Judges[a]);
-                break;
-            case 2:
-                tier2.push(round2Judges[a]);
-                break;
-            case 3:
-                tier3.push(round2Judges[a]);
-                break;
-        }
-    }
+    let judgeAssignments = assignJudges(roundJudges);
 
-    //create judge assignment array
-    let judgesPerRound = parseInt($("#judgesPerRound").val());
-    let judgeAssignments = [];
-    let i = 0;
-    for (var a = 0; a < pairings.length; a++) {
-        if (pairings[a].round === 2) {
-            judgeAssignments[i] = [];
-            judgeAssignments[i][0] = pairings[a];
-            for (var b = 0; b < judgesPerRound; b++) {
-                judgeAssignments[i][b + 1] = 0;
-            }
-            i++;
-        }
-    }
-
-    //ye olde monte carlo way of assigning judges
-    let judgesValid = false;
-    while (!judgesValid) {
-        let shuffledTier1 = shuffle(tier1);
-        let shuffledTier2 = shuffle(tier2);
-        let shuffledTier3 = shuffle(tier3);
-        for (var a = 0; a < judgesPerRound; a++) {
-            for (var b = 0; b < judgeAssignments.length; b++) {
-                if (shuffledTier1.length > 0) {
-                    judgeAssignments[b][a + 1] = shuffledTier1[0];
-                    shuffledTier1.splice(0, 1);
-                } else if (shuffledTier2.length > 0) {
-                    judgeAssignments[b][a + 1] = shuffledTier2[0];
-                    shuffledTier2.splice(0, 1);
-                } else if (shuffledTier3.length > 0) {
-                    judgeAssignments[b][a + 1] = shuffledTier3[0];
-                    shuffledTier3.splice(0, 1);
-                } else {
-                    alert("Insufficient judges for round 3. Please assign manually");
-                    judgesValid = true;
-                }
-
-            }
-        }
-
-        //check if assignments valid
-        judgesValid = judgeAssignmentsValid(judgeAssignments);
-    }
-
-    for (var a = 0; a < judgeAssignments.length; a++) {
-        for (var b = 1; b < judgeAssignments[a].length; b++) {
-            $(`.judgeSelect[data-round='2'][data-pairing='${a}'][data-judge='${b - 1}']`).val(judgeAssignments[a][b].id);
-        }
-    }
-
+    fillJudgeSelects(judgeAssignments, 2);
 });
 
 $("#assignJudges3").on("click", function (e) {
     e.preventDefault();
 
     //find the judges that can judge this round
-    let round3Judges = [];
+    let roundJudges = [];
     for (var a = 0; a < judges.length; a++) {
         if (judges[a].round3 === true) {
-            round3Judges.push(judges[a]);
+            roundJudges.push(judges[a]);
         }
     }
 
-    //sort the judges into tiers
-    let tier1 = [];
-    let tier2 = [];
-    let tier3 = [];
-    for (var a = 0; a < round3Judges.length; a++) {
-        switch (round3Judges[a].category) {
-            case 1:
-                tier1.push(round3Judges[a]);
-                break;
-            case 2:
-                tier2.push(round3Judges[a]);
-                break;
-            case 3:
-                tier3.push(round3Judges[a]);
-                break;
-        }
-    }
+    let judgeAssignments = assignJudges(roundJudges);
 
-    //create judge assignment array
-    let judgesPerRound = parseInt($("#judgesPerRound").val());
-    let judgeAssignments = [];
-    let i = 0;
-    for (var a = 0; a < pairings.length; a++) {
-        if (pairings[a].round === 3) {
-            judgeAssignments[i] = [];
-            judgeAssignments[i][0] = pairings[a];
-            for (var b = 0; b < judgesPerRound; b++) {
-                judgeAssignments[i][b + 1] = 0;
-            }
-            i++;
-        }
-    }
-
-    //ye olde monte carlo way of assigning judges
-    let judgesValid = false;
-    while (!judgesValid) {
-        let shuffledTier1 = shuffle(tier1);
-        let shuffledTier2 = shuffle(tier2);
-        let shuffledTier3 = shuffle(tier3);
-        for (var a = 0; a < judgesPerRound; a++) {
-            for (var b = 0; b < judgeAssignments.length; b++) {
-                if (shuffledTier1.length > 0) {
-                    judgeAssignments[b][a + 1] = shuffledTier1[0];
-                    shuffledTier1.splice(0, 1);
-                } else if (shuffledTier2.length > 0) {
-                    judgeAssignments[b][a + 1] = shuffledTier2[0];
-                    shuffledTier2.splice(0, 1);
-                } else if (shuffledTier3.length > 0) {
-                    judgeAssignments[b][a + 1] = shuffledTier3[0];
-                    shuffledTier3.splice(0, 1);
-                } else {
-                    alert("Insufficient judges for round 3. Please assign manually");
-                    judgesValid = true;
-                }
-
-            }
-        }
-
-        //check if assignments valid
-        judgesValid = judgeAssignmentsValid(judgeAssignments);
-    }
-
-    for (var a = 0; a < judgeAssignments.length; a++) {
-        for (var b = 1; b < judgeAssignments[a].length; b++) {
-            $(`.judgeSelect[data-round='3'][data-pairing='${a}'][data-judge='${b - 1}']`).val(judgeAssignments[a][b].id);
-        }
-    }
-
+    fillJudgeSelects(judgeAssignments, 3);
 });
 
 $("#assignJudges4").on("click", function (e) {
     e.preventDefault();
 
     //find the judges that can judge this round
-    let round4Judges = [];
+    let roundJudges = [];
     for (var a = 0; a < judges.length; a++) {
         if (judges[a].round4 === true) {
-            round4Judges.push(judges[a]);
+            roundJudges.push(judges[a]);
         }
     }
 
+    let judgeAssignments = assignJudges(roundJudges);
+
+    fillJudgeSelects(judgeAssignments, 4);
+});
+
+function assignJudges(roundJudges) {
     //sort the judges into tiers
     let tier1 = [];
     let tier2 = [];
     let tier3 = [];
-    for (var a = 0; a < round4Judges.length; a++) {
-        switch (round4Judges[a].category) {
+    for (var a = 0; a < roundJudges.length; a++) {
+        switch (roundJudges[a].category) {
             case 1:
-                tier1.push(round4Judges[a]);
+                tier1.push(roundJudges[a]);
                 break;
             case 2:
-                tier2.push(round4Judges[a]);
+                tier2.push(roundJudges[a]);
                 break;
             case 3:
-                tier3.push(round4Judges[a]);
+                tier3.push(roundJudges[a]);
                 break;
         }
     }
@@ -488,6 +325,8 @@ $("#assignJudges4").on("click", function (e) {
 
     //ye olde monte carlo way of assigning judges
     let judgesValid = false;
+    let insufficientJudges = false;
+    let attemptCounter = 0;
     while (!judgesValid) {
         let shuffledTier1 = shuffle(tier1);
         let shuffledTier2 = shuffle(tier2);
@@ -505,23 +344,83 @@ $("#assignJudges4").on("click", function (e) {
                     shuffledTier3.splice(0, 1);
                 } else {
                     alert("Insufficient judges for round 4. Please assign manually");
-                    judgesValid = true;
+                    insufficientJudges = true;
                 }
 
             }
         }
 
         //check if assignments valid
-        judgesValid = judgeAssignmentsValid(judgeAssignments);
+        if (insufficientJudges) {
+            alert("Insufficent judges to assign automatically. Please assign manually.")
+            judgesValid = true;
+        } else if (attemptCounter === 100000) {
+            $("#judgeAssignmentText").html("Unable to assign judges according to the AMTA rulebook after 100,000 attempts. Keep trying or assign randomly instead?");
+            $("#judgeAssignmentModal").modal();
+        } else {
+            judgesValid = judgeAssignmentsValid(judgeAssignments);
+        }
     }
+    return judgeAssignments;
+}
 
-    for (var a = 0; a < judgeAssignments.length; a++) {
-        for (var b = 1; b < judgeAssignments[a].length; b++) {
-            $(`.judgeSelect[data-round='4'][data-pairing='${a}'][data-judge='${b - 1}']`).val(judgeAssignments[a][b].id);
+function assignJudgesRandomly(roundJudges) {
+//create judge assignment array
+    let judgesPerRound = parseInt($("#judgesPerRound").val());
+    let judgeAssignments = [];
+    let i = 0;
+    for (var a = 0; a < pairings.length; a++) {
+        if (pairings[a].round === 1) {
+            judgeAssignments[i] = [];
+            judgeAssignments[i][0] = pairings[a];
+            for (var b = 0; b < judgesPerRound; b++) {
+                judgeAssignments[i][b + 1] = 0;
+            }
+            i++;
         }
     }
 
-});
+    //ye olde monte carlo way of assigning judges
+    let judgesValid = false;
+    let attemptCounter = 0;
+    let insufficientJudges = false;
+    while (!judgesValid) {
+        let shuffledJudges = shuffle(roundJudges);
+        for (var a = 0; a < judgesPerRound; a++) {
+            for (var b = 0; b < judgeAssignments.length; b++) {
+                if (shuffledJudges.length > 0) {
+                    judgeAssignments[b][a + 1] = shuffledJudges[0];
+                    shuffledJudges.splice(0, 1);
+                } else {
+                    insufficientJudges = true;
+                }
+
+            }
+        }
+
+        //check if assignments valid
+        if (insufficientJudges) {
+            alert("Insufficient judges for round. Please assign manually");
+            judgesValid = true;
+        } else if (attemptCounter === 100000) {
+            judgesValid = true;
+            $("#judgeAssignmentText").html("Unable to assign judges according to the AMTA rulebook after 100,000 attempts. Keep trying or assign randomly instead?");
+            $("#judgeAssignmentModal").modal();
+        } else {
+            judgesValid = judgeAssignmentsValid(judgeAssignments);
+        }
+        attemptCounter++;
+    }
+    return judgeAssignments;
+}
+
+function fillJudgeSelects(judgeAssignments, round) {
+    for (var a = 0; a < judgeAssignments.length; a++) {
+        for (var b = 1; b < judgeAssignments[a].length; b++) {
+            $(`.judgeSelect[data-round='${round}'][data-pairing='${a}'][data-judge='${b - 1}']`).val(judgeAssignments[a][b].id);
+        }
+    }
+}
 
 function judgeAssignmentsValid(judgeAssignments) {
     if (coachConflictsExist(judgeAssignments) || pastRoundConflictsExist(judgeAssignments)) {
