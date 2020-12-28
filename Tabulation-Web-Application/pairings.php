@@ -301,8 +301,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                         <p id="judgeAssignmentText">Error. Modal unexpectedly displayed.</p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal" id="keepTrying">Keep Trying</button>
-                        <button type="button" class="btn btn-default" data-dismiss="modal" id="randomJudges">Assign Randomly</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal" data-round="1" id="keepTrying">Keep Trying</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal" data-round="1" id="randomJudges">Assign Randomly</button>
                     </div>
                 </div>
             </div>
