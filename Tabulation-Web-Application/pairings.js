@@ -349,35 +349,42 @@ function assignJudges(round) {
             alert("Insufficent judges to assign automatically. Please assign manually.");
             judgesValid = true;
         } else if (attemptCounter === 100000) {
+            $("#judgeAssignmentText").html("Unable to assign judges according to the AMTA rulebook after 100,000 attempts. Keep trying or assign randomly instead?");
             displayAttemptModal(round);
             judgesValid = true;
         } else {
             judgesValid = judgeAssignmentsValid(judgeAssignments);
             attemptCounter++;
             if (judgesValid) {
-                fillJudgeAssignments(judgeAssignments, round);
+                fillJudgeSelects(judgeAssignments, round);
             }
         }
     }
 }
 
 function displayAttemptModal(round) {
-    $("#judgeAssignmentText").html("Unable to assign judges according to the AMTA rulebook after 100,000 attempts. Keep trying or assign randomly instead?");
     $("#randomJudges").prop("data-round", round);
     $("#keepTrying").prop("data-round", round);
-    $("#judgeAssignmentModal").modal();
+    $("#judgeAssignmentModal").modal("show");
 }
 
 $("#randomJudges").click(function (e) {
     e.preventDefault();
     $("#judgeAssignmentModal").modal("hide");
-    assignJudgesRandomly(parseInt(this.prop("data-round")));
+    $("#judgeAssignmentModal").on("hidden.bs.modal", function (e) {
+        $(e.currentTarget).unbind();
+        assignJudgesRandomly(parseInt($("#randomJudges").prop("data-round")));
+    });
 });
 
 $("#keepTrying").click(function (e) {
     e.preventDefault();
     $("#judgeAssignmentModal").modal("hide");
-    assignJudges(parseInt(this.prop("data-round")));
+    $("#judgeAssignmentModal").on("hidden.bs.modal", function (e) {
+        $(e.currentTarget).unbind();
+        assignJudges(parseInt($("#keepTrying").prop("data-round")));
+    });
+
 });
 
 function assignJudgesRandomly(round) {
@@ -437,9 +444,9 @@ function assignJudgesRandomly(round) {
         let shuffledJudges = shuffle(roundJudges);
         for (var a = 0; a < judgesPerRound; a++) {
             for (var b = 0; b < judgeAssignments.length; b++) {
-                if (roundJudges.length > 0) {
-                    judgeAssignments[b][a + 1] = roundJudges[0];
-                    roundJudges.splice(0, 1);
+                if (shuffledJudges.length > 0) {
+                    judgeAssignments[b][a + 1] = shuffledJudges[0];
+                    shuffledJudges.splice(0, 1);
                 } else {
                     insufficientJudges = true;
                 }
@@ -458,7 +465,7 @@ function assignJudgesRandomly(round) {
             judgesValid = judgeAssignmentsValid(judgeAssignments);
             attemptCounter++;
             if (judgesValid) {
-                fillJudgeAssignments(judgeAssignments, round);
+                fillJudgeSelects(judgeAssignments, round);
             }
         }
     }
