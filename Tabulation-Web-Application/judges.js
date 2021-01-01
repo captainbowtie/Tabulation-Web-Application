@@ -25,7 +25,7 @@ $(document).ready(function () {
 $(".name").on("change", function () {
     let editRow = $(this).closest("tr");
     let judgeId = (editRow[0].id.substring(5));
-    updateJudge(judgeId, "name", $(this).val());
+    updateJudge(judgeId, "name", $(this).val().replace(/'/g, '’'));
 });
 
 $(".category").on("change", function () {
@@ -143,13 +143,13 @@ $("#newJudge").on("click", function () {
 });
 
 $("#addJudge").on("click", function () {
-    let judgeData = {"name": $("#name").val()};
+    let judgeData = {"name": $("#name").val().replace(/'/g, '’')};
     judgeData.category = $("#category").val();
     judgeData.round1 = $("#round1").prop("checked");
     judgeData.round2 = $("#round2").prop("checked");
     judgeData.round3 = $("#round3").prop("checked");
     judgeData.round4 = $("#round4").prop("checked");
-
+    
     $.ajax({
         url: "../api/judges/create.php",
         method: "POST",

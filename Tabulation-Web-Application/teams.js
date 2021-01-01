@@ -46,7 +46,7 @@ $("#updateTeam").on("click", function (e) {
 
 function newTeamHandler() {
     let number = $("#number").val();
-    let name = $("#name").val();
+    let name = $("#name").val().replace(/'/g, '’');
     if (!validateNumber(number)) {
         warningModal("Invalid team number: " + number);
     } else if (!validateName(name)) {
