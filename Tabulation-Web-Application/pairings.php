@@ -308,6 +308,26 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             </div>
         </div>
 
+        <!-- Odd Teams Warning Modal -->
+        <div id="oddTeamsModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Warning</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p id="ballotsWarningModalText">You have an odd number of teams Please return to the <a href="teams.php">Teams</a> page to fix.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Ignore</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
         <script src="pairings.js"></script>
     </body>
 </html>

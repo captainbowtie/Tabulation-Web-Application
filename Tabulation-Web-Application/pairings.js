@@ -150,12 +150,17 @@ $(document).ready(function () {
         } else {
             $('.nav-tabs a[href="#round1"]').tab('show');
         }
+
+        //if there are an odd number of teams, warn the user
+        if (teams.length % 2 !== 0) {
+            $("#oddTeamsModal").modal("toggle");
+        }
     });
 });
 
 $("#pair1").on("click", function (e) {
     e.preventDefault();
-    const pairings = pair1();
+    let pairings = pair1();
     for (let a = 0; a < pairings.length; a++) {
         $(`#round1p${a}`).val(pairings[a].plaintiff);
         $(`#round1d${a}`).val(pairings[a].defense);
@@ -164,7 +169,7 @@ $("#pair1").on("click", function (e) {
 
 $("#pair2").on("click", function (e) {
     e.preventDefault();
-    const pairings = pair2();
+    let pairings = pair2();
     for (let a = 0; a < pairings.length; a++) {
         $(`#round2p${a}`).val(pairings[a].plaintiff);
         $(`#round2d${a}`).val(pairings[a].defense);
@@ -173,7 +178,7 @@ $("#pair2").on("click", function (e) {
 
 $("#pair3").on("click", function (e) {
     e.preventDefault();
-    const pairings = pair3();
+    let pairings = pair3();
     for (let a = 0; a < pairings.length; a++) {
         $(`#round3p${a}`).val(pairings[a].plaintiff);
         $(`#round3d${a}`).val(pairings[a].defense);
@@ -182,7 +187,7 @@ $("#pair3").on("click", function (e) {
 
 $("#pair4").on("click", function (e) {
     e.preventDefault();
-    const pairings = pair4();
+    let pairings = pair4();
     for (let a = 0; a < pairings.length; a++) {
         $(`#round4p${a}`).val(pairings[a].plaintiff);
         $(`#round4d${a}`).val(pairings[a].defense);
@@ -1431,7 +1436,7 @@ function getJudges() {
 
 function rankTeams(teams) {
     let unsortedTeams = teams;
-    var sortFunction = function (team0, team1) {
+    const sortFunction = function (team0, team1) {
         //first check if wins is higher
         if (team0.wins < team1.wins) {
             return 1;
