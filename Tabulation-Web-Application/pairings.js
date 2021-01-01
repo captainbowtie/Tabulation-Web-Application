@@ -1047,9 +1047,8 @@ function pair3() {
 
 
     //return pairings, flipping the side assignment of half of them at random
-    const snakeFlag = Math.random();
     let r3pairings = [];
-    if (snakeFlag < .5) {
+    if ($("#snakeStart").val()==="true") {
         for (var a = 0; a < teams.length; a += 2) {
             if (a % 4 === 0) {
                 var pairing = `{"plaintiff":${teams[a].number},"defense":${teams[a + 1].number}}`;
