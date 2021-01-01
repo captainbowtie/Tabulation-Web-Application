@@ -1048,7 +1048,7 @@ function pair3() {
 
     //return pairings, flipping the side assignment of half of them at random
     let r3pairings = [];
-    if ($("#snakeStart").val()==="true") {
+    if ($("#snakeStart").val() === "true") {
         for (var a = 0; a < teams.length; a += 2) {
             if (a % 4 === 0) {
                 var pairing = `{"plaintiff":${teams[a].number},"defense":${teams[a + 1].number}}`;
@@ -1430,6 +1430,7 @@ function getJudges() {
 }
 
 function rankTeams(teams) {
+    let unsortedTeams = teams;
     var sortFunction = function (team0, team1) {
         //first check if wins is higher
         if (team0.wins < team1.wins) {
@@ -1449,19 +1450,26 @@ function rankTeams(teams) {
         } else if (team0.pd > team1.pd) {
             return -1;
         } else {
-            //Randomly break tie; eventually this should be changed to team number tie breaker
-            var coinflip = Math.random();
-            if (coinflip < .5) {
-                return 1;
+            //team number tie breaker
+            if ($("#tieBreaker").val() === "true") {
+                if (team0.number < team1.number) {
+                    return -1;
+                } else {
+                    return 1;
+                }
             } else {
-                return -1;
+                if (team0.number < team1.number) {
+                    return 1;
+                } else {
+                    return -1;
+                }
             }
         }
     };
 
-    teams = teams.sort(sortFunction);
+    let sortedTeams = unsortedTeams.sort(sortFunction);
 
-    return teams;
+    return sortedTeams;
 }
 
 function rankSwaps(swaps) {
