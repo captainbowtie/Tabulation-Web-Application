@@ -58,7 +58,7 @@ function newTeamHandler() {
 
 function updateTeamHandler() {
     let newNumber = $("#updateNumber").val();
-    let name = $("#updateName").val();
+    let name = $("#updateName").val().replace(/'/g, '’');
     if (!validateNumber(newNumber)) {
         warningModal("Invalid team number: " + newNumber);
     } else if (!validateName(name)) {
