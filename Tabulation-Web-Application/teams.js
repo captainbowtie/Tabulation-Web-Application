@@ -24,9 +24,19 @@ $("#addTeam").on("click", function (e) {
 
 $(".edit").on("click", function (e) {
     e.preventDefault();
-    existingNumber = $(this).attr("id").substring(4);
+    existingNumber = $(this).attr("data-number");
     let name = $("#" + existingNumber + "name").html();
     teamUpdateModal(name);
+});
+
+$(".delete").click(function(e){
+    e.preventDefault();
+    deleteModal($(this).attr("data-number"));
+});
+
+$("#deleteTeam").click(function(e){
+    e.preventDefault();
+    deleteTeam($(this).attr("data-number"));
 });
 
 $("#updateTeam").on("click", function (e) {
@@ -92,6 +102,22 @@ function updateTeam(newNumber, name) {
     });
 }
 
+function deleteTeam(number){
+    let deleteData = {"number":parseInt(number)};
+    $.ajax({
+        url: "../api/teams/delete.php",
+        method: "POST",
+        data: deleteData,
+        dataType: "json"
+    }).then(response => {
+        if (response.message === 0) {
+            window.location.reload();
+        } else {
+            warningModal(response.message);
+        }
+    });
+}
+
 function warningModal(warning) {
     $("#warningModalText").text(warning);
     $("#warningModal").modal();
@@ -101,6 +127,12 @@ function teamUpdateModal(name) {
     $("#updateNumber").val(existingNumber);
     $("#updateName").val(name);
     $("#teamUpdateModal").modal();
+}
+
+function deleteModal(number){
+    $("#deleteText").html(`Are you sure you want to delete team ${number}?`);
+    $("#deleteTeam").attr("data-number",number);
+    $("#deleteModal").modal("toggle");
 }
 
 function validateNumber(number) {

@@ -57,6 +57,19 @@ function updateTeam($existingNumber, $newNumber, $name) {
     return $teamUpdated;
 }
 
+function deleteTeam($number){
+    $teamDeleted = false;
+    $query = "DELETE FROM teams WHERE number = $number";
+    $db = new Database();
+    $conn = $db->getConnection();
+    $conn->query($query);
+    if($conn->affected_rows == 1){
+        $teamDeleted = true;
+    }
+    $conn->close();
+    return $teamDeleted;
+}
+
 function getAllTeams() {
     global $teams;
 

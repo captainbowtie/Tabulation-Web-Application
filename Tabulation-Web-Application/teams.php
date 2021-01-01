@@ -7,21 +7,24 @@ if ($_SESSION["isAdmin"]) {
     require_once SITE_ROOT . "/objects/team.php";
     require_once SITE_ROOT . "/loginHeader.php";
 
-    
+
 //prepare strings for team table
     $tableHTML = "";
     $teams = getAllTeams();
     if (!empty($teams)) {
         foreach ($teams as $team) {
+            $number = $team["number"];
+            $name = $team["name"];
             $tableHTML .= "<tr>\n";
-            $tableHTML .= "<td><a href='/team.php?number=" . $team["number"] . "'>" . $team["number"] . "</a></td>\n";
-            $tableHTML .= "<td id='" . $team["number"] . "name'>" . $team["name"] . "</td>\n";
-            $tableHTML .= "<td>" . "<a href='' class='edit' id='edit" . $team["number"] . "'>edit</a>" . "</td>\n";
+            $tableHTML .= "<td><a href='/team.php?number=$number'>$number</a></td>\n";
+            $tableHTML .= "<td id='{$number}name'>$name</td>\n";
+            $tableHTML .= "<td><a href='' class='edit' data-number='$number'>edit</a></td>\n";
+            $tableHTML .= "<td><a href='' class='delete' data-number='$number'>delete</a></td>\n";
             $tableHTML .= "</tr>\n";
         }
     }
-}else{
-    die ("Access denied");
+} else {
+    die("Access denied");
 }
 ?>
 
@@ -61,10 +64,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <title></title>
     </head>
     <body>
-<?php
-echo $navigation;
-echo $header;
-?>
+        <?php
+        echo $navigation;
+        echo $header;
+        ?>
         <div id="teamTable"></div>
         <table>
             <tr>
@@ -72,9 +75,9 @@ echo $header;
                 <th>Name</th>
                 <th></th>
             </tr>
-<?php
-echo $tableHTML;
-?>
+            <?php
+            echo $tableHTML;
+            ?>
             <tr>
                 <td>
                     <label for="number"></label>
@@ -117,7 +120,8 @@ echo $tableHTML;
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                         <h4 class="modal-title">Update Team</h4>
                     </div>
-                    <div class="modal-body"><form>
+                    <div class="modal-body">
+                        <form>
                             <label for="updateNumber">Number:</label>
                             <input type="number" id="updateNumber" name="updateNumber" size="5" max="1999">
                             <label for="updateName">Name:</label>
@@ -126,6 +130,26 @@ echo $tableHTML;
                     </div>
                     <div class="modal-footer">
                         <button type="button" id="updateTeam" class="btn btn-default" data-dismiss="modal">Update</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Delete team Modal -->
+        <div id="deleteModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Delete Team</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p id="deleteText">Error: delete modal unexpectedly displayed.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="deleteTeam" class="btn btn-default" data-dismiss="modal">Delete</button>
                     </div>
                 </div>
             </div>
