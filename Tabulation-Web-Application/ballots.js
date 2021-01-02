@@ -48,7 +48,7 @@ $("#ballot").on("change", function () {
 
 $("#unlockButton").on("click", function () {
     let ballotNumber = Number($("#ballot").val().substring(7));
-    let unlockData = {"id": ballotNumber};
+    let unlockData = {"id":ballotNumber};
     $.ajax({
         url: "../api/ballots/unlock.php",
         method: "POST",
@@ -118,16 +118,7 @@ function fillBallot() {
     let ballot;
     for (var a = 0; a < ballots.length; a++) {
         if (ballots[a].id === ballotNumber) {
-            if(ballots[a].judge !== 0){//check that not a one-judge panel
-                ballot = ballots[a];
-            }else{//if a one-judge panel, then need to find the ballot acutally used by the panel
-                for(var b = 0;b<ballots.length;b++){
-                    if(a !== b && ballots[a].pairing === ballots[b].pairing){
-                        ballot = ballots[b];
-                    }
-                }
-            }
-            
+            ballot = ballots[a];
         }
     }
     //put numbers in ballot
