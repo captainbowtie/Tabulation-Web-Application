@@ -71,7 +71,7 @@ function assignJudge($ballotData) {
         array_push($pairingIds, $ballotData[$a]["pairing"]);
     }
     $pairingIdsUnique = array_values(array_unique($pairingIds));
-var_dump($pairingIdsUnique);
+    var_dump($pairingIdsUnique);
     //update judge assignments
     for ($a = 0; $a < sizeOf($pairingIdsUnique); $a++) {
         //for each pairing id, find the ballots corresponding to that pairing
@@ -343,7 +343,7 @@ function updateIndividual($ballot) {
 }
 
 function lockBallot($ballot) {
-    $query = "UPDATE ballots SET " .
+    $ballotQuery = "UPDATE ballots SET " .
             "pOpen = " . $ballot["pOpen"] . ", " .
             "pOpenComments = '" . addslashes($ballot["pOpenComments"]) . "', " .
             "dOpen = " . $ballot["dOpen"] . ", " .
@@ -413,7 +413,87 @@ function lockBallot($ballot) {
 
     $db = new Database();
     $conn = $db->getConnection();
-    $conn->query($query);
+    //write ballot to database
+    $conn->query($ballotQuery);
+
+    //check if part of one-judge panel
+    $pairingQuery = "SELECT pairing FROM ballots WHERE url = '" . $ballot["url"] . "'";
+    $pairingResult = $conn->query($pairingQuery);
+    $pairingRow = $pairingResult->fetch_assoc();
+    $pairing = $pairingRow["pairing"];
+    $oneJudgeQuery = "SELECT judge FROM ballots WHERE pairing = $pairing && url != '" . $ballot["url"] . "'";
+    $oneJudgeResult = $conn->query($oneJudgeQuery);
+    $oneJudgeRow = $oneJudgeResult->fetch_assoc();
+    if (intval($oneJudgeRow["judge"]) === 0) {//if it is a one judge panel, duplicate the ballot
+        $duplicateQuery = "UPDATE ballots SET " .
+                "pOpen = " . $ballot["pOpen"] . ", " .
+                "pOpenComments = '" . addslashes($ballot["pOpenComments"]) . "', " .
+                "dOpen = " . $ballot["dOpen"] . ", " .
+                "dOpenComments = '" . addslashes($ballot["dOpenComments"]) . "', " .
+                "pDx1 = " . $ballot["pDx1"] . ", " .
+                "pDx1Comments = '" . addslashes($ballot["pDx1Comments"]) . "', " .
+                "pWDx1 = " . $ballot["pWDx1"] . ", " .
+                "pWDx1Comments = '" . addslashes($ballot["pWDx1Comments"]) . "', " .
+                "pWCx1 = " . $ballot["pWCx1"] . ", " .
+                "pWCx1Comments = '" . addslashes($ballot["pWCx1Comments"]) . "', " .
+                "dCx1 = " . $ballot["dCx1"] . ", " .
+                "dCx1Comments = '" . addslashes($ballot["dCx1Comments"]) . "', " .
+                "pDx2 = " . $ballot["pDx2"] . ", " .
+                "pDx2Comments = '" . addslashes($ballot["pDx2Comments"]) . "', " .
+                "pWDx2 = " . $ballot["pWDx2"] . ", " .
+                "pWDx2Comments = '" . addslashes($ballot["pWDx2Comments"]) . "', " .
+                "pWCx2 = " . $ballot["pWCx2"] . ", " .
+                "pWCx2Comments = '" . addslashes($ballot["pWCx2Comments"]) . "', " .
+                "dCx2 = " . $ballot["dCx2"] . ", " .
+                "dCx2Comments = '" . addslashes($ballot["dCx2Comments"]) . "', " .
+                "pDx3 = " . $ballot["pDx3"] . ", " .
+                "pDx3Comments = '" . addslashes($ballot["pDx3Comments"]) . "', " .
+                "pWDx3 = " . $ballot["pWDx3"] . ", " .
+                "pWDx3Comments = '" . addslashes($ballot["pWDx3Comments"]) . "', " .
+                "pWCx3 = " . $ballot["pWCx3"] . ", " .
+                "pWCx3Comments = '" . addslashes($ballot["pWCx3Comments"]) . "', " .
+                "dCx3 = " . $ballot["dCx3"] . ", " .
+                "dCx3Comments = '" . addslashes($ballot["dCx3Comments"]) . "', " .
+                "dDx1 = " . $ballot["dDx1"] . ", " .
+                "dDx1Comments = '" . addslashes($ballot["dDx1Comments"]) . "', " .
+                "dWDx1 = " . $ballot["dWDx1"] . ", " .
+                "dWDx1Comments = '" . addslashes($ballot["dWDx1Comments"]) . "', " .
+                "dWCx1 = " . $ballot["dWCx1"] . ", " .
+                "dWCx1Comments = '" . addslashes($ballot["dWCx1Comments"]) . "', " .
+                "pCx1 = " . $ballot["pCx1"] . ", " .
+                "pCx1Comments = '" . addslashes($ballot["pCx1Comments"]) . "', " .
+                "dDx2 = " . $ballot["dDx2"] . ", " .
+                "dDx2Comments = '" . addslashes($ballot["dDx2Comments"]) . "', " .
+                "dWDx2 = " . $ballot["dWDx2"] . ", " .
+                "dWDx2Comments = '" . addslashes($ballot["dWDx2Comments"]) . "', " .
+                "dWCx2 = " . $ballot["dWCx2"] . ", " .
+                "dWCx2Comments = '" . addslashes($ballot["dWCx2Comments"]) . "', " .
+                "pCx2 = " . $ballot["pCx2"] . ", " .
+                "pCx2Comments = '" . addslashes($ballot["pCx2Comments"]) . "', " .
+                "dDx3 = " . $ballot["dDx3"] . ", " .
+                "dDx3Comments = '" . addslashes($ballot["dDx3Comments"]) . "', " .
+                "dWDx3 = " . $ballot["dWDx3"] . ", " .
+                "dWDx3Comments = '" . addslashes($ballot["dWDx3Comments"]) . "', " .
+                "dWCx3 = " . $ballot["dWCx3"] . ", " .
+                "dWCx3Comments = '" . addslashes($ballot["dWCx3Comments"]) . "', " .
+                "pCx3 = " . $ballot["pCx3"] . ", " .
+                "pCx3Comments = '" . addslashes($ballot["pCx3Comments"]) . "', " .
+                "pClose = " . $ballot["pClose"] . ", " .
+                "pCloseComments = '" . addslashes($ballot["pCloseComments"]) . "', " .
+                "dClose = " . $ballot["dClose"] . ", " .
+                "dCloseComments = '" . addslashes($ballot["dCloseComments"]) . "', " .
+                "aty1 = '" . addslashes($ballot["aty1"]) . "', " .
+                "aty2 = '" . addslashes($ballot["aty2"]) . "', " .
+                "aty3 = '" . addslashes($ballot["aty3"]) . "', " .
+                "aty4 = '" . addslashes($ballot["aty4"]) . "', " .
+                "wit1 = '" . addslashes($ballot["wit1"]) . "', " .
+                "wit2 = '" . addslashes($ballot["wit2"]) . "', " .
+                "wit3 = '" . addslashes($ballot["wit3"]) . "', " .
+                "wit4 = '" . addslashes($ballot["wit4"]) . "', " .
+                "locked = " . 1 .
+                " WHERE pairing = $pairing";
+        $conn->query($duplicateQuery);
+    }
     $conn->close();
     return true;
 }
