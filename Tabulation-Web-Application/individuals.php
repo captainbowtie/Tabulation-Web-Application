@@ -33,148 +33,68 @@ if ($_SESSION["isAdmin"]) {
     $db = new Database();
     $conn = $db->getConnection();
 
-    //get all individual award ballot data and put it in an array
-    $ballotsResult = $conn->query($ballotsQuery);
-    $ballotArrayIterator = 0;
-    $ballots = [];
-    while ($ballot = $ballotsResult->fetch_assoc()) {
-        $ballots[$ballotArrayIterator]["pairing"] = $ballot["pairing"];
-        $ballots[$ballotArrayIterator]["judge"] = $ballot["judge"];
-        $ballots[$ballotArrayIterator]["aty1"] = $ballot["aty1"];
-        $ballots[$ballotArrayIterator]["aty2"] = $ballot["aty2"];
-        $ballots[$ballotArrayIterator]["aty3"] = $ballot["aty3"];
-        $ballots[$ballotArrayIterator]["aty4"] = $ballot["aty4"];
-        $ballots[$ballotArrayIterator]["wit1"] = $ballot["wit1"];
-        $ballots[$ballotArrayIterator]["wit2"] = $ballot["wit2"];
-        $ballots[$ballotArrayIterator]["wit3"] = $ballot["wit3"];
-        $ballots[$ballotArrayIterator]["wit4"] = $ballot["wit4"];
-        $ballotArrayIterator++;
-    }
-    $ballotsResult->close();
-
     //get all individual awards and fill an array with them
+    $ballotsResult = $conn->query($ballotsQuery);
     $individualAwards = [];
-    for ($a = 0; $a < sizeOf($ballots); $a++) {
-        if ($ballots[$a]["judge"] != 0) {//check that assigned judge is not "one-judge panel"
-            if ($ballots[$a]["aty1"] !== "N/A") {
-                $award["name"] = $ballots[$a]["aty1"];
-                $award["pairing"] = intVal($ballots[$a]["pairing"]);
-                $award["ranks"] = 5;
-                $award["isAttorney"] = true;
-                array_push($individualAwards, $award);
-            }
-            if ($ballots[$a]["aty2"] !== "N/A") {
-                $award["name"] = $ballots[$a]["aty2"];
-                $award["pairing"] = intVal($ballots[$a]["pairing"]);
-                $award["ranks"] = 4;
-                $award["isAttorney"] = true;
-                array_push($individualAwards, $award);
-            }
-            if ($ballots[$a]["aty3"] !== "N/A") {
-                $award["name"] = $ballots[$a]["aty3"];
-                $award["pairing"] = intVal($ballots[$a]["pairing"]);
-                $award["ranks"] = 3;
-                $award["isAttorney"] = true;
-                array_push($individualAwards, $award);
-            }
-            if ($ballots[$a]["aty4"] !== "N/A") {
-                $award["name"] = $ballots[$a]["aty4"];
-                $award["pairing"] = intVal($ballots[$a]["pairing"]);
-                $award["ranks"] = 2;
-                $award["isAttorney"] = true;
-                array_push($individualAwards, $award);
-            }
-            if ($ballots[$a]["wit1"] !== "N/A") {
-                $award["name"] = $ballots[$a]["wit1"];
-                $award["pairing"] = intVal($ballots[$a]["pairing"]);
-                $award["ranks"] = 5;
-                $award["isAttorney"] = false;
-                array_push($individualAwards, $award);
-            }
-            if ($ballots[$a]["wit2"] !== "N/A") {
-                $award["name"] = $ballots[$a]["wit2"];
-                $award["pairing"] = intVal($ballots[$a]["pairing"]);
-                $award["ranks"] = 4;
-                $award["isAttorney"] = false;
-                array_push($individualAwards, $award);
-            }
-            if ($ballots[$a]["wit3"] !== "N/A") {
-                $award["name"] = $ballots[$a]["wit3"];
-                $award["pairing"] = intVal($ballots[$a]["pairing"]);
-                $award["ranks"] = 3;
-                $award["isAttorney"] = false;
-                array_push($individualAwards, $award);
-            }
-            if ($ballots[$a]["wit4"] !== "N/A") {
-                $award["name"] = $ballots[$a]["wit4"];
-                $award["pairing"] = intVal($ballots[$a]["pairing"]);
-                $award["ranks"] = 2;
-                $award["isAttorney"] = false;
-                array_push($individualAwards, $award);
-            }
-        } else {//if this was a one judge panel, need to find the ballot that actually had a judge and duplicate its ranks
-            for ($b = 0; $b < sizeOf($ballots); $b++) {
-                if ($ballots[$b]["pairing"] === $ballots[$a]["pairing"] && $a !== $b) {
-                    if ($ballots[$b]["aty1"] !== "N/A") {
-                        $award["name"] = $ballots[$b]["aty1"];
-                        $award["pairing"] = intVal($ballots[$b]["pairing"]);
-                        $award["ranks"] = 5;
-                        $award["isAttorney"] = true;
-                        array_push($individualAwards, $award);
-                    }
-                    if ($ballots[$b]["aty2"] !== "N/A") {
-                        $award["name"] = $ballots[$b]["aty2"];
-                        $award["pairing"] = intVal($ballots[$b]["pairing"]);
-                        $award["ranks"] = 4;
-                        $award["isAttorney"] = true;
-                        array_push($individualAwards, $award);
-                    }
-                    if ($ballots[$b]["aty3"] !== "N/A") {
-                        $award["name"] = $ballots[$b]["aty3"];
-                        $award["pairing"] = intVal($ballots[$b]["pairing"]);
-                        $award["ranks"] = 3;
-                        $award["isAttorney"] = true;
-                        array_push($individualAwards, $award);
-                    }
-                    if ($ballots[$b]["aty4"] !== "N/A") {
-                        $award["name"] = $ballots[$b]["aty4"];
-                        $award["pairing"] = intVal($ballots[$b]["pairing"]);
-                        $award["ranks"] = 2;
-                        $award["isAttorney"] = true;
-                        array_push($individualAwards, $award);
-                    }
-                    if ($ballots[$b]["wit1"] !== "N/A") {
-                        $award["name"] = $ballots[$b]["wit1"];
-                        $award["pairing"] = intVal($ballots[$b]["pairing"]);
-                        $award["ranks"] = 5;
-                        $award["isAttorney"] = false;
-                        array_push($individualAwards, $award);
-                    }
-                    if ($ballots[$b]["wit2"] !== "N/A") {
-                        $award["name"] = $ballots[$b]["wit2"];
-                        $award["pairing"] = intVal($ballots[$b]["pairing"]);
-                        $award["ranks"] = 4;
-                        $award["isAttorney"] = false;
-                        array_push($individualAwards, $award);
-                    }
-                    if ($ballots[$b]["wit3"] !== "N/A") {
-                        $award["name"] = $ballots[$b]["wit3"];
-                        $award["pairing"] = intVal($ballots[$b]["pairing"]);
-                        $award["ranks"] = 3;
-                        $award["isAttorney"] = false;
-                        array_push($individualAwards, $award);
-                    }
-                    if ($ballots[$b]["wit4"] !== "N/A") {
-                        $award["name"] = $ballots[$b]["wit4"];
-                        $award["pairing"] = intVal($ballots[$b]["pairing"]);
-                        $award["ranks"] = 2;
-                        $award["isAttorney"] = false;
-                        array_push($individualAwards, $award);
-                    }
-                }
-            }
+    while ($ballot = $ballotsResult->fetch_assoc()) {
+        if ($ballot["aty1"] !== "N/A") {
+            $award["name"] = $ballot["aty1"];
+            $award["pairing"] = intVal($ballot["pairing"]);
+            $award["ranks"] = 5;
+            $award["isAttorney"] = true;
+            array_push($individualAwards, $award);
+        }
+        if ($ballot["aty2"] !== "N/A") {
+            $award["name"] = $ballot["aty2"];
+            $award["pairing"] = intVal($ballot["pairing"]);
+            $award["ranks"] = 4;
+            $award["isAttorney"] = true;
+            array_push($individualAwards, $award);
+        }
+        if ($ballot["aty3"] !== "N/A") {
+            $award["name"] = $ballot["aty3"];
+            $award["pairing"] = intVal($ballot["pairing"]);
+            $award["ranks"] = 3;
+            $award["isAttorney"] = true;
+            array_push($individualAwards, $award);
+        }
+        if ($ballot["aty4"] !== "N/A") {
+            $award["name"] = $ballot["aty4"];
+            $award["pairing"] = intVal($ballot["pairing"]);
+            $award["ranks"] = 2;
+            $award["isAttorney"] = true;
+            array_push($individualAwards, $award);
+        }
+        if ($ballot["wit1"] !== "N/A") {
+            $award["name"] = $ballot["wit1"];
+            $award["pairing"] = intVal($ballot["pairing"]);
+            $award["ranks"] = 5;
+            $award["isAttorney"] = false;
+            array_push($individualAwards, $award);
+        }
+        if ($ballot["wit2"] !== "N/A") {
+            $award["name"] = $ballot["wit2"];
+            $award["pairing"] = intVal($ballot["pairing"]);
+            $award["ranks"] = 4;
+            $award["isAttorney"] = false;
+            array_push($individualAwards, $award);
+        }
+        if ($ballot["wit3"] !== "N/A") {
+            $award["name"] = $ballot["wit3"];
+            $award["pairing"] = intVal($ballot["pairing"]);
+            $award["ranks"] = 3;
+            $award["isAttorney"] = false;
+            array_push($individualAwards, $award);
+        }
+        if ($ballot["wit4"] !== "N/A") {
+            $award["name"] = $ballot["wit4"];
+            $award["pairing"] = intVal($ballot["pairing"]);
+            $award["ranks"] = 2;
+            $award["isAttorney"] = false;
+            array_push($individualAwards, $award);
         }
     }
+    $ballotsResult->close();
 
     //cross reference individual awards with pairings to determine team and side
     $pairingsResult = $conn->query($pairingsQuery);

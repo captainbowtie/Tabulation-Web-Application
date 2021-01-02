@@ -66,7 +66,6 @@ if ($_SESSION["isAdmin"]) {
                             . "data-pairing='$b' "
                             . "data-judge='$c' "
                             . "style='grid-row:" . ($b + 3) . "; grid-column:" . ($c + 3) . "'>\n";
-                    $judgeSelects[$a][$b][$c] .= "<option value='0'>One-Judge Panel</option>\n";
                     for ($d = 0; $d < sizeOf($judges); $d++) {
                         if ($a === 1) {
                             $judgeSelects[$a][$b][$c] .= "<option value='" . $judges[$d]["id"] . "'>" . $judges[$d]["name"] . "</option>\n";
@@ -287,7 +286,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 </div>
             </div>
         </div>
-
+        
         <!-- Judge Assignment Modal -->
         <div id="judgeAssignmentModal" class="modal fade" role="dialog">
             <div class="modal-dialog">
@@ -328,7 +327,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 </div>
             </div>
         </div>
-
+        
         <script src="pairings.js"></script>
     </body>
 </html>
