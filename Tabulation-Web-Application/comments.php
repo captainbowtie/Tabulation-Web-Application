@@ -507,9 +507,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
                     <div id="openingScores" class="collapse show" aria-labelledby="headingOne" data-parent="#scores">
                         <div class="card-body speech">
-                            <label for="pOpen" class="pSpeechLabel" id="pOpenLabel">π Open (<?php echo $pairing["pOpen"]; ?>):</label>
+                            <label for="pOpen" class="pSpeechLabel" id="pOpenLabel">π Open ():</label>
                             <p class="pSpeech" id="pOpen"></p>
-                            <label for="dOpen" class="dSpeechLabel" id="dOpenLabel">∆ Open (<?php echo $pairing["dOpen"]; ?>):</label>
+                            <label for="dOpen" class="dSpeechLabel" id="dOpenLabel">∆ Open ():</label>
                             <p class="dSpeech" id="dOpen"></p>
                             <p class="pSpeechComments" id="pOpenComments"></p>
                             <p class="dSpeechComments" id="dOpenComments"></p>
@@ -521,25 +521,25 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     <div class="card-header">
                         <h2 class="mb-0">
                             <button id="witness1Header" class="btn btn-link" type="button" data-toggle="collapse" data-target="#p1Scores" aria-expanded="true" aria-controls="p1Scores">
-                                Plaintiff Witness 1 (<?php echo $pairing["Wit1"]; //TODO: make Wit lower case          ?>)
+                                Plaintiff Witness 1 ()
                             </button>
                         </h2>
                     </div>
 
                     <div id="p1Scores" class="collapse" aria-labelledby="headingOne" data-parent="#scores">
                         <div class="card-body plaintiffWitness">
-                            <label for="pDx1" class="pDxLabel" id="pDx1Label">Atty Dx (<?php echo $pairing["pDx1"]; ?>):</label>
+                            <label for="pDx1" class="pDxLabel" id="pDx1Label">Atty Dx ():</label>
                             <p class="pDx" id="pDx1"></p>
-                            <label for="dCx1" class="dCxLabel" id="dCx1Label">Atty Cx (<?php echo $pairing["dCx1"]; ?>):</label>
+                            <label for="dCx1" class="dCxLabel" id="dCx1Label">Atty Cx ():</label>
                             <p class="dCx" id="dCx1"></p>
                             <p class="pDxComments" id="pDx1Comments"></p>
                             <p class="dCxComments" id="dCx1Comments"></p>
 
-                            <label for="pWDx1" class="pWDxLabel" id="pWDx1Label">Wit Dx (<?php echo $pairing["pWDx1"]; ?>):</label>
+                            <label for="pWDx1" class="pWDxLabel" id="pWDx1Label">Wit Dx ():</label>
                             <p class="pWDx" id="pWDx1"></p>
                             <p class="pWDxComments" id="pWDx1Comments"></p>
 
-                            <label for="pWCx1" class="pWCxLabel" id="pWCx1Label">Wit Cx (<?php echo $pairing["pWDx1"]; ?>):</label>
+                            <label for="pWCx1" class="pWCxLabel" id="pWCx1Label">Wit Cx ():</label>
                             <p class="pWCx" id="pWCx1"></p>
                             <p class="pWCxComments" id="pWCx1Comments"></p>
                         </div>
@@ -550,25 +550,25 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     <div class="card-header">
                         <h2 class="mb-0">
                             <button id="witness2Header" class="btn btn-link" type="button" data-toggle="collapse" data-target="#p2Scores" aria-expanded="true" aria-controls="p2Scores">
-                                Plaintiff Witness 2 (<?php echo $pairing["Wit2"]; ?>)
+                                Plaintiff Witness 2 ()
                             </button>
                         </h2>
                     </div>
 
                     <div id="p2Scores" class="collapse" aria-labelledby="headingOne" data-parent="#scores">
                         <div class="card-body plaintiffWitness">
-                            <label for="pDx2" class="pDxLabel" id="pDx2Label">Atty Dx (<?php echo $pairing["pDx2"]; ?>):</label>
+                            <label for="pDx2" class="pDxLabel" id="pDx2Label">Atty Dx (<):</label>
                             <p class="pDx" id="pDx2"></p>
-                            <label for="dCx2" class="dCxLabel" id="dCx2Label">Atty Cx (<?php echo $pairing["dCx2"]; ?>):</label>
+                            <label for="dCx2" class="dCxLabel" id="dCx2Label">Atty Cx ():</label>
                             <p class="dCx" id="dCx2"></p>
 
                             <p class="pDxComments" id="pDx2Comments"></p>
                             <p class="dCxComments" id="dCx2Comments"></p>
 
-                            <label for="pWDx2" class="pWDxLabel" id="pWDx2Label">Wit Dx (<?php echo $pairing["pWDx2"]; ?>):</label>
+                            <label for="pWDx2" class="pWDxLabel" id="pWDx2Label">Wit Dx ():</label>
                             <p class="pWDx" id="pWDx2" ></p>
                             <p class="pWDxComments" id="pWDx2Comments"></p>
-                            <label for="pWCx2" class="pWCxLabel" id="pWCx2Label">Wit Cx (<?php echo $pairing["pWDx2"]; ?>):</label>
+                            <label for="pWCx2" class="pWCxLabel" id="pWCx2Label">Wit Cx ():</label>
                             <p class="pWCx" id="pWCx2"></p>
                             <p class="pWCxComments" id="pWCx2Comments"></p>
                         </div>
@@ -581,27 +581,27 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     <div class="card-header">
                         <h2 class="mb-0">
                             <button id="witness3Header" class="btn btn-link" type="button" data-toggle="collapse" data-target="#p3Scores" aria-expanded="true" aria-controls="p3Scores">
-                                Plaintiff Witness 3 (<?php echo $pairing["Wit3"]; ?>)
+                                Plaintiff Witness 3 ()
                             </button>
                         </h2>
                     </div>
 
                     <div id="p3Scores" class="collapse" aria-labelledby="headingOne" data-parent="#scores">
                         <div class="card-body plaintiffWitness">
-                            <label for="pDx3" class="pDxLabel" id="pDx3Label">Atty Dx (<?php echo $pairing["pDx3"]; ?>):</label>
+                            <label for="pDx3" class="pDxLabel" id="pDx3Label">Atty Dx ():</label>
                             <p class="pDx" id="pDx3"></p>
-                            <label for="dCx3" class="dCxLabel" id="dCx3Label">Atty Cx (<?php echo $pairing["dCx3"]; ?>):</label>
+                            <label for="dCx3" class="dCxLabel" id="dCx3Label">Atty Cx ():</label>
                             <p class="dCx" id="dCx3"></p>
 
                             <p class="pDxComments" id="pDx3Comments"></p>
                             <p class="dCxComments" id="dCx3Comments"></p>
 
-                            <label for="pWDx3" class="pWDxLabel" id="pWDx3Label">Wit Dx (<?php echo $pairing["pWDx3"]; ?>):</label>
+                            <label for="pWDx3" class="pWDxLabel" id="pWDx3Label">Wit Dx ():</label>
                             <p class="pWDx" id="pWDx3"></p>
 
                             <p class="pWDxComments" id="pWDx3Comments"></p>
 
-                            <label for="pWCx3" class="pWCxLabel" id="pWCx3Label">Wit Cx (<?php echo $pairing["pWDx3"]; ?>):</label>
+                            <label for="pWCx3" class="pWCxLabel" id="pWCx3Label">Wit Cx ():</label>
                             <p class="pWCx" id="pWCx3"></p>
                             <p class="pWCxComments" id="pWCx3Comments"></p>
                         </div>
@@ -612,28 +612,28 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     <div class="card-header">
                         <h2 class="mb-0">
                             <button id="witness4Header" class="btn btn-link" type="button" data-toggle="collapse" data-target="#d1Scores" aria-expanded="true" aria-controls="d1Scores">
-                                Defense Witness 1 (<?php echo $pairing["Wit4"]; ?>)
+                                Defense Witness 1 ()
                             </button>
                         </h2>
                     </div>
 
                     <div id="d1Scores" class="collapse" aria-labelledby="headingOne" data-parent="#scores">
                         <div class="card-body defenseWitness">
-                            <label for="pCx1" class="pCxLabel" id="pCx1Label">Atty Cx (<?php echo $pairing["pCx1"]; ?>):</label>
+                            <label for="pCx1" class="pCxLabel" id="pCx1Label">Atty Cx ():</label>
                             <p class="pCx" id="pCx1"></p>
-                            <label for="dDx1" class="dDxLabel" id="dDx1Label">Atty Dx (<?php echo $pairing["dDx1"]; ?>):</label>
+                            <label for="dDx1" class="dDxLabel" id="dDx1Label">Atty Dx ():</label>
                             <p class="dDx" id="dDx1"></p>
 
                             <p class="pCxComments" id="pCx1Comments"></p>
                             <p class="dDxComments" id="dDx1Comments"></p>
 
 
-                            <label for="dWDx1" class="dWDxLabel" id="dWDx1Label">Wit Dx (<?php echo $pairing["dWDx1"]; ?>):</label>
+                            <label for="dWDx1" class="dWDxLabel" id="dWDx1Label">Wit Dx ():</label>
                             <p class="dWDx" id="dWDx1"></p>
 
                             <p class="dWDxComments" id="dWDx1Comments"></p>
 
-                            <label for="dWCx1" class="dWCxLabel" id="dWCx1Label">Wit Cx (<?php echo $pairing["dWDx1"]; ?>):</label>
+                            <label for="dWCx1" class="dWCxLabel" id="dWCx1Label">Wit Cx ():</label>
                             <p class="dWCx" id="dWCx1"></p>
 
                             <p class="dWCxComments" id="dWCx1Comments"></p>
@@ -646,27 +646,27 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     <div class="card-header">
                         <h2 class="mb-0">
                             <button id="witness5Header" class="btn btn-link" type="button" data-toggle="collapse" data-target="#d2Scores" aria-expanded="true" aria-controls="d2Scores">
-                                Defense Witness 2 (<?php echo $pairing["Wit5"]; ?>)
+                                Defense Witness 2 ()
                             </button>
                         </h2>
                     </div>
 
                     <div id="d2Scores" class="collapse" aria-labelledby="headingOne" data-parent="#scores">
                         <div class="card-body defenseWitness">
-                            <label for="pCx2" class="pCxLabel" id="pCx2Label">Wit Cx (<?php echo $pairing["pCx2"]; ?>):</label>
+                            <label for="pCx2" class="pCxLabel" id="pCx2Label">Wit Cx ():</label>
                             <p class="pCx" id="pCx2"></p>
-                            <label for="dDx2" class="dDxLabel" id="dDx2Label">Wit Dx (<?php echo $pairing["dDx2"]; ?>):</label>
+                            <label for="dDx2" class="dDxLabel" id="dDx2Label">Wit Dx ():</label>
                             <p class="dDx" id="dDx2"></p>
 
                             <p class="pCxComments" id="pCx2Comments"></p>
                             <p class="dDxComments" id="dDx2Comments"></p>
 
-                            <label for="dWDx2" class="dWDxLabel" id="dWDx2Label">Wit Dx (<?php echo $pairing["dWDx2"]; ?>):</label>
+                            <label for="dWDx2" class="dWDxLabel" id="dWDx2Label">Wit Dx ():</label>
                             <p class="dWDx" id="dWDx2"></p>
 
                             <p class="dWDxComments" id="dWDx2Comments"></p>
 
-                            <label for="dWCx2" class="dWCxLabel" id="dWCx2Label">Wit Cx (<?php echo $pairing["dWDx2"]; ?>):</label>
+                            <label for="dWCx2" class="dWCxLabel" id="dWCx2Label">Wit Cx ():</label>
                             <p class="dWCx" id="dWCx2"></p>
 
                             <p class="dWCxComments" id="dWCx2Comments"></p>
@@ -679,27 +679,27 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     <div class="card-header">
                         <h2 class="mb-0">
                             <button id="witness6Header" class="btn btn-link" type="button" data-toggle="collapse" data-target="#d3Scores" aria-expanded="true" aria-controls="d3Scores">
-                                Defense Witness 3 (<?php echo $pairing["Wit6"]; ?>)
+                                Defense Witness 3 ()
                             </button>
                         </h2>
                     </div>
 
                     <div id="d3Scores" class="collapse" aria-labelledby="headingOne" data-parent="#scores">
                         <div class="card-body defenseWitness">
-                            <label for="pCx3" class="pCxLabel" id="pCx3Label">Atty Cx (<?php echo $pairing["pCx3"]; ?>):</label>
+                            <label for="pCx3" class="pCxLabel" id="pCx3Label">Atty Cx ():</label>
                             <p class="pCx" id="pCx3"></p>
-                            <label for="dDx3" class="dDxLabel" id="dDx3Label">Atty Dx (<?php echo $pairing["dDx3"]; ?>):</label>
+                            <label for="dDx3" class="dDxLabel" id="dDx3Label">Atty Dx ():</label>
                             <p class="dDx" id="dDx3"></p>
 
                             <p class="pCxComments" id="pCx3Comments"></p>
                             <p class="dDxComments" id="dDx3Comments"></p>
 
-                            <label for="dWDx3" class="dWDxLabel" id="dWDx3Label">Wit Dx (<?php echo $pairing["dWDx3"]; ?>):</label>
+                            <label for="dWDx3" class="dWDxLabel" id="dWDx3Label">Wit Dx ():</label>
                             <p class="dWDx" id="dWDx3"></p>
 
                             <p class="dWDxComments" id="dWDx3Comments"></p>
 
-                            <label for="dWCx3" class="dWCxLabel" id="dWCx3Label">Wit Cx (<?php echo $pairing["dWDx3"]; ?>):</label>
+                            <label for="dWCx3" class="dWCxLabel" id="dWCx3Label">Wit Cx ():</label>
                             <p class="dWCx" id="dWCx3"></p>
 
                             <p class="dWCxComments" id="dWCx3Comments"></p>
@@ -719,9 +719,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
                     <div id="closingScores" class="collapse" aria-labelledby="headingOne" data-parent="#scores">
                         <div class="card-body speech">
-                            <label for="pClose" class="pSpeechLabel" id="pCloseLabel">π Close (<?php echo $pairing["pClose"]; ?>):</label>
+                            <label for="pClose" class="pSpeechLabel" id="pCloseLabel">π Close ():</label>
                             <p class="pSpeech" id="pClose"></p>
-                            <label for="dClose" class="dSpeechLabel" id="dCloseLabel">∆ Close (<?php echo $pairing["dClose"]; ?>):</label>
+                            <label for="dClose" class="dSpeechLabel" id="dCloseLabel">∆ Close ():</label>
                             <p class="dSpeech" id="dClose"></p>
                             <p class="pSpeechComments" id="pCloseComments"></p>
                             <p class="dSpeechComments" id="dCloseComments"></p>
