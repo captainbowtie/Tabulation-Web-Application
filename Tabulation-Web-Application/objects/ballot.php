@@ -413,7 +413,7 @@ function lockBallot($ballot) {
 
     $db = new Database();
     $conn = $db->getConnection();
-    //write ballot to database
+    //write ballot to db
     $conn->query($ballotQuery);
 
     //check if part of one-judge panel
