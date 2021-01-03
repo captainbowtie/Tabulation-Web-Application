@@ -71,7 +71,7 @@ function assignJudge($ballotData) {
         array_push($pairingIds, $ballotData[$a]["pairing"]);
     }
     $pairingIdsUnique = array_values(array_unique($pairingIds));
-    var_dump($pairingIdsUnique);
+
     //update judge assignments
     for ($a = 0; $a < sizeOf($pairingIdsUnique); $a++) {
         //for each pairing id, find the ballots corresponding to that pairing

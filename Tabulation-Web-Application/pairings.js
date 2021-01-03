@@ -539,34 +539,42 @@ function judgeAssignmentsValid(judgeAssignments) {
 
 $("#submitJudges1").on("click", function (e) {
     e.preventDefault();
-    if (validateJudges(1)) {
-        let ballots = generateBallots(1);
-        submitBallots(ballots);
-    }
+    validateJudges(1).then(judgesValid => {
+        if (judgesValid) {
+            let ballots = generateBallots(1);
+            submitBallots(ballots);
+        }
+    });
 });
 
 $("#submitJudges2").on("click", function (e) {
     e.preventDefault();
-    if (validateJudges(2)) {
-        let ballots = generateBallots(2);
-        submitBallots(ballots);
-    }
+    validateJudges(2).then(judgesValid => {
+        if (judgesValid) {
+            let ballots = generateBallots(2);
+            submitBallots(ballots);
+        }
+    });
 });
 
 $("#submitJudges3").on("click", function (e) {
     e.preventDefault();
-    if (validateJudges(3)) {
-        let ballots = generateBallots(3);
-        submitBallots(ballots);
-    }
+    validateJudges(3).then(judgesValid => {
+        if (judgesValid) {
+            let ballots = generateBallots(3);
+            submitBallots(ballots);
+        }
+    });
 });
 
 $("#submitJudges4").on("click", function (e) {
     e.preventDefault();
-    if (validateJudges(4)) {
-        let ballots = generateBallots(4);
-        submitBallots(ballots);
-    }
+    validateJudges(4).then(judgesValid => {
+        if (judgesValid) {
+            let ballots = generateBallots(4);
+            submitBallots(ballots);
+        }
+    });
 });
 
 $("#pairingSave").on("click", function (e) {
@@ -1545,9 +1553,9 @@ function validateJudges(round) {
     }
     Object.keys(judgeIdArray).forEach(function (judgeId) {
         if (judgeIdArray[judgeId] !== 1) {
-            for(let a = 0;a<judgeSelects.length;a++){
-                if(judgeId === judgeSelects[a].value){
-                    $(judgeSelects[a]).css("color","red");
+            for (let a = 0; a < judgeSelects.length; a++) {
+                if (judgeId === judgeSelects[a].value) {
+                    $(judgeSelects[a]).css("color", "red");
                 }
             }
             duplicateJudges = true;

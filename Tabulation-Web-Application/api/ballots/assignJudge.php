@@ -44,7 +44,7 @@ if ($_SESSION["isAdmin"]) {
             http_response_code(201);
 
             // tell the user
-            echo json_encode(array("message" => "Ballots created."));
+            echo json_encode(array("message" => 0));
         } else {
 
             // set response code - 503 service unavailable
@@ -87,7 +87,6 @@ function findPairingID($ballotData) {
     $stmt = $conn->prepare("SELECT id FROM pairings WHERE plaintiff = ? AND defense = ?");
     //for each pairing, determine the corresponding pairing ID
     for ($a = 0; $a < sizeOf($ballotData); $a++) {
-        //echo "p:".$ballotData[$a]["plaintiff"]." d:".$ballotData[$a]["defense"]."\n";
         $stmt->bind_param('ii', $ballotData[$a]["plaintiff"], $ballotData[$a]["defense"]);
         $stmt->execute();
         $res = $stmt->get_result();
