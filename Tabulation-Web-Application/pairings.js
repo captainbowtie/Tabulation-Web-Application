@@ -231,21 +231,25 @@ $("#submit4").on("click", function (e) {
 });
 
 $("#assignJudges1").on("click", function (e) {
+    $(".judgeSelect").css("color", "black");
     e.preventDefault();
     assignJudges(1);
 });
 
 $("#assignJudges2").on("click", function (e) {
+    $(".judgeSelect").css("color", "black");
     e.preventDefault();
     assignJudges(2);
 });
 
 $("#assignJudges3").on("click", function (e) {
+    $(".judgeSelect").css("color", "black");
     e.preventDefault();
     assignJudges(3);
 });
 
 $("#assignJudges4").on("click", function (e) {
+    $(".judgeSelect").css("color", "black");
     e.preventDefault();
     assignJudges(4);
 });
@@ -594,6 +598,10 @@ $("#snakeStart").on("change", function () {
 
 $("#roundFourBallotsViewable").on("change", function () {
     updateSetting("roundFourBallotsViewable", $(this).val());
+});
+
+$(".judgeSelect").change(function (e) {
+    $(this).css("color", "black");
 });
 
 function updateSetting(field, value) {
@@ -1517,7 +1525,164 @@ function rankSwaps(swaps) {
 }
 
 function validateJudges(round) {
-    return true; //TODO actually validate
+    //get arrays of relevant <select> elements
+    let judgeSelects = $(`.judgeSelect[data-round='${round}']`);
+    let pSelects = $(`.pSelect[data-round='${round}']`);
+    let dSelects = $(`.dSelect[data-round='${round}']`);
+
+    //check that no judge is assigned to more than one round
+    var duplicateJudges = false;
+    let judgeIdArray = [];
+    for (let a = 0; a < judgeSelects.length; a++) {
+        if (parseInt(judgeSelects[a].value) !== 0) {
+            judgeIdArray[judgeSelects[a].value] = 0;
+        }
+    }
+    for (let a = 0; a < judgeSelects.length; a++) {
+        if (parseInt(judgeSelects[a].value) !== 0) {
+            judgeIdArray[judgeSelects[a].value]++;
+        }
+    }
+    Object.keys(judgeIdArray).forEach(function (judgeId) {
+        if (judgeIdArray[judgeId] !== 1) {
+            for(let a = 0;a<judgeSelects.length;a++){
+                if(judgeId === judgeSelects[a].value){
+                    $(judgeSelects[a]).css("color","red");
+                }
+            }
+            duplicateJudges = true;
+        }
+    });
+
+
+
+
+
+    //check that judges do not have school conflicts
+    var schoolConflicts = false;
+    for (let a = 0; a < judgeSelects.length; a++) {
+        if (parseInt(judgeSelects[a].value) !== 0) {
+            for (let b = 0; b < judgeConflicts.length; b++) {
+                if (judgeConflicts[b].judge === parseInt(judgeSelects[a].value)) {
+                    for (let c = 0; c < pSelects.length; c++) {
+                        if (judgeConflicts[b].team === parseInt(pSelects[c].value) &&
+                                $(pSelects[c]).attr("data-pairing") === $(judgeSelects[a]).attr("data-pairing")) {
+                            schoolConflicts = true;
+                            $(judgeSelects[a]).css("color", "red");
+                        }
+                        if (judgeConflicts[b].team === parseInt(dSelects[c].value) &&
+                                $(dSelects[c]).attr("data-pairing") === $(judgeSelects[a]).attr("data-pairing")) {
+                            schoolConflicts = true;
+                            $(judgeSelects[a]).css("color", "red");
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    //check that judge does not have previous round conflict
+    var pastRoundConflicts = false;
+    for (let a = 0; a < judgeSelects.length; a++) {
+        for (let b = 0; b < ballots.length; b++) {
+            if (parseInt(judgeSelects[a].value) === ballots[b].judge) {
+                for (let c = 0; c < pairings.length; c++) {
+                    if (ballots[b].pairing === pairings[c].id) {
+                        for (let d = 0; d < pSelects.length; d++) {
+                            if (parseInt(pSelects[d].value) === pairings[c].plaintiff &&
+                                    $(pSelects[d]).attr("data-pairing") === $(judgeSelects[a]).attr("data-pairing")) {
+                                pastRoundConflicts = true;
+                                $(judgeSelects[a]).css("color", "red");
+                                console.log($(judgeSelects[a]));
+                            } else if (parseInt(pSelects[d].value) === pairings[c].defense &&
+                                    $(pSelects[d]).attr("data-pairing") === $(judgeSelects[a]).attr("data-pairing")) {
+                                pastRoundConflicts = true;
+                                $(judgeSelects[a]).css("color", "red");
+                            }
+                            if (parseInt(dSelects[d].value) === pairings[c].plaintiff &&
+                                    $(dSelects[d]).attr("data-pairing") === $(judgeSelects[a]).attr("data-pairing")) {
+                                pastRoundConflicts = true;
+                                $(judgeSelects[a]).css("color", "red");
+                            } else if (parseInt(dSelects[d].value) === pairings[c].defense &&
+                                    $(dSelects[d]).attr("data-pairing") === $(judgeSelects[a]).attr("data-pairing")) {
+                                pastRoundConflicts = true;
+                                $(judgeSelects[a]).css("color", "red");
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    //check that judge can actually judge this round
+    var judgesUnavailable = false;
+    for (let a = 0; a < judgeSelects.length; a++) {
+        for (let b = 0; b < judges.length; b++) {
+            if (parseInt(judgeSelects[a].value) === judges[b].id) {
+                switch (round) {
+                    case 1:
+                        if (!judges[b].round1) {
+                            judgesUnavailable = true;
+                            $(judgeSelects[a]).css("color", "red");
+                        }
+                        break;
+                    case 2:
+                        if (!judges[b].round2) {
+                            judgesUnavailable = true;
+                            $(judgeSelects[a]).css("color", "red");
+                        }
+                        break;
+                    case 3:
+                        if (!judges[b].round3) {
+                            judgesUnavailable = true;
+                            $(judgeSelects[a]).css("color", "red");
+                        }
+                        break;
+                    case 4:
+                        if (!judges[b].round4) {
+                            judgesUnavailable = true;
+                            $(judgeSelects[a]).css("color", "red");
+                        }
+                        break;
+                }
+            }
+        }
+    }
+//TODO make the one causing the error turn red
+
+    return new Promise(function (resolve, reject) {
+        if (!duplicateJudges && !schoolConflicts && !pastRoundConflicts && !judgesUnavailable) {
+            resolve(true);
+        } else {
+            var modalText = "The following errors were found in judge assignments:<br>";
+            if (duplicateJudges) {
+                modalText += "• Same judge assigned to multiple rounds<br>";
+            }
+            if (schoolConflicts) {
+                modalText += "• Judge has conflict with assigned school<br>";
+            }
+            if (pastRoundConflicts) {
+                modalText += "• Judge has previously seen same team at this tornament<br>";
+            }
+            if (judgesUnavailable) {
+                modalText += "• Judge's listed availability indicates it cannot judge this round<br>";
+            }
+            modalText += "Close this dialog and modify the assignments, or proceed with assignments anyway?";
+            $("#invalidJudgesModalText").html(modalText);
+            $("#invalidJudgesModal").modal("toggle");
+            $("#reassignJudges").click(function () {
+                $("#reassignJudges").unbind();
+                resolve(false);
+            });
+            $("#assignAnyway").click(function () {
+                $("#assignAnyway").unbind();
+                resolve(true);
+            });
+        }
+
+    });
+
 }
 
 function generateBallots(round) {

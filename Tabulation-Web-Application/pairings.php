@@ -66,6 +66,7 @@ if ($_SESSION["isAdmin"]) {
                             . "data-pairing='$b' "
                             . "data-judge='$c' "
                             . "style='grid-row:" . ($b + 3) . "; grid-column:" . ($c + 3) . "'>\n";
+                    $judgeSelects[$a][$b][$c] .= "<option value='0'>One-Judge Panel</option>\n";
                     for ($d = 0; $d < sizeOf($judges); $d++) {
                         if ($a === 1) {
                             $judgeSelects[$a][$b][$c] .= "<option value='" . $judges[$d]["id"] . "'>" . $judges[$d]["name"] . "</option>\n";
@@ -323,6 +324,27 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Ignore</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Invalid JUdges Modal -->
+        <div id="invalidJudgesModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Warning</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="invalidJudgesModalText">Error: judge validation modal unexpectedly displayed.</div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" id="reassignJudges">Modify Assignments</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal" id="assignAnyway">Assign Anyway</button>
                     </div>
                 </div>
             </div>
