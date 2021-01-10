@@ -317,7 +317,7 @@ function assignJudges(round) {
     let judgeAssignments = [];
     let i = 0;
     for (var a = 0; a < pairings.length; a++) {
-        if (pairings[a].round === 4) {
+        if (pairings[a].round === round) {
             judgeAssignments[i] = [];
             judgeAssignments[i][0] = pairings[a];
             for (var b = 0; b < judgesPerRound; b++) {

@@ -70,7 +70,7 @@ if ($_SESSION["isAdmin"]) {
         } else if ($ballots[$a]["locked"] == true) {
             $lockStatus = "Locked";
         }
-        $tabHTML[$roundNumber] .= "<span class='teamNumbers'>$pNumber v. $dNumber</span><a class='url' href='https://$url'>$judgeName</a><span class='lockStatus'>$lockStatus</span><br>";
+        $tabHTML[$roundNumber] .= "<span class='teamNumbers'>$pNumber v. $dNumber</span><a class='url' href='$url'>$judgeName</a><span class='lockStatus'>$lockStatus</span><br>";
     }
 } else {
     die("Access denied.");
