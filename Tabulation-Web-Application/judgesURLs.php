@@ -63,7 +63,7 @@ if ($_SESSION["isAdmin"]) {
                 $judgeName = $judges[$b]["name"];
             }
         }
-        $url = HOST_NAME . "/judgeBallot.php?ballot=" . $ballots[$a]["url"];
+        $url =  "judgeBallot.php?ballot=" . $ballots[$a]["url"];
 
         if ($ballots[$a]["locked"] == false) {
             $lockStatus = "Unlocked";
