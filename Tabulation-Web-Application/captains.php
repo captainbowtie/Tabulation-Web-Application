@@ -139,7 +139,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 <option value="Cannon">Cannon</option>
                 <option value="Arnould">Arnould</option>
                 <option value="Francazio">Francazio</option>
-                <option value="Soto">Soto</option>      
+                <option value="Soto">Soto</option>
+                <option value="Johar">Johar</option>
             </select>
             <label id="pDx1Label" for="pDx1">Directing Attorney:</label>
             <input class="pInput" id="pDx1">
@@ -156,7 +157,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 <option value="Cannon">Cannon</option>
                 <option value="Arnould">Arnould</option>
                 <option value="Francazio">Francazio</option>
-                <option value="Soto">Soto</option>       
+                <option value="Soto">Soto</option>
+                <option value="Johar">Johar</option>
             </select>
             <label id="pDx2Label" for="pDx2">Directing Attorney:</label>
             <input class="pInput" id="pDx2">
@@ -173,7 +175,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 <option value="Cannon">Cannon</option>
                 <option value="Arnould">Arnould</option>
                 <option value="Francazio">Francazio</option>
-                <option value="Soto">Soto</option>        
+                <option value="Soto">Soto</option>
+                <option value="Johar">Johar</option>
             </select>
             <label id="pDx3Label" for="pDx3">Directing Attorney:</label>
             <input class="pInput" id="pDx3">
@@ -190,7 +193,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 <option value="Cannon">Cannon</option>
                 <option value="Arnould">Arnould</option>
                 <option value="Francazio">Francazio</option>
-                <option value="Soto">Soto</option>       
+                <option value="Soto">Soto</option>
+                <option value="Johar">Johar</option>
             </select>
             <label id="dDx1Label" for="dDx1">Directing Attorney:</label>
             <input class="dInput" id="dDx1">
@@ -207,7 +211,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 <option value="Cannon">Cannon</option>
                 <option value="Arnould">Arnould</option>
                 <option value="Francazio">Francazio</option>
-                <option value="Soto">Soto</option>      
+                <option value="Soto">Soto</option>
+                <option value="Johar">Johar</option>
             </select>
             <label id="dDx2Label" for="dDx2">Directing Attorney:</label>
             <input class="dInput" id="dDx2">
@@ -224,7 +229,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 <option value="Cannon">Cannon</option>
                 <option value="Arnould">Arnould</option>
                 <option value="Francazio">Francazio</option>
-                <option value="Soto">Soto</option>       
+                <option value="Soto">Soto</option>
+                <option value="Johar">Johar</option>
             </select>
             <label id="dDx3Label" for="dDx3">Directing Attorney:</label>
             <input class="dInput" id="dDx3">
