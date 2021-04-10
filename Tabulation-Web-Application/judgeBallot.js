@@ -84,7 +84,7 @@ $("#submit").on("click", function () {
         ballotData.dWCx2 = $("#dWCx2").val();
         ballotData.pCx2 = $("#pCx2").val();
         ballotData.dDx3 = $("#dDx3").val();
-        ballotData.dWDx3 = $("#pOpen").val();
+        ballotData.dWDx3 = $("#dWDx3").val();
         ballotData.dWCx3 = $("#dWCx3").val();
         ballotData.pCx3 = $("#pCx3").val();
         ballotData.pClose = $("#pClose").val();
@@ -175,7 +175,7 @@ $("#lockButton").on("click", function () {
     ballotData.pCx2Comments = $("#pCx2Comments").val();
     ballotData.dDx3 = $("#dDx3").val();
     ballotData.dDx3Comments = $("#dDx3Comments").val();
-    ballotData.dWDx3 = $("#pOpen").val();
+    ballotData.dWDx3 = $("#dWDx3").val();
     ballotData.dWDx3Comments = $("#dWDx3Comments").val();
     ballotData.dWCx3 = $("#dWCx3").val();
     ballotData.dWCx3Comments = $("#dWCx3Comments").val();
