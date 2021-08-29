@@ -126,21 +126,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             <label for="dRadio">Defense</label><br>
         </div>
         <div id="inputDiv">
-            <label id="pOpenLabel" for="pOpen">Plaintiff Open:</label>
+            <label id="pOpenLabel" for="pOpen">Prosecution Open:</label>
             <input class="pInput" id="pOpen">
             <label id="dOpenLabel" for="dOpen">Defense Open:</label>
             <input class="dInput" id="dOpen">
 
             <select class="pInput" id="wit1">
-                <option value="Rodriguez">Rodriguez</option>
-                <option value="Paras">Paras</option>
-                <option value="OKeefe">O'Keefe</option>
-                <option value="Kwon">Kwon</option>
-                <option value="Cannon">Cannon</option>
-                <option value="Arnould">Arnould</option>
-                <option value="Francazio">Francazio</option>
-                <option value="Soto">Soto</option>
-                <option value="Johar">Johar</option>
+                <option value="Weber">Weber</option>
+                <option value="Khan">Khan</option>
+                <option value="Singh">Singh</option>
+                <option value="DeJong">De Jong</option>
+                <option value="Vaughn">Vaughn</option>
+                <option value="Silva">Silva</option>
+                <option value="Johnson">Johnson</option>
             </select>
             <label id="pDx1Label" for="pDx1">Directing Attorney:</label>
             <input class="pInput" id="pDx1">
@@ -150,15 +148,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             <input class="dInput" id="dCx1">
 
             <select class="pInput" id="wit2">
-                <option value="Rodriguez">Rodriguez</option>
-                <option value="Paras">Paras</option>
-                <option value="OKeefe">O'Keefe</option>
-                <option value="Kwon">Kwon</option>
-                <option value="Cannon">Cannon</option>
-                <option value="Arnould">Arnould</option>
-                <option value="Francazio">Francazio</option>
-                <option value="Soto">Soto</option>
-                <option value="Johar">Johar</option>
+                <option value="Weber">Weber</option>
+                <option value="Khan">Khan</option>
+                <option value="Singh">Singh</option>
+                <option value="DeJong">De Jong</option>
+                <option value="Vaughn">Vaughn</option>
+                <option value="Silva">Silva</option>
+                <option value="Johnson">Johnson</option>
             </select>
             <label id="pDx2Label" for="pDx2">Directing Attorney:</label>
             <input class="pInput" id="pDx2">
@@ -168,15 +164,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             <input class="dInput" id="dCx2">
 
             <select class="pInput" id="wit3">
-                <option value="Rodriguez">Rodriguez</option>
-                <option value="Paras">Paras</option>
-                <option value="OKeefe">O'Keefe</option>
-                <option value="Kwon">Kwon</option>
-                <option value="Cannon">Cannon</option>
-                <option value="Arnould">Arnould</option>
-                <option value="Francazio">Francazio</option>
-                <option value="Soto">Soto</option>
-                <option value="Johar">Johar</option>
+                <option value="Weber">Weber</option>
+                <option value="Khan">Khan</option>
+                <option value="Singh">Singh</option>
+                <option value="DeJong">De Jong</option>
+                <option value="Vaughn">Vaughn</option>
+                <option value="Silva">Silva</option>
+                <option value="Johnson">Johnson</option>
             </select>
             <label id="pDx3Label" for="pDx3">Directing Attorney:</label>
             <input class="pInput" id="pDx3">
@@ -186,15 +180,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             <input class="dInput" id="dCx3">
 
             <select class="dInput" id="wit4">
-                <option value="Martini">Martini</option>
-                <option value="Lewis">Lewis</option>
-                <option value="Osborne">Osborne</option>
-                <option value="Kwon">Kwon</option>
-                <option value="Cannon">Cannon</option>
-                <option value="Arnould">Arnould</option>
-                <option value="Francazio">Francazio</option>
-                <option value="Soto">Soto</option>
-                <option value="Johar">Johar</option>
+                <option value="Syed">Syed</option>
+                <option value="Jelani">Jelani</option>
+                <option value="DeJong">De Jong</option>
+                <option value="Vaughn">Vaughn</option>
+                <option value="Silva">Silva</option>
+                <option value="Johnson">Johnson</option>
             </select>
             <label id="dDx1Label" for="dDx1">Directing Attorney:</label>
             <input class="dInput" id="dDx1">
@@ -204,15 +195,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             <input class="pInput" id="pCx1">
 
             <select class="dInput" id="wit5">
-                <option value="Martini">Martini</option>
-                <option value="Lewis">Lewis</option>
-                <option value="Osborne">Osborne</option>
-                <option value="Kwon">Kwon</option>
-                <option value="Cannon">Cannon</option>
-                <option value="Arnould">Arnould</option>
-                <option value="Francazio">Francazio</option>
-                <option value="Soto">Soto</option>
-                <option value="Johar">Johar</option>
+                <option value="Syed">Syed</option>
+                <option value="Jelani">Jelani</option>
+                <option value="DeJong">De Jong</option>
+                <option value="Vaughn">Vaughn</option>
+                <option value="Silva">Silva</option>
+                <option value="Johnson">Johnson</option>
             </select>
             <label id="dDx2Label" for="dDx2">Directing Attorney:</label>
             <input class="dInput" id="dDx2">
@@ -222,15 +210,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             <input class="pInput" id="pCx2">
 
             <select class="dInput" id="wit6">
-                <option value="Martini">Martini</option>
-                <option value="Lewis">Lewis</option>
-                <option value="Osborne">Osborne</option>
-                <option value="Kwon">Kwon</option>
-                <option value="Cannon">Cannon</option>
-                <option value="Arnould">Arnould</option>
-                <option value="Francazio">Francazio</option>
-                <option value="Soto">Soto</option>
-                <option value="Johar">Johar</option>
+                <option value="Syed">Syed</option>
+                <option value="Jelani">Jelani</option>
+                <option value="DeJong">De Jong</option>
+                <option value="Vaughn">Vaughn</option>
+                <option value="Silva">Silva</option>
+                <option value="Johnson">Johnson</option>
             </select>
             <label id="dDx3Label" for="dDx3">Directing Attorney:</label>
             <input class="dInput" id="dDx3">
@@ -239,7 +224,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             <label id="pCx3Label" for="pCx3">Crossing Attorney:</label>
             <input class="pInput" id="pCx3">
 
-            <label id="pCloseLabel" for="pClose">Plaintiff Close:</label>
+            <label id="pCloseLabel" for="pClose">Prosecution Close:</label>
             <input class="pInput" id="pClose">
             <label id="dCloseLabel" for="dClose">Defense Close:</label>
             <input class="dInput" id="dClose">
