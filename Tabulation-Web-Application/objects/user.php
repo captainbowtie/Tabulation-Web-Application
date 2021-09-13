@@ -75,7 +75,7 @@ function getUserByEmail($email) {
     return $user;
 }
 
-function getUserByURL($url){
+function getUserByURL($url) {
     $db = new Database();
     $conn = $db->getConnection();
     $query = "SELECT * FROM users WHERE url = '$url'";
@@ -146,4 +146,19 @@ function updateUser($id, $field, $value) {
     }
     $conn->close();
     return $userUpdated;
+}
+
+function resetURL($id) {
+    $url = bin2hex(random_bytes(8));
+    $urlReset = false;
+    $db = new Database();
+    $conn = $db->getConnection();
+    $query = "UPDATE users SET url = '$url' WHERE id = $id";
+    $conn->query($query);
+    echo $query;
+    if ($conn->affected_rows == 1) {
+        $urlReset = true;
+    }
+    $conn->close();
+    return $urlReset;
 }
