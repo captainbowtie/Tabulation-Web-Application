@@ -49,11 +49,18 @@ if (
 ) {
     $url = htmlspecialchars($_GET['url']);
     $user = getUserByURL($url);
-    $_SESSION["id"] = $user["id"];
+    if ($user["email"] == "") {
+        echo "Error: invalid login URL";
+        $_SESSION["isAdmin"] = 0;
+        $_SESSION["isCoach"] = 0;
+        $_SESSION["id"] = 0;
+    } else {
+        $_SESSION["id"] = $user["id"];
         $_SESSION["user"] = $user["email"];
         $_SESSION["isAdmin"] = $user["isAdmin"];
         $_SESSION["isCoach"] = $user["isCoach"];
         header("Location: index.php");
+    }
 } else {
 // tell the user
     echo json_encode(array("message" => "Unable to login. Data is incomplete."));
