@@ -29,7 +29,7 @@ if (
 ) {
     $email = htmlspecialchars(strip_tags($data->email));
     $password = htmlspecialchars(strip_tags($data->password));
-    $user = getUser($email);
+    $user = getUserByEmail($email);
     if ($user["email"] === $email &&
             password_verify($password, $user["password"])) {
         $_SESSION["id"] = $user["id"];
@@ -44,6 +44,16 @@ if (
         // tell the user
         echo json_encode(array("message" => "Unable to login. Incorrect information."));
     }
+} else if (
+        isset($_GET['url'])
+) {
+    $url = htmlspecialchars($_GET['url']);
+    $user = getUserByURL($url);
+    $_SESSION["id"] = $user["id"];
+        $_SESSION["user"] = $user["email"];
+        $_SESSION["isAdmin"] = $user["isAdmin"];
+        $_SESSION["isCoach"] = $user["isCoach"];
+        header("Location: index.php");
 } else {
 // tell the user
     echo json_encode(array("message" => "Unable to login. Data is incomplete."));

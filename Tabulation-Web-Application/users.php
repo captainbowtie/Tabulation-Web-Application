@@ -32,6 +32,7 @@ if ($_SESSION["isAdmin"]) {
         $bodyHTML .= "></td>\n";
         $bodyHTML .= "<td><button class='passwordButton' id='password$a'>Change Password</button></td>\n";
         $bodyHTML .= "<td><button id='teams$a' data-user='".$users[$a]["id"]."' class='teamsButton'>Teams</button></td>\n";
+        $bodyHTML .= "<td><a href='doLogin.php?url=".$users[$a]["url"]."'>Login Link</a></td>\n";
         $bodyHTML .= "</tr>\n";
     }
     $bodyHTML .= "</table>\n";
