@@ -31,8 +31,9 @@ if ($_SESSION["isAdmin"]) {
         }
         $bodyHTML .= "></td>\n";
         $bodyHTML .= "<td><button class='passwordButton' id='password$a'>Change Password</button></td>\n";
-        $bodyHTML .= "<td><button id='teams$a' data-user='".$users[$a]["id"]."' class='teamsButton'>Teams</button></td>\n";
-        $bodyHTML .= "<td><a href='doLogin.php?url=".$users[$a]["url"]."'>Login Link</a></td>\n";
+        $bodyHTML .= "<td><button id='teams$a' data-user='" . $users[$a]["id"] . "' class='teamsButton'>Teams</button></td>\n";
+        $bodyHTML .= "<td><a href='doLogin.php?url=" . $users[$a]["url"] . "'>Login Link</a></td>\n";
+        $bodyHTML .= "<td><button class='urlButton' id='url$a'>Reset Link</button></td>\n";
         $bodyHTML .= "</tr>\n";
     }
     $bodyHTML .= "</table>\n";
@@ -42,7 +43,7 @@ if ($_SESSION["isAdmin"]) {
     if (!empty($teams)) {
         for ($a = 0; $a < sizeOf($teams); $a++) {
             $teamsHTML .= "<div>\n";
-            $teamsHTML .= "<label><input class='teamCheckbox' data-number='".$teams[$a]["number"]."' type='checkbox' id='" . $teams[$a]["number"] . "checkbox'>" . $teams[$a]["number"] . " " . $teams[$a]["name"] . "</label>\n";
+            $teamsHTML .= "<label><input class='teamCheckbox' data-number='" . $teams[$a]["number"] . "' type='checkbox' id='" . $teams[$a]["number"] . "checkbox'>" . $teams[$a]["number"] . " " . $teams[$a]["name"] . "</label>\n";
             $teamsHTML .= "</div>\n";
         }
     }
@@ -158,6 +159,26 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                         </form>
                     </div>
                     <div class="modal-footer">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- URL Modal -->
+        <div id="urlModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Reset Login Link</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p id="urlPrompt">Resetting the link will disable the old link and create a new one.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="resetURL" class="btn btn-default" data-dismiss="modal">Reset Link</button>
                     </div>
                 </div>
             </div>

@@ -155,7 +155,6 @@ function resetURL($id) {
     $conn = $db->getConnection();
     $query = "UPDATE users SET url = '$url' WHERE id = $id";
     $conn->query($query);
-    echo $query;
     if ($conn->affected_rows == 1) {
         $urlReset = true;
     }
