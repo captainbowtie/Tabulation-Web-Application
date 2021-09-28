@@ -16,6 +16,7 @@
  */
 
 var passwordId;
+var urlId;
 var coaches = [];
 var coachUser;
 
@@ -120,11 +121,34 @@ $("#addUser").on("click", function () {
     });
 });
 
+$(".urlButton").on("click", function () {
+    let editRow = $(this).closest("tr");
+    urlId = (editRow[0].id.substring(4));
+    urlModal();
+});
+
+$("#resetURL").on("click",function(){
+    $.ajax({
+        url: "../api/users/resetURL.php",
+        method: "POST",
+        data: `{"id":${urlId}}`,
+        dataType: "json"
+    }).then(response => {
+        if (response.message === 0) {
+            window.location.reload();
+        } else {
+            warningModal(response.message);
+        }
+    });
+});
+
 function fillTeamsModal(userID) {
     //start by unchecking all checkboxes
     $(".teamCheckbox").prop("checked", false);
 
     //then check the ones with conflicts
+    
+    //verifies there is in fact stuff in the array
     if (!coaches) {
 
     } else {
@@ -139,6 +163,10 @@ function fillTeamsModal(userID) {
 function passwordModal() {
     $("#newPassword").val("");
     $("#passwordModal").modal();
+}
+
+function urlModal(){
+    $("#urlModal").modal();
 }
 
 function updateUser(id, field, value) {

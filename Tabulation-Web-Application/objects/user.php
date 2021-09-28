@@ -38,15 +38,18 @@ class User {
 
 function createUser($email, $password, $isAdmin, $isCoach) {
     $hashedPassword = password_hash($password, PASSWORD_BCRYPT, ['cost' => 11,]);
+    $url = bin2hex(random_bytes(8));
     $userCreated = false;
     $db = new Database();
     $conn = $db->getConnection();
-    $query = "INSERT INTO users (email, password, isAdmin, isCoach) VALUES ("
+    $query = "INSERT INTO users (email, password, isAdmin, isCoach, url) VALUES ("
             . "'$email',"
             . "'$hashedPassword',"
             . "$isAdmin,"
-            . "$isCoach)";
+            . "$isCoach,"
+            . "'$url')";
     $conn->query($query);
+    echo $query;
     if ($conn->affected_rows == 1) {
         $userCreated = true;
     }
@@ -54,7 +57,7 @@ function createUser($email, $password, $isAdmin, $isCoach) {
     return $userCreated;
 }
 
-function getUser($email) {
+function getUserByEmail($email) {
     $db = new Database();
     $conn = $db->getConnection();
     $query = "SELECT * FROM users WHERE email = '$email'";
@@ -65,6 +68,25 @@ function getUser($email) {
         $user["password"] = $row["password"];
         $user["isAdmin"] = $row["isAdmin"];
         $user["isCoach"] = $row["isCoach"];
+        $user["url"] = $row["url"];
+        $result->close();
+    }
+    $conn->close();
+    return $user;
+}
+
+function getUserByURL($url) {
+    $db = new Database();
+    $conn = $db->getConnection();
+    $query = "SELECT * FROM users WHERE url = '$url'";
+    if ($result = $conn->query($query)) {
+        $row = $result->fetch_assoc();
+        $user["id"] = intval($row["id"]);
+        $user["email"] = $row["email"];
+        $user["password"] = $row["password"];
+        $user["isAdmin"] = $row["isAdmin"];
+        $user["isCoach"] = $row["isCoach"];
+        $user["url"] = $row["url"];
         $result->close();
     }
     $conn->close();
@@ -79,7 +101,7 @@ function getAllUsers() {
     $conn = $db->getConnection();
 
     //get user data
-    $userQuery = "SELECT id,email,isAdmin,isCoach FROM users ORDER BY email";
+    $userQuery = "SELECT id,email,isAdmin,isCoach,url FROM users ORDER BY email";
     if ($result = $conn->query($userQuery)) {
         $i = 0;
         while ($row = $result->fetch_assoc()) {
@@ -87,6 +109,7 @@ function getAllUsers() {
             $users[$i]["email"] = $row["email"];
             $users[$i]["isAdmin"] = $row["isAdmin"];
             $users[$i]["isCoach"] = $row["isCoach"];
+            $users[$i]["url"] = $row["url"];
             $i++;
         }
         /* free result set */
@@ -123,4 +146,18 @@ function updateUser($id, $field, $value) {
     }
     $conn->close();
     return $userUpdated;
+}
+
+function resetURL($id) {
+    $url = bin2hex(random_bytes(8));
+    $urlReset = false;
+    $db = new Database();
+    $conn = $db->getConnection();
+    $query = "UPDATE users SET url = '$url' WHERE id = $id";
+    $conn->query($query);
+    if ($conn->affected_rows == 1) {
+        $urlReset = true;
+    }
+    $conn->close();
+    return $urlReset;
 }

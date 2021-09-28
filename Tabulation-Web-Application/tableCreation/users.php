@@ -32,7 +32,8 @@ id INT(3) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 email VARCHAR(64) NOT NULL,
 password CHAR(60) NOT NULL,
 isAdmin BOOLEAN NOT NULL DEFAULT false,
-isCoach BOOLEAN NOT NULL DEFAULT false
+isCoach BOOLEAN NOT NULL DEFAULT false,
+url CHAR(16)
 )";
 
 if ($conn->query($query) === TRUE) {
