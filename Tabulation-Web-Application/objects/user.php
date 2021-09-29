@@ -49,7 +49,6 @@ function createUser($email, $password, $isAdmin, $isCoach) {
             . "$isCoach,"
             . "'$url')";
     $conn->query($query);
-    echo $query;
     if ($conn->affected_rows == 1) {
         $userCreated = true;
     }

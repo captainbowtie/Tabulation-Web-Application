@@ -42,7 +42,7 @@ session_start();
         <script type="text/javascript" src="login.js" defer></script>
     </head>
     <body>
-        <div id="form">
+        <form id="form">
             <div>
                 <label id="emailLabel" for="email">Email:</label>
                 <input id="email" name="email" type="email">
@@ -52,9 +52,9 @@ session_start();
                 <input id="password" name="password" type="password">
             </div>
             <div>
-                <button id="button">Submit</button>
+                <input type="submit" id="button" value="Submit">
             </div>
-        </div>
+        </form>
     </body>
 </html>
 
