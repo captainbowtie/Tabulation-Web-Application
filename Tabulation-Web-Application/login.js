@@ -15,7 +15,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-$("#button").on("click",function(){
+$("form").submit(function(e){
+    e.preventDefault();
     let email = $("#email").val();
     let password = $("#password").val();
     let data = '{"email":"' + email + '","password":"' + password + '"}';
