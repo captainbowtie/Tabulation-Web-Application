@@ -56,7 +56,7 @@ $("#unlockButton").on("click", function () {
         dataType: "json"
     }).then(response => {
         if (response.message === 0) {
-            warningModal(`Ballot Unlocked.\nYou can edit the ballot <a href="${response.url}">here</a>.`);
+            warningModal(`Ballot Unlocked.\nYou can edit the ballot <a href="judgeBallot.php?ballot=${response.url}">here</a>.`);
         } else {
             alert(response.message);
         }

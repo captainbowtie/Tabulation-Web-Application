@@ -521,6 +521,6 @@ function getBallotURL($id) {
     $conn->close();
 
     //return full url
-    $url = "https://" . HOST_NAME . "/judgeBallot.php?ballot=" . $row["url"];
+    $url = $row["url"];
     return $url;
 }
