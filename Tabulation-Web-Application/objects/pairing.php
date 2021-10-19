@@ -45,7 +45,6 @@ function createPairing($round, $plaintiff, $defense) {
     }
     $teamResult->close();
 
-
     $stmt = $conn->prepare("INSERT INTO pairings (round, plaintiff, defense) VALUES (?, ?, ?)");
     $stmt->bind_param('iii', $round, $plaintiffID, $defenseID);
     $stmt->execute();
@@ -156,7 +155,6 @@ function getRoundPairings($round) {
         /* free result set */
         $result->close();
 
-
         //convert ids to team numbers
         $teamQuery = "SELECT id,number FROM teams";
         $teamResult = $conn->query($teamQuery);
@@ -262,4 +260,35 @@ function submitCaptains($captains) {
     } else {
         return false;
     }
+}
+
+function getBallotData($pairingID) {
+    $ballotData;
+
+    $pairingsQuery = "SELECT * FROM pairings WHERE id = $pairingID";
+    //connect to database
+    $db = new Database();
+    $conn = $db->getConnection();
+
+    //get ballot data
+    if ($result = $conn->query($pairingsQuery)) {
+        $ballotData = $result->fetch_assoc();
+        /* free result set */
+        $result->close();
+    }
+
+    //convert ids to team numbers
+    $teamQuery = "SELECT id,number FROM teams WHERE id = " . $ballotData["plaintiff"] . " || id = " . $ballotData["defense"];
+    $teamResult = $conn->query($teamQuery);
+    while ($teamRow = $teamResult->fetch_assoc()) {
+
+        if ($ballotData["plaintiff"] === intval($teamRow["id"])) {
+            $ballotData["plaintiff"] = intval($teamRow["number"]);
+        } else if ($ballotData["defense"] === intval($teamRow["id"])) {
+            $ballotData["defense"] = intval($teamRow["number"]);
+        }
+    }
+    $teamResult->close();
+    $conn->close();
+    return $ballotData;
 }

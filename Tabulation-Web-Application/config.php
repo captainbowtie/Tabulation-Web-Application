@@ -17,4 +17,4 @@
  */
 
 define('SITE_ROOT', __DIR__);
-define('HOST_NAME','localhost:8000');
+define('tabEmail','allen@allenbarr.com');
