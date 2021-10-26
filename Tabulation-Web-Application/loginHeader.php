@@ -36,9 +36,11 @@ if ($_SESSION["isAdmin"]) {
     $header .= "<a style='float: right' href='logout.php'>Log Out</a>\n";
 } elseif ($_SESSION["isCoach"]) {
     $header .= '<a href="index.php">Home</a>
-        <a href="comments.php">Ballots</a>';
+        <a href="comments.php">Ballots</a>
+        <a href="captains.php">Captains Form</a>';
     $header .= "<a style='float: right' href='logout.php'>Log Out</a>\n";
 } else {
-    $header .= "<a style='float: right' href='login.php'>Log In</a>\n";
+    $header .= "<a href='captains.php'>Captains Form</a>"
+            . "<a style='float: right' href='login.php'>Log In</a>\n";
 }
 $header .= "</div>\n";
