@@ -173,7 +173,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
         <title>Ballot</title>
     </head>
-    <body>
+    
         <div>
             <p><?php echo $pTeamNumber; ?> v. <?php echo $dTeamNumber; ?></p>
             <p>Judge <?php echo $judgeName; ?></p>
@@ -479,7 +479,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                         <h4 class="modal-title"></h4>
                     </div>
                     <div class="modal-body" id="lockModalText">
-                        Locking the ballot will prevent further changes. If you need to modify the ballot, you will have to contact the tournament's tabulation director at allen@allenbarr.com. Would you like to lock the ballot?
+                        Locking the ballot will prevent further changes. If you need to modify the ballot, you will have to contact the tournament's tabulation director at <?php echo TAB_EMAIL ?>. Would you like to lock the ballot?
                     </div>
                     <div class="modal-footer">
                         <button type="button" id="lockButton" class="btn btn-default" data-dismiss="modal">Lock Ballot</button>
@@ -488,7 +488,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             </div>
         </div>
 
-        <script>const url = "<?php echo $url; ?>"</script>
+        <script>const url = "<?php echo $url; ?>";</script>
         <script src="judgeBallot.js"></script>
-    </body>
+        <script src="config.js"></script>
 </html>

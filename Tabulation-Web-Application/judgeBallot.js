@@ -39,7 +39,7 @@ $("textarea").on("change", function () {
         data: commentData,
         dataType: "json"
     }).fail(function (jqXHR, textStatus, errorThrown) {
-        alert("Error updating comments. Please contact the tabulation room at allen@allenbarr.com");
+        alert(`Error updating comments. Please contact the tabulation room at ${tabEmail}`);
     });
 })
 
@@ -55,7 +55,7 @@ $("select").on("change", function () {
         data: individualData,
         dataType: "json"
     }).fail(function (jqXHR, textStatus, errorThrown) {
-        alert("Error updating individual award. Please contact the tabulation room at allen@allenbarr.com");
+        alert(`Error updating individual award. Please contact the tabulation room at ${tabEmail}`);
     });
 })
 
@@ -122,7 +122,7 @@ $("#submit").on("click", function () {
         $("#lockModalText").html(
                 `Plaintiff Points: ${plaintiffPoints}<br>` +
                 `Defense Points: ${defensePoints}<br>` +
-                `Locking the ballot will prevent further changes. If you need to modify the ballot, you will have to contact the tournament's tabulation director at allen@allenbarr.com. Would you like to lock the ballot?`);
+                `Locking the ballot will prevent further changes. If you need to modify the ballot, you will have to contact the tournament's tabulation director at ${tabEmail}. Would you like to lock the ballot?`);
         $("#lockModal").modal();
     }
 
@@ -201,7 +201,7 @@ $("#lockButton").on("click", function () {
         data: ballotData,
         dataType: "json"
     }).done(function ( ) {
-        alert('Ballot successfully submitted. If you need to make any changes, please contact allen@allenbarr.com');
+        alert(`Ballot successfully submitted. If you need to make any changes, please contact ${tabEmail}`);
         $("#submit").prop("disabled",true);
         $("#submit").html("Ballot Submitted");
     }).fail(function (jqXHR, textStatus, errorThrown) {
@@ -251,7 +251,7 @@ function updateScore(part, score) {
         data: updateData,
         dataType: "json"
     }).fail(function (jqXHR, textStatus, errorThrown) {
-        alert("Error updating score. Please contact the tabulation room at allen@allenbarr.com");
+        alert(`Error updating score. Please contact the tabulation room at ${tabEmail}`);
     });
 }
 
