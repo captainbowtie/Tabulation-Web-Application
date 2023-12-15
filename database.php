@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2020 allen
+ * Copyright (C) 2023 allen
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -22,24 +22,24 @@
  *
  * @author allen
  */
-class Database {
+class Database
+{
 
-    private $host = "db4free.net";
+    private $host = "localhost";
     private $database = "tournament";
-    private $username = "mocktrial";
-    private $password = "password";
+    private $username = "tournamentUser";
+    private $password = "tournamentPassword";
     public $conn;
 
     // get the database connection
-    public function getConnection() {
-
-        $conn = new mysqli($this->host, $this->username, $this->password, $this->database);
-
-        if ($conn->connect_error) {
-            die("Connection failed: " . $db->connect_error);
+    public function getConnection()
+    {
+        try {
+            $conn = new PDO("mysql:host=$this->host;dbname=$this->database", $this->username, $this->password);
+            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            return $conn;
+        } catch (PDOException $e) {
+            echo "Connection failed: " . $e->getMessage();
         }
-
-        return $conn;
     }
-
 }

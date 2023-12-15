@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2020 allen
+ * Copyright (C) 2023 allen
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -16,12 +16,24 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+require_once __DIR__ . "/../../config.php";
+require_once SITE_ROOT . "/database.php";
 session_start();
 if ($_SESSION["isAdmin"]) {
-    require_once __DIR__ . '/../../config.php';
-    require_once SITE_ROOT . '/objects/user.php';
-
-    echo json_encode(getAllUsers());
+	try {
+		$db = new Database();
+		$conn = $db->getConnection();
+		$stmt = $conn->prepare("SELECT * FROM users ORDER BY username");
+		$stmt->execute();
+		$result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+		echo json_encode($stmt->fetchAll());
+	} catch (PDOException $e) {
+		echo "Error: " . $e->getMessage();
+	}
+	$conn = null;
 } else {
-    http_response_code(401);
+	$_SESSION["isAdmin"] = false;
+	http_response_code(401);
+	echo json_encode(array("message" => -1));
 }

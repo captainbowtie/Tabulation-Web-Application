@@ -18,42 +18,66 @@
  */
 session_start();
 if ($_SESSION["isAdmin"]) {
-    require_once __DIR__ . '/../../config.php';
-    require_once SITE_ROOT . '/objects/user.php';
+	require_once __DIR__ . '/../../config.php';
+	require_once SITE_ROOT . "/database.php";
 
-    $data = json_decode(file_get_contents("php://input"));
+	$data = json_decode(file_get_contents("php://input"));
 
-    if (
-            isset($data->id) &&
-            isset($data->field) &&
-            isset($data->value)
-    ) {
-        $id = htmlspecialchars(strip_tags($data->id));
-        $field = htmlspecialchars(strip_tags($data->field));
-        $value = htmlspecialchars(strip_tags($data->value));
-        if (updateUser($id, $field, $value)) {
-            // set response code - 201 created
-            http_response_code(201);
+	if (
+		isset($data->id) &&
+		isset($data->field) &&
+		isset($data->value)
+	) {
+		$id = htmlspecialchars(strip_tags($data->id));
+		$field = htmlspecialchars(strip_tags($data->field));
+		$value = htmlspecialchars(strip_tags($data->value));
+		if ($field == "username" || $field == "isAdmin") {
+			if (updateUser($id, $field, $value)) {
+				// set response code - 201 created
+				http_response_code(201);
 
-            // tell the user
-            echo json_encode(array("message" => 0));
-        } else {
+				// tell the user
+				echo json_encode(array("message" => 0));
+			} else {
 
-            // set response code - 503 service unavailable
-            http_response_code(503);
+				// set response code - 503 service unavailable
+				http_response_code(503);
 
-            // tell the user
-            echo json_encode(array("message" => "Unable to update user."));
-        }
-    } else {
+				// tell the user
+				echo json_encode(array("message" => "Unable to update user."));
+			}
+		} else {
+			// set response code - 400 bad request
+			http_response_code(400);
 
-        // set response code - 400 bad request
-        http_response_code(400);
+			// tell the user
+			echo json_encode(array("message" => "Unable to update user. Invalid field."));
+		}
+	} else {
 
-        // tell the user
-        echo json_encode(array("message" => "Unable to update user. Data is incomplete."));
-    }
+		// set response code - 400 bad request
+		http_response_code(400);
+
+		// tell the user
+		echo json_encode(array("message" => "Unable to update user. Data is incomplete."));
+	}
 } else {
-    http_response_code(401);
+	$_SESSION["isAdmin"] = false;
+	http_response_code(401);
+	echo json_encode(array("message" => -1));
 }
 
+function updateUser($id, $field, $value)
+{
+	$userUpdated = false;
+	$db = new Database();
+	$conn = $db->getConnection();
+	$stmt = $conn->prepare("UPDATE users SET :field=:value WHERE id=:id");
+	$stmt->bindParam(':value', $value);
+	$stmt->bindParam(':field', $field);
+	$stmt->bindParam(':id', $id);
+	$stmt->execute();
+	$conn = null;
+	$userUpdated = true;
+	return $userUpdated;
+}

@@ -17,8 +17,8 @@
  */
 
 // Get config information
-require_once __DIR__."/../config.php";
-require_once SITE_ROOT."/database.php";
+require_once __DIR__ . "/../config.php";
+require_once SITE_ROOT . "/database.php";
 
 // Create db connection
 $db = new Database();
@@ -28,6 +28,7 @@ $conn = $db->getConnection();
 $query = "CREATE TABLE IF NOT EXISTS pairings (
 id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 round INT(1) UNSIGNED NOT NULL,
+room VARCHAR(32) DEFAULT 'N/A',
 plaintiff INT(4) UNSIGNED NOT NULL,
 defense INT(4) UNSIGNED NOT NULL,
 pOpen CHAR(32) DEFAULT 'N/A',
@@ -60,10 +61,5 @@ wit5 CHAR(32) DEFAULT 'N/A',
 wit6 CHAR(32) DEFAULT 'N/A'
 )";
 
-if ($conn->query($query) === TRUE) {
-    
-} else {
-    echo "Error creating table: " . $conn->error;
-}
-
-$conn->close();
+$conn->exec($query);
+$conn = null;

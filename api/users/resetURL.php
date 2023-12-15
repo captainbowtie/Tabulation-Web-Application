@@ -19,37 +19,54 @@
 
 session_start();
 if ($_SESSION["isAdmin"]) {
-    require_once __DIR__ . '/../../config.php';
-    require_once SITE_ROOT . '/objects/user.php';
+	require_once __DIR__ . '/../../config.php';
+	require_once SITE_ROOT . "/database.php";
 
-    $data = json_decode(file_get_contents("php://input"));
+	$data = json_decode(file_get_contents("php://input"));
 
-    if (
-            isset($data->id)
-    ) {
-        $id = htmlspecialchars(strip_tags($data->id));
-        if (resetURL($id)) {
-            // set response code - 201 created
-            http_response_code(201);
+	if (
+		isset($data->id)
+	) {
+		$id = htmlspecialchars(strip_tags($data->id));
+		if (resetURL($id)) {
+			// set response code - 201 created
+			http_response_code(201);
 
-            // tell the user
-            echo json_encode(array("message" => 0));
-        } else {
+			// tell the user
+			echo json_encode(array("message" => 0));
+		} else {
 
-            // set response code - 503 service unavailable
-            http_response_code(503);
+			// set response code - 503 service unavailable
+			http_response_code(503);
 
-            // tell the user
-            echo json_encode(array("message" => "Unable to reset URL."));
-        }
-    } else {
+			// tell the user
+			echo json_encode(array("message" => "Unable to reset URL."));
+		}
+	} else {
 
-        // set response code - 400 bad request
-        http_response_code(400);
+		// set response code - 400 bad request
+		http_response_code(400);
 
-        // tell the user
-        echo json_encode(array("message" => "Unable to reset URL. Data is incomplete."));
-    }
+		// tell the user
+		echo json_encode(array("message" => "Unable to reset URL. Data is incomplete."));
+	}
 } else {
-    http_response_code(401);
+	$_SESSION["isAdmin"] = false;
+	http_response_code(401);
+	echo json_encode(array("message" => -1));
+}
+
+function resetURL($id)
+{
+	$url = bin2hex(random_bytes(32));
+	$urlReset = false;
+	$db = new Database();
+	$conn = $db->getConnection();
+	$stmt = $conn->prepare("UPDATE users SET url=:url WHERE id=:id");
+	$stmt->bindParam(':url', $url);
+	$stmt->bindParam(':id', $id);
+	$stmt->execute();
+	$conn = null;
+	$urlReset = true;
+	return $urlReset;
 }

@@ -16,12 +16,21 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-session_start();
-if ($_SESSION["isAdmin"]) {
-    require_once __DIR__ . '/../../config.php';
-    require_once SITE_ROOT . '/objects/coach.php';
 
-    echo json_encode(getAllCoaches());
-} else {
-    die("Access denied.");
-}
+// Get config information
+require_once __DIR__ . "/../config.php";
+require_once SITE_ROOT . "/database.php";
+
+// Create db connection
+$db = new Database();
+$conn = $db->getConnection();
+
+//Query to create table
+$query = "CREATE TABLE IF NOT EXISTS coaches (
+id INT(3) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+team SMALLINT(3) UNSIGNED NOT NULL,
+user SMALLINT(3) UNSIGNED NOT NULL
+)";
+
+$conn->exec($query);
+$conn = null;

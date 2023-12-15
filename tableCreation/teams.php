@@ -17,8 +17,8 @@
  */
 
 // Get config information
-require_once __DIR__."/../config.php";
-require_once SITE_ROOT."/database.php";
+require_once __DIR__ . "/../config.php";
+require_once SITE_ROOT . "/database.php";
 
 // Create db connection
 $db = new Database();
@@ -33,11 +33,5 @@ isByeTeam BOOLEAN NOT NULL DEFAULT false,
 UNIQUE (number)
 )";
 
-if ($conn->query($query) === TRUE) {
-    
-} else {
-    echo "Error creating table: " . $conn->error;
-}
-
-$conn->close();
-?>
+$conn->exec($query);
+$conn = null;

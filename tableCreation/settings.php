@@ -27,23 +27,23 @@ $conn = $db->getConnection();
 
 //Query to create table
 $query = "CREATE TABLE IF NOT EXISTS settings (
-id INT(1) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-judgesPerRound INT(2) UNSIGNED NOT NULL,
+id INT(1) UNSIGNED AUTO_INCREMENT PRIMARY KEY,x
 lowerTeamIsHigherRank BOOLEAN NOT NULL,
 snakeStartsOnPlaintiff BOOLEAN NOT NULL,
 roundFourBallotsViewable BOOLEAN NOT NULL
 )";
 
-if ($conn->query($query) === TRUE) {
-    $settingsExistQuery = "SELECT * FROM settings";
-    $numRows = mysqli_num_rows($conn->query($settingsExistQuery));
-    if ($numRows === 0) {
-        $defaultsQuery = "INSERT INTO settings (judgesPerRound, lowerTeamIsHigherRank, snakeStartsOnPlaintiff, roundFourBallotsViewable) VALUES "
-                . "(2,TRUE,TRUE,FALSE)";
-        $conn->query($defaultsQuery);
-    }
-} else {
-    echo "Error creating table: " . $conn->error;
+$conn->exec($query);
+
+$settingsExistQuery = 'select * from settings';
+$data = $conn->query($settingsExistQuery);
+$rows = $data->fetchAll();
+$numRows = count($rows);
+
+if ($numRows === 0) {
+    $defaultsQuery = $conn->prepare("INSERT INTO settings (lowerTeamIsHigherRank, snakeStartsOnPlaintiff, roundFourBallotsViewable) VALUES "
+        . "(TRUE,TRUE,FALSE)");
+    $defaultsQuery->execute();
 }
 
-$conn->close();
+$conn = null;

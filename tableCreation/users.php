@@ -20,7 +20,6 @@
 // Get config information
 require_once __DIR__ . "/../config.php";
 require_once SITE_ROOT . "/database.php";
-require_once SITE_ROOT ."/objects/user.php";
 
 // Create db connection
 $db = new Database();
@@ -29,26 +28,22 @@ $conn = $db->getConnection();
 //Query to create table
 $query = "CREATE TABLE IF NOT EXISTS users (
 id INT(3) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-email VARCHAR(64) NOT NULL,
-password CHAR(60) NOT NULL,
-isAdmin BOOLEAN NOT NULL DEFAULT false,
-isCoach BOOLEAN NOT NULL DEFAULT false,
-url CHAR(16)
+username VARCHAR(64) NOT NULL,
+isAdmin BOOLEAN NOT NULL DEFAULT false
+url CHAR(64)
 )";
 
-if ($conn->query($query) === TRUE) {
-    $adminCheckQuery = "SELECT * FROM users";
-    $numRows = mysqli_num_rows($conn->query($adminCheckQuery));
-    if ($numRows === 0) {
-        if (createUser("allen@allenbarr.com", "password", 1, 0)) {
-            
-        } else {
-            echo "Error creating default user: " . $conn->error;
-        }
-    }
-} else {
-    echo "Error creating table: " . $conn->error;
+$conn->exec($query);
+
+$usersExistQuery = 'select * from users';
+$data = $conn->query($usersExistQuery);
+$rows = $data->fetchAll();
+$numRows = count($rows);
+
+if ($numRows === 0) {
+    $defaultsQuery = $conn->prepare("INSERT INTO users (username, isAdmin, url) VALUES "
+        . "(allen,TRUE,allen)");
+    $defaultsQuery->execute();
 }
 
-$conn->close();
-?>
+$conn = null;

@@ -30,7 +30,7 @@ $conn = $db->getConnection();
 $query = "CREATE TABLE IF NOT EXISTS ballots (
 id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 pairing INT UNSIGNED NOT NULL,
-judge SMALLINT UNSIGNED NOT NULL DEFAULT 0,
+judge TEXT,
 locked BOOLEAN DEFAULT FALSE,
 pOpen TINYINT UNSIGNED NOT NULL DEFAULT 0,
 pOpenComments TEXT,
@@ -99,11 +99,5 @@ wit4 CHAR(32) DEFAULT 'N/A',
 url CHAR(64)
 )";
 
-if ($conn->query($query) === TRUE) {
-    
-} else {
-    echo "Error creating table: " . $conn->error;
-}
-
-$conn->close();
-?>
+$conn->exec($query);
+$conn = null;

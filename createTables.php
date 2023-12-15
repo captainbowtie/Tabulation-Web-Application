@@ -28,4 +28,5 @@ require_once SITE_ROOT . "/tableCreation/users.php";
 require_once SITE_ROOT . "/tableCreation/judges.php";
 require_once SITE_ROOT . "/tableCreation/judgeConflicts.php";
 require_once SITE_ROOT . "/tableCreation/settings.php";
-require_once SITE_ROOT . "/tableCreation/coaches.php";
+require_once SITE_ROOT . "/tableCreation/userTeams.php";
+require_once SITE_ROOT . "/tableCreation/judgeAssignments.php";

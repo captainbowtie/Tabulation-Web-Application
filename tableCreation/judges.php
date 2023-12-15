@@ -31,16 +31,13 @@ $query = "CREATE TABLE IF NOT EXISTS judges (
 id INT(3) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 name VARCHAR(64) NOT NULL,
 category TINYINT(1) UNSIGNED NOT NULL,
+checkedIn BOOLEAN NOT NULL DEFAULT false,
 round1 BOOLEAN NOT NULL DEFAULT false,
 round2 BOOLEAN NOT NULL DEFAULT false,
 round3 BOOLEAN NOT NULL DEFAULT false,
-round4 BOOLEAN NOT NULL DEFAULT false
+round4 BOOLEAN NOT NULL DEFAULT false,
+notes VARCHAR(256)
 )";
 
-if ($conn->query($query) === TRUE) {
-    
-} else {
-    echo "Error creating table: " . $conn->error;
-}
-
-$conn->close();
+$conn->exec($query);
+$conn = null;
