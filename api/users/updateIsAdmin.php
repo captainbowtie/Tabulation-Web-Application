@@ -24,34 +24,24 @@ if ($_SESSION["isAdmin"]) {
 	$data = json_decode(file_get_contents("php://input"));
 
 	if (
-		isset($data->id) &&
-		isset($data->field) &&
-		isset($data->value)
+		isset($_POST["id"]) &&
+		isset($_POST["isAdmin"])
 	) {
-		$id = htmlspecialchars(strip_tags($data->id));
-		$field = htmlspecialchars(strip_tags($data->field));
-		$value = htmlspecialchars(strip_tags($data->value));
-		if ($field == "username" || $field == "isAdmin") {
-			if (updateUser($id, $field, $value)) {
-				// set response code - 201 created
-				http_response_code(201);
-
-				// tell the user
-				echo json_encode(array("message" => 0));
-			} else {
-
-				// set response code - 503 service unavailable
-				http_response_code(503);
-
-				// tell the user
-				echo json_encode(array("message" => "Unable to update user."));
-			}
-		} else {
-			// set response code - 400 bad request
-			http_response_code(400);
+		$id = htmlspecialchars(strip_tags($_POST["id"]));
+		$isAdmin = htmlspecialchars(strip_tags($_POST["isAdmin"]));
+		if (updateIsAdmin($id, $isAdmin)) {
+			// set response code - 201 created
+			http_response_code(201);
 
 			// tell the user
-			echo json_encode(array("message" => "Unable to update user. Invalid field."));
+			echo json_encode(array("message" => 0));
+		} else {
+
+			// set response code - 503 service unavailable
+			http_response_code(503);
+
+			// tell the user
+			echo json_encode(array("message" => "Unable to update user."));
 		}
 	} else {
 
@@ -67,14 +57,13 @@ if ($_SESSION["isAdmin"]) {
 	echo json_encode(array("message" => -1));
 }
 
-function updateUser($id, $field, $value)
+function updateIsAdmin($id, $isAdmin)
 {
 	$userUpdated = false;
 	$db = new Database();
 	$conn = $db->getConnection();
-	$stmt = $conn->prepare("UPDATE users SET :field=:value WHERE id=:id");
-	$stmt->bindParam(':value', $value);
-	$stmt->bindParam(':field', $field);
+	$stmt = $conn->prepare("UPDATE users SET isAdmin=:isAdmin WHERE id=:id");
+	$stmt->bindParam(':isAdmin', $isAdmin);
 	$stmt->bindParam(':id', $id);
 	$stmt->execute();
 	$conn = null;

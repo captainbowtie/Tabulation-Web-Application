@@ -27,7 +27,7 @@ $conn = $db->getConnection();
 
 //Query to create table
 $query = "CREATE TABLE IF NOT EXISTS settings (
-id INT(1) UNSIGNED AUTO_INCREMENT PRIMARY KEY,x
+id INT(1) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 lowerTeamIsHigherRank BOOLEAN NOT NULL,
 snakeStartsOnPlaintiff BOOLEAN NOT NULL,
 roundFourBallotsViewable BOOLEAN NOT NULL

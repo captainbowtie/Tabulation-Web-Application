@@ -21,14 +21,12 @@ if ($_SESSION["isAdmin"]) {
 	require_once __DIR__ . '/../../config.php';
 	require_once SITE_ROOT . "/database.php";
 
-	$data = json_decode(file_get_contents("php://input"));
-
 	if (
-		isset($data->username) &&
-		isset($data->isAdmin)
+		isset($_POST["username"]) &&
+		isset($_POST["isAdmin"])
 	) {
-		$username = htmlspecialchars(strip_tags($data->username));
-		$isAdmin = htmlspecialchars(strip_tags($data->isAdmin));
+		$username = htmlspecialchars(strip_tags($_POST["username"]));
+		$isAdmin = htmlspecialchars(strip_tags($_POST["isAdmin"]));
 
 		if (createUser($username, $isAdmin)) {
 			// set response code - 201 created
@@ -60,12 +58,15 @@ if ($_SESSION["isAdmin"]) {
 
 function createUser($username, $isAdmin)
 {
+	$url = bin2hex(random_bytes(32));
+
 	$userCreated = false;
 	$db = new Database();
 	$conn = $db->getConnection();
-	$stmt = $conn->prepare("INSERT INTO users (username, isAdmin) VALUES (:username, :isAdmin)");
-	$stmt->bindParam(':name', $username);
+	$stmt = $conn->prepare("INSERT INTO users (username, isAdmin, url) VALUES (:username, :isAdmin, :url)");
+	$stmt->bindParam(':username', $username);
 	$stmt->bindParam(':isAdmin', $isAdmin);
+	$stmt->bindParam(':url', $url);
 	$stmt->execute();
 	$conn = null;
 	$userCreated = true;

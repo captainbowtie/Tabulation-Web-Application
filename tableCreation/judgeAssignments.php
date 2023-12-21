@@ -30,7 +30,7 @@ $conn = $db->getConnection();
 $query = "CREATE TABLE IF NOT EXISTS judgeAssignments (
 id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 pairing INT UNSIGNED NOT NULL,
-judge TEXT UNSIGNED NOT NULL DEFAULT 0
+judge INT UNSIGNED NOT NULL DEFAULT 0
 )";
 
 $conn->exec($query);

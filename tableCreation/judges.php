@@ -20,7 +20,6 @@
 // Get config information
 require_once __DIR__ . "/../config.php";
 require_once SITE_ROOT . "/database.php";
-require_once SITE_ROOT . "/objects/judge.php";
 
 // Create db connection
 $db = new Database();

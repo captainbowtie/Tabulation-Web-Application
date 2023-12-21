@@ -1,7 +1,7 @@
 <?php
 
-/* 
- * Copyright (C) 2021 allen
+/*
+ * Copyright (C) 2020 allen
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -16,17 +16,20 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 session_start();
 if ($_SESSION["isAdmin"]) {
 	require_once __DIR__ . '/../../config.php';
 	require_once SITE_ROOT . "/database.php";
 
+	$data = json_decode(file_get_contents("php://input"));
+
 	if (
-		isset($_POST["id"])
+		isset($_POST["id"]) &&
+		isset($_POST["username"])
 	) {
 		$id = htmlspecialchars(strip_tags($_POST["id"]));
-		if (resetURL($id)) {
+		$username = htmlspecialchars(strip_tags($_POST["username"]));
+		if (updateUsername($id, $username)) {
 			// set response code - 201 created
 			http_response_code(201);
 
@@ -38,7 +41,7 @@ if ($_SESSION["isAdmin"]) {
 			http_response_code(503);
 
 			// tell the user
-			echo json_encode(array("message" => "Unable to reset URL."));
+			echo json_encode(array("message" => "Unable to update user."));
 		}
 	} else {
 
@@ -46,7 +49,7 @@ if ($_SESSION["isAdmin"]) {
 		http_response_code(400);
 
 		// tell the user
-		echo json_encode(array("message" => "Unable to reset URL. Data is incomplete."));
+		echo json_encode(array("message" => "Unable to update user. Data is incomplete."));
 	}
 } else {
 	$_SESSION["isAdmin"] = false;
@@ -54,17 +57,16 @@ if ($_SESSION["isAdmin"]) {
 	echo json_encode(array("message" => -1));
 }
 
-function resetURL($id)
+function updateUsername($id, $username)
 {
-	$url = bin2hex(random_bytes(32));
-	$urlReset = false;
+	$userUpdated = false;
 	$db = new Database();
 	$conn = $db->getConnection();
-	$stmt = $conn->prepare("UPDATE users SET url=:url WHERE id=:id");
-	$stmt->bindParam(':url', $url);
+	$stmt = $conn->prepare("UPDATE users SET username=:username WHERE id=:id");
+	$stmt->bindParam(':username', $username);
 	$stmt->bindParam(':id', $id);
 	$stmt->execute();
 	$conn = null;
-	$urlReset = true;
-	return $urlReset;
+	$userUpdated = true;
+	return $userUpdated;
 }

@@ -29,7 +29,7 @@ $conn = $db->getConnection();
 $query = "CREATE TABLE IF NOT EXISTS users (
 id INT(3) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 username VARCHAR(64) NOT NULL,
-isAdmin BOOLEAN NOT NULL DEFAULT false
+isAdmin BOOLEAN NOT NULL DEFAULT false,
 url CHAR(64)
 )";
 
@@ -41,8 +41,7 @@ $rows = $data->fetchAll();
 $numRows = count($rows);
 
 if ($numRows === 0) {
-    $defaultsQuery = $conn->prepare("INSERT INTO users (username, isAdmin, url) VALUES "
-        . "(allen,TRUE,allen)");
+    $defaultsQuery = $conn->prepare("INSERT INTO users (username, isAdmin, url) VALUES ('allen', TRUE, 'allen')");
     $defaultsQuery->execute();
 }
 

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2023 allen
+ * Copyright (C) 2020 allen
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -17,29 +17,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
- * Description of database
- *
- * @author allen
- */
-class Database
-{
+require_once __DIR__ . "/config.php";
+require_once SITE_ROOT . "/database.php";
+session_start();
 
-    private $host = "dev-mariadb";
-    private $database = "db";
-    private $username = "user";
-    private $password = "password";
-    public $conn;
+$headerHTML = "<a href='index.php'>Home</a>";
 
-    // get the database connection
-    public function getConnection()
-    {
-        try {
-            $conn = new PDO("mysql:host=$this->host;dbname=$this->database", $this->username, $this->password);
-            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            return $conn;
-        } catch (PDOException $e) {
-            echo "Connection failed: " . $e->getMessage();
-        }
-    }
+if ($_SESSION["isAdmin"]) {
+	$headerHTML .= "<a href='users.html'>Users</a>";
+	$headerHTML .= "<a style='float: right' href='logout.php'>Log Out</a>";
+} else {
+	$headerHTML .=  '<a href="comments.php">Ballots</a>';
+	$headerHTML .= '<a href="captains.php">Captains Form</a>';
 }
+?>
+<div>
+	<?php echo $headerHTML ?>
+</div>
