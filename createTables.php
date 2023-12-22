@@ -21,7 +21,7 @@ require_once __DIR__ . "/config.php";
 require_once SITE_ROOT . "/database.php";
 
 require_once SITE_ROOT . "/tableCreation/ballots.php";
-require_once SITE_ROOT . "/tableCreation/impermissibles.php";
+require_once SITE_ROOT . "/tableCreation/teamConflicts.php";
 require_once SITE_ROOT . "/tableCreation/pairings.php";
 require_once SITE_ROOT . "/tableCreation/teams.php";
 require_once SITE_ROOT . "/tableCreation/users.php";

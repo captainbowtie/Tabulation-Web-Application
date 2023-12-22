@@ -1,6 +1,6 @@
 <?php
 /* 
- * Copyright (C) 2019 allen
+ * Copyright (C) 2023 allen
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -27,7 +27,7 @@ $conn = $db->getConnection();
 //Query to create table
 $query = "CREATE TABLE IF NOT EXISTS teams (
 id INT(3) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-number INT(4) UNSIGNED,
+number INT(4) NOT NULL UNSIGNED,
 name VARCHAR(50) NOT NULL,
 isByeTeam BOOLEAN NOT NULL DEFAULT false,
 UNIQUE (number)

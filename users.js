@@ -15,6 +15,23 @@ function fillBody() {
 	$("#body").html(bodyHTML);
 	fillUserTable();
 
+	$("#createUser").click(() => {
+		let username = $("#newUsername").val();
+		if (username != "") {
+			let userData = { username: username, isAdmin: 0 }
+			$.post(
+				"api/users/create.php",
+				userData,
+				(result) => {
+					if (result.message == -1) {
+						handleSessionExpiration();
+					} else {
+						fillBody();
+					}
+				},
+				"json");
+		}
+	});
 };
 
 function fillUserTable() {
@@ -40,7 +57,7 @@ function generateUserTable() {
 			let rowHTML = `<div style='grid-column: 1 / span 1; grid-row: ${row} / span 1;'><input class='username' userid='${user.id}' value='${user.username}'></div>`
 			rowHTML += `<div style='grid-column: 2 / span 1; grid-row: ${row} / span 1;'><button class='editTeams' userid='${user.id}'>Edit Teams</button></div>`
 			rowHTML += `<div style='grid-column: 3 / span 1; grid-row: ${row} / span 1;'><input class='isAdmin' userid='${user.id}' type='checkbox' ${user.isAdmin ? 'checked' : ''}></div>`
-			rowHTML += `<div style='grid-column: 4 / span 1; grid-row: ${row} / span 1;'><a class='loginLink' href='${user.url}'>Link</a></div>`
+			rowHTML += `<div style='grid-column: 4 / span 1; grid-row: ${row} / span 1;'><a class='loginLink' href='login.php?url=${user.url}'>Link</a></div>`
 			rowHTML += `<div  style='grid-column: 5 / span 1; grid-row: ${row} / span 1;'><button class='linkReset' userid='${user.id}'>Reset</button></div>`;
 			return rowHTML;
 		}

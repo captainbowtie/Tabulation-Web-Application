@@ -21,15 +21,14 @@ if ($_SESSION["isAdmin"]) {
 	require_once __DIR__ . '/../../config.php';
 	require_once SITE_ROOT . "/database.php";
 
-	$data = json_decode(file_get_contents("php://input"));
-
 	if (
-		isset($_POST["id"]) &&
-		isset($_POST["username"])
+		isset($_POST["team0"]) &&
+		isset($_POST["team1"])
 	) {
-		$id = htmlspecialchars(strip_tags($_POST["id"]));
-		$username = htmlspecialchars(strip_tags($_POST["username"]));
-		if (updateUsername($id, $username)) {
+		$team0 = htmlspecialchars(strip_tags($_POST["team0"]));
+		$team1 = htmlspecialchars(strip_tags($_POST["team1"]));
+
+		if (createConflict($team0, $team1)) {
 			// set response code - 201 created
 			http_response_code(201);
 
@@ -41,7 +40,7 @@ if ($_SESSION["isAdmin"]) {
 			http_response_code(503);
 
 			// tell the user
-			echo json_encode(array("message" => "Unable to update user."));
+			echo json_encode(array("message" => "Unable to create conflict."));
 		}
 	} else {
 
@@ -49,7 +48,7 @@ if ($_SESSION["isAdmin"]) {
 		http_response_code(400);
 
 		// tell the user
-		echo json_encode(array("message" => "Unable to update user. Data is incomplete."));
+		echo json_encode(array("message" => "Unable to create conflict. Data is incomplete."));
 	}
 } else {
 	$_SESSION["isAdmin"] = false;
@@ -57,16 +56,16 @@ if ($_SESSION["isAdmin"]) {
 	echo json_encode(array("message" => -1));
 }
 
-function updateUsername($id, $username)
+function createConflict($team0, $team1)
 {
-	$userUpdated = false;
+	$conflictCreated = false;
 	$db = new Database();
 	$conn = $db->getConnection();
-	$stmt = $conn->prepare("UPDATE users SET username=:username WHERE id=:id");
-	$stmt->bindParam(':username', $username);
-	$stmt->bindParam(':id', $id);
+	$stmt = $conn->prepare("INSERT INTO teamConflicts (team0, team1) VALUES (:team0, :team1)");
+	$stmt->bindParam(':team0', $team0);
+	$stmt->bindParam(':team1', $team1);
 	$stmt->execute();
 	$conn = null;
-	$userUpdated = true;
-	return $userUpdated;
+	$conflictCreated = true;
+	return $conflictCreated;
 }

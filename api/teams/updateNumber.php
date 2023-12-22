@@ -25,11 +25,11 @@ if ($_SESSION["isAdmin"]) {
 
 	if (
 		isset($_POST["id"]) &&
-		isset($_POST["username"])
+		isset($_POST["number"])
 	) {
 		$id = htmlspecialchars(strip_tags($_POST["id"]));
-		$username = htmlspecialchars(strip_tags($_POST["username"]));
-		if (updateUsername($id, $username)) {
+		$number = htmlspecialchars(strip_tags($_POST["number"]));
+		if (updateTeam($id, $number)) {
 			// set response code - 201 created
 			http_response_code(201);
 
@@ -41,7 +41,7 @@ if ($_SESSION["isAdmin"]) {
 			http_response_code(503);
 
 			// tell the user
-			echo json_encode(array("message" => "Unable to update user."));
+			echo json_encode(array("message" => "Unable to update team."));
 		}
 	} else {
 
@@ -49,7 +49,7 @@ if ($_SESSION["isAdmin"]) {
 		http_response_code(400);
 
 		// tell the user
-		echo json_encode(array("message" => "Unable to update user. Data is incomplete."));
+		echo json_encode(array("message" => "Unable to update team. Data is incomplete."));
 	}
 } else {
 	$_SESSION["isAdmin"] = false;
@@ -57,16 +57,16 @@ if ($_SESSION["isAdmin"]) {
 	echo json_encode(array("message" => -1));
 }
 
-function updateUsername($id, $username)
+function updateTeam($id, $number)
 {
-	$userUpdated = false;
+	$teamUpdated = false;
 	$db = new Database();
 	$conn = $db->getConnection();
-	$stmt = $conn->prepare("UPDATE users SET username=:username WHERE id=:id");
-	$stmt->bindParam(':username', $username);
+	$stmt = $conn->prepare("UPDATE teams SET number=:number WHERE id=:id");
+	$stmt->bindParam(':number', $number);
 	$stmt->bindParam(':id', $id);
 	$stmt->execute();
 	$conn = null;
-	$userUpdated = true;
-	return $userUpdated;
+	$teamUpdated = true;
+	return $teamUpdated;
 }

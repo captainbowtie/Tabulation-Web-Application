@@ -21,15 +21,14 @@ if ($_SESSION["isAdmin"]) {
 	require_once __DIR__ . '/../../config.php';
 	require_once SITE_ROOT . "/database.php";
 
-	$data = json_decode(file_get_contents("php://input"));
-
 	if (
-		isset($_POST["id"]) &&
-		isset($_POST["username"])
+		isset($_POST["number"]) &&
+		isset($_POST["name"])
 	) {
-		$id = htmlspecialchars(strip_tags($_POST["id"]));
-		$username = htmlspecialchars(strip_tags($_POST["username"]));
-		if (updateUsername($id, $username)) {
+		$number = htmlspecialchars(strip_tags($_POST["number"]));
+		$name = htmlspecialchars(strip_tags($_POST["name"]));
+
+		if (createTeam($number, $name)) {
 			// set response code - 201 created
 			http_response_code(201);
 
@@ -41,7 +40,7 @@ if ($_SESSION["isAdmin"]) {
 			http_response_code(503);
 
 			// tell the user
-			echo json_encode(array("message" => "Unable to update user."));
+			echo json_encode(array("message" => "Unable to create team."));
 		}
 	} else {
 
@@ -49,7 +48,7 @@ if ($_SESSION["isAdmin"]) {
 		http_response_code(400);
 
 		// tell the user
-		echo json_encode(array("message" => "Unable to update user. Data is incomplete."));
+		echo json_encode(array("message" => "Unable to create team. Data is incomplete."));
 	}
 } else {
 	$_SESSION["isAdmin"] = false;
@@ -57,16 +56,16 @@ if ($_SESSION["isAdmin"]) {
 	echo json_encode(array("message" => -1));
 }
 
-function updateUsername($id, $username)
+function createTeam($number, $name)
 {
-	$userUpdated = false;
+	$teamCreated = false;
 	$db = new Database();
 	$conn = $db->getConnection();
-	$stmt = $conn->prepare("UPDATE users SET username=:username WHERE id=:id");
-	$stmt->bindParam(':username', $username);
-	$stmt->bindParam(':id', $id);
+	$stmt = $conn->prepare("INSERT INTO teams (number, name) VALUES (:number, :name)");
+	$stmt->bindParam(':number', $number);
+	$stmt->bindParam(':name', $name);
 	$stmt->execute();
 	$conn = null;
-	$userUpdated = true;
-	return $userUpdated;
+	$teamCreated = true;
+	return $teamCreated;
 }
