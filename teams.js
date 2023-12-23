@@ -158,11 +158,7 @@ function getConflicts() {
 		$.get(
 			"api/teamConflicts/getAll.php",
 			(conflicts) => {
-				if (conflicts.message == -1) {
-					reject(handleSessionExpiration());
-				} else {
-					resolve(conflicts);
-				}
+				resolve(conflicts);
 			},
 			"json").fail(() => {
 				handleSessionExpiration();
@@ -176,9 +172,6 @@ function updateTeamNumber(id, number) {
 		"api/teams/updateNumber.php",
 		updateData,
 		function (response) {
-			if (response.message == -1) {
-				handleSessionExpiration();
-			}
 		},
 		"json").fail(() => {
 			handleSessionExpiration();
@@ -191,9 +184,6 @@ function updateTeamName(id, name) {
 		"api/teams/updateName.php",
 		updateData,
 		function (response) {
-			if (response.message == -1) {
-				handleSessionExpiration();
-			}
 		},
 		"json").fail(() => {
 			handleSessionExpiration();
