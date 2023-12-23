@@ -27,7 +27,7 @@ $conn = $db->getConnection();
 //Query to create table
 $query = "CREATE TABLE IF NOT EXISTS teams (
 id INT(3) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-number INT(4) NOT NULL UNSIGNED,
+number INT(4) UNSIGNED NOT NULL,
 name VARCHAR(50) NOT NULL,
 isByeTeam BOOLEAN NOT NULL DEFAULT false,
 UNIQUE (number)

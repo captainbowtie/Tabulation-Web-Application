@@ -39,7 +39,7 @@ function fillBody() {
 function fillTeamTable() {
 	generateTeamTable().then(function (tableHTML) {
 		$("#teamTable").html(tableHTML);
-		//fill conflicts
+		fillConflicts();
 		attachListeners();
 	});
 }
@@ -80,6 +80,28 @@ function attachListeners() {
 	});*/
 }
 
+function fillConflicts() {
+	getConflicts().then((conflicts) => {
+		let conflictChecks = $(".conflict");
+		for (let a = 0; a < conflictChecks.length; a++) {
+			$(conflictChecks[a]).prop("checked", false);
+		}
+
+		for (let a = 0; a < conflictChecks.length; a++) {
+			let conflictCheck = $(conflictChecks[a]);
+			let checkTeam0 = conflictCheck.attr("teamid");
+			let checkTeam1 = conflictCheck.attr("conflictteamid");
+			for (let b = 0; b < conflicts.length; b++) {
+				let conflictTeam0 = conflicts[b].team0;
+				let conflictTeam1 = conflicts[b].team1;
+				if ((checkTeam0 == conflictTeam0 && checkTeam1 == conflictTeam1) || (checkTeam0 == conflictTeam1 && checkTeam1 == conflictTeam0)) {
+					conflictCheck.prop("checked", true);
+				}
+			}
+		}
+	});
+}
+
 function generateTeamTable() {
 	return new Promise((resolve, reject) => {
 		let tableHTML = "<div style='display: grid;'>";
@@ -88,17 +110,17 @@ function generateTeamTable() {
 			let headerHTML = `<div style='grid-column: 2 / -1; grid-row: 1 / span 1;'>Conflicts</div><div style='grid-column: 1 / span 1; grid-row: 2 / span 1;'>Team</div>`;
 			let rowsHTML = [];
 
-			headerHTML += `<div style='grid-column: 2 / span 1; grid-row: 2 / span 1; writing-mode: vertical-lr'>Bye-Team?</div>`;
+			headerHTML += `<div style='grid-column: 2 / span 1; grid-row: 2 / span 1; writing-mode: vertical-lr;'>Bye-Team?</div>`;
 
 
 			//loop through all teams and add them to the header
 			for (let a = 0; a < teams.length; a++) {
-				headerHTML += `<div style='grid-column: ${a + 3} / span 1; grid-row: 2 / span 1; writing-mode: vertical-lr'>${teams[a].number + " " + teams[a].name}</div>`;
+				headerHTML += `<div style='grid-column: ${a + 3} / span 1; grid-row: 2 / span 1; writing-mode: vertical-lr;'>${teams[a].number + " " + teams[a].name}</div>`;
 			}
 
 			//loop through teams and create row for each team
 			for (let a = 0; a < teams.length; a++) {
-				let rowHTML = `<div style='grid-column: 1 / span 1; grid-row: ${a + 3} / span 1;'><input class='teamNumber' teamId='${teams[a].id}' value='${teams[a].number}' size='4'><input class='teamName' teamId='${teams[a].id}' value='${teams[a].name}'><button class='deleteButton' teamId='${teams[a].id}'>Delete</button></div>`;
+				let rowHTML = `<div style='grid-column: 1 / span 1; grid-row: ${a + 3} / span 1;'><input class='teamNumber' teamId='${teams[a].id}' value='${teams[a].number}' size='4'><input class='teamName' teamId='${teams[a].id}' value='${teams[a].name}'><button class='deleteButton' teamId='${teams[a].id}' disabled>Delete</button></div>`;
 				rowHTML += `<div style='grid-column: 2 / span 1; grid-row: ${a + 3} / span 1;'><input type="checkbox" class='isByeTeam' teamId='${teams[a].id}' ${teams[a].isByeTeam ? 'checked' : ''}></div>`;
 
 				for (let b = 0; b < teams.length; b++) {
@@ -123,14 +145,29 @@ function getTeams() {
 		$.get(
 			"api/teams/getAll.php",
 			(teams) => {
-				if (teams.message == -1) {
+				resolve(teams);
+			},
+			"json").fail(() => {
+				handleSessionExpiration();
+			});;
+	})
+}
+
+function getConflicts() {
+	return new Promise((resolve, reject) => {
+		$.get(
+			"api/teamConflicts/getAll.php",
+			(conflicts) => {
+				if (conflicts.message == -1) {
 					reject(handleSessionExpiration());
 				} else {
-					resolve(teams);
+					resolve(conflicts);
 				}
 			},
-			"json");
-	});
+			"json").fail(() => {
+				handleSessionExpiration();
+			});;
+	})
 }
 
 function updateTeamNumber(id, number) {
@@ -143,7 +180,9 @@ function updateTeamNumber(id, number) {
 				handleSessionExpiration();
 			}
 		},
-		"json");
+		"json").fail(() => {
+			handleSessionExpiration();
+		});
 }
 
 function updateTeamName(id, name) {
@@ -156,7 +195,9 @@ function updateTeamName(id, name) {
 				handleSessionExpiration();
 			}
 		},
-		"json");
+		"json").fail(() => {
+			handleSessionExpiration();
+		});
 }
 
 function updateIsByeTeam(id, isByeTeam) {
@@ -169,7 +210,9 @@ function updateIsByeTeam(id, isByeTeam) {
 				handleSessionExpiration();
 			}
 		},
-		"json");
+		"json").fail(() => {
+			handleSessionExpiration();
+		});
 }
 
 function createConflict(team0, team1) {
@@ -178,11 +221,11 @@ function createConflict(team0, team1) {
 		"api/teamConflicts/create.php",
 		conflictData,
 		function (response) {
-			if (response.message == -1) {
-				handleSessionExpiration();
-			}
+			fillConflicts();
 		},
-		"json");
+		"json").fail(() => {
+			handleSessionExpiration();
+		});
 }
 
 function deleteConflict(team0, team1) {
@@ -191,12 +234,18 @@ function deleteConflict(team0, team1) {
 		"api/teamConflicts/delete.php",
 		conflictData,
 		function (response) {
-			if (response.message == -1) {
-				handleSessionExpiration();
-			}
+			fillConflicts();
 		},
-		"json");
+		"json").fail(() => {
+			handleSessionExpiration();
+		});
 }
+
+function handleSessionExpiration() {
+	let html = "User session expired. Please login again using your login link."
+	$("body").html(html);
+};
+
 
 //cc-by-sa by Davide Pizzolato https://stackoverflow.com/questions/14636536/how-to-check-if-a-variable-is-an-integer-in-javascript
 function isInt(value) {
