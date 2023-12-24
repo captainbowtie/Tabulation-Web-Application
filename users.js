@@ -22,14 +22,12 @@ function fillBody() {
 			$.post(
 				"api/users/create.php",
 				userData,
-				(result) => {
-					if (result.message == -1) {
-						handleSessionExpiration();
-					} else {
-						fillBody();
-					}
+				() => {
+					fillBody();
 				},
-				"json");
+				"json").fail(() => {
+					handleSessionExpiration();
+				});
 		}
 	});
 };
@@ -63,24 +61,20 @@ function generateUserTable() {
 
 			//add a row to the table for each user
 			for (let a = 0; a < users.length; a++) {
-				tableHTML += generateUserRow(users[a], teams, a + 2);
+				let rowHTML = `<div style='grid-column: 1 / span 1; grid-row: ${2 + a} / span 1;'><input class='username' userId='${user.id}' value='${user.username}'></div>`
+				rowHTML += `<div style='grid-column: 2 / span 1; grid-row: ${2 + a} / span 1;'><input class='isAdmin' userId='${user.id}' type='checkbox' ${user.isAdmin ? 'checked' : ''}></div>`
+				rowHTML += `<div style='grid-column: 3 / span 1; grid-row: ${2 + a} / span 1;'><a class='loginLink' href='login.php?url=${user.url}'>Link</a></div>`
+				rowHTML += `<div style='grid-column: 4 / span 1; grid-row: ${2 + a} / span 1;'><button class='linkReset' userId='${user.id}'>Reset</button></div>`;
+				for (let b = 0; b < teams.length; b++) {
+					rowHTML += `<div style='grid-column: ${5 + b} / span 1; grid-row: ${2 + a} / span 1;'><input type="checkbox" class='userTeam' userId='${user.id}' teamId='${teams[b].id}'></div>`;
+				}
+				tableHTML += rowHTML;
 			}
+
 			tableHTML += "</div>"
 			resolve(tableHTML);
 
 		});
-
-		function generateUserRow(user, teams, row) {
-			let rowHTML = `<div style='grid-column: 1 / span 1; grid-row: ${row} / span 1;'><input class='username' userId='${user.id}' value='${user.username}'></div>`
-			rowHTML += `<div style='grid-column: 2 / span 1; grid-row: ${row} / span 1;'><input class='isAdmin' userId='${user.id}' type='checkbox' ${user.isAdmin ? 'checked' : ''}></div>`
-			rowHTML += `<div style='grid-column: 3 / span 1; grid-row: ${row} / span 1;'><a class='loginLink' href='login.php?url=${user.url}'>Link</a></div>`
-			rowHTML += `<div style='grid-column: 4 / span 1; grid-row: ${row} / span 1;'><button class='linkReset' userId='${user.id}'>Reset</button></div>`;
-			for (let a = 0; a < teams.length; a++) {
-				rowHTML += `<div style='grid-column: ${a + 5} / span 1; grid-row: ${row} / span 1;'><input type="checkbox" class='userTeam' userId='${user.id}' teamId='${teams[a].id}'></div>`;
-			}
-
-			return rowHTML;
-		}
 	});
 }
 
@@ -156,9 +150,6 @@ function updateUsername(id, username) {
 		"api/users/updateUsername.php",
 		updateData,
 		function (response) {
-			if (response.message == -1) {
-				handleSessionExpiration();
-			}
 		},
 		"json").fail(() => {
 			handleSessionExpiration();
