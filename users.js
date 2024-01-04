@@ -61,6 +61,7 @@ function generateUserTable() {
 
 			//add a row to the table for each user
 			for (let a = 0; a < users.length; a++) {
+				let user = users[a];
 				let rowHTML = `<div style='grid-column: 1 / span 1; grid-row: ${2 + a} / span 1;'><input class='username' userId='${user.id}' value='${user.username}'></div>`
 				rowHTML += `<div style='grid-column: 2 / span 1; grid-row: ${2 + a} / span 1;'><input class='isAdmin' userId='${user.id}' type='checkbox' ${user.isAdmin ? 'checked' : ''}></div>`
 				rowHTML += `<div style='grid-column: 3 / span 1; grid-row: ${2 + a} / span 1;'><a class='loginLink' href='login.php?url=${user.url}'>Link</a></div>`

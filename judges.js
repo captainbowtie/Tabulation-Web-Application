@@ -80,11 +80,11 @@ function generateJudgeTable() {
 						break;
 				}
 				rowHTML += "</select></div>"
-				rowHTML += `<div style = 'grid-column: 3 / span 1; grid-row: ${2 + a} / span 1;'><input type='checkbox' class='checkedIn' judgeid='${judges[a].id}'></div>`;
-				rowHTML += `<div style = 'grid-column: 4 / span 1; grid-row: ${2 + a} / span 1;'><input type='checkbox' class='round' round='1' judgeid='${judges[a].id}'></div>`;
-				rowHTML += `<div style = 'grid-column: 5 / span 1; grid-row: ${2 + a} / span 1;'><input type='checkbox' class='round' round='2' judgeid='${judges[a].id}'></div>`;
-				rowHTML += `<div style = 'grid-column: 6 / span 1; grid-row: ${2 + a} / span 1;'><input type='checkbox' class='round' round='3' judgeid='${judges[a].id}'></div>`;
-				rowHTML += `<div style = 'grid-column: 7 / span 1; grid-row: ${2 + a} / span 1;'><input type='checkbox' class='round' round='4' judgeid='${judges[a].id}'></div>`;
+				rowHTML += `<div style = 'grid-column: 3 / span 1; grid-row: ${2 + a} / span 1;'><input type='checkbox' class='checkedIn' judgeid='${judges[a].id}' ${judges[a].checkedIn ? 'checked' : ''}></div>`;
+				rowHTML += `<div style = 'grid-column: 4 / span 1; grid-row: ${2 + a} / span 1;'><input type='checkbox' class='round' round='1' judgeid='${judges[a].id}' ${judges[a].round1 ? 'checked' : ''}></div>`;
+				rowHTML += `<div style = 'grid-column: 5 / span 1; grid-row: ${2 + a} / span 1;'><input type='checkbox' class='round' round='2' judgeid='${judges[a].id}' ${judges[a].round2 ? 'checked' : ''}></div>`;
+				rowHTML += `<div style = 'grid-column: 6 / span 1; grid-row: ${2 + a} / span 1;'><input type='checkbox' class='round' round='3' judgeid='${judges[a].id}' ${judges[a].round3 ? 'checked' : ''}></div>`;
+				rowHTML += `<div style = 'grid-column: 7 / span 1; grid-row: ${2 + a} / span 1;'><input type='checkbox' class='round' round='4' judgeid='${judges[a].id}' ${judges[a].round4 ? 'checked' : ''}></div>`;
 				for (let b = 0; b < teams.length; b++) {
 					rowHTML += `<div style = 'grid-column: ${8 + b} / span 1; grid-row: ${2 + a} / span 1;'><input type='checkbox' class='conflict' judgeid='${judges[a].id}' teamid='${teams[b].id}'></div>`;
 				}
