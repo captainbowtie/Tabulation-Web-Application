@@ -69,6 +69,7 @@ function createPairings($round, $pairings)
 	$db = new Database();
 	$conn = $db->getConnection();
 
+	//delete old judge assignments & ballots & captains information
 	/*/get ids of existing pairings for the round so their corresponding assignments can be deleted
 	$existingPairingsStmt = $conn->prepare("SELECT id FROM pairings WHERE round=:round");
 	$existingPairingsStmt->bindParam(':round', $round);

@@ -1,3 +1,20 @@
+/* 
+ * Copyright (C) 2023 allen
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 $(document).ready(() => {
 	fillHeader();
 	fillBody();
@@ -11,9 +28,9 @@ function fillHeader() {
 
 function fillBody() {
 	//create tabs
-	let bodyHTML = "<div id='assignments'><ul><li><a href='#round1'>Round 1</a></li><li><a href='#round2'>Round 2</a></li><li><a href='#round3'>Round 3</a></li><li><a href='#round4'>Round 4</a></li></ul><div id='round1'></div><div id='round2'></div><div id='round3'></div><div id='round4'></div></div>"
+	let bodyHTML = "<div id='pairings'><ul><li><a href='#round1'>Round 1</a></li><li><a href='#round2'>Round 2</a></li><li><a href='#round3'>Round 3</a></li><li><a href='#round4'>Round 4</a></li></ul><div id='round1'></div><div id='round2'></div><div id='round3'></div><div id='round4'></div></div>"
 	$("#body").html(bodyHTML);
-	$("#assignments").tabs();
+	$("#pairings").tabs();
 	getTeams().then((teams) => {
 		//create table for each tab
 		for (let round = 1; round <= 4; round++) {
@@ -34,7 +51,7 @@ function fillBody() {
 				tableHTML += rowHTML;
 			}
 			tableHTML += "</div>";
-			tableHTML += `<button class='saveButton' round='${round}' state='unlock'>Unlock Pairings</button>`;
+			tableHTML += `<button class='saveButton' round='${round}' state='save'>Save Pairings</button>`;
 
 			$(`#round${round}`).html(tableHTML);
 		}
@@ -55,15 +72,30 @@ function fillBody() {
 
 function fillPairings() {
 	getPairings().then((pairings) => {
-		//fill table
-
-
-
-		//adjust button text accordingly
+		//sort pairings by round into separate arrays
+		let roundPairings = [[], [], [], [], []];
 		for (let a = 0; a < pairings.length; a++) {
-
+			roundPairings[pairings[a].round].push(pairings[a]);
 		}
 
+
+		for (let round = 1; round < 4; round++) {
+			//fill in pairings in table
+			roundPairings[round].forEach(function (pairing, index) {
+				$(`.room[round=${round}][pairing=${index}]`).val(pairing.room);
+				$(`.plaintiff[round=${round}][pairing=${index}]`).val(pairing.plaintiff);
+				$(`.defense[round=${round}][pairing=${index}]`).val(pairing.defense);
+			})
+
+			//adjust save button behavior and disable elements if necessary
+			if (roundPairings[round].length > 0) { //check if pairings exist for a particular round
+				$(`.room[round=${round}]`).attr("disabled", true);
+				$(`.plaintiff[round=${round}]`).attr("disabled", true);
+				$(`.defense[round=${round}]`).attr("disabled", true);
+				$(`.saveButton[round=${round}]`).attr("state", "unlock");
+				$(`.saveButton[round=${round}]`).html("Unlock Pairings");
+			}
+		}
 	});
 }
 
@@ -123,7 +155,7 @@ function getPairings() {
 	return new Promise((resolve, reject) => {
 		$.get(
 			"api/pairings/getAll.php",
-			([pairings]) => {
+			(pairings) => {
 				resolve(pairings);
 			},
 			"json").fail(() => {
