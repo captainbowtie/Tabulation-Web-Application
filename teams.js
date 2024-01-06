@@ -35,7 +35,6 @@ function fillBody() {
 	$("#createTeam").click(() => {
 		let newTeamNumber = $("#newTeamNumber").val();
 		let newTeamName = $("#newTeamName").val();
-		console.log(newTeamNumber + " " + newTeamName);
 		if (newTeamName != "" && isInt(newTeamNumber)) {
 			let teamData = { number: newTeamNumber, name: newTeamName }
 			$.post(
@@ -124,24 +123,25 @@ function generateTeamTable() {
 		let tableHTML = "<div style='display: grid;'>";
 		getTeams().then((teams) => {
 			//fill header with conflict text and first row
-			let headerHTML = `<div style='grid-column: 2 / -1; grid-row: 1 / span 1;'>Conflicts</div><div style='grid-column: 1 / span 1; grid-row: 2 / span 1;'>Team</div>`;
-			let rowsHTML = [];
+			let headerHTML = `<div style='grid-column: 4 / span 1; grid-row: 1 / span 1;'>Conflicts</div><div style='grid-column: 1 / span 1; grid-row: 2 / span 1;'>Team</div>`;
 
 			headerHTML += `<div style='grid-column: 2 / span 1; grid-row: 2 / span 1; writing-mode: vertical-lr;'>Bye-Team?</div>`;
-
+			headerHTML += `<div style='grid-column: 3 / span 1; grid-row: 2 / span 1; writing-mode: vertical-lr;'>URL</div>`;
 
 			//loop through all teams and add them to the header
 			for (let a = 0; a < teams.length; a++) {
-				headerHTML += `<div style='grid-column: ${a + 3} / span 1; grid-row: 2 / span 1; writing-mode: vertical-lr;'>${teams[a].number + " " + teams[a].name}</div>`;
+				headerHTML += `<div style='grid-column: ${a + 4} / span 1; grid-row: 2 / span 1; writing-mode: vertical-lr;'>${teams[a].number + " " + teams[a].name}</div>`;
 			}
 
 			//loop through teams and create row for each team
+			let rowsHTML = [];
 			for (let a = 0; a < teams.length; a++) {
 				let rowHTML = `<div style='grid-column: 1 / span 1; grid-row: ${a + 3} / span 1;'><input class='teamNumber' teamId='${teams[a].id}' value='${teams[a].number}' size='4'><input class='teamName' teamId='${teams[a].id}' value='${teams[a].name}'><button class='deleteButton' teamId='${teams[a].id}' disabled>Delete</button></div>`;
 				rowHTML += `<div style='grid-column: 2 / span 1; grid-row: ${a + 3} / span 1;'><input type="checkbox" class='isByeTeam' teamId='${teams[a].id}' ${teams[a].isByeTeam ? 'checked' : ''}></div>`;
+				rowHTML += `<div style='grid-column: 3 / span 1; grid-row: ${a + 3} / span 1;'><a href='team.php?t=${teams[a].url}'>Link</a></div>`;
 
 				for (let b = 0; b < teams.length; b++) {
-					rowHTML += `<div style='grid-column: ${b + 3} / span 1; grid-row: ${a + 3} / span 1;'><input type="checkbox" class='conflict' teamId='${teams[a].id}' conflictTeamId='${teams[b].id}'></div>`
+					rowHTML += `<div style='grid-column: ${b + 4} / span 1; grid-row: ${a + 3} / span 1;'><input type="checkbox" class='conflict' teamId='${teams[a].id}' conflictTeamId='${teams[b].id}'></div>`
 				}
 				rowsHTML.push(rowHTML);
 			}

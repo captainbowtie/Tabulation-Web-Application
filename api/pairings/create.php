@@ -88,12 +88,15 @@ function createPairings($round, $pairings)
 	$deletePairingsStmt->execute();
 
 	//create pairings
-	$createStmt = $conn->prepare("INSERT INTO pairings (round, room, plaintiff, defense) VALUES (:round, :room, :plaintiff, :defense)");
+	$url = bin2hex(random_bytes(32));
+	$createStmt = $conn->prepare("INSERT INTO pairings (round, room, plaintiff, defense, url) VALUES (:round, :room, :plaintiff, :defense, :url)");
 	$createStmt->bindParam(':round', $round);
 	foreach ($pairings as &$pairing) {
+		$url = bin2hex(random_bytes(32));
 		$createStmt->bindParam(':room', $pairing["room"]);
 		$createStmt->bindParam(':plaintiff', $pairing["plaintiff"]);
 		$createStmt->bindParam(':defense', $pairing["defense"]);
+		$createStmt->bindParam(':url', $url);
 		$createStmt->execute();
 	}
 	$conn = null;

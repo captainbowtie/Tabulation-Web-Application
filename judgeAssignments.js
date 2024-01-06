@@ -1,5 +1,5 @@
 /* 
- * Copyright (C) 2023 allen
+ * Copyright (C) 2024 allen
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -44,6 +44,7 @@ function fillBody() {
 			let headerHTML = "<div style='grid-column: 1 / span 1; grid-row: 1 / span 1;'>Room</div>";
 			headerHTML += "<div style='grid-column: 2 / span 1; grid-row: 1 / span 1;'>π</div>";
 			headerHTML += "<div style='grid-column: 3 / span 1; grid-row: 1 / span 1;'>∆</div>";
+			headerHTML += "<div style='grid-column: 4 / span 1; grid-row: 1 / span 1;'>Ballot URL</div>";
 
 			roundHTML += headerHTML;
 			roundHTML += "</div>"
@@ -67,6 +68,7 @@ function fillBody() {
 				let rowHTML = `<div class='room' style='grid-column: 1 / span 1; grid-row: ${index + 2} / span 1;' pairing='${pairing.id}'>${pairing.room}</div>`;
 				rowHTML += `<div style='grid-column: 2 / span 1; grid-row: ${index + 2} / span 1;'>${pTeamNumber}</div>`;
 				rowHTML += `<div style='grid-column: 3 / span 1; grid-row: ${index + 2} / span 1;'>${dTeamNumber}</div>`;
+				rowHTML += `<div style='grid-column: 4 / span 1; grid-row: ${index + 2} / span 1;'><a href='ballot.php?b=${pairing.url}'>Link</a></div>`;
 				$(`#round${round}Grid`).append(rowHTML);
 			});
 		}
@@ -109,7 +111,7 @@ function fillBody() {
 
 				for (let row = 0; row < pairingIds.length; row++) {
 					for (let judge = 0; judge < maxJudges; judge++) {
-						let selectHTML = `<div style='grid-column: ${judge + 4} / span 1; grid-row: ${row + 2} / span 1;'><select class='judge' pairing='${pairingIds[row]}' judge='${judge}'  round='${round}' disabled='true'>${optionsHTML}</select></div>`;
+						let selectHTML = `<div style='grid-column: ${judge + 5} / span 1; grid-row: ${row + 2} / span 1;'><select class='judge' pairing='${pairingIds[row]}' judge='${judge}'  round='${round}' disabled='true'>${optionsHTML}</select></div>`;
 						$(`#round${round}Grid`).append(selectHTML);
 					}
 				}
@@ -123,8 +125,8 @@ function fillBody() {
 
 			} else {//otherwise add the default of two empty judge slots
 				for (let a = 0; a < pairingIds.length; a++) {
-					let selectHTML = `<div style='grid-column: 4 / span 1; grid-row: ${a + 2} / span 1;'><select class='judge' pairing='${pairingIds[a]}' judge='0'  round='${round}'>${optionsHTML}</select></div>`;
-					selectHTML += `<div style='grid-column: 5 / span 1; grid-row: ${a + 2} / span 1;'><select class='judge' pairing='${pairingIds[a]}' judge='1'  round='${round}'>${optionsHTML}</select></div>`;
+					let selectHTML = `<div style='grid-column: 5 / span 1; grid-row: ${a + 2} / span 1;'><select class='judge' pairing='${pairingIds[a]}' judge='0'  round='${round}'>${optionsHTML}</select></div>`;
+					selectHTML += `<div style='grid-column: 6 / span 1; grid-row: ${a + 2} / span 1;'><select class='judge' pairing='${pairingIds[a]}' judge='1'  round='${round}'>${optionsHTML}</select></div>`;
 					$(`#round${round}Grid`).append(selectHTML);
 				}
 			}
@@ -172,7 +174,7 @@ function fillBody() {
 				//add new selects
 				let rooms = $(`#round${round}Grid`).children(".room");
 				for (let a = 0; a < rooms.length; a++) {
-					let selectHTML = `<div style='grid-column: ${existingMaxJudgeIndex + 5} / span 1; grid-row: ${a + 2} / span 1;'><select class='judge' pairing='${$(rooms[a]).attr("pairing")}' judge='${existingMaxJudgeIndex + 1}'  round='${round}'>${generateSelectOptions()}</select></div>`;
+					let selectHTML = `<div style='grid-column: ${existingMaxJudgeIndex + 6} / span 1; grid-row: ${a + 2} / span 1;'><select class='judge' pairing='${$(rooms[a]).attr("pairing")}' judge='${existingMaxJudgeIndex + 1}'  round='${round}'>${generateSelectOptions()}</select></div>`;
 					$(`#round${round}Grid`).append(selectHTML);
 				}
 
@@ -181,7 +183,6 @@ function fillBody() {
 			});
 			$(".removeColumn").click(function () {
 				let round = $(this).attr("round");
-				console.log("test");
 				//determine current number of judges per round
 				let existingSelects = $(`.judge[round='${round}']`);
 				let existingMaxJudgeIndex = -1;

@@ -1,6 +1,6 @@
 <?php
 
-/* 
+/*
  * Copyright (C) 2020 allen
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,18 +17,32 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once __DIR__ . "/config.php";
+// Get config information
+require_once __DIR__ . "/../config.php";
 require_once SITE_ROOT . "/database.php";
 
-require_once SITE_ROOT . "/tableCreation/ballots.php";
-require_once SITE_ROOT . "/tableCreation/teamConflicts.php";
-require_once SITE_ROOT . "/tableCreation/pairings.php";
-require_once SITE_ROOT . "/tableCreation/teams.php";
-require_once SITE_ROOT . "/tableCreation/users.php";
-require_once SITE_ROOT . "/tableCreation/judges.php";
-require_once SITE_ROOT . "/tableCreation/judgeConflicts.php";
-require_once SITE_ROOT . "/tableCreation/settings.php";
-require_once SITE_ROOT . "/tableCreation/userTeams.php";
-require_once SITE_ROOT . "/tableCreation/judgeAssignments.php";
-require_once SITE_ROOT . "/tableCreation/rosters.php";
-require_once SITE_ROOT . "/tableCreation/captains.php";
+// Create db connection
+$db = new Database();
+$conn = $db->getConnection();
+
+//Query to create table
+$query = "CREATE TABLE IF NOT EXISTS captains (
+id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+pairing SMALLINT UNSIGNED NOT NULL,
+prosecutingPorta BOOLEAN NOT NULL,
+count1 BOOLEAN NOT NULL,
+count2 BOOLEAN NOT NULL,
+count3 BOOLEAN NOT NULL,
+count4 BOOLEAN NOT NULL,
+count5 BOOLEAN NOT NULL,
+duress BOOLEAN NOT NULL,
+pWitness1 VARCHAR(7) NOT NULL,
+pWitness2 VARCHAR(7) NOT NULL,
+pWitness3 VARCHAR(7) NOT NULL,
+dWitness1 VARCHAR(7) NOT NULL,
+dWitness2 VARCHAR(7) NOT NULL,
+dWitness3 VARCHAR(7) NOT NULL
+)";
+
+$conn->exec($query);
+$conn = null;

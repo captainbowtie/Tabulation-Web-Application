@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2023 allen
+ * Copyright (C) 2024 allen
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -20,19 +20,31 @@
 require_once __DIR__ . "/../../config.php";
 require_once SITE_ROOT . "/database.php";
 session_start();
-if ($_SESSION["isAdmin"]) {
+if (isset($_SESSION["team"])) {
+
+	$teamURL = htmlspecialchars(strip_tags($_SESSION["team"]));
+
 	try {
 		$db = new Database();
 		$conn = $db->getConnection();
-		$stmt = $conn->prepare("SELECT id,round,room,plaintiff,defense,url FROM pairings ORDER BY room");
+
+		//get id of relevant team
+		$stmt = $conn->prepare("SELECT id FROM teams WHERE url = :url");
+		$stmt->bindParam(':url', $teamURL);
 		$stmt->execute();
-		$result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
-		echo json_encode($stmt->fetchAll());
+		$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		$teamId = $result[0]["id"];
+
+		//get members from that team
+		$rosterStmt = $conn->prepare("SELECT * FROM rosters WHERE team = :team");
+		$rosterStmt->bindParam(':team', $teamId);
+		$rosterStmt->execute();
+		echo json_encode($rosterStmt->fetchAll(PDO::FETCH_ASSOC));
 	} catch (PDOException $e) {
 		echo "Error: " . $e->getMessage();
 	}
 	$conn = null;
 } else {
-	$_SESSION["isAdmin"] = false;
+	http_response_code(401);
 	echo json_encode(array("message" => -1));
 }

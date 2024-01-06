@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2023 allen
+ * Copyright (C) 2024 allen
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -17,18 +17,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 session_start();
-if ($_SESSION["isAdmin"]) {
+if (isset($_SESSION["team"])) {
 	require_once __DIR__ . '/../../config.php';
 	require_once SITE_ROOT . "/database.php";
 
 	if (
-		isset($_POST["number"]) &&
 		isset($_POST["name"])
 	) {
-		$number = htmlspecialchars(strip_tags($_POST["number"]));
 		$name = htmlspecialchars(strip_tags($_POST["name"]));
+		$teamURL = htmlspecialchars(strip_tags($_SESSION["team"]));
 
-		if (createTeam($number, $name)) {
+		if (addStudent($teamURL, $name)) {
 			// set response code - 201 created
 			http_response_code(201);
 
@@ -40,7 +39,7 @@ if ($_SESSION["isAdmin"]) {
 			http_response_code(503);
 
 			// tell the user
-			echo json_encode(array("message" => "Unable to create team."));
+			echo json_encode(array("message" => "Unable to create conflict."));
 		}
 	} else {
 
@@ -48,28 +47,31 @@ if ($_SESSION["isAdmin"]) {
 		http_response_code(400);
 
 		// tell the user
-		echo json_encode(array("message" => "Unable to create team. Data is incomplete."));
+		echo json_encode(array("message" => "Unable to create student. Data is incomplete."));
 	}
 } else {
-	$_SESSION["isAdmin"] = false;
 	http_response_code(401);
 	echo json_encode(array("message" => -1));
 }
 
-function createTeam($number, $name)
+function addStudent($teamURL, $name)
 {
-	$teamCreated = false;
-
-	$url = bin2hex(random_bytes(32));
-
+	$studentCreated = false;
 	$db = new Database();
 	$conn = $db->getConnection();
-	$stmt = $conn->prepare("INSERT INTO teams (number, name, url) VALUES (:number, :name, :url)");
-	$stmt->bindParam(':number', $number);
+
+	//get id of relevant team
+	$teamStmt = $conn->prepare("SELECT id FROM teams WHERE url = :url");
+	$teamStmt->bindParam(':url', $teamURL);
+	$teamStmt->execute();
+	$result = $teamStmt->fetchAll(PDO::FETCH_ASSOC);
+	$teamId = $result[0]["id"];
+
+	$stmt = $conn->prepare("INSERT INTO rosters (team, student) VALUES (:teamId, :name)");
+	$stmt->bindParam(':teamId', $teamId);
 	$stmt->bindParam(':name', $name);
-	$stmt->bindParam(':url', $url);
 	$stmt->execute();
 	$conn = null;
-	$teamCreated = true;
-	return $teamCreated;
+	$studentCreated = true;
+	return $studentCreated;
 }

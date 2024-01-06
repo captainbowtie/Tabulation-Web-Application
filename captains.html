@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<!--
+Copyright (C) 2023 allen
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script
+      src="https://code.jquery.com/jquery-3.7.1.min.js"
+      integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" href="captains.css" />
+    <title>Captains Form</title>
+  </head>
+  <body>
+    <div id="captainsForm">
+      <div style="display: grid">
+        <div style="grid-column: 1 / span 1; grid-row: 1 / span 1">
+          Indictment Selection
+        </div>
+        <div style="grid-column: 1 / span 1; grid-row: 2 / span 1">
+          Berkely De la Porta
+        </div>
+        <div style="grid-column: 2 / span 1; grid-row: 2 / span 1">
+          <label for="dlp1">Cons. Grand Theft</label>
+          <input
+            type="checkbox"
+            class="dlp"
+            id="dlp1"
+            name="dlp1"
+            value="dlp1"
+          />
+        </div>
+        <div style="grid-column: 3 / span 1; grid-row: 2 / span 1">
+          <label for="dlp2">Cons. Agg. Burg.</label>
+          <input
+            type="checkbox"
+            class="dlp"
+            id="dlp2"
+            name="dlp2"
+            value="dlp2"
+          />
+        </div>
+        <div style="grid-column: 4 / span 1; grid-row: 2 / span 1">
+          <label for="dlp3">Cons. Agg. Rob.</label>
+          <input
+            type="checkbox"
+            class="dlp"
+            id="dlp3"
+            name="dlp3"
+            value="dlp3"
+          />
+        </div>
+        <div style="grid-column: 5 / span 1; grid-row: 2 / span 1">
+          <label for="dlp4">Wire Fraud</label>
+          <input
+            type="checkbox"
+            class="dlp"
+            id="dlp4"
+            name="dlp4"
+            value="dlp4"
+          />
+        </div>
+        <div style="grid-column: 6 / span 1; grid-row: 2 / span 1">
+          <label for="dlp5">RSP</label>
+          <input
+            type="checkbox"
+            class="dlp"
+            id="dlp5"
+            name="dlp5"
+            value="dlp5"
+          />
+        </div>
+        <div style="grid-column: 1 / span 1; grid-row: 3 / span 1">
+          Poe Cameron
+        </div>
+        <div style="grid-column: 2 / span 1; grid-row: 3 / span 1">
+          <label for="pc1">Cons. Grand Theft</label>
+          <input type="checkbox" class="pc" id="pc1" name="pc1" value="pc1" />
+        </div>
+        <div style="grid-column: 3 / span 1; grid-row: 3 / span 1">
+          <label for="pc2">Agg. Burg.</label>
+          <input type="checkbox" class="pc" id="pc2" name="pc2" value="pc2" />
+        </div>
+        <div style="grid-column: 4 / span 1; grid-row: 3 / span 1">
+          <label for="pc3">Agg. Rob.</label>
+          <input type="checkbox" class="pc" id="pc3" name="pc3" value="pc3" />
+        </div>
+        <div style="grid-column: 5 / span 1; grid-row: 3 / span 1">
+          <label for="pc4">Agg. Aslt.</label>
+          <input type="checkbox" class="pc" id="pc4" name="pc4" value="pc4" />
+        </div>
+        <div style="grid-column: 6 / span 1; grid-row: 3 / span 1">
+          <label for="pc5">Kidnapping</label>
+          <input type="checkbox" class="pc" id="pc5" name="pc5" value="pc5" />
+        </div>
+      </div>
+      <div style="display: grid">
+        <div style="grid-column: 1 / span 1; grid-row: 1 / span 1">
+          Duress Selection
+        </div>
+        <div style="grid-column: 1 / span 1; grid-row: 2 / span 1">
+          <input type="radio" name="duress" value="noDuress" checked />
+          <label for="noDuress">PC Not Arguing Duress</label>
+        </div>
+        <div style="grid-column: 2 / span 1; grid-row: 2 / span 1">
+          <input type="radio" name="duress" value="duress" />
+          <label for="duress">PC Arguing Duress</label>
+        </div>
+      </div>
+      <div style="display: grid">
+        <div style="grid-column: 1 / span 1; grid-row: 1 / span 1">
+          Witness Selection
+        </div>
+        <div style="grid-column: 1 / span 2; grid-row: 2 / span 1">
+          Prosecution Witness Selections
+        </div>
+        <div style="grid-column: 3 / span 2; grid-row: 2 / span 1">
+          Defense Witness Selections
+        </div>
+        <div style="grid-column: 1 / span 1; grid-row: 3 / span 1">
+          Witness Name
+        </div>
+        <div style="grid-column: 2 / span 1; grid-row: 3 / span 1">Call #</div>
+        <div style="grid-column: 3 / span 1; grid-row: 3 / span 1">
+          Witness Name
+        </div>
+        <div style="grid-column: 4 / span 1; grid-row: 3 / span 1">Call #</div>
+        <div style="grid-column: 1 / span 1; grid-row: 4 / span 1">
+          <select id="pWit1">
+            <option value="0" selected>---</option>
+            <option value="burke">Burke</option>
+            <option value="bahmani">Bahmani</option>
+            <option value="nguyen">Nguyen</option>
+            <option value="nova">Nova</option>
+            <option value="sands">Sands</option>
+            <option value="cosmos">Cosmos</option>
+            <option value="cage">Cage</option>
+          </select>
+        </div>
+        <div style="grid-column: 2 / span 1; grid-row: 4 / span 1">
+          <select id="pWit1Order">
+            <option value="0" selected>---</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+          </select>
+        </div>
+        <div style="grid-column: 3 / span 1; grid-row: 4 / span 1">
+          <select id="dWit1">
+            <option value="0" selected>---</option>
+            <option value="cameron">Cameron</option>
+            <option value="dlp">De la Porta</option>
+            <option value="ebi">Ebi</option>
+            <option value="orlov">Orlov</option>
+            <option value="cosmos">Cosmos</option>
+            <option value="cage">Cage</option>
+          </select>
+        </div>
+        <div style="grid-column: 4 / span 1; grid-row: 4 / span 1">
+          <select id="dWit1Order">
+            <option value="0" selected>---</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+          </select>
+        </div>
+        <div style="grid-column: 1 / span 1; grid-row: 5 / span 1">
+          <select id="pWit2">
+            <option value="0" selected>---</option>
+            <option value="burke">Burke</option>
+            <option value="bahmani">Bahmani</option>
+            <option value="nguyen">Nguyen</option>
+            <option value="nova">Nova</option>
+            <option value="sands">Sands</option>
+            <option value="cosmos">Cosmos</option>
+            <option value="cage">Cage</option>
+          </select>
+        </div>
+        <div style="grid-column: 2 / span 1; grid-row: 5 / span 1">
+          <select id="pWit2Order">
+            <option value="0" selected>---</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+          </select>
+        </div>
+        <div style="grid-column: 3 / span 1; grid-row: 5 / span 1">
+          <select id="dWit2">
+            <option value="0" selected>---</option>
+            <option value="cameron">Cameron</option>
+            <option value="dlp">De la Porta</option>
+            <option value="ebi">Ebi</option>
+            <option value="orlov">Orlov</option>
+            <option value="cosmos">Cosmos</option>
+            <option value="cage">Cage</option>
+          </select>
+        </div>
+        <div style="grid-column: 4 / span 1; grid-row: 5 / span 1">
+          <select id="dWit2Order">
+            <option value="0" selected>---</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+          </select>
+        </div>
+        <div style="grid-column: 1 / span 1; grid-row: 6 / span 1">
+          <select id="pWit3">
+            <option value="0" selected>---</option>
+            <option value="burke">Burke</option>
+            <option value="bahmani">Bahmani</option>
+            <option value="nguyen">Nguyen</option>
+            <option value="nova">Nova</option>
+            <option value="sands">Sands</option>
+            <option value="cosmos">Cosmos</option>
+            <option value="cage">Cage</option>
+          </select>
+        </div>
+        <div style="grid-column: 2 / span 1; grid-row: 6 / span 1">
+          <select id="pWit3Order">
+            <option value="0" selected>---</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+          </select>
+        </div>
+        <div style="grid-column: 3 / span 1; grid-row: 6 / span 1">
+          <select id="dWit3">
+            <option value="0" selected>---</option>
+            <option value="cameron">Cameron</option>
+            <option value="dlp">De la Porta</option>
+            <option value="ebi">Ebi</option>
+            <option value="orlov">Orlov</option>
+            <option value="cosmos">Cosmos</option>
+            <option value="cage">Cage</option>
+          </select>
+        </div>
+        <div style="grid-column: 4 / span 1; grid-row: 6 / span 1">
+          <select id="dWit3Order">
+            <option value="0" selected>---</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+          </select>
+        </div>
+      </div>
+      <div><button id="submitCaptains">Submit Form</button></div>
+    </div>
+    <div id="rosters">
+      <div style="display: grid">
+        <div style="grid-column: 1 / span 1; grid-row: 1 / span 1">
+          <label id="pOpenLabel" for="pOpen">Prosecution Open:</label>
+          <select class="pInput" id="pOpen"></select>
+        </div>
+        <div style="grid-column: 2 / span 1; grid-row: 1 / span 1">
+          <label id="dOpenLabel" for="dOpen">Defense Open:</label>
+          <select class="dInput" id="dOpen"></select>
+        </div>
+        <div style="grid-column: 1 / span 2; grid-row: 2 / span 1">
+          P Witness 1
+        </div>
+        <div style="grid-column: 1 / span 1; grid-row: 3 / span 1">
+          <label for="rosterPDx1">Dx Attorney:</label>
+          <select class="pInput" id="rosterPDx1"></select>
+        </div>
+        <div style="grid-column: 2 / span 1; grid-row: 3 / span 1">
+          <label for="rosterDCx1">Cx Attorney:</label>
+          <select class="dInput" id="rosterDCx1"></select>
+        </div>
+        <div style="grid-column: 1 / span 1; grid-row: 4 / span 1">
+          <label for="rosterPWit1">Witness:</label>
+          <select class="pInput" id="rosterPWit1"></select>
+        </div>
+        <div style="grid-column: 1 / span 2; grid-row: 5 / span 1">
+          P Witness 2
+        </div>
+        <div style="grid-column: 1 / span 1; grid-row: 6 / span 1">
+          <label for="rosterPDx2">Dx Attorney:</label>
+          <select class="pInput" id="rosterPDx2"></select>
+        </div>
+        <div style="grid-column: 2 / span 1; grid-row: 6 / span 1">
+          <label for="rosterDCx2">Cx Attorney:</label>
+          <select class="dInput" id="rosterDCx2"></select>
+        </div>
+        <div style="grid-column: 1 / span 1; grid-row: 7 / span 1">
+          <label for="rosterPWit2">Witness:</label>
+          <select class="pInput" id="rosterPWit2"></select>
+        </div>
+        <div style="grid-column: 1 / span 2; grid-row: 8 / span 1">
+          P Witness 3
+        </div>
+        <div style="grid-column: 1 / span 1; grid-row: 9 / span 1">
+          <label for="rosterPDx3">Dx Attorney:</label>
+          <select class="pInput" id="rosterPDx3"></select>
+        </div>
+        <div style="grid-column: 2 / span 1; grid-row: 9 / span 1">
+          <label for="rosterDCx3">Cx Attorney:</label>
+          <select class="dInput" id="rosterDCx3"></select>
+        </div>
+        <div style="grid-column: 1 / span 1; grid-row: 10 / span 1">
+          <label for="rosterPWit3">Witness:</label>
+          <select class="pInput" id="rosterPWit3"></select>
+        </div>
+        <div style="grid-column: 1 / span 2; grid-row: 11 / span 1">
+          D Witness 1
+        </div>
+        <div style="grid-column: 1 / span 1; grid-row: 12 / span 1">
+          <label for="rosterPCx1">Cx Attorney:</label>
+          <select class="pInput" id="rosterPCx1"></select>
+        </div>
+        <div style="grid-column: 2 / span 1; grid-row: 12 / span 1">
+          <label for="rosterDDx1">Dx Attorney:</label>
+          <select class="dInput" id="rosterDDx1"></select>
+        </div>
+        <div style="grid-column: 2 / span 1; grid-row: 13 / span 1">
+          <label for="rosterDWit1">Witness:</label>
+          <select class="dInput" id="rosterDWit1"></select>
+        </div>
+        <div style="grid-column: 1 / span 2; grid-row: 14 / span 1">
+          D Witness 2
+        </div>
+        <div style="grid-column: 1 / span 1; grid-row: 15 / span 1">
+          <label for="rosterPCx2">Cx Attorney:</label>
+          <select class="pInput" id="rosterPCx2"></select>
+        </div>
+        <div style="grid-column: 2 / span 1; grid-row: 15 / span 1">
+          <label for="rosterDDx2">Dx Attorney:</label>
+          <select class="dInput" id="rosterDDx2"></select>
+        </div>
+        <div style="grid-column: 2 / span 1; grid-row: 16 / span 1">
+          <label for="rosterDWit2">Witness:</label>
+          <select class="dInput" id="rosterDWit2"></select>
+        </div>
+        <div style="grid-column: 1 / span 2; grid-row: 17 / span 1">
+          D Witness 3
+        </div>
+        <div style="grid-column: 1 / span 1; grid-row: 18 / span 1">
+          <label for="rosterPCx3">Cx Attorney:</label>
+          <select class="pInput" id="rosterPCx3"></select>
+        </div>
+        <div style="grid-column: 2 / span 1; grid-row: 18 / span 1">
+          <label for="rosterDDx3">Dx Attorney:</label>
+          <select class="dInput" id="rosterDDx3"></select>
+        </div>
+        <div style="grid-column: 2 / span 1; grid-row: 19 / span 1">
+          <label for="rosterDWit3">Witness:</label>
+          <select class="dInput" id="rosterDWit3"></select>
+        </div>
+        <div style="grid-column: 1 / span 1; grid-row: 20 / span 1">
+          <label id="pCloseLabel" for="pClose">Prosecution Close:</label>
+          <select class="pInput" id="pClose"></select>
+        </div>
+        <div style="grid-column: 2 / span 1; grid-row: 20 / span 1">
+          <label id="dCloseLabel" for="dClose">Defense Close:</label>
+          <select class="dInput" id="dClose"></select>
+        </div>
+      </div>
+      <div><button id="submitRoster">Submit Roster</button></div>
+    </div>
+    <script src="captains.js"></script>
+  </body>
+</html>

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2023 allen
+ * Copyright (C) 2020 allen
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -17,22 +17,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once __DIR__ . "/../../config.php";
+// Get config information
+require_once __DIR__ . "/../config.php";
 require_once SITE_ROOT . "/database.php";
-session_start();
-if ($_SESSION["isAdmin"]) {
-	try {
-		$db = new Database();
-		$conn = $db->getConnection();
-		$stmt = $conn->prepare("SELECT id,round,room,plaintiff,defense,url FROM pairings ORDER BY room");
-		$stmt->execute();
-		$result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
-		echo json_encode($stmt->fetchAll());
-	} catch (PDOException $e) {
-		echo "Error: " . $e->getMessage();
-	}
-	$conn = null;
-} else {
-	$_SESSION["isAdmin"] = false;
-	echo json_encode(array("message" => -1));
-}
+
+// Create db connection
+$db = new Database();
+$conn = $db->getConnection();
+
+//Query to create table
+$query = "CREATE TABLE IF NOT EXISTS rosters (
+id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+team SMALLINT UNSIGNED NOT NULL,
+student VARCHAR(32) NOT NULL
+)";
+
+$conn->exec($query);
+$conn = null;

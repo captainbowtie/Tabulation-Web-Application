@@ -58,7 +58,8 @@ pWitness2 CHAR(32) DEFAULT 'N/A',
 pWitness3 CHAR(32) DEFAULT 'N/A',
 dWitness1 CHAR(32) DEFAULT 'N/A',
 dWitness2 CHAR(32) DEFAULT 'N/A',
-dWitness3 CHAR(32) DEFAULT 'N/A'
+dWitness3 CHAR(32) DEFAULT 'N/A',
+url CHAR(64)
 )";
 
 $conn->exec($query);
