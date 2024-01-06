@@ -15,93 +15,125 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-$("#submitCaptains").click(() => {
-	if (captainsVerified()) {
-		let portaIsDefendant = 0;
-		let count1 = 0;
-		let count2 = 0;
-		let count3 = 0;
-		let count4 = 0;
-		let count5 = 0;
-		if ($(":checked.dlp").length > 0) {
-			portaIsDefendant = 1;
-			if ($(":checked#dlp1").prop("checked")) {
-				count1 = 1;
+let isPlaintiff;
+
+$(document).ready(() => {
+	fillBody();
+});
+
+function fillBody() {
+	getTeamSide().then((side) => {
+		isPlaintiff = side;
+		fillRosterSelects();
+		isCaptainsComplete().then((completed) => {
+			if (completed) {
+				fillCaptains();
+				$("#captainsForm :input").attr("disabled", "disabled")
+			} else {
+				$("#rosters :input").attr("disabled", "disabled")
 			}
-			if ($(":checked#dlp2").prop("checked")) {
-				count2 = 1;
+		});
+
+		isRosterComplete().then((completed) => {
+			if (completed) {
+				fillRoster();
 			}
-			if ($(":checked#dlp3").prop("checked")) {
-				count3 = 1;
+		});
+	});
+}
+
+function fillRosterSelects() {
+	getRoster().then((roster) => {
+		let optionsHTML = "<option value='0'>---</option>";
+		roster.forEach(student => {
+			optionsHTML += `<option value='${student.id}'>${student.student}</option>`;
+		});
+		if (isPlaintiff) {
+			$(".pInput").html(optionsHTML);
+			$(".dInput").prop("disabled", true);
+		} else {
+			$(".dInput").html(optionsHTML);
+			$(".pInput").prop("disabled", true);
+		}
+
+	})
+};
+
+function fillCaptains() {
+	getCaptains().then((captains) => {
+		if (captains.prosecutingPorta) {
+			if (captains.count1) {
+				$("#dlp1").prop("checked", true);
 			}
-			if ($(":checked#dlp4").prop("checked")) {
-				count4 = 1;
+			if (captains.count2) {
+				$("#dlp2").prop("checked", true);
 			}
-			if ($(":checked#dlp5").prop("checked")) {
-				count5 = 1;
+			if (captains.count3) {
+				$("#dlp3").prop("checked", true);
+			}
+			if (captains.count4) {
+				$("#dlp4").prop("checked", true);
+			}
+			if (captains.count5) {
+				$("#dlp5").prop("checked", true);
 			}
 		} else {
-			if ($(":checked#pc1").prop("checked")) {
-				count1 = 1;
+			if (captains.count1) {
+				$("#pc1").prop("checked", true);
 			}
-			if ($(":checked#pc2").prop("checked")) {
-				count2 = 1;
+			if (captains.count2) {
+				$("#pc2").prop("checked", true);
 			}
-			if ($(":checked#pc3").prop("checked")) {
-				count3 = 1;
+			if (captains.count3) {
+				$("#pc3").prop("checked", true);
 			}
-			if ($(":checked#pc4").prop("checked")) {
-				count4 = 1;
+			if (captains.count4) {
+				$("#pc4").prop("checked", true);
 			}
-			if ($(":checked#pc5").prop("checked")) {
-				count5 = 1;
+			if (captains.count5) {
+				$("#pc5").prop("checked", true);
+			}
+			if (captains.duress) {
+				$("#duress").prop("checked", true);
 			}
 		}
-		let duress = 0;
-		if ($("input[name='duress']:checked").val() == "duress" && !portaIsDefendant) {
-			duress = 1;
-		}
-		let pWitness1 = $("#pWit1").val();
-		let pWitness2 = $("#pWit2").val();
-		let pWitness3 = $("#pWit3").val();
-		let dWitness1 = $("#dWit1").val();
-		let dWitness2 = $("#dWit2").val();
-		let dWitness3 = $("#dWit3").val();
+		$("#pWit1").val(captains.pWitness1);
+		$("#pWit2").val(captains.pWitness2);
+		$("#pWit3").val(captains.pWitness3);
+		$("#dWit1").val(captains.dWitness1);
+		$("#dWit2").val(captains.dWitness2);
+		$("#dWit3").val(captains.dWitness3);
 
-		let pWitCalls = [];
-		let dWitCalls = [];
 		for (let a = 1; a <= 3; a++) {
-
-			switch (parseInt($(`#pWit${a}Order`).val())) {
-				case 1:
-					pWitCalls[1] = $(`#pWit${a}`).val();
-					break;
-				case 2:
-					pWitCalls[2] = $(`#pWit${a}`).val();
-					break;
-				case 3:
-					pWitCalls[3] = $(`#pWit${a}`).val();
-					break;
-				default:
-					break;
+			if ($(`#pWit${a}`).val() == captains.pCall1) {
+				$(`#pWit${a}Order`).val(1);
 			}
-			switch (parseInt($(`#dWit${a}Order`).val())) {
-				case 1:
-					dWitCalls[1] = $(`#dWit${a}`).val();
-					break;
-				case 2:
-					dWitCalls[2] = $(`#dWit${a}`).val();
-					break;
-				case 3:
-					dWitCalls[3] = $(`#dWit${a}`).val();
-					break;
+			if ($(`#dWit${a}`).val() == captains.dCall1) {
+				$(`#dWit${a}Order`).val(1);
 			}
 		}
-		submitCaptains(portaIsDefendant, count1, count2, count3, count4, count5, duress, pWitness1, pWitness2, pWitness3, dWitness1, dWitness2, dWitness3, pWitCalls[1], pWitCalls[2], pWitCalls[3], dWitCalls[1], dWitCalls[2], dWitCalls[3]);
-	} else {
-		console.log("error");
-	}
-});
+		for (let a = 1; a <= 3; a++) {
+			if ($(`#pWit${a}`).val() == captains.pCall2) {
+				$(`#pWit${a}Order`).val(2);
+			}
+			if ($(`#dWit${a}`).val() == captains.dCall2) {
+				$(`#dWit${a}Order`).val(2);
+			}
+		}
+		for (let a = 1; a <= 3; a++) {
+			if ($(`#pWit${a}`).val() == captains.pCall3) {
+				$(`#pWit${a}Order`).val(3);
+			}
+			if ($(`#dWit${a}`).val() == captains.dCall3) {
+				$(`#dWit${a}Order`).val(3);
+			}
+		}
+	});
+}
+
+function fillRoster() {
+
+};
 
 function submitCaptains(portaIsDefendant, count1, count2, count3, count4, count5, duress, pWitness1, pWitness2, pWitness3, dWitness1, dWitness2, dWitness3, pCall1, pCall2, pCall3, dCall1, dCall2, dCall3) {
 	//determine defendant
@@ -195,4 +227,339 @@ function captainsVerified() {
 	}
 
 	return verified;
+}
+
+function rosterVerified() {
+	let rosterVerified = true;
+
+	if (isPlaintiff) {
+		//check that only three peeople are in attorney spots
+		let attorneyIndexes = [];
+		attorneyIndexes.push($("#pOpen").val());
+		attorneyIndexes.push($("#rosterPDx1").val());
+		attorneyIndexes.push($("#rosterPDx2").val());
+		attorneyIndexes.push($("#rosterPDx3").val());
+		attorneyIndexes.push($("#rosterPCx1").val());
+		attorneyIndexes.push($("#rosterPCx2").val());
+		attorneyIndexes.push($("#rosterPCx3").val());
+		attorneyIndexes.push($("#pClose").val());
+		let attorneyCount = new Set(attorneyIndexes).size;
+		if (attorneyCount != 3) {
+			rosterVerified = false;
+		}
+
+		//check that different people are opening and closing
+		let speechIndexes = [];
+		speechIndexes.push($("#pOpen").val());
+		speechIndexes.push($("#pClose").val());
+		let speechCount = new Set(speechIndexes).size;
+		if (speechCount != 2) {
+			rosterVerified = false;
+		}
+
+		//check that three different people have directs
+		let directIndexes = [];
+		directIndexes.push($("#rosterPDx1").val());
+		directIndexes.push($("#rosterPDx2").val());
+		directIndexes.push($("#rosterPDx3").val());
+		let directCount = new Set(directIndexes).size;
+		if (directCount != 3) {
+			rosterVerified = false;
+		}
+
+		//check that three different people have crosses
+		let crossIndexes = [];
+		crossIndexes.push($("#rosterPCx1").val());
+		crossIndexes.push($("#rosterPCx2").val());
+		crossIndexes.push($("#rosterPCx3").val());
+		let crossCount = new Set(crossIndexes).size;
+		if (crossCount != 3) {
+			rosterVerified = false;
+		}
+
+		//check that three different people are in witness spots
+		let witnessIndexes = [];
+		witnessIndexes.push($("#rosterPWit1").val());
+		witnessIndexes.push($("#rosterPWit2").val());
+		witnessIndexes.push($("#rosterPWit3").val());
+		let witnessCount = new Set(witnessIndexes).size;
+		if (witnessCount != 3) {
+			rosterVerified = false;
+		}
+
+		//check that no witness is also in an attorney spot
+		let studentIndexes = attorneyIndexes.concat(witnessIndexes);
+		let studentCount = new Set(studentIndexes).size;
+		if (studentCount != 6) {
+			rosterVerified = false;
+		}
+
+		//check that all parts have a name in them
+		for (let a = 0; a < studentIndexes.length; a++) {
+			if (studentIndexes[a] == 0) {
+				rosterVerified = false;
+			}
+		}
+
+	} else {
+		//check that only three peeople are in attorney spots
+		let attorneyIndexs = [];
+		attorneyIndexs.push($("#dOpen").val());
+		attorneyIndexs.push($("#rosterDDx1").val());
+		attorneyIndexs.push($("#rosterDDx2").val());
+		attorneyIndexs.push($("#rosterDDx3").val());
+		attorneyIndexs.push($("#rosterDCx1").val());
+		attorneyIndexs.push($("#rosterDCx2").val());
+		attorneyIndexs.push($("#rosterDCx3").val());
+		attorneyIndexs.push($("#dClose").val());
+		let attorneyCount = new Set(attorneyIndexs).size;
+		if (attorneyCount != 3) {
+			rosterVerified = false;
+		}
+
+		//check that different people are opening and closing
+		let speechIndexes = [];
+		speechIndexes.push($("#dOpen").val());
+		speechIndexes.push($("#dClose").val());
+		let speechCount = new Set(speechIndexes).size;
+		if (speechCount != 2) {
+			rosterVerified = false;
+		}
+
+		//check that three different people have directs
+		let directIndexes = [];
+		directIndexes.push($("#rosterDDx1").val());
+		directIndexes.push($("#rosterDDx2").val());
+		directIndexes.push($("#rosterDDx3").val());
+		let directCount = new Set(directIndexes).size;
+		if (directCount != 3) {
+			rosterVerified = false;
+		}
+
+		//check that three different people have crosses
+		let crossIndexes = [];
+		crossIndexes.push($("#rosterDCx1").val());
+		crossIndexes.push($("#rosterDCx2").val());
+		crossIndexes.push($("#rosterDCx3").val());
+		let crossCount = new Set(crossIndexes).size;
+		if (crossCount != 3) {
+			rosterVerified = false;
+		}
+
+
+		//check that three different people are in witness spots
+		let witnessIndexes = [];
+		witnessIndexes.push($("#rosterDWit1").val());
+		witnessIndexes.push($("#rosterDWit2").val());
+		witnessIndexes.push($("#rosterDWit3").val());
+		let witnessCount = new Set(witnessIndexes).size;
+		if (witnessCount != 3) {
+			rosterVerified = false;
+		}
+
+		//check that no witness is also in an attorney spot
+		let studentIndexes = attorneyIndexes.concat(witnessIndexes);
+		let studentCount = new Set(studentIndexes).size;
+		if (studentCount != 6) {
+			rosterVerified = false;
+		}
+
+		//check that all parts have a name in them
+		for (let a = 0; a < studentIndexes.length; a++) {
+			if (studentIndexes[a] == 0) {
+				rosterVerified = false;
+			}
+		}
+	}
+	return rosterVerified;
+}
+
+$("#submitCaptains").click(() => {
+	if (captainsVerified()) {
+		let portaIsDefendant = 0;
+		let count1 = 0;
+		let count2 = 0;
+		let count3 = 0;
+		let count4 = 0;
+		let count5 = 0;
+		if ($(":checked.dlp").length > 0) {
+			portaIsDefendant = 1;
+			if ($(":checked#dlp1").prop("checked")) {
+				count1 = 1;
+			}
+			if ($(":checked#dlp2").prop("checked")) {
+				count2 = 1;
+			}
+			if ($(":checked#dlp3").prop("checked")) {
+				count3 = 1;
+			}
+			if ($(":checked#dlp4").prop("checked")) {
+				count4 = 1;
+			}
+			if ($(":checked#dlp5").prop("checked")) {
+				count5 = 1;
+			}
+		} else {
+			if ($(":checked#pc1").prop("checked")) {
+				count1 = 1;
+			}
+			if ($(":checked#pc2").prop("checked")) {
+				count2 = 1;
+			}
+			if ($(":checked#pc3").prop("checked")) {
+				count3 = 1;
+			}
+			if ($(":checked#pc4").prop("checked")) {
+				count4 = 1;
+			}
+			if ($(":checked#pc5").prop("checked")) {
+				count5 = 1;
+			}
+		}
+		let duress = 0;
+		if ($("input[name='duress']:checked").val() == "duress" && !portaIsDefendant) {
+			duress = 1;
+		}
+		let pWitness1 = $("#pWit1").val();
+		let pWitness2 = $("#pWit2").val();
+		let pWitness3 = $("#pWit3").val();
+		let dWitness1 = $("#dWit1").val();
+		let dWitness2 = $("#dWit2").val();
+		let dWitness3 = $("#dWit3").val();
+
+		let pWitCalls = [];
+		let dWitCalls = [];
+		for (let a = 1; a <= 3; a++) {
+
+			switch (parseInt($(`#pWit${a}Order`).val())) {
+				case 1:
+					pWitCalls[1] = $(`#pWit${a}`).val();
+					break;
+				case 2:
+					pWitCalls[2] = $(`#pWit${a}`).val();
+					break;
+				case 3:
+					pWitCalls[3] = $(`#pWit${a}`).val();
+					break;
+				default:
+					break;
+			}
+			switch (parseInt($(`#dWit${a}Order`).val())) {
+				case 1:
+					dWitCalls[1] = $(`#dWit${a}`).val();
+					break;
+				case 2:
+					dWitCalls[2] = $(`#dWit${a}`).val();
+					break;
+				case 3:
+					dWitCalls[3] = $(`#dWit${a}`).val();
+					break;
+			}
+		}
+		submitCaptains(portaIsDefendant, count1, count2, count3, count4, count5, duress, pWitness1, pWitness2, pWitness3, dWitness1, dWitness2, dWitness3, pWitCalls[1], pWitCalls[2], pWitCalls[3], dWitCalls[1], dWitCalls[2], dWitCalls[3]);
+	} else {
+		console.log("error");
+	}
+});
+
+$("#submitRoster").click(() => {
+	if (rosterVerified()) {
+		if (isPlaintiff) {
+			submitRoster(true, $("#pOpen").val(), $("#rosterPDx1").val(), $("#rosterPDx2").val(), $("#rosterPDx3").val(), $("#rosterPCx1").val(), $("#rosterPCx2").val(), $("#rosterPCx3").val(), $("#rosterPWit1").val(), $("#rosterPWit2").val(), $("#rosterPWit3").val(), $("#pClose").val());
+		} else {
+			submitRoster(false, $("#dOpen").val(), $("#rosterPDx1").val(), $("#rosterPDx2").val(), $("#rosterPDx3").val(), $("#rosterPCx1").val(), $("#rosterPCx2").val(), $("#rosterPCx3").val(), $("#rosterPWit1").val(), $("#rosterPWit2").val(), $("#rosterPWit3").val(), $("#dClose").val());
+		}
+
+
+	} else {
+		//TODO add error handling
+		console.log("error");
+	}
+});
+
+function getCaptains() {
+	return new Promise((resolve, reject) => {
+		$.get(
+			"api/captains/getCaptains.php",
+			(captains) => {
+				resolve(captains);
+			},
+			"json").fail(() => {
+				handleSessionExpiration();
+			});
+	});
+}
+
+function getRoster() {
+	return new Promise((resolve, reject) => {
+		$.get(
+			"api/rosters/getTeam.php",
+			(roster) => {
+				resolve(roster);
+			},
+			"json").fail(() => {
+				handleSessionExpiration();
+			});
+	})
+}
+
+function getTeamSide() {
+	return new Promise((resolve, reject) => {
+		$.get(
+			"api/captains/isPlaintiff.php",
+			(isPlaintiff) => {
+				resolve(isPlaintiff.isPlaintiff);
+			},
+			"json").fail(() => {
+				handleSessionExpiration();
+			});
+	});
+}
+
+function isCaptainsComplete() {
+	return new Promise((resolve, reject) => {
+		$.get(
+			"api/captains/isComplete.php",
+			(captainsComplete) => {
+				resolve(captainsComplete.captainsComplete);
+			},
+			"json").fail(() => {
+				handleSessionExpiration();
+			});
+	});
+}
+
+function getRosterParts() {
+	return new Promise((resolve, reject) => {
+		$.get(
+			"api/captains/getRosterParts.php",
+			(parts) => {
+				resolve(parts);
+			},
+			"json").fail(() => {
+				handleSessionExpiration();
+			});
+	});
+}
+
+function submitRoster(isPlaintiff, open, dx1, dx2, dx3, cx1, cx2, cx3, wit1, wit2, wit3, close) {
+	let data = {
+		isPlaintiff: isPlaintiff,
+		open: open,
+		dx1: dx1,
+		dx2: dx2,
+		dx3: dx3,
+		cx1: cx1,
+		cx2: cx2,
+		cx3: cx3,
+		wit1: wit1,
+		wit2: wit2,
+		wit3: wit3,
+		close: close
+	};
+	$.post(
+		"api/captains/submitRoster.php",
+		data,
+		() => { },
+		"json");
 }
