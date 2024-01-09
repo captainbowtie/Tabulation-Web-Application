@@ -17,3 +17,4 @@
  */
 
 define('SITE_ROOT', __DIR__);
+define('TAB_EMAIL', 'allen@allenbarr.com');

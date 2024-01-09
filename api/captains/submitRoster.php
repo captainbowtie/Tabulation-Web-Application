@@ -36,7 +36,7 @@ if (isset($_SESSION["team"])) {
 		isset($_POST["close"])
 	) {
 		$teamURL = htmlspecialchars(strip_tags($_SESSION["team"]));
-		$isPlaintiff = htmlspecialchars(strip_tags($_POST["isPlaintiff"]));
+		$isPlaintiff = filter_var(htmlspecialchars(strip_tags($_POST["isPlaintiff"])), FILTER_VALIDATE_BOOLEAN);
 		$open = htmlspecialchars(strip_tags($_POST["open"]));
 		$dx1 = htmlspecialchars(strip_tags($_POST["dx1"]));
 		$dx2 = htmlspecialchars(strip_tags($_POST["dx2"]));
@@ -96,7 +96,10 @@ function submitRoster($teamURL, $isPlaintiff, $open, $dx1, $dx2, $dx3, $cx1, $cx
 	} else {
 		$query = "UPDATE pairings SET dOpen=:open, dDirectingAttorney1=:dx1, dDirectingAttorney2=:dx2, dDirectingAttorney3=:dx3, dCrossingAttorney1=:cx1, dCrossingAttorney2=:cx2, dCrossingAttorney3=:cx3, dStudentWitness1=:wit1, dStudentWitness2=:wit2, dStudentWitness3=:wit3, dClose=:close WHERE defense = :teamId && round = (SELECT Max(round) FROM pairings)";
 	}
+
+
 	$pairingStmt = $conn->prepare($query);
+
 	$pairingStmt->bindParam(':open', $open);
 	$pairingStmt->bindParam(':dx1', $dx1);
 	$pairingStmt->bindParam(':dx2', $dx2);

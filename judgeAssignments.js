@@ -28,7 +28,7 @@ function fillHeader() {
 
 function fillBody() {
 	//create tabs
-	let bodyHTML = "<div id='assignments'><ul><li><a href='#round1'>Round 1</a></li><li><a href='#round2'>Round 2</a></li><li><a href='#round3'>Round 3</a></li><li><a href='#round4'>Round 4</a></li></ul><div id='round1'></div><div id='round2'></div><div id='round3'></div><div id='round4'></div></div>"
+	let bodyHTML = "<div id='ballots'><ul><li><a href='#round1'>Round 1</a></li><li><a href='#round2'>Round 2</a></li><li><a href='#round3'>Round 3</a></li><li><a href='#round4'>Round 4</a></li></ul><div id='round1'></div><div id='round2'></div><div id='round3'></div><div id='round4'></div></div>"
 	$("#body").html(bodyHTML);
 	$("#assignments").tabs();
 	Promise.all([getPairings(), getJudgeAssignments(), getTeams(), getJudges()]).then(values => {
@@ -68,7 +68,7 @@ function fillBody() {
 				let rowHTML = `<div class='room' style='grid-column: 1 / span 1; grid-row: ${index + 2} / span 1;' pairing='${pairing.id}'>${pairing.room}</div>`;
 				rowHTML += `<div style='grid-column: 2 / span 1; grid-row: ${index + 2} / span 1;'>${pTeamNumber}</div>`;
 				rowHTML += `<div style='grid-column: 3 / span 1; grid-row: ${index + 2} / span 1;'>${dTeamNumber}</div>`;
-				rowHTML += `<div style='grid-column: 4 / span 1; grid-row: ${index + 2} / span 1;'><a href='ballot.php?b=${pairing.url}'>Link</a></div>`;
+				rowHTML += `<div style='grid-column: 4 / span 1; grid-row: ${index + 2} / span 1;'><a href='b.php?p=${pairing.url}'>Link</a></div>`;
 				$(`#round${round}Grid`).append(rowHTML);
 			});
 		}

@@ -35,7 +35,11 @@ if (
 		$_SESSION["id"] = $user["id"];
 		$_SESSION["username"] = $user["username"];
 		$_SESSION["isAdmin"] = $user["isAdmin"];
-		header("Location: index.php");
+		if ($user["isAdmin"]) {
+			header("Location: users.html");
+		} else {
+			header("Location: userBallots.php?user=" . $url);
+		}
 	}
 } else {
 	// tell the user

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2020 allen
+ * Copyright (C) 2024 allen
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -17,23 +17,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once __DIR__ . "/config.php";
+require_once __DIR__ . "/../../config.php";
 require_once SITE_ROOT . "/database.php";
 session_start();
-$headerHTML = "";
-if ($_SESSION["isAdmin"] ?? false) {
-	$headerHTML .= "<a href='users.html'>Users</a>";
-	$headerHTML .= "<a href='teams.html'>Teams</a>";
-	$headerHTML .= "<a href='judges.html'>Judges</a>";
-	$headerHTML .= "<a href='pairings.html'>Pairings</a>";
-	$headerHTML .= "<a href='judgeAssignments.html'>Judge Assignments</a>";
-	$headerHTML .= "<a href='ballots.html'>Ballots</a>";
-	$headerHTML .= "<a style='float: right' href='logout.php'>Log Out</a>";
-} else {
-	$headerHTML .=  '<a href="comments.php">Ballots</a>';
-	$headerHTML .= '<a href="captains.php">Captains Form</a>';
+
+if (isset($_SESSION["ballot"]) && isset($_POST["name"])) {
+	$name = htmlspecialchars(strip_tags($_POST["name"]));
+
+
+	$query = "UPDATE ballots SET judge = :name WHERE url=:url && locked = 0";
+
+	try {
+		$db = new Database();
+		$conn = $db->getConnection();
+		$stmt = $conn->prepare($query);
+		$stmt->bindParam(':url', $_SESSION["ballot"]);
+		$stmt->bindParam(':name', $name);
+		$stmt->execute();
+		$conn = null;
+		echo json_encode(array("message" => 0));
+	} catch (PDOException $e) {
+		echo "Error: " . $e->getMessage();
+	}
 }
-?>
-<div>
-	<?php echo $headerHTML ?>
-</div>

@@ -25,12 +25,19 @@ $_SESSION["team"] = $_GET["t"];
 try {
 	$db = new Database();
 	$conn = $db->getConnection();
-	$stmt = $conn->prepare("SELECT number,name FROM teams WHERE url = :url");
+	$stmt = $conn->prepare("SELECT id,number,name FROM teams WHERE url = :url");
 	$stmt->bindParam(':url', $_SESSION["team"]);
 	$stmt->execute();
 	$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+	$teamId = $result[0]["id"];
 	$teamNumber = $result[0]["number"];
 	$teamName = $result[0]["name"];
+
+	$pairingStmt = $conn->prepare("SELECT url FROM pairings WHERE round = (SELECT Max(round) FROM pairings) && (plaintiff=:teamId || defense=:teamId)");
+	$pairingStmt->bindParam(':teamId', $teamId);
+	$pairingStmt->execute();
+	$pairingResult = $pairingStmt->fetchAll(PDO::FETCH_ASSOC);
+	$pairingURL = $pairingResult[0]["url"];
 } catch (PDOException $e) {
 	echo "Error: " . $e->getMessage();
 }
@@ -59,6 +66,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title>Team</title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" integrity="sha512-CNgIRecGo7nphbeZ04Sc13ka07paqdeTu0WR1IM4kNcpmBAUSHSQX0FslNhTDadL4O5SAGapGt4FodqL8My0mA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 
 <body>
@@ -66,8 +74,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 		<div><?php echo $teamNumber . " " . $teamName ?></div>
 		<div><a href="roster.html">Roster</a></div>
 		<div><a href="captains.html">Captains Form</a></div>
-		<div><a href="ballot.html">Ballot QR Code</a></div>
+		<div><a href="b.php?p=<?php echo $pairingURL ?>">Ballot Link</a></div>
+		<div id='qr'></div>
 	</div>
+	<script>
+		let pairingURL = '<?php echo $pairingURL ?>';
+	</script>
+	<script src="team.js"></script>
 </body>
 
 </html>

@@ -59,6 +59,10 @@ function fillRosterSelects() {
 	})
 };
 
+function isRosterComplete() {
+	return new Promise((resolve, reject) => { });
+};
+
 function fillCaptains() {
 	getCaptains().then((captains) => {
 		if (captains.prosecutingPorta) {
@@ -303,16 +307,16 @@ function rosterVerified() {
 
 	} else {
 		//check that only three peeople are in attorney spots
-		let attorneyIndexs = [];
-		attorneyIndexs.push($("#dOpen").val());
-		attorneyIndexs.push($("#rosterDDx1").val());
-		attorneyIndexs.push($("#rosterDDx2").val());
-		attorneyIndexs.push($("#rosterDDx3").val());
-		attorneyIndexs.push($("#rosterDCx1").val());
-		attorneyIndexs.push($("#rosterDCx2").val());
-		attorneyIndexs.push($("#rosterDCx3").val());
-		attorneyIndexs.push($("#dClose").val());
-		let attorneyCount = new Set(attorneyIndexs).size;
+		let attorneyIndexes = [];
+		attorneyIndexes.push($("#dOpen").val());
+		attorneyIndexes.push($("#rosterDDx1").val());
+		attorneyIndexes.push($("#rosterDDx2").val());
+		attorneyIndexes.push($("#rosterDDx3").val());
+		attorneyIndexes.push($("#rosterDCx1").val());
+		attorneyIndexes.push($("#rosterDCx2").val());
+		attorneyIndexes.push($("#rosterDCx3").val());
+		attorneyIndexes.push($("#dClose").val());
+		let attorneyCount = new Set(attorneyIndexes).size;
 		if (attorneyCount != 3) {
 			rosterVerified = false;
 		}
@@ -467,7 +471,7 @@ $("#submitRoster").click(() => {
 		if (isPlaintiff) {
 			submitRoster(true, $("#pOpen").val(), $("#rosterPDx1").val(), $("#rosterPDx2").val(), $("#rosterPDx3").val(), $("#rosterPCx1").val(), $("#rosterPCx2").val(), $("#rosterPCx3").val(), $("#rosterPWit1").val(), $("#rosterPWit2").val(), $("#rosterPWit3").val(), $("#pClose").val());
 		} else {
-			submitRoster(false, $("#dOpen").val(), $("#rosterPDx1").val(), $("#rosterPDx2").val(), $("#rosterPDx3").val(), $("#rosterPCx1").val(), $("#rosterPCx2").val(), $("#rosterPCx3").val(), $("#rosterPWit1").val(), $("#rosterPWit2").val(), $("#rosterPWit3").val(), $("#dClose").val());
+			submitRoster(false, $("#dOpen").val(), $("#rosterDDx1").val(), $("#rosterDDx2").val(), $("#rosterDDx3").val(), $("#rosterDCx1").val(), $("#rosterDCx2").val(), $("#rosterDCx3").val(), $("#rosterDWit1").val(), $("#rosterDWit2").val(), $("#rosterDWit3").val(), $("#dClose").val());
 		}
 
 
@@ -562,4 +566,9 @@ function submitRoster(isPlaintiff, open, dx1, dx2, dx3, cx1, cx2, cx3, wit1, wit
 		data,
 		() => { },
 		"json");
+}
+
+function handleSessionExpiration() {
+	let html = "User session expired. Please login again using your login link."
+	$("body").html(html);
 }
