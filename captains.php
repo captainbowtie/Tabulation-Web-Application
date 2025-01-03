@@ -134,13 +134,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <input class="dInput" id="dOpen">
 
         <select class="pInput" id="wit1">
-            <option value="Burke">Burke</option>
-            <option value="Bahmani">Bahmani</option>
-            <option value="Nguyen">Nguyen</option>
-            <option value="Nova">Nova</option>
-            <option value="Sands">Sands</option>
-            <option value="Cosmos">Cosmos</option>
-            <option value="Cage">Cage</option>
+            <option value="Doolittle">Doolittle</option>
+            <option value="Edmund">Edmund</option>
+            <option value="Nathanson">Nathanson</option>
+            <option value="Connel">Connel</option>
+            <option value="Doos">Doos</option>
+            <option value="Kim">Kim</option>
+            <option value="Shelton">Shelton</option>
         </select>
         <label id="pDx1Label" for="pDx1">Directing Attorney:</label>
         <input class="pInput" id="pDx1">
@@ -150,13 +150,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <input class="dInput" id="dCx1">
 
         <select class="pInput" id="wit2">
-            <option value="Burke">Burke</option>
-            <option value="Bahmani">Bahmani</option>
-            <option value="Nguyen">Nguyen</option>
-            <option value="Nova">Nova</option>
-            <option value="Sands">Sands</option>
-            <option value="Cosmos">Cosmos</option>
-            <option value="Cage">Cage</option>
+        <option value="Doolittle">Doolittle</option>
+            <option value="Edmund">Edmund</option>
+            <option value="Nathanson">Nathanson</option>
+            <option value="Connel">Connel</option>
+            <option value="Doos">Doos</option>
+            <option value="Kim">Kim</option>
+            <option value="Shelton">Shelton</option>
         </select>
         <label id="pDx2Label" for="pDx2">Directing Attorney:</label>
         <input class="pInput" id="pDx2">
@@ -166,13 +166,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <input class="dInput" id="dCx2">
 
         <select class="pInput" id="wit3">
-            <option value="Burke">Burke</option>
-            <option value="Bahmani">Bahmani</option>
-            <option value="Nguyen">Nguyen</option>
-            <option value="Nova">Nova</option>
-            <option value="Sands">Sands</option>
-            <option value="Cosmos">Cosmos</option>
-            <option value="Cage">Cage</option>
+        <option value="Doolittle">Doolittle</option>
+            <option value="Edmund">Edmund</option>
+            <option value="Nathanson">Nathanson</option>
+            <option value="Connel">Connel</option>
+            <option value="Doos">Doos</option>
+            <option value="Kim">Kim</option>
+            <option value="Shelton">Shelton</option>
         </select>
         <label id="pDx3Label" for="pDx3">Directing Attorney:</label>
         <input class="pInput" id="pDx3">
@@ -182,12 +182,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <input class="dInput" id="dCx3">
 
         <select class="dInput" id="wit4">
-            <option value="Cameron">Cameron</option>
-            <option value="Porta">Porta</option>
-            <option value="Ebi">Ebi</option>
-            <option value="Orlov">Orlov</option>
-            <option value="Cosmos">Cosmos</option>
-            <option value="Cage">Cage</option>
+        <option value="Hopson">Hopson</option>
+            <option value="Haskins">Haskins</option>
+            <option value="Silva">Silva</option>
+            <option value="Connel">Connel</option>
+            <option value="Doos">Doos</option>
+            <option value="Kim">Kim</option>
+            <option value="Shelton">Shelton</option>
         </select>
         <label id="dDx1Label" for="dDx1">Directing Attorney:</label>
         <input class="dInput" id="dDx1">
@@ -197,12 +198,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <input class="pInput" id="pCx1">
 
         <select class="dInput" id="wit5">
-            <option value="Cameron">Cameron</option>
-            <option value="Porta">Porta</option>
-            <option value="Ebi">Ebi</option>
-            <option value="Orlov">Orlov</option>
-            <option value="Cosmos">Cosmos</option>
-            <option value="Cage">Cage</option>
+        <option value="Hopson">Hopson</option>
+            <option value="Haskins">Haskins</option>
+            <option value="Silva">Silva</option>
+            <option value="Connel">Connel</option>
+            <option value="Doos">Doos</option>
+            <option value="Kim">Kim</option>
+            <option value="Shelton">Shelton</option>
         </select>
         <label id="dDx2Label" for="dDx2">Directing Attorney:</label>
         <input class="dInput" id="dDx2">
@@ -212,12 +214,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <input class="pInput" id="pCx2">
 
         <select class="dInput" id="wit6">
-            <option value="Cameron">Cameron</option>
-            <option value="Porta">Porta</option>
-            <option value="Ebi">Ebi</option>
-            <option value="Orlov">Orlov</option>
-            <option value="Cosmos">Cosmos</option>
-            <option value="Cage">Cage</option>
+        <option value="Hopson">Hopson</option>
+            <option value="Haskins">Haskins</option>
+            <option value="Silva">Silva</option>
+            <option value="Connel">Connel</option>
+            <option value="Doos">Doos</option>
+            <option value="Kim">Kim</option>
+            <option value="Shelton">Shelton</option>
         </select>
         <label id="dDx3Label" for="dDx3">Directing Attorney:</label>
         <input class="dInput" id="dDx3">
