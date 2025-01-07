@@ -36,8 +36,10 @@ function createBallots($pairings) {
 
     //delete old ballots for the pairings in question
     $deleteStatement = $conn->prepare("DELETE FROM ballots WHERE pairing = ?");
+
     for ($a = 0; $a < sizeOf($pairings); $a++) {
-        $deleteStatement->bind_param('i', intval($pairings[$a]["id"]));
+        $pairingId = intval($pairings[$a]["id"]);
+        $deleteStatement->bind_param('i', $pairingId);
         $deleteStatement->execute();
     }
 
@@ -49,7 +51,8 @@ function createBallots($pairings) {
     for ($a = 0; $a < sizeOf($pairings); $a++) {
         for ($b = 0; $b < $judgesPerRound; $b++) {
             $url = bin2hex(random_bytes(32));
-            $stmt->bind_param('is', intval($pairings[$a]["id"]), $url);
+            $pairingId = intval($pairings[$a]["id"]);
+            $stmt->bind_param('is', $pairingId, $url);
             //execute statement as many times as there are needed ballots
             $stmt->execute();
         }
