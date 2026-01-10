@@ -23,15 +23,18 @@ session_start();
 $header = "<div>\n";
 if ($_SESSION["isAdmin"]) {
     $header .= '<a href="index.php">Home</a>
-        <a href="ballots.php">Ballots</a>
-    <a href="pairings.php">Pairings</a>
-    <a href="judges.php">Judges</a>
     <a href="teams.php">Teams</a>
     <a href="users.php">Users</a>
+    <a href="judges.php">Judges</a>
+    <a href="pairings.php">Pairings</a>
+    <a href="judgeAssignments.php">Judge Assignments</a>
     <a href="judgesURLs.php">Judges URLs</a>
+    <a href="ballots.php">Ballots</a>
     <a href="individuals.php">Individual Awards</a>
     <a href="comments.php">Comments</a>
-    <a href="captainsCompletion.php">Captains Completion</a>';
+    <a href="captainsCompletion.php">Captains Completion</a>
+    <a href="settings.php">Settings</a>
+   ';
     
     $header .= "<a style='float: right' href='logout.php'>Log Out</a>\n";
 } elseif ($_SESSION["isCoach"]) {

@@ -137,6 +137,23 @@ $(document).ready(function () {
             round4BallotsExist = true;
         }
 
+        //disable generate and save buttons for rounds where pairings already exist
+        if (round1PairingsExist) {
+            $("#pair1").prop("disabled", true);
+            $("#submit1").prop("disabled", true);
+        }
+        if (round2PairingsExist) {
+            $("#pair2").prop("disabled", true);
+            $("#submit2").prop("disabled", true);
+        }
+        if (round3PairingsExist) {
+            $("#pair3").prop("disabled", true);
+            $("#submit3").prop("disabled", true);
+        }
+        if (round4PairingsExist) {
+            $("#pair4").prop("disabled", true);
+            $("#submit4").prop("disabled", true);
+        }
 
         //switch tab to current round
         if (round4PairingsExist) {
@@ -600,10 +617,6 @@ $("#tieBreaker").on("change", function () {
     updateSetting("lowerTeamIsHigherRank", $(this).val());
 });
 
-$("#snakeStart").on("change", function () {
-    updateSetting("snakeStartsOnPlaintiff", $(this).val());
-});
-
 $("#roundFourBallotsViewable").on("change", function () {
     updateSetting("roundFourBallotsViewable", $(this).val());
 });
@@ -958,7 +971,7 @@ function pair3() {
     //print initial pairings to console
     console.log("Initial Pairings:");
     for (var a = 0; a < teams.length; a += 2) {
-        console.log(teams[a].number + " v. " + teams[a + 1].number);
+        console.log(teams[a].number + " wins: " + teams[a].wins + " CS: " + teams[a].cs + " PD: " + teams[a].pd + " v. " + teams[a + 1].number + " wins: " + teams[a + 1].wins + " CS: " + teams[a + 1].cs + " PD: " + teams[a + 1].pd);
     }
 
     //check for and resolve conflicts
@@ -1055,9 +1068,9 @@ function pair3() {
                 }
 
                 //print swap to console
-                console.log("Swap Performed:");
+                console.log("Swap Performed: " + swapList[swapList.length - 1][0] + " and " + swapList[swapList.length - 1][1]);
                 for (var b = 0; b < teams.length; b += 2) {
-                    console.log(teams[b].number + " v. " + teams[b + 1].number);
+                    console.log(teams[b].number + " wins " + teams[b].wins + " CS: " + teams[b].cs + " PD: " + teams[b].pd + " v. " + teams[b + 1].number + " wins " + teams[b + 1].wins + " CS: " + teams[b + 1].cs + " PD: " + teams[b + 1].pd);
                 }
 
                 //restart the loop
@@ -1069,7 +1082,7 @@ function pair3() {
 
     //return pairings, flipping the side assignment of half of them at random
     let r3pairings = [];
-    if ($("#snakeStart").val() === "true") {
+    if (snakeStartsOnPlaintiff) {
         for (var a = 0; a < teams.length; a += 2) {
             if (a % 4 === 0) {
                 var pairing = `{"plaintiff":${teams[a].number},"defense":${teams[a + 1].number}}`;

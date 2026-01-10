@@ -123,7 +123,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     </div>
     <div id="sideSelectDiv">
         <input type="radio" name="side" value="plainitff" id="pRadio">
-        <label for="pRadio">Plaintiff</label><br>
+        <label for="pRadio">Prosecution</label><br>
         <input type="radio" name="side" value="defense" id="dRadio">
         <label for="dRadio">Defense</label><br>
     </div>
@@ -134,13 +134,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <input class="dInput" id="dOpen">
 
         <select class="pInput" id="wit1">
-            <option value="Doolittle">Doolittle</option>
-            <option value="Edmund">Edmund</option>
-            <option value="Nathanson">Nathanson</option>
-            <option value="Connel">Connel</option>
+            <option value="Patel">Patel</option>
+            <option value="Kaye">Kaye</option>
+            <option value="Rivera">Rivera</option>
+            <option value="Hartley">Hartley</option>
             <option value="Doos">Doos</option>
-            <option value="Kim">Kim</option>
-            <option value="Shelton">Shelton</option>
+            <option value="Quade">Quade</option>
+            <option value="Jha">Jha</option>
+            <option value="Reynolds">Reynolds</option>
         </select>
         <label id="pDx1Label" for="pDx1">Directing Attorney:</label>
         <input class="pInput" id="pDx1">
@@ -150,13 +151,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <input class="dInput" id="dCx1">
 
         <select class="pInput" id="wit2">
-        <option value="Doolittle">Doolittle</option>
-            <option value="Edmund">Edmund</option>
-            <option value="Nathanson">Nathanson</option>
-            <option value="Connel">Connel</option>
+<option value="Patel">Patel</option>
+            <option value="Kaye">Kaye</option>
+            <option value="Rivera">Rivera</option>
+            <option value="Hartley">Hartley</option>
             <option value="Doos">Doos</option>
-            <option value="Kim">Kim</option>
-            <option value="Shelton">Shelton</option>
+            <option value="Quade">Quade</option>
+            <option value="Jha">Jha</option>
+            <option value="Reynolds">Reynolds</option>
         </select>
         <label id="pDx2Label" for="pDx2">Directing Attorney:</label>
         <input class="pInput" id="pDx2">
@@ -166,13 +168,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <input class="dInput" id="dCx2">
 
         <select class="pInput" id="wit3">
-        <option value="Doolittle">Doolittle</option>
-            <option value="Edmund">Edmund</option>
-            <option value="Nathanson">Nathanson</option>
-            <option value="Connel">Connel</option>
+<option value="Patel">Patel</option>
+            <option value="Kaye">Kaye</option>
+            <option value="Rivera">Rivera</option>
+            <option value="Hartley">Hartley</option>
             <option value="Doos">Doos</option>
-            <option value="Kim">Kim</option>
-            <option value="Shelton">Shelton</option>
+            <option value="Quade">Quade</option>
+            <option value="Jha">Jha</option>
+            <option value="Reynolds">Reynolds</option>
         </select>
         <label id="pDx3Label" for="pDx3">Directing Attorney:</label>
         <input class="pInput" id="pDx3">
@@ -182,13 +185,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <input class="dInput" id="dCx3">
 
         <select class="dInput" id="wit4">
-        <option value="Hopson">Hopson</option>
-            <option value="Haskins">Haskins</option>
-            <option value="Silva">Silva</option>
-            <option value="Connel">Connel</option>
+<option value="Martin">Martin</option>
+            <option value="Marlowe">Marlowe</option>
+            <option value="Lin">Lin</option>
             <option value="Doos">Doos</option>
-            <option value="Kim">Kim</option>
-            <option value="Shelton">Shelton</option>
+            <option value="Quade">Quade</option>
+            <option value="Jha">Jha</option>
+            <option value="Reynolds">Reynolds</option>
         </select>
         <label id="dDx1Label" for="dDx1">Directing Attorney:</label>
         <input class="dInput" id="dDx1">
@@ -198,13 +201,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <input class="pInput" id="pCx1">
 
         <select class="dInput" id="wit5">
-        <option value="Hopson">Hopson</option>
-            <option value="Haskins">Haskins</option>
-            <option value="Silva">Silva</option>
-            <option value="Connel">Connel</option>
+        <option value="Martin">Martin</option>
+            <option value="Marlowe">Marlowe</option>
+            <option value="Lin">Lin</option>
             <option value="Doos">Doos</option>
-            <option value="Kim">Kim</option>
-            <option value="Shelton">Shelton</option>
+            <option value="Quade">Quade</option>
+            <option value="Jha">Jha</option>
+            <option value="Reynolds">Reynolds</option>
         </select>
         <label id="dDx2Label" for="dDx2">Directing Attorney:</label>
         <input class="dInput" id="dDx2">
@@ -214,13 +217,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <input class="pInput" id="pCx2">
 
         <select class="dInput" id="wit6">
-        <option value="Hopson">Hopson</option>
-            <option value="Haskins">Haskins</option>
-            <option value="Silva">Silva</option>
-            <option value="Connel">Connel</option>
+        <option value="Martin">Martin</option>
+            <option value="Marlowe">Marlowe</option>
+            <option value="Lin">Lin</option>
             <option value="Doos">Doos</option>
-            <option value="Kim">Kim</option>
-            <option value="Shelton">Shelton</option>
+            <option value="Quade">Quade</option>
+            <option value="Jha">Jha</option>
+            <option value="Reynolds">Reynolds</option>
         </select>
         <label id="dDx3Label" for="dDx3">Directing Attorney:</label>
         <input class="dInput" id="dDx3">

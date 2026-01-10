@@ -24,7 +24,6 @@ if ($_SESSION["isAdmin"]) {
     require_once SITE_ROOT . "/database.php";
     require_once SITE_ROOT . "/objects/team.php";
     require_once SITE_ROOT . "/objects/settings.php";
-    require_once SITE_ROOT . "/objects/judge.php";
     require_once SITE_ROOT . "/loginHeader.php";
 
     //get team data;
@@ -32,10 +31,6 @@ if ($_SESSION["isAdmin"]) {
 
     //get settings data
     $settings = getAllSettings();
-
-    //get judge data
-    $judges = getAllJudges();
-    $judgesPerRound = getSetting("judgesPerRound");
 
     //generate team select content
     if (!empty($teams)) {
@@ -53,33 +48,6 @@ if ($_SESSION["isAdmin"]) {
                 $dSelect .= "</select>\n";
                 $pSelects[$c][] = $pSelect;
                 $dSelects[$c][] = $dSelect;
-            }
-        }
-
-        //fill judge selects
-        $judgeSelects; //[round number][row number][column number] round indexed to 1, row and column 0-indexed
-        for ($a = 1; $a <= 4; $a++) {//non-zero indexed to match actual round number
-            for ($b = 0; $b < sizeOf($teams) / 2; $b++) {//number of rows equal to half the number of teams
-                for ($c = 0; $c < $judgesPerRound; $c++) {//equal to number of judges per round
-                    $judgeSelects[$a][$b][$c] = "<select class='judgeSelect' "
-                            . "data-round='$a' "
-                            . "data-pairing='$b' "
-                            . "data-judge='$c' "
-                            . "style='grid-row:" . ($b + 3) . "; grid-column:" . ($c + 3) . "'>\n";
-                    $judgeSelects[$a][$b][$c] .= "<option value='0'>One-Judge Panel</option>\n";
-                    for ($d = 0; $d < sizeOf($judges); $d++) {
-                        if ($a === 1) {
-                            $judgeSelects[$a][$b][$c] .= "<option value='" . $judges[$d]["id"] . "'>" . $judges[$d]["name"] . "</option>\n";
-                        } else if ($a === 2) {
-                            $judgeSelects[$a][$b][$c] .= "<option value='" . $judges[$d]["id"] . "'>" . $judges[$d]["name"] . "</option>\n";
-                        } else if ($a === 3) {
-                            $judgeSelects[$a][$b][$c] .= "<option value='" . $judges[$d]["id"] . "'>" . $judges[$d]["name"] . "</option>\n";
-                        } else if ($a === 4) {
-                            $judgeSelects[$a][$b][$c] .= "<option value='" . $judges[$d]["id"] . "'>" . $judges[$d]["name"] . "</option>\n";
-                        }
-                    }
-                    $judgeSelects[$a][$b][$c] .= "</select>\n";
-                }
             }
         }
 
@@ -102,16 +70,9 @@ if ($_SESSION["isAdmin"]) {
                 $tabHTML[$a] .= "\n" . $pSelects[$a][$b] . "\n";
                 $tabHTML[$a] .= "\n" . $dSelects[$a][$b] . "\n";
             }
-            for ($b = 0; $b < sizeOf($teams) / 2; $b++) {
-                for ($c = 0; $c < $judgesPerRound; $c++) {
-                    $tabHTML[$a] .= $judgeSelects[$a][$b][$c];
-                }
-            }
             $tabHTML[$a] .= "<br>
                 <input type='button' id='pair$a' value='Generate Pairings' class='pairButton' style='grid-column:1/1; grid-row:" . (3 + sizeOf($teams) / 2) . "'>
-                <input type='submit' id='submit$a' value='Save Pairings' class='saveButton' style='grid-column:2/2; grid-row:" . (3 + sizeOf($teams) / 2) . "'>
-            <input type = 'button' id = 'assignJudges$a' value = 'Generate Judge Assignments' class = 'assignJudgesButton' style = 'grid-column:3/3; grid-row:" . (3 + sizeOf($teams) / 2) . "'>
-            <input type = 'submit' id = 'submitJudges$a' value = 'Save Judge Assignments' class = 'saveJudgesButton' style = 'grid-column:4/4; grid-row:" . (3 + sizeOf($teams) / 2) . "'>";
+                <input type='submit' id='submit$a' value='Save Pairings' class='saveButton' style='grid-column:2/2; grid-row:" . (3 + sizeOf($teams) / 2) . "'>";
         }
     }
 } else {
@@ -160,49 +121,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <?php
         echo $header;
         ?>
-        <form id="settings">
-            <label id="judgesPerRoundLabel" for="judgesPerRound">Judges Per Round:</label>
-            <input id="judgesPerRound" value="<?php echo $settings["judgesPerRound"]; ?>">
-            <label id="tieBreakerLabel" for="tieBreaker">Team Number Tiebreaker:</label>
-            <select id="tieBreaker">
-                <option <?php
-                if ($settings["lowerTeamIsHigherRank"]) {
-                    echo "selected";
-                }
-                ?> value="true">Lower Team Number Is Better Rank</option>
-                <option <?php
-                if (!$settings["lowerTeamIsHigherRank"]) {
-                    echo "selected";
-                }
-                ?> value="false">Higher Team Number Is Better Rank</option>
-            </select>
-            <label id="snakeStartLabel" for="snakeStart">Start Round 3 Snake On:</label>
-            <select id="snakeStart">
-                <option <?php
-                if ($settings["snakeStartsOnPlaintiff"]) {
-                    echo "selected";
-                }
-                ?> value="true">Plaintiff</option>
-                <option <?php
-                if (!$settings["snakeStartsOnPlaintiff"]) {
-                    echo "selected";
-                }
-                ?> value="false">Defense</option>
-            </select>
-            <label id="roundFourBallotsViewableLabel" for="roundFourBallotsViewable">Allow teams to view round 4 ballots:</label>
-            <select id="roundFourBallotsViewable">
-                <option <?php
-                if ($settings["roundFourBallotsViewable"]) {
-                    echo "selected";
-                }
-                ?> value="true">Yes</option>
-                <option <?php
-                if (!$settings["roundFourBallotsViewable"]) {
-                    echo "selected";
-                }
-                ?> value="false">No</option>
-            </select>
-        </form>
         <div class="tab-content">
             <div id="round1" class="tab-pane fade in active">
                 <div id="round1Div">
@@ -349,7 +267,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 </div>
             </div>
         </div>
-        
+        <script>
+            var snakeStartsOnPlaintiff = <?php echo $settings["snakeStartsOnPlaintiff"]; ?>;
+            </script>
         <script src="pairings.js"></script>
     </body>
 </html>
